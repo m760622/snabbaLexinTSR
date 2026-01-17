@@ -44,7 +44,7 @@ html.iphone-mode {
 }
 
 body.iphone-view {
-    max-width: 430px;
+    max-width: 414px;
     margin: 0 auto;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
 }

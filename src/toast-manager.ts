@@ -217,7 +217,7 @@ export const ToastManager = {
             }
 
             /* Mobile responsive */
-            @media (max-width: 480px) {
+            @media (max-width: 414px) {
                 .toast-container {
                     top: 10px;
                     width: calc(100% - 20px);

@@ -86,7 +86,7 @@
 
 /* Container & Layout */
 .container.details-page-container {
-    max-width: 800px;
+    max-width: 414px;
     margin: 0 auto;
     padding: 0 1rem 80px 1rem;
 }
@@ -2209,7 +2209,7 @@
 }
 
 /* Mobile Adjustments */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .details-header-clean {
         padding: 0.75rem 1rem;
     }
@@ -2534,7 +2534,7 @@ body.flashcard-active .revealed {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 414px) {
     .word-swe-hero {
         font-size: 2.5rem;
     }
@@ -2817,7 +2817,7 @@ body.flashcard-active .revealed {
 }
 
 /* Responsive Design for FABs */
-@media (max-width: 768px) {
+@media (max-width: 414px) {
     .details-fab-container {
         right: 0.75rem;
         top: 0.75rem;
@@ -2838,7 +2838,7 @@ body.flashcard-active .revealed {
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .details-fab-container {
         gap: 0.5rem;
     }
@@ -3197,7 +3197,7 @@ button:active,
 }
 
 /* Responsive */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .details-title-swedish {
         font-size: 0.7rem;
         letter-spacing: 1px;
@@ -3301,7 +3301,7 @@ button:active,
 }
 
 /* Responsive - Stack menu on small screens */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .more-actions-menu {
         right: 1rem;
         left: 1rem;
@@ -3827,7 +3827,7 @@ button:active,
 }
 
 /* Responsive for mobile */
-@media (max-width: 500px) {
+@media (max-width: 414px) {
 
     .verb-grid,
     .noun-grid {
@@ -5887,7 +5887,7 @@ body .quiz-options {
 .flashcard-clean {
     position: relative;
     width: 90%;
-    max-width: 600px;
+    max-width: 414px;
     height: 280px;
     margin: 0 auto;
     cursor: pointer;
@@ -8040,7 +8040,7 @@ body .quiz-options {
 }
 
 /* Responsive */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .pronunciation-actions-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 0.6rem;

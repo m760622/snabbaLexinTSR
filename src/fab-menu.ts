@@ -517,7 +517,7 @@ const fabMenuStyles = `
 }
 
 /* Mobile optimizations */
-@media (max-width: 768px) {
+@media (max-width: 414px) {
     .fab-menu-container {
         bottom: 20px;
         right: 20px;

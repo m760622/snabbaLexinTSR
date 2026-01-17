@@ -439,7 +439,7 @@ header {
     display: grid;
     gap: 16px;
     width: 100%;
-    max-width: 600px;
+    max-width: 414px;
     /* Slightly larger max-width */
     margin: auto;
     /* Grid columns are set by JS */
@@ -775,7 +775,7 @@ header {
 }
 
 /* Mobile Responsive */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     header {
         padding: 0.8rem;
         flex-direction: column;
@@ -985,7 +985,7 @@ header {
 }
 
 /* Hide text labels on mobile if needed */
-@media (max-width: 500px) {
+@media (max-width: 414px) {
     .pill span {
         display: none;
     }

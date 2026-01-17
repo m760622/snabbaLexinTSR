@@ -192,7 +192,7 @@
 
  main {
      padding: 0 1rem 1rem;
-     max-width: 700px;
+     max-width: 414px;
      margin: 0 auto;
  }
 
@@ -212,7 +212,7 @@
  /* Search Filter Section (outside main) */
  .search-filter-section {
      padding: 0 1rem;
-     max-width: 700px;
+     max-width: 414px;
      margin: 0 auto;
  }
 
@@ -608,7 +608,7 @@
  }
 
  .lesson-content {
-     max-width: 700px;
+     max-width: 414px;
      margin: 0 auto;
      padding: 4.5rem 1rem 2rem;
  }
@@ -713,7 +713,7 @@
  }
 
  .quiz-container {
-     max-width: 600px;
+     max-width: 414px;
      margin: 0 auto;
      text-align: center;
  }
@@ -1186,7 +1186,7 @@
    MOBILE RESPONSIVE STYLES - LEARN PAGE
    ======================================== */
 
- @media (max-width: 480px) {
+ @media (max-width: 414px) {
 
      /* Header */
      header {
@@ -1523,7 +1523,7 @@
      gap: 3rem;
      padding: 2rem 1rem 6rem;
      position: relative;
-     max-width: 600px;
+     max-width: 414px;
      margin: 0 auto;
  }
 
@@ -1986,7 +1986,7 @@
  }
 
  /* Adjust header layout for mobile */
- @media (max-width: 600px) {
+ @media (max-width: 414px) {
      header {
          padding: 0.8rem 1rem;
          flex-wrap: nowrap;
@@ -2684,7 +2684,7 @@
 
  .lesson-content {
      padding: 1.5rem;
-     max-width: 800px;
+     max-width: 414px;
      margin: 0 auto;
  }
 
@@ -2763,7 +2763,7 @@
  }
 
  /* Responsive */
- @media (max-width: 600px) {
+ @media (max-width: 414px) {
      .hero-stats {
          gap: 0.5rem;
      }
