@@ -26,7 +26,8 @@
         <!-- Sticky Header with Actions + Tabs -->
         <header class="details-header details-header-sticky">
             <div class="header-actions">
-                <a href="index.html" class="header-action-btn back-btn-nav" data-i18n-title="nav.back">
+                <a href="index.html" class="header-action-btn back-btn-nav" data-i18n-title="nav.back"
+                    aria-label="Tillbaka / رجوع">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 12H5"></path>
@@ -35,7 +36,8 @@
                 </a>
 
                 <div class="header-right-group">
-                    <button id="headerAudioBtn" class="header-action-btn" data-i18n-title="settings.testTTS">
+                    <button type="button" id="headerAudioBtn" class="header-action-btn" aria-label="Testa uppläsning"
+                        data-i18n-title="settings.testTTS">
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
@@ -43,7 +45,8 @@
                         </svg>
                     </button>
 
-                    <button id="headerFavoriteBtn" class="header-action-btn" data-i18n-title="toast.favAdded">
+                    <button type="button" id="headerFavoriteBtn" class="header-action-btn"
+                        aria-label="Spara som favorit" data-i18n-title="toast.favAdded">
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
@@ -52,7 +55,8 @@
                         </svg>
                     </button>
 
-                    <button id="headerFlashcardBtn" class="header-action-btn" data-i18n-title="learn.quiz">
+                    <button type="button" id="headerFlashcardBtn" class="header-action-btn" aria-label="Öva ordet"
+                        data-i18n-title="learn.quiz">
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
@@ -60,14 +64,16 @@
                         </svg>
                     </button>
 
-                    <button id="themeToggleBtn" class="header-action-btn" data-i18n-title="settings.appearance">
+                    <button type="button" id="themeToggleBtn" class="header-action-btn" aria-label="Ändra tema"
+                        data-i18n-title="settings.appearance">
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                         </svg>
                     </button>
 
-                    <button id="smartCopyBtn" class="header-action-btn" data-i18n-title="toast.copied">
+                    <button type="button" id="smartCopyBtn" class="header-action-btn" aria-label="Kopiera länk"
+                        data-i18n-title="toast.copied">
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -75,7 +81,8 @@
                         </svg>
                     </button>
 
-                    <button id="headerShareBtn" class="header-action-btn" data-i18n-title="btn.export">
+                    <button type="button" id="headerShareBtn" class="header-action-btn" aria-label="Dela"
+                        data-i18n-title="btn.export">
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="18" cy="5" r="3"></circle>
@@ -178,7 +185,7 @@
                     <!-- Main Actions - Premium Grid Layout -->
                     <div class="pronunciation-actions-grid">
                         <!-- Primary Action: Listen -->
-                        <button id="pronounceNormalBtn" class="action-card listen-card">
+                        <button type="button" id="pronounceNormalBtn" class="action-card listen-card">
                             <span class="action-icon">🔊</span>
                             <span class="action-label">
                                 <span class="sv-text">Lyssna</span>
@@ -192,14 +199,16 @@
                         <div class="action-card repeat-card">
                             <span class="action-icon">🔁</span>
                             <div class="repeat-inner">
-                                <select id="repeatCount" class="repeat-select-modern">
+                                <select id="repeatCount" class="repeat-select-modern"
+                                    aria-label="Antal upprepningar / عدد التكرار"
+                                    title="Antal upprepningar / عدد التكرار">
                                     <option value="2">2×</option>
                                     <option value="3" selected>3×</option>
                                     <option value="5">5×</option>
                                     <option value="10">10×</option>
                                     <option value="infinite">∞</option>
                                 </select>
-                                <button id="repeatBtn" class="repeat-go-btn">
+                                <button type="button" id="repeatBtn" class="repeat-go-btn">
                                     <span class="sv-text">Upprepa</span>
                                     <span class="ar-text">تكرار</span>
                                 </button>
@@ -207,7 +216,7 @@
                         </div>
 
                         <!-- Slow Listen Action -->
-                        <button id="pronounceSlowBtn" class="action-card slow-card">
+                        <button type="button" id="pronounceSlowBtn" class="action-card slow-card">
                             <span class="action-icon">🐢</span>
                             <span class="action-label">
                                 <span class="sv-text">Långsamt</span>
@@ -216,99 +225,16 @@
                         </button>
 
                         <!-- Stop Action -->
-                        <button id="stopBtn" class="action-card stop-card">
+                        <button type="button" id="stopBtn" class="action-card stop-card">
                             <span class="action-icon">⏹️</span>
                             <span class="action-label">
                                 <span class="sv-text">Stopp</span>
                                 <span class="ar-text">إيقاف</span>
                             </span>
                         </button>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Quiz Section -->
-            <div class="details-section quiz-section premium-glow-section">
-                <h3 class="section-title">
-                    <span class="section-icon">⚡</span> <span class="sv-text">Snabbtest</span><span
-                        class="ar-text">اختبار سريع</span>
-                </h3>
-                <div id="miniQuizContainer" class="mini-quiz-card">
-                    <div id="miniQuizQuestion" class="mini-quiz-question"></div>
-                    <div id="miniQuizOptions" class="quiz-options"></div>
-                    <div id="miniQuizFeedback" class="mini-quiz-feedback hidden"></div>
-                </div>
-            </div>
-
-            <!-- Pronunciation Lab (NEW) -->
-            <div class="details-section pronunciation-lab-section premium-glow-section">
-                <h3 class="section-title">
-                    <span class="section-icon">🎙️</span> <span class="sv-text">Uttalslabb</span><span
-                        class="ar-text">مختبر النطق</span>
-                </h3>
-
-                <div class="pronunciation-card premium-border-animated">
-                    <!-- Practice Levels -->
-                    <div id="practiceLevelsContainer"></div>
-                    <div id="modeInstruction" class="mode-instruction"></div>
-
-                    <!-- Visualizer -->
-                    <div id="audioVisualizerContainer" class="visualizer-container"></div>
-
-                    <!-- Word Display with Highlight -->
-                    <div id="karaokeDisplay" class="karaoke-display"></div>
-
-                    <!-- Syllables Breakdown -->
-                    <div id="syllableDisplay" class="syllable-display"></div>
-
-                    <!-- Speed Control -->
-                    <div class="speed-control-container">
-                        <label for="ttsSpeedSlider" class="speed-label">
-                            <span class="sv-text">Hastighet: <span id="speedValue">1.0x</span></span>
-                            <span class="ar-text">السرعة: <span id="speedValueAr">1.0x</span></span>
-                        </label>
-                        <input type="range" id="ttsSpeedSlider" class="speed-slider" min="0.5" max="1.5" step="0.1"
-                            value="1.0">
-                        <div class="speed-markers">
-                            <span>0.5x</span>
-                            <span>1.0x</span>
-                            <span>1.5x</span>
-                        </div>
-                    </div>
-
-                    <!-- Main Actions - Premium Grid Layout -->
-                    <div class="pronunciation-actions-grid">
-                        <!-- Primary Action: Listen -->
-                        <button id="pronounceNormalBtn" class="action-card listen-card">
-                            <span class="action-icon">🔊</span>
-                            <span class="action-label">
-                                <span class="sv-text">Lyssna</span>
-                                <span class="ar-text">استمع</span>
-                            </span>
-                            <span class="action-hint sv-text">En gång</span>
-                            <span class="action-hint ar-text">مرة واحدة</span>
-                        </button>
-
-                        <!-- Repeat Action -->
-                        <div class="action-card repeat-card">
-                            <span class="action-icon">🔁</span>
-                            <div class="repeat-inner">
-                                <select id="repeatCount" class="repeat-select-modern">
-                                    <option value="2">2×</option>
-                                    <option value="3" selected>3×</option>
-                                    <option value="5">5×</option>
-                                    <option value="10">10×</option>
-                                    <option value="infinite">∞</option>
-                                </select>
-                                <button id="repeatBtn" class="repeat-go-btn">
-                                    <span class="sv-text">Upprepa</span>
-                                    <span class="ar-text">تكرار</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Record Action -->
-                        <button id="recordBtn" class="action-card record-card">
+                        <!-- Record Action (Moved here) -->
+                        <button type="button" id="recordBtn" class="action-card record-card">
                             <span class="action-icon">🎙️</span>
                             <span class="action-label">
                                 <span class="sv-text">Spela in</span>
@@ -327,17 +253,31 @@
 
                     <!-- Playback of recorded audio -->
                     <div id="playbackArea" class="playback-area hidden">
-                        <button id="playRecordedBtn" class="pro-btn outline">
+                        <button type="button" id="playRecordedBtn" class="pro-btn outline">
                             ▶️ <span class="sv-text">Hör din röst</span><span class="ar-text">اسمع صوتك</span>
                         </button>
                         <div id="pronunciationScore" class="pronunciation-score"></div>
                         <div id="masteryBadgeContainer" class="mastery-badge-container"></div>
                     </div>
-
-                    <!-- Phonetic Tips -->
+                    <!-- Phonetic Tips (Moved here) -->
                     <div id="phoneticTipsArea" class="phonetic-tips-area"></div>
                 </div>
             </div>
+
+            <!-- Quiz Section -->
+            <div class="details-section quiz-section premium-glow-section">
+                <h3 class="section-title">
+                    <span class="section-icon">⚡</span> <span class="sv-text">Snabbtest</span><span
+                        class="ar-text">اختبار سريع</span>
+                </h3>
+                <div id="miniQuizContainer" class="mini-quiz-card">
+                    <div id="miniQuizQuestion" class="mini-quiz-question"></div>
+                    <div id="miniQuizOptions" class="quiz-options"></div>
+                    <div id="miniQuizFeedback" class="mini-quiz-feedback hidden"></div>
+                </div>
+            </div>
+
+
 
             <!-- Flashcard Mode -->
             <div class="details-section flashcard-section">
@@ -351,11 +291,12 @@
                                 class="ar-text">ملاحظات</span>
                         </h3>
                         <div class="notes-container">
-                            <textarea id="wordNotes" data-i18n-placeholder="details.notesPlaceholder"></textarea>
+                            <textarea id="wordNotes" data-i18n-placeholder="details.notesPlaceholder"
+                                aria-label="Anteckningar / ملاحظات"></textarea>
                             <div class="notes-actions">
                                 <span id="notesStatus" class="notes-status"></span>
-                                <button id="saveNotesBtn" class="save-notes-btn"><span class="sv-text">Spara</span><span
-                                        class="ar-text">حفظ</span></button>
+                                <button type="button" id="saveNotesBtn" class="save-notes-btn"><span
+                                        class="sv-text">Spara</span><span class="ar-text">حفظ</span></button>
                             </div>
                         </div>
                     </div>

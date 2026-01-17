@@ -71,8 +71,8 @@ body.iphone-view::before {
     z-index: 1000;
 
     background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
 
     border: 1px solid rgba(251, 191, 36, 0.15);
     border-radius: 16px;
@@ -167,8 +167,8 @@ body.iphone-view::before {
     margin-bottom: 2px;
 
     background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     padding: 6px;
     border-radius: 50px;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -286,6 +286,7 @@ main {
     overflow-y: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    -ms-overflow-style: none;
     padding-bottom: 0.25rem;
     max-height: 50px;
     transition: all 0.3s ease;
@@ -369,7 +370,7 @@ main {
 }
 
 .cognate-card.saved {
-    border-color: var(--warning);
+    /* No border change - only star button changes color */
 }
 
 .word-swe {
@@ -424,7 +425,10 @@ body .cognate-card .word-arb {
 }
 
 .mini-btn.saved {
-    background: rgba(245, 158, 11, 0.2);
+    background: rgba(239, 68, 68, 0.25);
+    color: #ef4444;
+    filter: none;
+    text-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
 
 /* Shared View Container Styles */
@@ -462,10 +466,39 @@ body .cognate-card .word-arb {
 
 /* Saved View (inline like flashcards) */
 .saved-view {
-    padding: 1.5rem 1rem;
-    /* Slightly less horizontal padding for list */
-    width: auto;
-    /* Let margin handle the width */
+    padding: 1rem;
+    width: 100%;
+}
+
+/* Saved View Header */
+.saved-view-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(251, 191, 36, 0.1) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.saved-view-header h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.saved-count-badge {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
 }
 
 .saved-list {
@@ -475,22 +508,153 @@ body .cognate-card .word-arb {
     width: 100%;
 }
 
+/* Premium Saved Card Design */
 .saved-card {
-    border-left: 4px solid var(--saved-color, #fbbf24);
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: none;
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
 
+.saved-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #ef4444 0%, #fbbf24 100%);
+    border-radius: 4px 0 0 4px;
+}
+
+.saved-card:hover {
+    transform: translateX(4px);
+    border-color: rgba(239, 68, 68, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(239, 68, 68, 0.1);
+}
+
+.saved-card .card-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.saved-card .card-left strong {
+    font-size: 1.1rem;
+    color: #f1f5f9;
+    font-weight: 600;
+}
+
+.saved-card .card-type {
+    font-size: 0.75rem;
+    color: rgba(148, 163, 184, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.saved-card .card-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.saved-card .word-arb {
+    font-size: 1.15rem;
+    color: rgba(251, 191, 36, 0.95);
+    font-family: 'Tajawal', sans-serif;
+}
+
+.saved-card .mini-btn.saved {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+    font-size: 1.1rem;
+    transition: all 0.2s;
+}
+
+.saved-card .mini-btn.saved:hover {
+    background: rgba(239, 68, 68, 0.35);
+    transform: scale(1.1);
+}
+
+/* Empty State Card - Premium */
 .empty-state-card {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: 2rem;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+    border-radius: 20px;
+    padding: 3rem 2rem;
     text-align: center;
-    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border: 2px dashed rgba(251, 191, 36, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.empty-state-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.05) 0%, transparent 50%);
+    animation: pulse-glow 4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
 }
 
 .empty-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    opacity: 0.5;
+    font-size: 4rem;
+    margin-bottom: 1.25rem;
+    filter: drop-shadow(0 4px 15px rgba(251, 191, 36, 0.3));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.empty-state-card p {
+    margin: 0.5rem 0;
+    color: rgba(226, 232, 240, 0.9);
+    font-size: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.empty-state-card .sub-text {
+    color: rgba(148, 163, 184, 0.7);
+    font-size: 0.9rem;
 }
 
 .flashcard-progress {
@@ -709,6 +873,7 @@ body .cognate-card .word-arb {
     border: 1px solid rgba(255, 255, 255, 0.05);
     overflow-x: auto;
     scrollbar-width: none;
+    -ms-overflow-style: none;
     -ms-overflow-style: none;
 }
 
@@ -1426,7 +1591,7 @@ body .cognate-card .word-arb {
 }
 
 /* Smaller mobile phones */
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 414px) {
     .quiz-container {
         padding: 0.75rem;
         padding-top: 3rem;
@@ -1511,6 +1676,8 @@ body.iphone-view .quiz-container {
         flex-wrap: nowrap;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
 
     .mode-tab {
@@ -1540,10 +1707,48 @@ body.iphone-view .quiz-container {
         transition: transform 0.1s ease;
     }
 
-    .quiz-type-btn:active,
-    .result-btn:active,
     .submit-btn:active {
         transform: scale(0.97);
         opacity: 0.9;
     }
+}
+
+/* Utility classes extracted from inline styles */
+.nav-buttons-row {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-group-left {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nav-group-right {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.page-title-container {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+}
+
+.main-title-blue {
+    font-family: 'Amiri', serif;
+    font-size: 2.5rem;
+    color: #3b82f6;
+    margin: 0;
+    text-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+}
+
+.subtitle-text {
+    font-size: 1.2rem;
+    color: #cbd5e1;
+    margin-top: 0.2rem;
 }

@@ -365,7 +365,7 @@ body.lang-both .ar-text {
 }
 
 /* Responsive */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .puzzle-grid {
         gap: 6px;
         padding: 10px;

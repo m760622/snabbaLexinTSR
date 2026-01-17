@@ -69,7 +69,7 @@
 }
 
 /* Adjust title size for small screens to prevent overlap */
-@media (max-width: 360px) {
+@media (max-width: 414px) {
     .game-hero-title {
         font-size: 1.2rem;
     }

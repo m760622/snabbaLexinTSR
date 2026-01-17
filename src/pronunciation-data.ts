@@ -47,29 +47,67 @@ export const PronunciationHelper = {
     /**
      * Basic Swedish syllable splitter (Simplified heuristic)
      */
+    /**
+     * Advanced Swedish syllable splitter based on Golden Rules
+     * 1. One vowel per syllable
+     * 2. V-C-V -> V-CV (Single consonant goes to second syllable)
+     * 3. V-CC-V -> VC-CV (Two consonants split)
+     * 4. Best-effort compound splitting via VCCV rule
+     */
     splitIntoSyllables(word: string): string[] {
-        const vowels = 'aeiouyåäö';
-        const syllables: string[] = [];
-        let current = '';
+        if (!word) return [];
+        const vowels = 'aeiouyåäöAEIOUYÅÄÖ';
 
+        // Find all vowel indices
+        const vowelIndices: number[] = [];
         for (let i = 0; i < word.length; i++) {
-            current += word[i];
-
-            // Heuristic: Split after vowel if followed by consonant + vowel
-            if (vowels.includes(word[i].toLowerCase())) {
-                if (i + 2 < word.length && !vowels.includes(word[i + 1].toLowerCase()) && vowels.includes(word[i + 2].toLowerCase())) {
-                    syllables.push(current);
-                    current = '';
-                }
-            }
-            // Split after double consonant
-            if (i > 0 && word[i] === word[i - 1] && !vowels.includes(word[i].toLowerCase())) {
-                syllables.push(current);
-                current = '';
+            if (vowels.includes(word[i])) {
+                vowelIndices.push(i);
             }
         }
 
-        if (current) syllables.push(current);
+        // If 0 or 1 vowel, it's a single syllable
+        if (vowelIndices.length <= 1) return [word];
+
+        const syllables: string[] = [];
+        let lastSplit = 0;
+
+        // Iterate intervals between vowels
+        for (let k = 0; k < vowelIndices.length - 1; k++) {
+            const v1 = vowelIndices[k];
+            const v2 = vowelIndices[k + 1];
+
+            // Consonants between vowels
+            const consonants = word.substring(v1 + 1, v2);
+            const numConsonants = consonants.length;
+
+            let splitOffset = 0;
+
+            if (numConsonants === 0) {
+                // Hiatus (e.g. Boende -> Bo-en-de, Teater -> Te-a-ter)
+                // Split between the vowels
+                splitOffset = 1;
+            } else if (numConsonants === 1) {
+                // Rule 2: V-C-V -> V-CV (Lä-sa)
+                // Split before the consonant
+                splitOffset = 1;
+            } else {
+                // Rule 3: V-CC-V -> VC-CV (Kaf-fe)
+                // Split after the first consonant
+                splitOffset = 2; // v1 + 1 (first cons) + 1 (split after)
+
+                // Exception check for specific indivisible pairs could go here if strongly required,
+                // but user examples (Sjun-ga) suggest splitting is preferred between consonants.
+            }
+
+            const splitPoint = v1 + splitOffset;
+            syllables.push(word.substring(lastSplit, splitPoint));
+            lastSplit = splitPoint;
+        }
+
+        // Add the rest of the word
+        syllables.push(word.substring(lastSplit));
+
         return syllables;
     },
 

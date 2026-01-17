@@ -50,12 +50,12 @@
         <!-- Difficulty & Type Filters -->
         <div class="wordle-filters">
             <select id="wordleDifficulty" class="wordle-filter-btn" onchange="startWordleGame()"
-                title="Difficulty / الصعوبة">
+                aria-label="Svårighetsgrad" title="Difficulty / الصعوبة">
                 <option value="easy">🟢 Lätt (4 bokstäver)</option>
                 <option value="medium" selected>🟡 Medel (5 bokstäver)</option>
                 <option value="hard">🔴 Svår (6 bokstäver)</option>
             </select>
-            <select id="wordleTypeFilter" class="wordle-filter-btn" onchange="startWordleGame()"
+            <select id="wordleTypeFilter" class="wordle-filter-btn" onchange="startWordleGame()" aria-label="Ordtyp"
                 title="Word Type / نوع الكلمة">
                 <option value="all">Alla typer</option>
                 <option value="substantiv">Substantiv</option>

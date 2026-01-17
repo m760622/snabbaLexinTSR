@@ -28,50 +28,53 @@
     <div class="particles-container" id="particlesContainer"></div>
 
     <header>
-        <button class="back-btn" onclick="window.location.href='../index.html'" aria-label="Tillbaka / رجوع"
-            title="Tillbaka / رجوع">
+        <button type="button" class="back-btn" onclick="window.location.href='../index.html'"
+            aria-label="Tillbaka / رجوع" title="Tillbaka / رجوع">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
         </button>
-        <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()" class="ml-sm">📱</button>
+        <button type="button" id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()" class="ml-sm"
+            aria-label="Mobilvy / عرض الجوال">📱</button>
         <h1><span class="sv-text">Lär dig Svenska</span><span class="ar-text">تعلم السويدية</span></h1>
 
         <div class="flex-1"></div>
 
-        <button class="mobile-toggle-btn" onclick="window.location.href='../profile.html'"
-            title="Profil / الملف الشخصي">
+        <button type="button" class="mobile-toggle-btn" onclick="window.location.href='../profile.html'"
+            title="Profil / الملف الشخصي" aria-label="Profil / الملف الشخصي">
             👤
         </button>
     </header>
 
     <!-- Quick Access Row (Separate Line) -->
     <div class="quick-access-row">
-        <button class="quick-btn" onclick="window.location.href='quran.html'" title="Koranord / كلمات القرآن">
+        <button type="button" class="quick-btn" onclick="window.location.href='quran.html'"
+            title="Koranord / كلمات القرآن">
             <span class="quick-icon">📖</span>
             <span class="quick-label sv-text">Koranord</span>
             <span class="quick-label ar-text">كلمات القرآن</span>
         </button>
-        <button class="quick-btn" onclick="window.location.href='asma_ul_husna.html'"
+        <button type="button" class="quick-btn" onclick="window.location.href='asma_ul_husna.html'"
             title="Guds 99 Namn / أسماء الله الحسنى">
             <span class="quick-icon">📿</span>
             <span class="quick-label sv-text">99 Namn</span>
             <span class="quick-label ar-text">أسماء الله</span>
         </button>
-        <button class="quick-btn" onclick="window.location.href='ordsprak.html'"
+        <button type="button" class="quick-btn" onclick="window.location.href='ordsprak.html'"
             title="Svenska Ordspråk / الأمثال السويدية">
             <span class="quick-icon">📜</span>
             <span class="quick-label sv-text">Ordspråk</span>
             <span class="quick-label ar-text">الأمثال</span>
         </button>
-        <button class="quick-btn" onclick="window.location.href='cognates.html'" title="Liknande Ord / المتشابهات">
+        <button type="button" class="quick-btn" onclick="window.location.href='cognates.html'"
+            title="Liknande Ord / المتشابهات">
             <span class="quick-icon">🔤</span>
             <span class="quick-label sv-text">Liknande</span>
             <span class="quick-label ar-text">متشابهات</span>
         </button>
-        <button class="quick-btn" onclick="openRandomQuiz()" title="Slumpmässig Quiz / اختبار عشوائي">
+        <button type="button" class="quick-btn" onclick="openRandomQuiz()" title="Slumpmässig Quiz / اختبار عشوائي">
             <span class="quick-icon">🎲</span>
             <span class="quick-label sv-text">Quiz</span>
             <span class="quick-label ar-text">اختبار</span>
@@ -83,7 +86,7 @@
         <div class="search-container">
             <input type="text" id="lessonSearchInput" placeholder="Sök lektioner / ابحث عن درس..."
                 data-i18n-placeholder="learn.searchPlaceholder">
-            <button id="filterToggleBtn" class="filter-toggle-btn" aria-label="Toggle Filters">
+            <button type="button" id="filterToggleBtn" class="filter-toggle-btn" aria-label="Toggle Filters">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
@@ -91,13 +94,13 @@
             </button>
         </div>
         <div class="filter-scroll-container">
-            <button class="filter-chip active" data-filter="all"><span class="sv-text">Alla</span><span
+            <button type="button" class="filter-chip active" data-filter="all"><span class="sv-text">Alla</span><span
                     class="ar-text">الكل</span></button>
-            <button class="filter-chip filter-beginner" data-filter="beginner"><span
+            <button type="button" class="filter-chip filter-beginner" data-filter="beginner"><span
                     class="sv-text">Nybörjare</span><span class="ar-text">مبتدئ</span></button>
-            <button class="filter-chip filter-intermediate" data-filter="intermediate"><span
+            <button type="button" class="filter-chip filter-intermediate" data-filter="intermediate"><span
                     class="sv-text">Medel</span><span class="ar-text">متوسط</span></button>
-            <button class="filter-chip filter-advanced" data-filter="advanced"><span
+            <button type="button" class="filter-chip filter-advanced" data-filter="advanced"><span
                     class="sv-text">Avancerad</span><span class="ar-text">متقدم</span></button>
         </div>
     </div>
@@ -159,7 +162,7 @@
                 <div class="wod-card" onclick="speakWordOfDay()">
                     <div class="wod-header">
                         <span class="wod-date" id="wodDate"></span>
-                        <button class="wod-speak-btn">🔊</button>
+                        <button type="button" class="wod-speak-btn" aria-label="Lyssna / استمع">🔊</button>
                     </div>
                     <div class="wod-content">
                         <div class="wod-word" id="wodWord">välkommen</div>
@@ -252,7 +255,7 @@
                         <div class="bar-fill"></div><span class="day-label">Lör</span>
                     </div>
                     <div class="activity-bar today" data-day="6">
-                        <div class="bar-fill" style="height: 60%"></div><span class="day-label">Sön</span>
+                        <div class="bar-fill h-60"></div><span class="day-label">Sön</span>
                     </div>
                 </div>
                 <div class="activity-summary">
@@ -278,7 +281,8 @@
     <!-- Lesson Modal -->
     <div id="lessonModal" class="lesson-modal">
         <div class="modal-header">
-            <button class="close-lesson" onclick="closeLessonModal()">×</button>
+            <button type="button" class="close-lesson" onclick="closeLessonModal()"
+                aria-label="Stäng / إغلاق">×</button>
             <h2 id="modalTitle">Lektion</h2>
             <div class="w-44"></div>
         </div>

@@ -56,7 +56,7 @@
                         <span class="sv-text">Ordklass</span>
                         <span class="ar-text">نوع الكلمة</span>
                     </label>
-                    <select id="type">
+                    <select id="type" aria-label="Ordtyp / نوع الكلمة">
                         <option value="">
                             <span class="sv-text">Välj ordklass</span> / <span class="ar-text">اختر نوع الكلمة</span>
                         </option>
@@ -97,7 +97,8 @@
                         <span class="sv-text">Definition (Svenska)</span>
                         <span class="ar-text">التعريف (السويدية)</span>
                     </label>
-                    <textarea id="sweDef" rows="2" placeholder="Beskriv ordet på svenska..."></textarea>
+                    <textarea id="sweDef" rows="2" placeholder="Beskriv ordet på svenska..."
+                        aria-label="Svensk definition"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -105,7 +106,8 @@
                         <span class="sv-text">Definition (Arabiska)</span>
                         <span class="ar-text">التعريف (العربية)</span>
                     </label>
-                    <textarea id="arbDef" rows="2" dir="rtl" placeholder="اشرح الكلمة بالعربية..."></textarea>
+                    <textarea id="arbDef" rows="2" dir="rtl" placeholder="اشرح الكلمة بالعربية..."
+                        aria-label="Arabisk definition"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -113,7 +115,8 @@
                         <span class="sv-text">Exempel (Svenska)</span>
                         <span class="ar-text">مثال (السويدية)</span>
                     </label>
-                    <input type="text" id="exSwe" placeholder="Använd ordet i en mening...">
+                    <input type="text" id="exSwe" placeholder="Använd ordet i en mening..."
+                        aria-label="Svenskt exempel">
                 </div>
 
                 <div class="form-group">
@@ -121,7 +124,8 @@
                         <span class="sv-text">Exempel (Arabiska)</span>
                         <span class="ar-text">مثال (العربية)</span>
                     </label>
-                    <input type="text" id="exArb" dir="rtl" placeholder="استخدم الكلمة في جملة...">
+                    <input type="text" id="exArb" dir="rtl" placeholder="استخدم الكلمة في جملة..."
+                        aria-label="Arabiskt exempel">
                 </div>
 
                 <div class="live-preview-container" id="livePreview">

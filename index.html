@@ -26,7 +26,7 @@
 </head>
 
 <body>
-    <div id="splashScreen" class="splash-screen" style="display: none !important;"></div>
+    <div id="splashScreen" class="splash-screen hidden"></div>
     <script>
         // Check if we need to load data via Welcome screen
         try {
@@ -63,14 +63,12 @@
     </div>
 
     <!-- App Update Prompt -->
-    <div id="updatePrompt" class="update-prompt hidden">
+    <div id="updateNotification" class="update-notification hidden">
         <div class="update-content">
-            <span class="update-icon">🔄</span>
-            <span class="update-text"><span class="ar-text">تحديث جديد متوفر!</span> / <span class="sv-text">Ny
-                    uppdatering tillgänglig!</span></span>
-            <button id="updateBtn" class="update-btn"><span class="ar-text">تحديث</span> / <span
+            <span id="updateMessage">Ny version tillgänglig! / نسخة جديدة متاحة!</span>
+            <button type="button" id="updateBtn" class="update-btn"><span class="ar-text">تحديث</span> / <span
                     class="sv-text">Uppdatera</span></button>
-            <button id="dismissUpdate" class="dismiss-btn">×</button>
+            <button type="button" id="dismissUpdate" class="dismiss-btn" aria-label="Stäng / إغلاق">×</button>
         </div>
     </div>
 
@@ -126,10 +124,12 @@
             </div>
 
             <!-- Hidden elements kept for functionality -->
-            <button id="installApp" class="hidden" title="Installera appen / تثبيت التطبيق"></button>
+            <button type="button" id="installApp" class="hidden" title="Installera appen / تثبيت التطبيق"></button>
             <input type="file" id="importCustomFile" accept=".json" class="hidden"
-                title="Importera anpassade ord / استيراد كلمات مخصصة">
-            <input type="file" id="importFile" accept=".json" class="hidden" title="Importera data / استيراد البيانات">
+                title="Importera anpassade ord / استيراد كلمات مخصصة"
+                aria-label="Importera anpassade ord / استيراد كلمات مخصصة">
+            <input type="file" id="importFile" accept=".json" class="hidden" title="Importera data / استيراد البيانات"
+                aria-label="Importera data / استيراد البيانات">
     </nav>
 
     <!-- <h3>Snabba Lexin</h3> -->
@@ -147,7 +147,8 @@
                     <span class="flashcard-stats-inline">
                         ✅ <span id="fcCorrectInline">0</span>
                     </span>
-                    <button id="closeFlashcardInline" class="close-btn">&times;</button>
+                    <button type="button" id="closeFlashcardInline" class="close-btn"
+                        aria-label="Stäng / إغلاق">&times;</button>
                 </div>
             </div>
             <div class="flashcard-body-inline">
@@ -156,16 +157,18 @@
                         <div class="flashcard-face flashcard-front-inline">
                             <span class="flashcard-text-inline" id="flashcardFrontInline">Hej</span>
                             <span class="flashcard-hint-inline">Tryck för att vända / اضغط للقلب</span>
-                            <button class="flashcard-speak-btn-inline" id="flashcardSpeakFrontInline">🔊</button>
+                            <button type="button" class="flashcard-speak-btn-inline" id="flashcardSpeakFrontInline"
+                                aria-label="Lyssna / استمع">🔊</button>
                         </div>
                         <div class="flashcard-face flashcard-back-inline">
                             <span class="flashcard-text-inline" id="flashcardBackInline">مرحبا</span>
-                            <button class="flashcard-speak-btn-inline" id="flashcardSpeakBtnInline">🔊</button>
+                            <button type="button" class="flashcard-speak-btn-inline" id="flashcardSpeakBtnInline"
+                                aria-label="Lyssna / استمع">🔊</button>
                         </div>
                     </div>
                     <!-- Favorite Button - Always Visible -->
-                    <button class="flashcard-fav-btn" id="flashcardFavBtn"
-                        title="Lägg till favorit / أضف للمفضلة">❤️</button>
+                    <button type="button" class="flashcard-fav-btn" id="flashcardFavBtn"
+                        title="Lägg till favorit / أضف للمفضلة" aria-label="Lägg till favorit / أضف للمفضلة">❤️</button>
                 </div>
 
 
@@ -201,8 +204,8 @@
 
 
                     <input type="text" id="searchInput" placeholder="Sök ord / ابحث عن كلمة..." autocomplete="off"
-                        autocorrect="off" spellcheck="false">
-                    <button id="clearSearch" class="clear-btn hidden" aria-label="Rensa / مسح">
+                        autocorrect="off" spellcheck="false" aria-label="Sök ord / ابحث عن كلمة">
+                    <button type="button" id="clearSearch" class="clear-btn hidden" aria-label="Rensa / مسح">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -213,8 +216,8 @@
                     <!-- New Result Count Badge -->
                     <span id="resultCount" class="search-result-badge">0</span>
 
-                    <button id="voiceSearchBtn" class="voice-search-btn" aria-label="Röstinmatning / البحث الصوتي"
-                        aria-pressed="false">
+                    <button type="button" id="voiceSearchBtn" class="voice-search-btn"
+                        aria-label="Röstinmatning / البحث الصوتي" aria-pressed="false">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
@@ -225,7 +228,7 @@
                     </button>
                 </div>
 
-                <button id="filterToggleBtn" class="filter-toggle-btn" aria-label="Filter">
+                <button type="button" id="filterToggleBtn" class="filter-toggle-btn" aria-label="Filter">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="4" y1="21" x2="4" y2="14"></line>
@@ -324,7 +327,7 @@
 
     <!-- شريط الاختصارات السريعة - يظهر دائماً -->
     <div class="quick-actions-bar">
-        <button class="quick-action-btn hidden" id="quickWodBtn" title="كلمة اليوم / Dagens Ord">
+        <button type="button" class="quick-action-btn hidden" id="quickWodBtn" title="كلمة اليوم / Dagens Ord">
             <span class="quick-icon">📅</span>
             <span class="quick-label"><span class="sv-text">Ord</span><span class="ar-text">كلمة</span></span>
         </button>
@@ -336,11 +339,11 @@
             <span class="quick-icon">📚</span>
             <span class="quick-label"><span class="sv-text">Lär</span><span class="ar-text">تعلم</span></span>
         </a>
-        <button class="quick-action-btn" id="quickFavBtn" title="مفضلة / Favoriter">
+        <button type="button" class="quick-action-btn" id="quickFavBtn" title="مفضلة / Favoriter">
             <span class="quick-icon">⭐</span>
             <span class="quick-label"><span class="sv-text">Favoriter</span><span class="ar-text">مفضلة</span></span>
         </button>
-        <button class="quick-action-btn premium-border-animated" id="quickQuizBtn" title="اختبار / Quiz">
+        <button type="button" class="quick-action-btn premium-border-animated" id="quickQuizBtn" title="اختبار / Quiz">
             <span class="quick-icon">⚡</span>
             <span class="quick-label"><span class="sv-text">Quiz</span><span class="ar-text">اختبار</span></span>
         </button>
@@ -353,7 +356,8 @@
             <div class="history-header">
                 <span class="history-title">🕒 <span class="sv-text">Senaste</span><span
                         class="ar-text">الأخيرة</span></span>
-                <button id="clearHistoryBtn" class="clear-history-btn" title="Rensa / مسح">🗑️</button>
+                <button type="button" id="clearHistoryBtn" class="clear-history-btn" title="Rensa / مسح"
+                    aria-label="Rensa / مسح">🗑️</button>
             </div>
             <div id="searchHistoryList" class="history-list">
                 <!-- Items injected here -->
@@ -396,7 +400,7 @@
                         <div class="challenge-progress-fill glow-effect" id="challengeProgressBar">
                         </div>
                     </div>
-                    <button class="challenge-progress-count" id="challengeProgressText"
+                    <button type="button" class="challenge-progress-count" id="challengeProgressText"
                         title="تقدمك / Din framsteg">0/5</button>
                 </div>
             </div>
@@ -424,7 +428,7 @@
                         <div class="quiz-timer" id="quizTimer">10</div>
                         <div class="quiz-progress-text" id="quizProgressText">1/10</div>
                         <div class="quiz-score-inline" id="quizScore">0</div>
-                        <button id="quizFavBtn" class="quiz-fav-btn-header" aria-label="Spara / حفظ">
+                        <button type="button" id="quizFavBtn" class="quiz-fav-btn-header" aria-label="Spara / حفظ">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2">
                                 <path
@@ -432,7 +436,8 @@
                                 </path>
                             </svg>
                         </button>
-                        <button id="closeQuiz" class="close-btn">&times;</button>
+                        <button type="button" id="closeQuiz" class="close-btn"
+                            aria-label="Stäng / إغلاق">&times;</button>
                     </div>
                 </div>
 
@@ -451,7 +456,7 @@
                     </div>
                     <div id="quizOptions" class="quiz-options"></div>
                     <div id="quizFeedback" class="quiz-feedback"></div>
-                    <button id="nextQuestion" class="action-btn primary next-btn-styled"><span
+                    <button type="button" id="nextQuestion" class="action-btn primary next-btn-styled"><span
                             class="sv-text">Nästa</span><span class="ar-text">التالي</span> ➡️</button>
 
                     <!-- End Screen -->
@@ -466,8 +471,8 @@
                         <p class="end-message" id="endMessage"><span class="sv-text">Bra jobbat!</span><span
                                 class="ar-text">أحسنت!</span></p>
                         <div id="endStats" class="end-stats"></div>
-                        <button id="restartQuiz" class="action-btn primary"><span class="sv-text">Spela igen</span><span
-                                class="ar-text">إعادة</span> 🔄</button>
+                        <button type="button" id="restartQuiz" class="action-btn primary"><span class="sv-text">Spela
+                                igen</span><span class="ar-text">إعادة</span> 🔄</button>
                     </div>
                 </div>
             </div>
@@ -479,13 +484,14 @@
                 <div class="wod-header">
                     <div class="wod-title-col">
                         <span>📅 <span class="sv-text">Dagens Ord</span><span class="ar-text">كلمة اليوم</span></span>
-                        <button id="wodTTSBtn" class="wod-action-btn wod-tts-btn"
+                        <button type="button" id="wodTTSBtn" class="wod-action-btn wod-tts-btn"
                             aria-label="Lyssna / استمع">🔊</button>
                     </div>
                     <div class="wod-header-actions">
                         <span class="wod-type-badge"></span>
 
-                        <button id="wodDetailsBtn" class="wod-action-btn" aria-label="Se detaljer / التفاصيل">
+                        <button type="button" id="wodDetailsBtn" class="wod-action-btn"
+                            aria-label="Se detaljer / التفاصيل">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -495,7 +501,8 @@
                                 <line x1="3" y1="21" x2="10" y2="14"></line>
                             </svg>
                         </button>
-                        <button id="wodLoopBtn" class="wod-action-btn" aria-label="Ny mening / جملة جديدة">
+                        <button type="button" id="wodLoopBtn" class="wod-action-btn"
+                            aria-label="Ny mening / جملة جديدة">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -503,7 +510,7 @@
                                     d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
                             </svg>
                         </button>
-                        <button id="wodFavBtn" class="wod-action-btn" aria-label="Spara / حفظ">
+                        <button type="button" id="wodFavBtn" class="wod-action-btn" aria-label="Spara / حفظ">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -596,10 +603,10 @@
             <p><span class="sv-text">Installera appen för bättre upplevelse!</span><span class="ar-text">قم بتثبيت
                     التطبيق لتجربة أفضل</span></p>
             <div class="pwa-buttons">
-                <button id="pwa-install-btn" class="pwa-btn primary"><span class="sv-text">Install</span><span
-                        class="ar-text">تثبيت</span></button>
-                <button id="pwa-later-btn" class="pwa-btn secondary"><span class="sv-text">Later</span><span
-                        class="ar-text">لاحقاً</span></button>
+                <button type="button" id="pwa-install-btn" class="pwa-btn primary"><span
+                        class="sv-text">Install</span><span class="ar-text">تثبيت</span></button>
+                <button type="button" id="pwa-later-btn" class="pwa-btn secondary"><span
+                        class="sv-text">Later</span><span class="ar-text">لاحقاً</span></button>
             </div>
         </div>
     </div>
@@ -614,7 +621,7 @@
                     src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDdlZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgM3YxMm0wIDBsLTQtNG00IDRsNCA0TTQgMjBoMTYiLz48L3N2Zz4="
                     alt="Share" class="inline-icon-img"> واختر <strong>"إضافة إلى الشاشة
                     الرئيسية"</strong></p>
-            <button id="closeIosPrompt">OK</button>
+            <button type="button" id="closeIosPrompt" aria-label="OK">OK</button>
         </div>
     </div>
 
@@ -624,7 +631,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Dagens Ord</h2>
-                <button id="closeWod" class="close-btn">&times;</button>
+                <button type="button" id="closeWod" class="close-btn" aria-label="Stäng / إغلاق">&times;</button>
             </div>
             <div class="wod-modal-body">
                 <!-- Content injected via JS -->
@@ -638,7 +645,7 @@
         <div class="modal-content progress-modal-content">
             <div class="modal-header progress-modal-header">
                 <h2>📊 <span class="sv-text">Min Progress</span><span class="ar-text">تقدمي</span></h2>
-                <button id="closeProgress" class="close-btn">&times;</button>
+                <button type="button" id="closeProgress" class="close-btn" aria-label="Stäng / إغلاق">&times;</button>
             </div>
             <div class="progress-modal-body">
                 <!-- Daily Progress Ring Section -->
@@ -662,8 +669,10 @@
                         <div class="goal-adjuster">
                             <label for="dailyGoalInput"><span class="sv-text">Ändra mål:</span><span
                                     class="ar-text">تغيير الهدف:</span></label>
-                            <input type="number" id="dailyGoalInput" min="1" max="100" value="10">
-                            <button id="saveGoalBtn" class="mini-btn">💾</button>
+                            <input type="number" id="dailyGoalInput" min="1" max="100" value="10"
+                                aria-label="Dagligt mål antal ord">
+                            <button type="button" id="saveGoalBtn" class="mini-btn"
+                                aria-label="Spara mål / حفظ الهدف">💾</button>
                         </div>
                     </div>
                 </div>
@@ -685,7 +694,8 @@
                         <label for="weeklyGoalInput"><span class="sv-text">Veckomål:</span><span class="ar-text">هدف
                                 أسبوعي:</span></label>
                         <input type="number" id="weeklyGoalInput" min="10" max="500" value="50">
-                        <button id="saveWeeklyGoalBtn" class="mini-btn">💾</button>
+                        <button type="button" id="saveWeeklyGoalBtn" class="mini-btn"
+                            aria-label="Spara veckomål / حفظ الهدف الأسبوعي">💾</button>
                     </div>
                 </div>
 
@@ -778,7 +788,7 @@
 
                 <!-- Share Button -->
                 <div class="progress-section share-section">
-                    <button id="shareProgressBtn" class="share-btn">
+                    <button type="button" id="shareProgressBtn" class="share-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="18" cy="5" r="3"></circle>
@@ -795,7 +805,7 @@
                 <div class="progress-section export-section">
                     <h4>📁 <span class="sv-text">Säkerhetskopia</span><span class="ar-text">نسخة احتياطية</span></h4>
                     <div class="export-buttons">
-                        <button id="exportDataBtn" class="export-btn"
+                        <button type="button" id="exportDataBtn" class="export-btn"
                             onclick="if(typeof ExportManager !== 'undefined') ExportManager.exportToJSON();">
                             📥 <span class="sv-text">Exportera data</span><span class="ar-text">تصدير البيانات</span>
                         </button>
@@ -819,7 +829,7 @@
                     <span id="flashcardCurrent">1</span>/<span id="flashcardTotal">10</span>
                 </div>
                 <h2>🃏 Flashcards</h2>
-                <button id="closeFlashcard" class="close-btn">&times;</button>
+                <button type="button" id="closeFlashcard" class="close-btn" aria-label="Stäng / إغلاق">&times;</button>
             </div>
 
             <div class="flashcard-body">
@@ -829,30 +839,32 @@
                             <span class="flashcard-text" id="flashcardFront">Hej</span>
                             <span class="flashcard-hint"><span class="sv-text">Tryck för att vända</span><span
                                     class="ar-text">اضغط للقلب</span></span>
-                            <button class="flashcard-speak-btn" id="flashcardSpeakFrontBtn">🔊</button>
+                            <button type="button" class="flashcard-speak-btn" id="flashcardSpeakFrontBtn"
+                                aria-label="Lyssna / استمع">🔊</button>
                         </div>
                         <div class="flashcard-face flashcard-back">
                             <span class="flashcard-text" id="flashcardBack">مرحبا</span>
-                            <button class="flashcard-speak-btn" id="flashcardSpeakBtn">🔊</button>
+                            <button type="button" class="flashcard-speak-btn" id="flashcardSpeakBtn"
+                                aria-label="Lyssna / استمع">🔊</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="flashcard-controls hidden" id="flashcardControls">
-                    <button class="fc-btn fc-again" data-quality="0">
+                    <button type="button" class="fc-btn fc-again" data-quality="0">
                         <span class="fc-emoji">😅</span>
                         <span class="fc-label"><span class="sv-text">Igen</span><span class="ar-text">مرة
                                 أخرى</span></span>
                     </button>
-                    <button class="fc-btn fc-hard" data-quality="2">
+                    <button type="button" class="fc-btn fc-hard" data-quality="2">
                         <span class="fc-emoji">🤔</span>
                         <span class="fc-label"><span class="sv-text">Svårt</span><span class="ar-text">صعب</span></span>
                     </button>
-                    <button class="fc-btn fc-good" data-quality="4">
+                    <button type="button" class="fc-btn fc-good" data-quality="4">
                         <span class="fc-emoji">👍</span>
                         <span class="fc-label"><span class="sv-text">Bra</span><span class="ar-text">جيد</span></span>
                     </button>
-                    <button class="fc-btn fc-easy" data-quality="5">
+                    <button type="button" class="fc-btn fc-easy" data-quality="5">
                         <span class="fc-emoji">🌟</span>
                         <span class="fc-label"><span class="sv-text">Lätt</span><span class="ar-text">سهل</span></span>
                     </button>
@@ -871,7 +883,7 @@
     <!-- Onboarding Modal -->
     <div id="onboardingModal" class="onboarding-overlay hidden">
         <div class="onboarding-container">
-            <button class="onboarding-skip" id="skipOnboarding">Hoppa över ❯</button>
+            <button type="button" class="onboarding-skip" id="skipOnboarding">Hoppa över ❯</button>
 
             <div class="onboarding-slides" id="onboardingSlides">
                 <!-- Slide 1 -->
@@ -939,8 +951,9 @@
             </div>
 
             <div class="onboarding-nav">
-                <button class="onboarding-btn secondary visibility-hidden" id="prevSlide">⟵ Tillbaka</button>
-                <button class="onboarding-btn primary" id="nextSlide">Nästa ⟶</button>
+                <button type="button" class="onboarding-btn secondary visibility-hidden" id="prevSlide">⟵
+                    Tillbaka</button>
+                <button type="button" class="onboarding-btn primary" id="nextSlide">Nästa ⟶</button>
             </div>
         </div>
     </div>

@@ -37,12 +37,14 @@
     </header>
 
     <div class="controls-bar">
-        <select class="control-select" id="difficultySelect" onchange="changeDifficulty()" title="Välj svårighetsgrad">
+        <select class="control-select" id="difficultySelect" onchange="changeDifficulty()" title="Välj svårighetsgrad"
+            aria-label="Välj svårighetsgrad">
             <option value="easy">🟢 Lätt / سهل</option>
             <option value="medium" selected>🟡 Medel / متوسط</option>
             <option value="hard">🔴 Svår / صعب</option>
         </select>
-        <select class="control-select" id="categorySelect" onchange="changeCategory()" title="Välj kategori">
+        <select class="control-select" id="categorySelect" onchange="changeCategory()" title="Välj kategori"
+            aria-label="Välj kategori">
             <option value="all">📚 Alla / الكل</option>
             <option value="substantiv">📦 Substantiv / أسماء</option>
             <option value="verb">🏃 Verb / أفعال</option>

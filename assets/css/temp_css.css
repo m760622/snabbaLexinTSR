@@ -66,7 +66,7 @@
 
 /* Container & Layout */
 .container.details-page-container {
-    max-width: 800px;
+    max-width: 414px;
     margin: 0 auto;
     padding: 0 1rem 80px 1rem;
 }
@@ -255,7 +255,7 @@
 .details-hero {
     position: relative;
     width: 100%;
-    /* max-width: 600px; Remove max-width to let it fill container */
+    /* max-width: 414px;; Remove max-width to let it fill container */
     margin: 0 auto 2rem auto;
     padding: 2.5rem 2rem;
     border-radius: 24px;
@@ -2046,7 +2046,7 @@
 }
 
 /* Mobile Adjustments */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .details-header-clean {
         padding: 0.75rem 1rem;
     }
@@ -2675,7 +2675,7 @@ body.flashcard-active .revealed {
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .details-fab-container {
         gap: 0.5rem;
     }
@@ -3034,7 +3034,7 @@ button:active,
 }
 
 /* Responsive */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .details-title-swedish {
         font-size: 0.7rem;
         letter-spacing: 1px;
@@ -3138,7 +3138,7 @@ button:active,
 }
 
 /* Responsive - Stack menu on small screens */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .more-actions-menu {
         right: 1rem;
         left: 1rem;
@@ -3664,7 +3664,7 @@ button:active,
 }
 
 /* Responsive for mobile */
-@media (max-width: 500px) {
+@media (max-width: 414px) {
 
     .verb-grid,
     .noun-grid {
@@ -4037,7 +4037,7 @@ button:active,
     gap: 0.75rem;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 414px) {
     #quizOptions {
         grid-template-columns: 1fr;
     }
@@ -5691,7 +5691,8 @@ button:active,
 .flashcard-clean {
     position: relative;
     width: 90%;
-    max-width: 600px;
+    max-width: 414px;
+    ;
     height: 280px;
     margin: 0 auto;
     cursor: pointer;

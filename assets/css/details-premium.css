@@ -287,7 +287,7 @@
 .details-hero {
     position: relative;
     width: 100%;
-    /* max-width: 600px; Remove max-width to let it fill container */
+    /* max-width: 414px;; Remove max-width to let it fill container */
     margin: 0 auto 2rem auto;
     padding: 2.5rem 2rem;
     border-radius: 24px;
@@ -494,11 +494,14 @@
 }
 
 /* Hide old hero styles completely */
+/* Hide old hero styles completely */
 [data-theme="dark"] .details-section,
 [data-theme="dark"] .section-title,
 .details-hero.type-noun,
 .details-hero.type-verb {
     /* Override specificity war by using !important in above rules */
+    display: block;
+    /* Placeholder to avoid empty ruleset warning, or could remove block entirely but comments suggest intent to override */
 }
 
 /* Subtle Hover Effects on Hero Card - Glow Only */
@@ -1307,6 +1310,8 @@
 
     /* Hide scrollbar but keep functionality */
     scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
     /* Firefox */
     -ms-overflow-style: none;
     /* IE/Edge */
@@ -4200,7 +4205,7 @@ button:active,
     gap: 0.75rem;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 414px) {
     #quizOptions {
         grid-template-columns: 1fr;
     }
@@ -7482,8 +7487,8 @@ body .quiz-options {
 /* Dynamic Glassmorphism for Pronunciation Lab */
 .pronunciation-lab-section {
     background: rgba(15, 23, 42, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border-radius: 24px;
     border: 1px solid rgba(125, 211, 252, 0.15);
     padding: 1.5rem;
@@ -7692,6 +7697,7 @@ body .quiz-options {
 .speed-slider {
     width: 100%;
     -webkit-appearance: none;
+    appearance: none;
     height: 6px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 5px;

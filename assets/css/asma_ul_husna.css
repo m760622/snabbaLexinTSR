@@ -11,9 +11,9 @@
             align-items: center;
             gap: 0.5rem;
             /* Frosted Glass Effect */
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.75);
             -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
             padding: 6px;
             border-radius: 36px 36px 0 0;
             border: 1px solid rgba(251, 191, 36, 0.15);
@@ -31,7 +31,8 @@
             height: 44px;
             border: none;
             border-radius: 12px;
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(0, 0, 0, 0.8);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             color: #e2e8f0;
             cursor: pointer;
@@ -117,9 +118,9 @@
             margin-bottom: 2rem;
             animation: fadeIn 0.3s ease-in-out;
             padding-bottom: 5px;
-            /* Space for scrollbar */
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            /*    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
             /* Firefox */
         }
 
@@ -157,7 +158,8 @@
 
         /* Asma ul Husna Specific Styles */
         .asma-container {
-            max-width: 900px;
+            max-width: 414px;
+            ;
             margin: 0 auto;
             padding: 1rem;
             padding-top: 120px;
@@ -198,9 +200,10 @@
             padding: 0.8rem 1.2rem;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(15, 23, 42, 0.7);
+            background: rgba(0, 0, 0, 0.7);
             color: #e2e8f0;
             font-size: 1rem;
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
 
@@ -225,7 +228,7 @@
 
         .loading-content {
             text-align: center;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(0, 0, 0, 0.9);
             padding: 2rem;
             border-radius: 20px;
             border: 1px solid rgba(251, 191, 36, 0.3);
@@ -287,10 +290,11 @@
 
         /* Name Card */
         .asma-card {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6));
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(20, 20, 20, 0.6));
             border: 1px solid rgba(251, 191, 36, 0.2);
             border-radius: 20px;
             padding: 1.5rem;
+            -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
             transition: all 0.3s ease;
             position: relative;
@@ -490,7 +494,7 @@
         }
 
         /* Mobile */
-        @media (max-width: 480px) {
+        @media (max-width: 414px) {
             .asma-cards-grid {
                 grid-template-columns: 1fr;
             }
@@ -506,14 +510,39 @@
 
         /* ========== PHASE 1: VISUAL ENHANCEMENTS ========== */
 
-        /* Navy Blue Background for Asma Ul Husna */
-        body.memory-game-page {
-            background: linear-gradient(135deg, #0a1628 0%, #1a2744 50%, #0d1e36 100%);
-            min-height: 100vh;
+        /* Override blue glows from style.css */
+        body.asma-page::before,
+        body.asma-page::after,
+        body::before,
+        body::after {
+            display: none !important;
+            content: none !important;
+            background: transparent !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
         }
 
-        /* Islamic Geometric Background */
-        body.memory-game-page::before {
+        /* Override prefers-color-scheme dark background from mobile-enhancements.css */
+        @media (prefers-color-scheme: dark) {
+
+            html,
+            body,
+            body.asma-page {
+                background: #000 !important;
+                background-image: none !important;
+                background-color: #000 !important;
+            }
+        }
+
+        /* Ensure html is pure black at all times */
+        html {
+            background: #000 !important;
+            background-color: #000 !important;
+            background-image: none !important;
+        }
+
+        /* Islamic Geometric Background Pattern - use separate element */
+        .islamic-bg-pattern {
             content: '';
             position: fixed;
             top: 0;
@@ -521,9 +550,9 @@
             right: 0;
             bottom: 0;
             background-image:
-                radial-gradient(circle at 25% 25%, rgba(251, 191, 36, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(251, 191, 36, 0.03) 0%, transparent 50%),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='rgba(251,191,36,0.05)' stroke-width='0.5'/%3E%3Ccircle cx='30' cy='30' r='8' fill='none' stroke='rgba(251,191,36,0.03)' stroke-width='0.5'/%3E%3C/svg%3E");
+                radial-gradient(circle at 25% 25%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='rgba(212,175,55,0.05)' stroke-width='0.5'/%3E%3Ccircle cx='30' cy='30' r='8' fill='none' stroke='rgba(212,175,55,0.03)' stroke-width='0.5'/%3E%3C/svg%3E");
             background-size: 100% 100%, 100% 100%, 60px 60px;
             pointer-events: none;
             z-index: -1;
@@ -933,56 +962,43 @@
             }
         }
 
-        /* ========== NEON THEME (Default) ========== */
-        [data-theme="neon"],
+        /* ========== ISLAMIC NIGHT THEME (Default) ========== */
         :root {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --gold-primary: #fbbf24;
-            --gold-secondary: #f59e0b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --card-bg: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6));
-            --accent-glow: rgba(251, 191, 36, 0.4);
+            --bg-primary: #0a0f1a;
+            --bg-secondary: #111827;
+            --gold-primary: #d4af37;
+            --gold-secondary: #b8860b;
+            --text-primary: #e5e7eb;
+            --text-secondary: #9ca3af;
+            --card-bg: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9));
+            --accent-glow: rgba(212, 175, 55, 0.4);
         }
 
-        [data-theme="neon"] body,
-        body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+        body,
+        body.asma-page {
+            background: #000 !important;
+            min-height: 100vh;
         }
 
-        [data-theme="neon"] .asma-card {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6));
-            border-color: rgba(251, 191, 36, 0.3);
-            box-shadow: 0 4px 20px rgba(251, 191, 36, 0.1);
+        .asma-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9));
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.1);
         }
 
-        [data-theme="neon"] .asma-card::before {
-            background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
-            animation: neonPulse 2s ease-in-out infinite;
+        .asma-card::before {
+            background: linear-gradient(90deg, #d4af37, #b8860b);
         }
 
-        @keyframes neonPulse {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.7;
-            }
+        .asma-name-ar,
+        .asma-title-ar {
+            color: #d4af37;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
         }
 
-        [data-theme="neon"] .asma-name-ar,
-        [data-theme="neon"] .asma-title-ar {
-            color: #fbbf24;
-            text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
-        }
-
-        [data-theme="neon"] .asma-number {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+        .asma-number {
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
         }
 
         /* ========== CALM THEME ========== */
@@ -1105,44 +1121,126 @@
             border-color: rgba(146, 64, 14, 0.5);
         }
 
-        /* ========== ISLAMIC NIGHT THEME ========== */
-        [data-theme="islamic-night"] {
-            --bg-primary: #0a0f1a;
-            --bg-secondary: #111827;
-            --gold-primary: #d4af37;
-            --gold-secondary: #b8860b;
-            --text-primary: #e5e7eb;
-            --text-secondary: #9ca3af;
+        /* Calm Mode Flashcard Overrides */
+        [data-theme="calm"] .flashcard-front,
+        [data-theme="calm"] .flashcard-back {
+            background: linear-gradient(135deg, #ffffff, #f1f5f9);
+            border: 1px solid rgba(146, 64, 14, 0.2);
         }
 
-        [data-theme="islamic-night"] body {
-            background: linear-gradient(135deg, #0a0f1a 0%, #1a1f2e 50%, #0f1419 100%);
+        [data-theme="calm"] .flashcard-name,
+        [data-theme="calm"] .flashcard-meaning-ar {
+            color: #92400e;
+            text-shadow: none;
         }
 
-        [data-theme="islamic-night"] .asma-card {
-            background: linear-gradient(135deg, rgba(10, 15, 26, 0.95), rgba(26, 31, 46, 0.9));
-            border-color: rgba(212, 175, 55, 0.3);
+        [data-theme="calm"] .flashcard-meaning-sv,
+        [data-theme="calm"] .flashcard-hint {
+            color: #475569;
+            text-shadow: none;
         }
 
-        [data-theme="islamic-night"] .asma-card::before {
-            background: linear-gradient(90deg, #d4af37, #b8860b);
+        [data-theme="calm"] .flashcard-number {
+            background: linear-gradient(135deg, #92400e, #b45309);
+            color: white;
+            box-shadow: none;
         }
 
-        [data-theme="islamic-night"] .asma-name-ar,
-        [data-theme="islamic-night"] .asma-title-ar {
-            color: #d4af37;
+        /* Calm Mode Sub-Views Overrides */
+        [data-theme="calm"] .quiz-container {
+            background: rgba(255, 255, 255, 0.98);
+            border-color: rgba(146, 64, 14, 0.3);
+            box-shadow: 0 4px 20px rgba(146, 64, 14, 0.1);
         }
 
-        [data-theme="islamic-night"] .asma-number {
-            background: linear-gradient(135deg, #d4af37, #b8860b);
+        [data-theme="calm"] .quiz-question-name {
+            color: #92400e;
+            text-shadow: none;
         }
 
-        [data-theme="islamic-night"] .islamic-bg-layer::before {
+        [data-theme="calm"] .quiz-option {
+            background: white;
+            color: #334155;
+            border-color: #cbd5e1;
+        }
+
+        [data-theme="calm"] .quiz-option:hover:not(.disabled) {
+            background: #fff7ed;
+            border-color: #92400e;
+            transform: translateY(-2px);
+        }
+
+        [data-theme="calm"] .quiz-fill-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(146, 64, 14, 0.3);
+            color: #334155;
+        }
+
+        [data-theme="calm"] .quiz-fill-card::before {
+            filter: invert(1) opacity(0.5);
+        }
+
+        [data-theme="calm"] .quiz-fill-header {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(146, 64, 14, 0.2);
+        }
+
+        [data-theme="calm"] .fill-progress-text,
+        [data-theme="calm"] .quiz-fill-score {
+            color: #92400e;
+        }
+
+        [data-theme="calm"] .fill-ayah-arabic {
+            color: #92400e;
+            text-shadow: none;
+        }
+
+        [data-theme="calm"] .fill-ayah-translation {
+            color: #475569;
+        }
+
+        [data-theme="calm"] .fill-instruction {
+            background: rgba(146, 64, 14, 0.1);
+            color: #92400e;
+            border-color: rgba(146, 64, 14, 0.2);
+        }
+
+        [data-theme="calm"] .fill-option-btn {
+            background: white;
+            color: #334155;
+            border-color: #cbd5e1;
+        }
+
+        [data-theme="calm"] .fill-option-btn:hover {
+            background: #fff7ed;
+            border-color: #92400e;
+            color: #92400e;
+        }
+
+        [data-theme="calm"] .quiz-fill-results {
+            background: rgba(255, 255, 255, 0.98);
+            color: #1e293b;
+            border-color: rgba(146, 64, 14, 0.3);
+        }
+
+        [data-theme="calm"] .results-score {
+            color: #92400e;
+        }
+
+        [data-theme="calm"] .results-percentage {
+            background: linear-gradient(45deg, #92400e, #b45309);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ========== ISLAMIC NIGHT EFFECTS (Applied to default theme) ========== */
+        .islamic-bg-layer::before {
             filter: hue-rotate(-10deg) brightness(0.8);
         }
 
         /* Stars Effect for Night Theme */
-        [data-theme="islamic-night"] .islamic-bg-layer::after {
+        .islamic-bg-layer::after {
             background-image:
                 radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.3), transparent),
                 radial-gradient(2px 2px at 40% 70%, rgba(255, 255, 255, 0.2), transparent),
@@ -1166,8 +1264,8 @@
             }
         }
 
-        /* Crescent Moon Decoration for Night Theme */
-        [data-theme="islamic-night"] .asma-header::before {
+        /* Crescent Moon Decoration */
+        .asma-header::before {
             content: '☪';
             position: absolute;
             top: -20px;
@@ -1196,6 +1294,95 @@
         .asma-nav-btn.night-active {
             background: rgba(212, 175, 55, 0.3);
             border-color: rgba(212, 175, 55, 0.5);
+        }
+
+        /* Night Mode Overrides for Sub-Views */
+        [data-theme="islamic-night"] .quiz-option {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(212, 175, 55, 0.3);
+            color: #e2e8f0;
+        }
+
+        [data-theme="islamic-night"] .quiz-option:hover:not(.disabled) {
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.15);
+        }
+
+        [data-theme="islamic-night"] #flashcard {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9));
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        [data-theme="islamic-night"] .flashcard-front,
+        [data-theme="islamic-night"] .flashcard-back {
+            background: linear-gradient(135deg, rgba(16, 20, 35, 0.95), rgba(26, 32, 53, 0.95));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        [data-theme="islamic-night"] .quiz-fill-card {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.9));
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        [data-theme="islamic-night"] .quiz-fill-header {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: rgba(212, 175, 55, 0.2);
+        }
+
+        [data-theme="islamic-night"] .fill-ayah-arabic {
+            color: #d4af37;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        [data-theme="islamic-night"] .fill-ayah-translation {
+            color: #9ca3af;
+        }
+
+        [data-theme="islamic-night"] .fill-option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        [data-theme="islamic-night"] .fill-option-btn:hover {
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.15);
+            color: #d4af37;
+        }
+
+        [data-theme="islamic-night"] .mode-selection-bar {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: rgba(212, 175, 55, 0.2);
+        }
+
+        [data-theme="islamic-night"] .mode-btn {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        [data-theme="islamic-night"] .mode-btn:hover {
+            color: #d4af37;
+        }
+
+        [data-theme="islamic-night"] .mode-btn.active {
+            color: #1a1a2e;
+            /* Contrast against the gold indicator */
+        }
+
+        /* Additional Night Mode Overrides */
+        [data-theme="islamic-night"] .quiz-container {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.98), rgba(20, 20, 20, 0.95));
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        [data-theme="islamic-night"] .quiz-question-name {
+            color: #d4af37;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        [data-theme="islamic-night"] .quiz-fill-results {
+            background: rgba(0, 0, 0, 0.95);
+            border-color: rgba(212, 175, 55, 0.3);
         }
 
         /* Action Button for Memorize */
@@ -1233,7 +1420,7 @@
             padding: 0.5rem 1rem;
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(0, 0, 0, 0.6);
             color: #94a3b8;
             cursor: pointer;
             font-size: 0.85rem;
@@ -1260,6 +1447,7 @@
             border-radius: 16px;
             padding: 1rem;
             margin-bottom: 1.5rem;
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
 
@@ -1320,7 +1508,7 @@
             padding: 0.9rem 0.5rem;
             border: 2px solid rgba(251, 191, 36, 0.25);
             border-radius: 14px;
-            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.9));
             color: #fbbf24;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -1432,11 +1620,12 @@
         }
 
         .quiz-container {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.95));
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.98), rgba(20, 20, 20, 0.95));
             border: 2px solid rgba(251, 191, 36, 0.3);
             border-radius: 24px;
             padding: 2rem;
-            max-width: 600px;
+            max-width: 414px;
+            ;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
@@ -1642,7 +1831,7 @@
             display: none;
             position: relative;
             width: 100%;
-            max-width: 430px;
+            max-width: 414px;
             margin: 0 auto;
             padding: 1rem;
             z-index: 100;
@@ -1693,13 +1882,13 @@
         }
 
         .flashcard-front {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.85), rgba(96, 165, 250, 0.75)) !important;
-            border: 1px solid rgba(255, 255, 255, 0.35) !important;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.85), rgba(96, 165, 250, 0.75));
+            border: 1px solid rgba(255, 255, 255, 0.35);
         }
 
         .flashcard-back {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(29, 78, 216, 0.75)) !important;
-            border: 1px solid rgba(255, 255, 255, 0.35) !important;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(29, 78, 216, 0.75));
+            border: 1px solid rgba(255, 255, 255, 0.35);
             transform: rotateY(180deg);
         }
 
@@ -1772,8 +1961,8 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 16px;
             background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
             color: #e2e8f0;
             cursor: pointer;
             font-size: 0.95rem;
@@ -1847,7 +2036,7 @@
             box-shadow: 0 6px 16px rgba(239, 68, 68, 0.5);
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 414px) {
             .flashcard-controls {
                 flex-wrap: wrap;
                 gap: 0.5rem;
@@ -1900,7 +2089,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(0, 0, 0, 0.8);
             padding: 0.5rem 1rem;
             border-radius: 20px;
             border: 1px solid rgba(251, 191, 36, 0.3);
@@ -1983,11 +2172,11 @@
         }
 
         .stats-container {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.95));
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.98), rgba(20, 20, 20, 0.95));
             border: 2px solid rgba(251, 191, 36, 0.3);
             border-radius: 24px;
             padding: 2rem;
-            max-width: 800px;
+            max-width: 414px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
@@ -2101,7 +2290,7 @@
         }
 
         .badge-item {
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 1.5rem 1rem;
@@ -2189,7 +2378,7 @@
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.95);
+            background: rgba(0, 0, 0, 0.95);
             border: 1px solid rgba(251, 191, 36, 0.3);
             border-radius: 50px;
             padding: 0.8rem 2rem;
@@ -2198,10 +2387,12 @@
             gap: 2rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             z-index: 1000;
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             width: 90%;
-            max-width: 500px;
+            max-width: 414px;
+            ;
         }
 
         .audio-player-bar.hidden {
@@ -2349,7 +2540,7 @@
             background: #ef4444;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 414px) {
             .audio-player-bar {
                 width: 90%;
                 max-width: 400px;
@@ -2438,7 +2629,8 @@
             justify-content: space-between;
             margin-bottom: 2rem;
             width: 100%;
-            max-width: 900px;
+            max-width: 414px;
+            ;
             margin-left: auto;
             margin-right: auto;
         }
@@ -2499,15 +2691,17 @@
             gap: 8px;
             margin: 15px auto;
             width: 95%;
-            max-width: 500px;
+            max-width: 414px;
+            ;
             background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
             padding: 6px;
             border-radius: 50px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             white-space: nowrap;
-            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
             -ms-overflow-style: none;
             /* Hide scrollbar IE/Edge */
             scrollbar-width: none;
@@ -2534,6 +2728,10 @@
             font-weight: 500;
             transition: all 0.3s ease;
             flex: 1;
+            /* Support for Samsung Internet and older browsers */
+            min-width: -webkit-fill-available;
+            min-width: -webkit-fit-content;
+            min-width: -moz-fit-content;
             min-width: fit-content;
         }
 
@@ -2543,34 +2741,11 @@
         }
 
         .mode-btn.active {
-            background: rgba(255, 255, 255, 0.2);
+            background: transparent !important;
             color: var(--quran-gold, #fbbf24);
             font-weight: 700;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .mode-icon {
-            font-size: 1.1rem;
-        }
-
-        .mode-text-sv,
-        .mode-text-ar {
-            display: inline-block;
-        }
-
-        /* Hide stacked text on very small screens to keep one line if needed */
-        @media (max-width: 360px) {
-            .mode-btn {
-                padding: 8px 12px;
-                font-size: 0.8rem;
-            }
-
-            .mode-text-sv {
-                display: none;
-            }
-
-            /* Show only Arabic or icon on tiny screens */
+            box-shadow: none;
+            border: none;
         }
 
         /* ===================== Sliding Mode Indicator ===================== */
@@ -2608,7 +2783,8 @@
         /* ==================== FILL QUIZ STYLES ==================== */
         .quiz-fill-container {
             padding: 20px;
-            max-width: 600px;
+            max-width: 414px;
+            ;
             margin: 0 auto;
         }
 
@@ -2620,7 +2796,8 @@
             background: rgba(0, 0, 0, 0.4);
             padding: 12px 16px;
             border-radius: 12px;
-            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 215, 0, 0.2);
         }
 
@@ -2715,6 +2892,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            -webkit-backdrop-filter: blur(4px);
             backdrop-filter: blur(4px);
         }
 
@@ -2798,6 +2976,7 @@
             border-radius: 20px;
             border: 1px solid rgba(255, 215, 0, 0.3);
             color: white;
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
 
@@ -2853,9 +3032,43 @@
         }
 
         /* Responsive adjustments */
-        @media (max-width: 600px) {
+        @media (max-width: 414px) {
             .fill-options-grid {
                 grid-template-columns: 1fr;
                 /* Stack options on mobile */
             }
+        }
+
+        /* Utility classes extracted from inline styles */
+        .text-lg-icon {
+            font-size: 1.2rem;
+        }
+
+        .lang-label-text {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .nav-search-wrapper-styled {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 414px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-search-wrapper-styled .nav-search-input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nav-search-wrapper-styled .asma-nav-btn {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+        }
+
+        .quiz-progress-fill-initial {
+            width: 0%;
         }

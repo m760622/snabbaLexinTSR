@@ -379,20 +379,36 @@ function renderSavedWords() {
                 <p class="sub-text"><span class="sv-text">Klicka på stjärnan för att spara ord.</span><span class="ar-text">اضغط على النجمة لحفظ الكلمات.</span></p>
             </div>`;
     } else {
-        list.innerHTML = savedWords.map(word => {
+        const headerHtml = `
+            <div class="saved-view-header">
+                <h3>
+                    <span class="sv-text">⭐ Mina sparade ord</span>
+                    <span class="ar-text">⭐ كلماتي المحفوظة</span>
+                </h3>
+                <span class="saved-count-badge">
+                    <span>${savedWords.length}</span>
+                    <span class="sv-text">ord</span>
+                    <span class="ar-text">كلمة</span>
+                </span>
+            </div>`;
+
+        const cardsHtml = savedWords.map(word => {
             const item = cognatesData.find((c: CognateEntry) => c.swe === word);
+            const safeSwe = word.replace(/'/g, "\\'");
             return `
-                <div class="cognate-card saved-card">
+                <div class="cognate-card saved-card" onclick="playTTS('${safeSwe}')">
                     <div class="card-left">
                         <strong>${word}</strong>
-                        <span class="card-type">${item?.type || ''}</span>
+                        <span class="card-type">${item?.type || item?.category || ''}</span>
                     </div>
                     <div class="card-right">
                         <span class="word-arb">${item?.arb || ''}</span>
-                        <button class="mini-btn saved active" onclick="toggleSave('${word.replace(/'/g, "\\'")}', true); event.stopPropagation();">⭐</button>
+                        <button class="mini-btn saved" onclick="event.stopPropagation(); toggleSave('${safeSwe}')">⭐</button>
                     </div>
                 </div>`;
         }).join('');
+
+        list.innerHTML = headerHtml + '<div class="saved-list">' + cardsHtml + '</div>';
     }
 }
 
@@ -400,19 +416,31 @@ function renderSavedWords() {
 // Updated toggleSave to re-render if in saved mode
 function toggleSave(word: string) {
     const index = savedWords.indexOf(word);
-    if (index === -1) {
+    const isAdding = index === -1;
+
+    if (isAdding) {
         savedWords.push(word);
     } else {
         savedWords.splice(index, 1);
     }
-    localStorage.setItem('snabbaLexin_cognates_saved', JSON.stringify(savedWords));
+    localStorage.setItem('cognates_saved', JSON.stringify(savedWords));
 
     // Update UI
     updateStats();
 
-    // Update buttons in browse view
-    const btn = document.querySelector(`.btn-star[onclick*="${word}"]`);
-    if (btn) btn.classList.toggle('active', index === -1);
+    // Update button and card in browse view
+    const safeSwe = word.replace(/'/g, "\\'");
+    const btn = document.querySelector(`.mini-btn[onclick*="${safeSwe}"]`) as HTMLButtonElement;
+    if (btn) {
+        btn.classList.toggle('saved', isAdding);
+        btn.textContent = isAdding ? '⭐' : '☆';
+    }
+
+    // Update card styling
+    const card = btn?.closest('.cognate-card');
+    if (card) {
+        card.classList.toggle('saved', isAdding);
+    }
 
     // If we are in saved view, re-render the list immediately
     if (document.getElementById('savedView')?.classList.contains('active')) {

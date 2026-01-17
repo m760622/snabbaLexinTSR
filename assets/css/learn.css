@@ -326,8 +326,8 @@
  .special-section {
      margin-bottom: 1.5rem;
      background: linear-gradient(135deg, rgba(30, 58, 95, 0.3) 0%, rgba(15, 23, 42, 0.4) 100%);
-     -webkit-backdrop-filter: blur(10px);
-     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(12px);
+     backdrop-filter: blur(12px);
      border-radius: 16px;
      padding: 1rem;
      border: 1px solid rgba(100, 150, 200, 0.15);
@@ -1859,6 +1859,7 @@
      align-items: center;
      gap: 1rem;
      background: rgba(15, 23, 42, 0.8);
+     -webkit-backdrop-filter: blur(10px);
      backdrop-filter: blur(10px);
      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
  }
@@ -1939,7 +1940,7 @@
  }
 
  /* Mobile adjustments for Quick Access Row */
- @media (max-width: 400px) {
+ @media (max-width: 414px) {
      .quick-access-row {
          gap: 0.3rem;
          padding: 0.4rem 0.3rem;
@@ -2046,6 +2047,7 @@
      border-radius: 24px;
      margin: 1rem;
      padding: 1.5rem;
+     -webkit-backdrop-filter: blur(10px);
      backdrop-filter: blur(10px);
  }
 
@@ -2554,7 +2556,9 @@
      gap: 0.5rem;
      padding: 0 0.5rem;
      /* Reduced padding when closed */
+     -webkit-overflow-scrolling: touch;
      scrollbar-width: none;
+     -ms-overflow-style: none;
 
      /* Magical Reveal Animation Props */
      max-height: 0;
@@ -3079,6 +3083,7 @@
      color: var(--text-muted);
      transition: all 0.3s;
      list-style: none;
+     -webkit-user-select: none;
      user-select: none;
  }
 

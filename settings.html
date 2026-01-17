@@ -46,7 +46,7 @@
                 <h1><span class="sv-text">Inställningar</span><span class="ar-text">الإعدادات</span></h1>
             </div>
             <div class="settings-header-actions">
-                <button id="resetAllBtn" class="settings-reset-btn" title="Återställ / إعادة تعيين">
+                <button type="button" id="resetAllBtn" class="settings-reset-btn" title="Återställ / إعادة تعيين">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                         <path d="M3 3v5h5" />
@@ -61,7 +61,7 @@
                 <div class="profile-avatar" id="profileAvatar">
                     <span class="avatar-emoji">👤</span>
                 </div>
-                <button class="avatar-edit-btn" id="changeAvatarBtn" title="Ändra avatar">
+                <button type="button" class="avatar-edit-btn" id="changeAvatarBtn" title="Ändra avatar">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 20h9" />
                         <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
@@ -116,7 +116,7 @@
                 <span class="completion-value" id="completionPercent">60%</span>
             </div>
             <div class="completion-bar-bg">
-                <div class="completion-bar-fill" id="completionProgress" style="width: 60%"></div>
+                <div class="completion-bar-fill w-completion-60" id="completionProgress"></div>
             </div>
         </div>
 
@@ -153,17 +153,17 @@
                         <h4 class="settings-subtitle"><span class="sv-text">Välj Språk</span><span class="ar-text">اختر
                                 اللغة</span></h4>
                         <div class="language-grid-premium" id="languageSelector">
-                            <button class="lang-card-premium" data-lang="sv">
+                            <button type="button" class="lang-card-premium" data-lang="sv">
                                 <span class="lang-flag-large">🇸🇪</span>
                                 <span class="lang-name-large">Svenska</span>
                                 <span class="lang-check">✓</span>
                             </button>
-                            <button class="lang-card-premium" data-lang="ar">
+                            <button type="button" class="lang-card-premium" data-lang="ar">
                                 <span class="lang-flag-large">🇸🇦</span>
                                 <span class="lang-name-large">العربية</span>
                                 <span class="lang-check">✓</span>
                             </button>
-                            <button class="lang-card-premium" data-lang="both">
+                            <button type="button" class="lang-card-premium" data-lang="both">
                                 <span class="lang-flag-large">🌍</span>
                                 <span class="lang-name-large"><span class="sv-text">Båda</span><span
                                         class="ar-text">كلتا</span></span>
@@ -197,7 +197,7 @@
                             </div>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" id="darkModeToggle" checked>
+                            <input type="checkbox" id="darkModeToggle" checked aria-label="Dark Mode Toggle">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
@@ -212,7 +212,7 @@
                             </div>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" id="mobileViewToggle">
+                            <input type="checkbox" id="mobileViewToggle" aria-label="Mobile View Toggle">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
@@ -227,18 +227,18 @@
                             </div>
                         </div>
                         <div class="color-themes" id="colorThemes">
-                            <button class="color-btn active" data-theme="default"
-                                style="background: linear-gradient(135deg, #3b82f6, #60a5fa)" title="Standard"></button>
-                            <button class="color-btn" data-theme="ocean"
-                                style="background: linear-gradient(135deg, #0ea5e9, #0284c7)" title="Ocean"></button>
-                            <button class="color-btn" data-theme="sunset"
-                                style="background: linear-gradient(135deg, #f97316, #ea580c)" title="Sunset"></button>
-                            <button class="color-btn" data-theme="forest"
-                                style="background: linear-gradient(135deg, #22c55e, #16a34a)" title="Forest"></button>
-                            <button class="color-btn" data-theme="rose"
-                                style="background: linear-gradient(135deg, #ef4444, #b91c1c)" title="Ruby"></button>
-                            <button class="color-btn" data-theme="neon"
-                                style="background: linear-gradient(135deg, #0ea5e9, #22d3ee)" title="Neon"></button>
+                            <button type="button" class="color-btn active bg-theme-default" data-theme="default"
+                                title="Standard" aria-label="Standardtema"></button>
+                            <button type="button" class="color-btn bg-theme-ocean" data-theme="ocean" title="Ocean"
+                                aria-label="Ocean-tema"></button>
+                            <button type="button" class="color-btn bg-theme-sunset" data-theme="sunset" title="Sunset"
+                                aria-label="Solnedgångs-tema"></button>
+                            <button type="button" class="color-btn bg-theme-forest" data-theme="forest" title="Forest"
+                                aria-label="Forest-tema"></button>
+                            <button type="button" class="color-btn bg-theme-rose" data-theme="rose" title="Ruby"
+                                aria-label="Ruby-tema"></button>
+                            <button type="button" class="color-btn bg-theme-neon" data-theme="neon" title="Neon"
+                                aria-label="Neon-tema"></button>
                         </div>
                     </div>
 
@@ -252,9 +252,10 @@
                             </div>
                         </div>
                         <div class="font-size-control">
-                            <button class="font-btn" data-size="small">A</button>
-                            <button class="font-btn active" data-size="medium">A</button>
-                            <button class="font-btn" data-size="large">A</button>
+                            <button type="button" class="font-btn" data-size="small" aria-label="Liten text">A</button>
+                            <button type="button" class="font-btn active" data-size="medium"
+                                aria-label="Medelstor text">A</button>
+                            <button type="button" class="font-btn" data-size="large" aria-label="Stor text">A</button>
                         </div>
                     </div>
 
@@ -268,7 +269,7 @@
                             </div>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" id="animationsToggle" checked>
+                            <input type="checkbox" id="animationsToggle" checked aria-label="Animations Toggle">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
@@ -298,7 +299,7 @@
                             </div>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" id="soundEffectsToggle" checked>
+                            <input type="checkbox" id="soundEffectsToggle" checked aria-label="Sound Effects Toggle">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
@@ -313,7 +314,8 @@
                             </div>
                         </div>
                         <div class="slider-control">
-                            <input type="range" id="ttsSpeedSlider" min="50" max="150" value="85">
+                            <input type="range" id="ttsSpeedSlider" min="50" max="150" value="85"
+                                aria-label="TTS Speed Slider">
                             <span class="slider-value" id="ttsSpeedValue">85%</span>
                         </div>
                     </div>
@@ -328,16 +330,19 @@
                             </div>
                         </div>
                         <div class="voice-selector">
-                            <button class="voice-btn active" data-voice="natural" title="Naturlig / طبيعي">🌍</button>
-                            <button class="voice-btn" data-voice="female" title="Kvinna / أنثى">👩</button>
-                            <button class="voice-btn" data-voice="male" title="Man / ذكر">👨</button>
+                            <button type="button" class="voice-btn active" data-voice="natural" title="Naturlig / طبيعي"
+                                aria-label="Naturlig röst">🌍</button>
+                            <button type="button" class="voice-btn" data-voice="female" title="Kvinna / أنثى"
+                                aria-label="Kvinnlig röst">👩</button>
+                            <button type="button" class="voice-btn" data-voice="male" title="Man / ذكر"
+                                aria-label="Manlig röst">👨</button>
                         </div>
                     </div>
 
 
                     <!-- Test TTS -->
                     <div class="settings-item center-item">
-                        <button class="test-btn" id="testTTSBtn">
+                        <button type="button" class="test-btn" id="testTTSBtn">
                             <span>🔊</span> <span class="sv-text">Testa uttal</span><span class="ar-text">اختبر
                                 النطق</span>
                         </button>
@@ -353,13 +358,13 @@
                             </div>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" id="reminderToggle">
+                            <input type="checkbox" id="reminderToggle" aria-label="Daily Reminder Toggle">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
 
                     <!-- Reminder Time -->
-                    <div class="settings-item" id="reminderTimeItem" style="display: none;">
+                    <div class="settings-item hidden" id="reminderTimeItem">
                         <div class="item-left">
                             <span class="item-icon">🕐</span>
                             <div class="item-info">
@@ -367,7 +372,8 @@
                                         class="ar-text">وقت التذكير</span></span>
                             </div>
                         </div>
-                        <input type="time" id="reminderTime" value="18:00" class="time-input">
+                        <input type="time" id="reminderTime" value="18:00" class="time-input"
+                            aria-label="Reminder Time">
                     </div>
                 </div>
             </section>
@@ -395,10 +401,11 @@
                             </div>
                         </div>
                         <div class="goal-selector">
-                            <button class="goal-btn" data-goal="5">5</button>
-                            <button class="goal-btn active" data-goal="10">10</button>
-                            <button class="goal-btn" data-goal="20">20</button>
-                            <button class="goal-btn" data-goal="50">50</button>
+                            <button type="button" class="goal-btn" data-goal="5" aria-label="Mål: 5">5</button>
+                            <button type="button" class="goal-btn active" data-goal="10"
+                                aria-label="Mål: 10">10</button>
+                            <button type="button" class="goal-btn" data-goal="20" aria-label="Mål: 20">20</button>
+                            <button type="button" class="goal-btn" data-goal="50" aria-label="Mål: 50">50</button>
                         </div>
                     </div>
 
@@ -412,7 +419,7 @@
                             </div>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" id="autoPlayToggle">
+                            <input type="checkbox" id="autoPlayToggle" aria-label="Auto-Play Audio Toggle">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
@@ -427,7 +434,7 @@
                             </div>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" id="showExamplesToggle" checked>
+                            <input type="checkbox" id="showExamplesToggle" checked aria-label="Show Examples Toggle">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
@@ -442,7 +449,7 @@
                             </div>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" id="focusModeToggle">
+                            <input type="checkbox" id="focusModeToggle" aria-label="Focus Mode Toggle">
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
@@ -542,7 +549,8 @@
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
                     </div>
-                    <input type="file" id="importFile" accept=".json" style="display: none;">
+                    <input type="file" id="importFile" accept=".json" class="hidden"
+                        aria-label="Importera fil / استيراد ملف">
 
                     <!-- Clear Favorites -->
                     <div class="settings-item clickable danger" onclick="clearFavorites()">
@@ -612,7 +620,7 @@
                     </div>
 
                     <!-- Install App Button -->
-                    <div class="settings-item clickable install-app-item" id="installAppItem" style="display: none;">
+                    <div class="settings-item clickable install-app-item hidden" id="installAppItem">
                         <div class="item-left">
                             <span class="item-icon">📲</span>
                             <div class="item-info">
@@ -693,7 +701,8 @@
         <div class="modal-content avatar-modal">
             <div class="modal-header">
                 <h3><span class="sv-text">Välj Avatar</span><span class="ar-text">اختر الصورة</span></h3>
-                <button class="modal-close" onclick="closeAvatarModal()">×</button>
+                <button type="button" class="modal-close" onclick="closeAvatarModal()"
+                    aria-label="Stäng / إغلاق">×</button>
             </div>
             <div class="avatar-grid" id="avatarGrid">
                 <!-- Avatars will be added dynamically -->
@@ -710,9 +719,9 @@
             </h3>
             <p id="confirmMessage"></p>
             <div class="confirm-actions">
-                <button class="btn-secondary" onclick="closeConfirmModal()"><span class="sv-text">Avbryt</span><span
-                        class="ar-text">إلغاء</span></button>
-                <button class="btn-danger" id="confirmBtn"><span class="sv-text">Bekräfta</span><span
+                <button type="button" class="btn-secondary" onclick="closeConfirmModal()"><span
+                        class="sv-text">Avbryt</span><span class="ar-text">إلغاء</span></button>
+                <button type="button" class="btn-danger" id="confirmBtn"><span class="sv-text">Bekräfta</span><span
                         class="ar-text">تأكيد</span></button>
             </div>
         </div>

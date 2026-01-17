@@ -21,8 +21,7 @@
     <!-- Persistent Header -->
     <!-- Persistent Header with Mode Buttons -->
     <header class="quran-header">
-        <div class="nav-buttons-row"
-            style="display: flex; gap: 0.5rem; width: 100%; justify-content: space-between; align-items: center;">
+        <div class="nav-buttons-row">
             <button class="back-btn" onclick="window.location.href='../learn/learn.html'" title="Tillbaka / رجوع"
                 aria-label="Tillbaka / رجوع">
                 <svg viewBox="0 0 24 24" fill="none" class="icon-md" stroke="currentColor" stroke-width="2"
@@ -60,12 +59,11 @@
         <!-- Browse View -->
         <div id="browseView" class="view-section active">
             <!-- Screen Title (In-View) -->
-            <div class="quran-view-header" style="text-align: center; margin-bottom: 1.5rem; margin-top: 1rem;">
-                <h1
-                    style="font-family: 'Amiri', serif; font-size: 2.5rem; color: var(--quran-gold); margin: 0; text-shadow: 0 0 15px rgba(251, 191, 36, 0.4);">
+            <div class="quran-view-header">
+                <h1 class="quran-main-title">
                     كلمات القرآن
                 </h1>
-                <div style="font-size: 1.2rem; color: #cbd5e1; margin-top: 0.2rem;">Koranord</div>
+                <div class="quran-subtitle">Koranord</div>
             </div>
 
             <div class="search-container">
@@ -75,14 +73,16 @@
 
             <!-- Filter Bar -->
             <div class="filter-bar" id="filterBar">
-                <select class="glass-select" id="surahFilter" data-i18n-title="quran.filterSurah">
+                <select class="glass-select" id="surahFilter" data-i18n-title="quran.filterSurah"
+                    aria-label="Filtrera Surah / تصفية السورة">
                     <option value="all" data-i18n="quran.allSurahs">Alla Suror</option>
                     <option value="favorites">❤️ <span class="sv-text">Favoriter</span><span
                             class="ar-text">المفضلة</span>
                     </option>
                     <!-- Populated via JS -->
                 </select>
-                <select class="glass-select" id="typeFilter" data-i18n-title="quran.filterType">
+                <select class="glass-select" id="typeFilter" data-i18n-title="quran.filterType"
+                    aria-label="Filtrera Typ / تصفية النوع">
                     <option value="all" data-i18n="quran.allTypes">Alla Typer</option>
                     <option value="verb" data-i18n="quran.verb">Verb</option>
                     <option value="noun" data-i18n="quran.noun">Substantiv</option>
@@ -321,7 +321,7 @@
                 <!-- Options will be generated dynamically -->
             </div>
 
-            <div class="quiz-fill-feedback" id="fillFeedback" style="display: none;">
+            <div class="quiz-fill-feedback hidden" id="fillFeedback">
                 <div class="feedback-content"></div>
                 <button class="fill-next-btn" id="fillNextBtn">
                     <span class="sv-text">Nästa</span>
@@ -329,7 +329,7 @@
                 </button>
             </div>
 
-            <div class="quiz-fill-results" id="fillResults" style="display: none;">
+            <div class="quiz-fill-results hidden" id="fillResults">
                 <h2>
                     <span class="sv-text">Quiz Slutförd!</span>
                     <span class="ar-text">انتهى الاختبار!</span>
@@ -367,8 +367,7 @@
                 <label for="themeSelector">
                     🎨 <span class="sv-text">Färgtema</span><span class="ar-text">لون الثيم</span>
                 </label>
-                <select id="themeSelector" class="glass-select full-width"
-                    data-i18n-title="settings.themeSelectorTitle">
+                <select id="themeSelector" class="glass-select full-width" aria-label="Välj Tema / اختر الموضوع">
                     <option value="default">🟢 Emerald</option>
                     <option value="sage">🌿 Sage</option>
                     <option value="luxury">👑 Luxury</option>

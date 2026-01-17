@@ -166,7 +166,7 @@
 
 /* Default to mobile view mode */
 body {
-    --viewport-max-width: 420px;
+    --viewport-max-width: 414px;
 }
 
 /* Auto-enable mobile mode look */

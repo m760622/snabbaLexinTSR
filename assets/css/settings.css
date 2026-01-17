@@ -111,7 +111,8 @@
 .settings-container {
     position: relative;
     z-index: 1;
-    max-width: 600px;
+    max-width: 414px;
+    ;
     margin: 0 auto;
     padding: 0 16px 40px;
 }
@@ -135,8 +136,8 @@
     height: 44px;
     border-radius: 14px;
     background: var(--settings-surface);
-    backdrop-filter: var(--settings-glass-blur);
     -webkit-backdrop-filter: var(--settings-glass-blur);
+    backdrop-filter: var(--settings-glass-blur);
     border: 1px solid var(--settings-border);
     display: flex;
     align-items: center;
@@ -181,6 +182,7 @@
     height: 44px;
     border-radius: 14px;
     background: var(--settings-surface);
+    -webkit-backdrop-filter: var(--settings-glass-blur);
     backdrop-filter: var(--settings-glass-blur);
     border: 1px solid var(--settings-border);
     display: flex;
@@ -206,8 +208,8 @@
    ============================================================ */
 .glass-card {
     background: var(--settings-card);
-    backdrop-filter: var(--settings-glass-blur);
     -webkit-backdrop-filter: var(--settings-glass-blur);
+    backdrop-filter: var(--settings-glass-blur);
     border: 1px solid var(--settings-border);
     border-radius: 20px;
     overflow: hidden;
@@ -1069,12 +1071,14 @@ body.lang-both .section-title .ar-text {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.7);
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
 }
 
 .modal-content {
     position: relative;
     background: var(--settings-surface);
+    -webkit-backdrop-filter: var(--settings-glass-blur);
     backdrop-filter: var(--settings-glass-blur);
     border: 1px solid var(--settings-border);
     border-radius: 24px;
@@ -1434,7 +1438,7 @@ body.rtl .toast-progress {
 }
 
 /* RTL responsive adjustments */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     body.rtl .toast-item {
         padding: 12px 14px 12px 40px;
     }
@@ -1468,8 +1472,8 @@ body.rtl .toast-progress {
     position: relative;
     padding: 14px 44px 14px 18px;
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 14px;
     color: #f8fafc;
@@ -1611,7 +1615,7 @@ body:not(.dark-mode) .toast-close:hover {
 }
 
 /* Mobile responsive toasts */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .toast-container {
         bottom: 80px;
         width: calc(100% - 24px);
@@ -1706,7 +1710,7 @@ body:not(.dark-mode) .toast-notification {
    ============================================================ */
 
 /* Small Mobile (320px - 374px) */
-@media (max-width: 374px) {
+@media (max-width: 414px) {
     .settings-container {
         padding: 0 8px 100px;
     }
@@ -1920,7 +1924,7 @@ body:not(.dark-mode) .toast-notification {
 }
 
 /* Standard Mobile (375px - 480px) */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .settings-container {
         padding: 0 12px 100px;
     }
@@ -2380,7 +2384,7 @@ body:not(.dark-mode) .toast-notification {
 }
 
 /* Mobile Adjustments */
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .language-grid-premium {
         gap: 10px;
     }
@@ -2396,4 +2400,33 @@ body:not(.dark-mode) .toast-notification {
     .lang-name-large {
         font-size: 0.9rem;
     }
+}
+
+/* UTILITY CLASSES EXTRACTED FROM INLINE STYLES */
+.bg-theme-default {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+}
+
+.bg-theme-ocean {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+}
+
+.bg-theme-sunset {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.bg-theme-forest {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.bg-theme-rose {
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+}
+
+.bg-theme-neon {
+    background: linear-gradient(135deg, #0ea5e9, #22d3ee);
+}
+
+.w-completion-60 {
+    width: 60%;
 }

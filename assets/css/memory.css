@@ -1242,7 +1242,7 @@ header {
 }
 
 /* Mobile Tweak for Dropdown */
-@media (max-width: 400px) {
+@media (max-width: 414px) {
     .dropdown-trigger {
         min-width: unset;
         width: auto;

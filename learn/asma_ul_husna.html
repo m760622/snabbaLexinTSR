@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>أسماء الله الحسنى - Guds Vackraste Namn</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/games.css">
-    <link rel="stylesheet" href="../assets/css/mobile-enhancements.css">
+
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700&display=swap"
         rel="stylesheet">
@@ -16,7 +14,7 @@
 </head>
 
 
-<body class="memory-game-page">
+<body class="asma-page">
 
     <!-- Islamic Background Layer -->
     <div class="islamic-bg-layer"></div>
@@ -30,8 +28,8 @@
         <!-- Navigation Buttons (First Row) -->
         <div class="nav-buttons-row">
             <!-- Back Button -->
-            <button class="asma-nav-btn" onclick="window.location.href='../learn/learn.html'" aria-label="Back"
-                title="رجوع">
+            <button type="button" class="asma-nav-btn" onclick="window.location.href='../learn/learn.html'"
+                aria-label="Back" title="رجوع">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -39,8 +37,8 @@
                 </svg>
             </button>
             <!-- Mobile Toggle -->
-            <button id="mobileToggle" class="asma-nav-btn" onclick="toggleMobileView()" aria-label="Mobile View"
-                title="عرض الجوال">
+            <button type="button" id="mobileToggle" class="asma-nav-btn" onclick="toggleMobileView()"
+                aria-label="Mobile View" title="عرض الجوال">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2">
                     <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
@@ -48,16 +46,16 @@
                 </svg>
             </button>
             <!-- Stats Button -->
-            <button class="asma-nav-btn" onclick="openStats()" aria-label="Stats" title="إحصائياتي">
-                <span style="font-size: 1.2rem;">📊</span>
+            <button type="button" class="asma-nav-btn" onclick="openStats()" aria-label="Stats" title="إحصائياتي">
+                <span class="text-lg-icon">📊</span>
             </button>
             <!-- Language Toggle -->
-            <button id="langToggle" class="asma-nav-btn" onclick="toggleLang()" aria-label="Language"
+            <button type="button" id="langToggle" class="asma-nav-btn" onclick="toggleLang()" aria-label="Language"
                 title="تبديل اللغة">
-                <span style="font-size: 14px; font-weight: bold;" id="langLabel">ع</span>
+                <span class="lang-label-text" id="langLabel">ع</span>
             </button>
             <!-- Theme Toggle -->
-            <button id="themeToggle" class="asma-nav-btn" onclick="toggleTheme()" aria-label="Theme"
+            <button type="button" id="themeToggle" class="asma-nav-btn" onclick="toggleTheme()" aria-label="Theme"
                 title="تغيير الثيم">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2">
@@ -65,8 +63,8 @@
                 </svg>
             </button>
             <!-- Audio Player Button (Kept in Menu) -->
-            <button class="asma-nav-btn feature-btn" id="audioBtn" onclick="togglePlay()" aria-label="تشغيل صوتي"
-                title="تشغيل / إيقاف">
+            <button type="button" class="asma-nav-btn feature-btn" id="audioBtn" onclick="togglePlay()"
+                aria-label="تشغيل صوتي" title="تشغيل / إيقاف">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2">
                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
@@ -77,16 +75,18 @@
         <!-- Mode Selection Bar (New) -->
         <div class="mode-selection-bar" id="modeSelectionBar">
             <span class="mode-indicator" id="modeIndicator"></span>
-            <button class="mode-btn active" onclick="switchMode('browse')" id="btn-browse" title="Bläddra / تصفح">
+            <button type="button" class="mode-btn active" onclick="switchMode('browse')" id="btn-browse"
+                title="Bläddra / تصفح">
                 <span class="mode-icon">🔍</span>
             </button>
-            <button class="mode-btn" onclick="switchMode('quiz')" id="btn-quiz" title="Quiz / اختبار">
+            <button type="button" class="mode-btn" onclick="switchMode('quiz')" id="btn-quiz" title="Quiz / اختبار">
                 <span class="mode-icon">❓</span>
             </button>
-            <button class="mode-btn" onclick="switchMode('flashcard')" id="btn-flashcard" title="Flashcards / بطاقات">
+            <button type="button" class="mode-btn" onclick="switchMode('flashcard')" id="btn-flashcard"
+                title="Flashcards / بطاقات">
                 <span class="mode-icon">🃏</span>
             </button>
-            <button class="mode-btn" onclick="switchMode('quiz-fill')" id="btn-quiz-fill"
+            <button type="button" class="mode-btn" onclick="switchMode('quiz-fill')" id="btn-quiz-fill"
                 title="Fill Quiz / أكمل الفراغ">
                 <span class="mode-icon">✏️</span>
             </button>
@@ -108,10 +108,11 @@
             </div>
 
             <!-- Search & Filters -->
-            <div class="nav-search-wrapper" style="margin: 20px auto; width: 90%; max-width: 414px;">
+            <div class="nav-search-wrapper-styled">
                 <input type="text" id="asmaModeSearch" class="nav-search-input" placeholder="🔍 ابحث..."
                     oninput="filterNames()">
-                <button class="asma-nav-btn" onclick="toggleFilters()" aria-label="Filters" title="تصفية الأسماء">
+                <button type="button" class="asma-nav-btn" onclick="toggleFilters()" aria-label="Filters"
+                    title="تصفية الأسماء">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="4" y1="21" x2="4" y2="14"></line>
@@ -129,14 +130,17 @@
 
             <!-- Filter Buttons -->
             <div class="asma-filter-bar" id="filterBar">
-                <button class="asma-filter-btn active" data-filter="all" onclick="setFilter('all')">الكل</button>
-                <button class="asma-filter-btn" data-filter="favorites" onclick="setFilter('favorites')">❤️</button>
-                <button class="asma-filter-btn" data-filter="memorized" onclick="setFilter('memorized')">✓</button>
-                <button class="asma-filter-btn filter-btn--jalal" data-filter="jalal"
+                <button type="button" class="asma-filter-btn active" data-filter="all"
+                    onclick="setFilter('all')">الكل</button>
+                <button type="button" class="asma-filter-btn" data-filter="favorites"
+                    onclick="setFilter('favorites')">❤️</button>
+                <button type="button" class="asma-filter-btn" data-filter="memorized"
+                    onclick="setFilter('memorized')">✓</button>
+                <button type="button" class="asma-filter-btn filter-btn--jalal" data-filter="jalal"
                     onclick="setFilter('jalal')">الجلال</button>
-                <button class="asma-filter-btn filter-btn--jamal" data-filter="jamal"
+                <button type="button" class="asma-filter-btn filter-btn--jamal" data-filter="jamal"
                     onclick="setFilter('jamal')">الجمال</button>
-                <button class="asma-filter-btn filter-btn--kamal" data-filter="kamal"
+                <button type="button" class="asma-filter-btn filter-btn--kamal" data-filter="kamal"
                     onclick="setFilter('kamal')">الكمال</button>
             </div>
 
@@ -168,7 +172,7 @@
                 <div class="quiz-header">
                     <div class="quiz-progress">
                         <div class="quiz-progress-bar">
-                            <div class="quiz-progress-fill" id="quizProgressFill" style="width: 0%"></div>
+                            <div class="quiz-progress-fill quiz-progress-fill-initial" id="quizProgressFill"></div>
                         </div>
                         <div class="quiz-score" id="quizScore">0/10</div>
                     </div>
@@ -207,13 +211,13 @@
                         <!-- Options generated by JS -->
                     </div>
 
-                    <div class="quiz-fill-feedback" id="fillFeedback" style="display: none;">
+                    <div class="quiz-fill-feedback hidden" id="fillFeedback">
                         <div class="feedback-content"></div>
                     </div>
                 </div>
 
                 <!-- Results State -->
-                <div class="quiz-fill-results" id="fillResults" style="display: none;">
+                <div class="quiz-fill-results hidden" id="fillResults">
                     <div class="results-icon">🏆</div>
                     <h3>اكتمل الاختبار!</h3>
                     <div class="results-score">
@@ -221,10 +225,10 @@
                     </div>
                     <div class="results-percentage" id="fillPercentage">0%</div>
                     <div class="results-actions">
-                        <button class="mode-btn" onclick="retryFillQuiz()">
+                        <button type="button" class="mode-btn" onclick="retryFillQuiz()">
                             <span>🔄</span> إعادة المحاولة
                         </button>
-                        <button class="mode-btn" onclick="switchMode('browse')">
+                        <button type="button" class="mode-btn" onclick="switchMode('browse')">
                             <span>📜</span> العودة للقائمة
                         </button>
                     </div>
@@ -254,15 +258,15 @@
             </div>
 
             <div class="flashcard-controls">
-                <button class="flashcard-btn dont-know" onclick="flashcardDontKnow()">
+                <button type="button" class="flashcard-btn dont-know" onclick="flashcardDontKnow()">
                     <span>❌</span>
                     <span>لا أعرف</span>
                 </button>
-                <button class="flashcard-btn" onclick="speakCurrentFlashcard()">
+                <button type="button" class="flashcard-btn" onclick="speakCurrentFlashcard()">
                     <span>🔊</span>
                     <span>استمع</span>
                 </button>
-                <button class="flashcard-btn know" onclick="flashcardKnow()">
+                <button type="button" class="flashcard-btn know" onclick="flashcardKnow()">
                     <span>✓</span>
                     <span>أعرفها</span>
                 </button>
@@ -279,7 +283,7 @@
     <!-- Stats Modal -->
     <div class="stats-modal" id="statsModal" onclick="if(event.target === this) closeStats()">
         <div class="stats-container">
-            <button class="quiz-close-btn" onclick="closeStats()">×</button>
+            <button type="button" class="quiz-close-btn" onclick="closeStats()">×</button>
 
             <div class="stats-header">
                 <div class="stats-title">إحصائيات الحفظ</div>
@@ -318,11 +322,11 @@
             </div>
 
             <div class="stats-actions stats-actions-layout">
-                <button class="asma-mode-btn btn-compact" onclick="shareStats()">
+                <button type="button" class="asma-mode-btn btn-compact" onclick="shareStats()">
                     <span>📤</span>
                     <span>مشاركة إنجازي</span>
                 </button>
-                <button class="asma-mode-btn btn-compact" onclick="exportMemorizedList()">
+                <button type="button" class="asma-mode-btn btn-compact" onclick="exportMemorizedList()">
                     <span>📋</span>
                     <span>نسخ قائمة الحفظ</span>
                 </button>
@@ -333,7 +337,7 @@
     <!-- Audio Player Bar -->
     <div class="audio-player-bar hidden" id="audioPlayer">
         <!-- Close Button -->
-        <button class="player-close-btn" onclick="closeAudioPlayer()" title="إغلاق المشغل">×</button>
+        <button type="button" class="player-close-btn" onclick="closeAudioPlayer()" title="إغلاق المشغل">×</button>
 
         <div class="audio-info">
             <div class="audio-names-row">
@@ -343,14 +347,16 @@
         </div>
 
         <div class="audio-controls">
-            <button class="audio-btn" onclick="togglePlayerRepeat()" id="playerRepeatBtn" title="عدد التكرار">↻
+            <button type="button" class="audio-btn" onclick="togglePlayerRepeat()" id="playerRepeatBtn"
+                title="عدد التكرار">↻
                 1x</button>
-            <button class="audio-btn" onclick="toggleLoop()" id="loopBtn" title="تكرار القائمة">🔁</button>
-            <button class="audio-btn prev" onclick="playPrev()" title="السابق">⏮️</button>
-            <button class="audio-btn play-pause" onclick="togglePlay()" id="playPauseBtn">▶️</button>
-            <button class="audio-btn next" onclick="playNext()" title="التالي">⏭️</button>
+            <button type="button" class="audio-btn" onclick="toggleLoop()" id="loopBtn"
+                title="تكرار القائمة">🔁</button>
+            <button type="button" class="audio-btn prev" onclick="playPrev()" title="السابق">⏮️</button>
+            <button type="button" class="audio-btn play-pause" onclick="togglePlay()" id="playPauseBtn">▶️</button>
+            <button type="button" class="audio-btn next" onclick="playNext()" title="التالي">⏭️</button>
             <div class="speed-control">
-                <button class="audio-btn speed-btn" onclick="toggleSpeed()" id="speedBtn">1x</button>
+                <button type="button" class="audio-btn speed-btn" onclick="toggleSpeed()" id="speedBtn">1x</button>
             </div>
         </div>
     </div>

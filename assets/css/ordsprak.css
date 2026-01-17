@@ -79,7 +79,7 @@ main {
     padding: 1rem;
     padding-top: 120px;
     /* Adjusted for floating navbar */
-    max-width: 800px;
+    max-width: 414px;
     margin: 0 auto;
     position: relative;
 }
@@ -95,8 +95,8 @@ main {
     z-index: 1000;
 
     background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
 
     border: 1px solid rgba(251, 191, 36, 0.15);
     border-radius: 16px;
@@ -191,8 +191,8 @@ main {
     margin-bottom: 2px;
 
     background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
     padding: 6px;
     border-radius: 50px;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1295,7 +1295,7 @@ main {
     color: #94a3b8;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 414px) {
     .fill-blank-options {
         grid-template-columns: 1fr !important;
     }
@@ -1345,7 +1345,7 @@ main {
 
 /* ========== MOBILE VIEW ========== */
 body.iphone-view {
-    max-width: 430px;
+    max-width: 414px;
     margin: 0 auto;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
 }
@@ -1361,8 +1361,8 @@ body.iphone-view .audio-player-bar {
     padding: 1.25rem;
     gap: 1rem;
     background: rgba(15, 20, 35, 0.85);
-    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border: 1px solid rgba(251, 191, 36, 0.25);
     box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.4),
@@ -1408,8 +1408,8 @@ body.iphone-view .audio-controls {
 /* Glassmorphism Audio Buttons */
 body.iphone-view .audio-btn {
     background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 50%;
     width: 48px;
@@ -1491,6 +1491,7 @@ body.iphone-view .player-close-btn {
     width: 28px;
     height: 28px;
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
@@ -1513,7 +1514,7 @@ body.iphone-view .player-close-btn:hover {
 }
 
 /* ========== RESPONSIVE ========== */
-@media (max-width: 600px) {
+@media (max-width: 414px) {
     .mode-tabs {
         gap: 0.3rem;
     }
@@ -1659,4 +1660,44 @@ body.iphone-view .player-close-btn:hover {
     font-size: 0.9rem;
     color: #94a3b8;
     line-height: 1.5;
+}
+
+/* Utility classes extracted from inline styles */
+.nav-buttons-row {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-group-left {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nav-group-right {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.page-title-container {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+}
+
+.main-title-gold {
+    font-family: 'Amiri', serif;
+    font-size: 2.5rem;
+    color: #fbbf24;
+    margin: 0;
+    text-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+}
+
+.subtitle-text {
+    font-size: 1.2rem;
+    color: #cbd5e1;
+    margin-top: 0.2rem;
 }

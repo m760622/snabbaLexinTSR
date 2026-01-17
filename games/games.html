@@ -57,8 +57,8 @@
                             <polyline points="12 19 5 12 12 5"></polyline>
                         </svg>
                     </a>
-                    <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
-                        title="Mobilvy / وضع الموبايل">
+                    <button type="button" id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
+                        title="Mobilvy / وضع الموبايل" aria-label="Mobilvy / وضع الموبايل">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
@@ -78,7 +78,7 @@
                     <div class="xp-info-row">
                         <span class="xp-level-badge">LVL <span id="currentLevel">1</span></span>
                         <div class="xp-progress-container-mini">
-                            <div class="xp-progress-bar" id="xpProgressBar" style="width: 0%;"></div>
+                            <div class="xp-progress-bar w-0" id="xpProgressBar"></div>
                         </div>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
             <!-- Category Filter (Moved to Header) -->
             <div class="category-filter-container">
                 <div class="category-filter-scroll">
-                    <button class="category-chip active" onclick="filterGames('all')" data-cat="all">
+                    <button type="button" class="category-chip active" onclick="filterGames('all')" data-cat="all">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
@@ -114,7 +114,7 @@
                         </svg>
                         <span class="sv-text">Alla</span><span class="ar-text">الكل</span>
                     </button>
-                    <button class="category-chip" onclick="filterGames('vocab')" data-cat="vocab">
+                    <button type="button" class="category-chip" onclick="filterGames('vocab')" data-cat="vocab">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
@@ -122,7 +122,7 @@
                         </svg>
                         <span class="sv-text">Ordförråd</span><span class="ar-text">المفردات</span>
                     </button>
-                    <button class="category-chip" onclick="filterGames('grammar')" data-cat="grammar">
+                    <button type="button" class="category-chip" onclick="filterGames('grammar')" data-cat="grammar">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
@@ -130,7 +130,7 @@
                         </svg>
                         <span class="sv-text">Grammatik</span><span class="ar-text">القواعد</span>
                     </button>
-                    <button class="category-chip" onclick="filterGames('listening')" data-cat="listening">
+                    <button type="button" class="category-chip" onclick="filterGames('listening')" data-cat="listening">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
@@ -140,7 +140,7 @@
                         </svg>
                         <span class="sv-text">Lyssna</span><span class="ar-text">استمع</span>
                     </button>
-                    <button class="category-chip" onclick="filterGames('puzzle')" data-cat="puzzle">
+                    <button type="button" class="category-chip" onclick="filterGames('puzzle')" data-cat="puzzle">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <path d="M20.5 6c-2.6 0-3.66 1.5-4.5 3.35s-1.9 3.35-4.5 3.35-3.66-1.5-4.5-3.35S4.1 6 1.5 6">
@@ -162,7 +162,7 @@
                 <div class="wotd-label">
                     <span class="wotd-badge"><span class="sv-text">Dagens Ord</span><span class="ar-text">كلمة
                             اليوم</span></span>
-                    <button id="wotd-speak-btn" class="wotd-speak-btn" aria-label="Lyssna">
+                    <button type="button" id="wotd-speak-btn" class="wotd-speak-btn" aria-label="Lyssna / استمع">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
