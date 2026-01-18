@@ -9705,7 +9705,13 @@ body.dark-mode .onboarding-container {
    ======================================== */
 .quick-actions-bar {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  /* Changed from center to allow scrolling from start */
+  /* If content fits, we might want center. To do both (center if fits, start if overflows), 'justify-content: center' works with 'overflow-x: auto' in modern browsers but 'justify-content: flex-start' is safer for scrollable containers. 
+     Let's use a safe approach for scrollable areas: min-width ensures it takes space. 
+  */
+  overflow-x: auto;
+  white-space: nowrap;
   gap: 0.4rem;
   padding: 0.5rem 0.75rem;
   margin: 0 1rem 0.4rem;
@@ -9714,6 +9720,17 @@ body.dark-mode .onboarding-container {
   border-radius: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+  /* Hide Scrollbar */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+}
+
+.quick-actions-bar::-webkit-scrollbar {
+  display: none;
+  /* Chrome/Safari */
 }
 
 [data-theme="dark"] .quick-actions-bar {
