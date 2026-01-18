@@ -177,22 +177,42 @@ function initFillQuiz() {
     if (options) options.style.display = 'grid';
     if (feedback) feedback.style.display = 'none';
 
+    // Force hide other views just in case
+    const quizView = document.getElementById('quizView');
+    if (quizView) quizView.classList.add('hidden');
+
+    // Generate Progress Segments
+    const progressContainer = document.getElementById('fillSegmentedProgress');
+    if (progressContainer) {
+        progressContainer.innerHTML = '';
+        for (let i = 0; i < fillTotalQuestions; i++) {
+            const seg = document.createElement('div');
+            seg.className = 'fill-segment';
+            seg.id = 'fill-seg-' + i;
+            progressContainer.appendChild(seg);
+        }
+    }
+
     showFillQuestion();
 }
 
 function generateFillQuestions(count: number) {
-    const shuffled = [...allNames].sort(() => Math.random() - 0.5);
+    // Filter only names that have a verse (not empty or '-')
+    const candidates = allNames.filter(item => item.verseAr && item.verseAr.length > 5 && item.verseAr !== '-');
+    const shuffled = [...candidates].sort(() => Math.random() - 0.5);
+
     return shuffled.slice(0, count).map(item => ({
         nameAr: item.nameAr,
         nameSv: item.nameSv,
         meaningSv: item.meaningSv,
         verseAr: item.verseAr,
-        correctAnswer: item.meaningSv // Identify by meaning
+        verseSv: item.verseSv, // Added for Swedish Mode
+        correctAnswer: item.nameAr // Identify by Arabic Name
     }));
 }
 
 function showFillQuestion() {
-    if (fillCurrentIndex >= fillQuizQuestions.length) {
+    if (fillCurrentIndex >= fillTotalQuestions) {
         showFillResults();
         return;
     }
@@ -206,17 +226,57 @@ function showFillQuestion() {
     if (totalQ) totalQ.textContent = fillTotalQuestions.toString();
     if (scoreEl) scoreEl.textContent = fillScore.toString();
 
+    // Update Progress Segments (Set Current)
+    for (let i = 0; i < fillTotalQuestions; i++) {
+        const seg = document.getElementById('fill-seg-' + i);
+        if (seg) {
+            if (i === fillCurrentIndex) {
+                seg.classList.add('current');
+            } else {
+                seg.classList.remove('current');
+            }
+        }
+    }
+
     const ayahArabic = document.getElementById('fillAyahArabic');
     const ayahTranslation = document.getElementById('fillAyahTranslation');
 
     if (ayahArabic) {
-        // Show Name Only Initially
-        ayahArabic.innerHTML = `<span class="highlight-word">${question.nameAr}</span>`;
-    }
-    if (ayahTranslation) {
-        // Hide Meaning Initially
-        ayahTranslation.textContent = '';
-        ayahTranslation.style.visibility = 'hidden';
+        // --- SWEDISH MODE ---
+        ayahArabic.style.fontFamily = "'Inter', sans-serif";
+        ayahArabic.style.direction = "ltr";
+        ayahArabic.style.fontSize = "1.8rem";
+
+        if (ayahTranslation) {
+            ayahTranslation.style.fontFamily = "'Amiri', serif";
+            ayahTranslation.style.direction = "rtl";
+            ayahTranslation.style.fontSize = "1.6rem";
+            ayahTranslation.style.color = "rgba(255, 215, 0, 0.7)";
+            ayahTranslation.style.visibility = 'visible';
+            ayahTranslation.textContent = question.verseAr;
+        }
+
+        let maskedVerse = question.verseSv;
+        const nameSv = question.nameSv;
+        const escapeRegExp = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+        let pattern = escapeRegExp(nameSv);
+        let regex = new RegExp(pattern, 'gi');
+
+        if (regex.test(maskedVerse)) {
+            maskedVerse = maskedVerse.replace(regex, '<span class="fill-blank">_______</span>');
+        } else {
+            const shortName = nameSv.replace(/^(Den|Det)\s+/i, '');
+            if (shortName.length > 3 && shortName !== nameSv) {
+                const shortPattern = escapeRegExp(shortName);
+                const shortRegex = new RegExp(shortPattern, 'gi');
+                if (shortRegex.test(maskedVerse)) {
+                    maskedVerse = maskedVerse.replace(shortRegex, '<span class="fill-blank">_______</span>');
+                }
+            }
+        }
+
+        ayahArabic.innerHTML = `<div class="fill-verse-text" style="font-family: inherit; direction: ltr;">${maskedVerse}</div>`;
     }
 
     generateFillOptions(question);
@@ -229,73 +289,164 @@ function generateFillOptions(question: any) {
     const options = document.getElementById('fillOptions');
     if (!options) return;
 
+    // Correct Answer is Swedish Name
+    const correct = question.nameSv;
+
+    // Distractors: other Swedish Names
     const wrongAnswers = allNames
-        .filter(item => item.meaningSv !== question.correctAnswer)
+        .filter(item => item.nameSv !== correct)
         .sort(() => Math.random() - 0.5)
         .slice(0, 3)
-        .map(item => item.meaningSv);
+        .map(item => item.nameSv);
 
-    const allOptions = [question.correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+    const allOptions = [correct, ...wrongAnswers].sort(() => Math.random() - 0.5);
 
-    options.innerHTML = allOptions.map(option => `<button class="fill-option-btn" data-answer="${option}">${option}</button>`).join('');
+    // Use Latin font style
+    options.innerHTML = allOptions.map(option => `
+        <button class="fill-option-btn" style="font-family: 'Inter', sans-serif; font-size: 1.1rem; line-height: 1.2;" data-answer="${option}">
+            ${option}
+        </button>`).join('');
 
     options.querySelectorAll('.fill-option-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const selected = (e.target as HTMLElement).getAttribute('data-answer');
-            checkFillAnswer(selected, question.correctAnswer, question); // Pass full question object
+            checkFillAnswer(selected, correct, question);
         });
     });
 }
 
 function checkFillAnswer(selected: string | null, correct: string, question: any) {
     const feedback = document.getElementById('fillFeedback');
-    const feedbackContent = feedback?.querySelector('.feedback-content');
     const options = document.getElementById('fillOptions');
-    const ayahTranslation = document.getElementById('fillAyahTranslation');
-    const ayahArabic = document.getElementById('fillAyahArabic');
-
-    // Show Meaning After Answer
-    if (ayahTranslation) {
-        ayahTranslation.textContent = correct; // Or question.meaningSv (same as correct)
-        ayahTranslation.style.visibility = 'visible';
-    }
-
-    // Show Verse After Answer
-    if (ayahArabic && question.verseAr) {
-        ayahArabic.innerHTML = `<span class="highlight-word">${question.nameAr}</span><br><span class="verse-text" style="font-size: 0.6em; display: block; margin-top: 15px; color: #cbd5e1;">${question.verseAr}</span>`;
-    }
-
-    if (!feedback || !feedbackContent) return;
+    const mainTextEl = document.getElementById('fillAyahArabic');
+    const scoreEl = document.getElementById('fillScore');
 
     const isCorrect = selected === correct;
 
+    // Update Segment Status
+    const currentSeg = document.getElementById('fill-seg-' + fillCurrentIndex);
+    if (currentSeg) {
+        currentSeg.classList.remove('current');
+        if (isCorrect) currentSeg.classList.add('correct');
+        else currentSeg.classList.add('wrong');
+    }
+
+    const clickedBtn = options?.querySelector(`button[data-answer="${selected}"]`);
+
     if (isCorrect) {
         fillScore++;
-        // Feedback message removed as per request
-        // feedbackContent.innerHTML = ...
-        // feedback.className = ...
+        if (scoreEl) scoreEl.textContent = fillScore.toString();
+
+        if (clickedBtn && mainTextEl) {
+            clickedBtn.classList.add('correct');
+            const blank = mainTextEl.querySelector('.fill-blank') as HTMLElement;
+            if (blank) {
+                animateFlyToFill(clickedBtn as HTMLElement, blank, () => {
+                    updateVerseWithHighlight(mainTextEl, question);
+                });
+            } else {
+                updateVerseWithHighlight(mainTextEl, question);
+            }
+        } else {
+            if (mainTextEl) updateVerseWithHighlight(mainTextEl, question);
+        }
+
     } else {
-        // Feedback message removed as per request
+        if (clickedBtn) {
+            clickedBtn.classList.add('wrong');
+            clickedBtn.animate([
+                { transform: 'translateX(0)' },
+                { transform: 'translateX(-10px)' },
+                { transform: 'translateX(10px)' },
+                { transform: 'translateX(0)' }
+            ], { duration: 400 });
+        }
     }
 
     options?.querySelectorAll('.fill-option-btn').forEach(btn => {
         (btn as HTMLButtonElement).disabled = true;
-        if (btn.getAttribute('data-answer') === correct) {
+        if (btn.getAttribute('data-answer') === correct && !isCorrect) {
             btn.classList.add('correct');
-        } else if (btn.getAttribute('data-answer') === selected) {
-            btn.classList.add('wrong');
         }
     });
 
-    // feedback.style.display = 'block'; // Hidden as per request
-    const scoreEl = document.getElementById('fillScore');
-    if (scoreEl) scoreEl.textContent = fillScore.toString();
-
-    // Auto-advance
     if (fillAutoAdvanceTimer) clearTimeout(fillAutoAdvanceTimer);
     fillAutoAdvanceTimer = setTimeout(() => {
         nextFillQuestion();
-    }, 5000);
+    }, isCorrect ? 4000 : 5000);
+}
+
+function updateVerseWithHighlight(container: HTMLElement, question: any) {
+    let fullVerse = question.verseSv;
+    const highlightHtml = `<span class="highlight-word success">${question.nameSv}</span>`;
+    const escapeRegExp = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    const nameSv = question.nameSv;
+    let pattern = escapeRegExp(nameSv);
+    let regex = new RegExp(pattern, 'gi');
+
+    if (regex.test(fullVerse)) {
+        fullVerse = fullVerse.replace(regex, highlightHtml);
+    } else {
+        const shortName = nameSv.replace(/^(Den|Det)\s+/i, '');
+        if (shortName.length > 3) {
+            const shortPattern = escapeRegExp(shortName);
+            const shortRegex = new RegExp(shortPattern, 'gi');
+            if (shortRegex.test(fullVerse)) {
+                fullVerse = fullVerse.replace(shortRegex, highlightHtml);
+            }
+        }
+    }
+
+    container.innerHTML = `<div class="fill-verse-text" style="font-family: inherit; direction: ltr;">${fullVerse}</div>`;
+}
+
+function animateFlyToFill(startEl: HTMLElement, targetEl: HTMLElement, onComplete: () => void) {
+    // 1. Create Clone
+    const clone = document.createElement('div');
+    clone.textContent = startEl.innerText;
+    clone.className = 'fly-item';
+
+    // 2. Get Coordinates
+    const startRect = startEl.getBoundingClientRect();
+    const targetRect = targetEl.getBoundingClientRect();
+
+    // 3. Set Initial Position
+    clone.style.top = `${startRect.top}px`;
+    clone.style.left = `${startRect.left}px`;
+    clone.style.width = `${startRect.width}px`;
+    clone.style.height = `${startRect.height}px`;
+    // Align text center vertically/horizontally
+    clone.style.display = 'flex';
+    clone.style.alignItems = 'center';
+    clone.style.justifyContent = 'center';
+    clone.style.margin = '0';
+
+    document.body.appendChild(clone);
+
+    // 4. Force Reflow
+    clone.getBoundingClientRect();
+
+    // 5. Animate to Target
+    // We want it to shrink/grow to match target size? target is usually small '_______'
+    // Actually target is a span in text.
+
+    requestAnimationFrame(() => {
+        clone.style.top = `${targetRect.top}px`;
+        clone.style.left = `${targetRect.left}px`;
+        clone.style.width = `${targetRect.width}px`;
+        clone.style.height = `${targetRect.height}px`;
+        clone.style.fontSize = '1.8rem'; // Match verse font size roughly
+        clone.style.background = 'transparent'; // box style to text style
+        clone.style.boxShadow = 'none';
+        clone.style.color = '#4ade80'; // Success color
+    });
+
+    // 6. Cleanup
+    clone.addEventListener('transitionend', () => {
+        clone.remove();
+        onComplete();
+    });
 }
 
 function nextFillQuestion() {
@@ -902,6 +1053,19 @@ function startQuiz(): void {
     currentQuestionIndex = 0;
     quizScore = 0;
 
+    // Initialize Segmented Progress Bar
+    const progressBar = document.querySelector('.quiz-progress-bar');
+    if (progressBar) {
+        progressBar.innerHTML = '';
+        // Create 10 segments
+        for (let i = 0; i < 10; i++) {
+            const segment = document.createElement('div');
+            segment.className = 'quiz-segment future';
+            segment.id = `quiz-segment-${i}`;
+            progressBar.appendChild(segment);
+        }
+    }
+
     // View is already activated by manager
     renderQuizQuestion();
 }
@@ -942,7 +1106,7 @@ function renderQuizQuestion(): void {
         <div class="quiz-options">
             ${shuffledOptions.map(opt => `
                 <button class="quiz-option" data-nr="${opt.nr}" onclick="checkAnswer(${opt.nr}, ${question.nr}, this)">
-                    ${opt.meaningSv} (${opt.meaningAr})
+                    ${opt.meaningSv} <span class="quiz-answer-ar" style="display:none; color: #fbbf24; margin-right: 5px;">(${opt.meaningAr})</span>
                 </button>
             `).join('')}
         </div>
@@ -956,6 +1120,21 @@ function checkAnswer(selectedNr: number, correctNr: number, btn: HTMLElement): v
     const buttons = document.querySelectorAll('.quiz-option');
     buttons.forEach(b => b.classList.add('disabled'));
 
+    // Reveal Arabic Text for the selected button
+    const selectedAr = btn.querySelector('.quiz-answer-ar') as HTMLElement;
+    if (selectedAr) selectedAr.style.display = 'inline';
+
+    // Update Segment Status
+    const segment = document.getElementById(`quiz-segment-${currentQuestionIndex}`);
+    if (segment) {
+        segment.classList.remove('current', 'future');
+        if (selectedNr === correctNr) {
+            segment.classList.add('correct');
+        } else {
+            segment.classList.add('wrong');
+        }
+    }
+
     if (selectedNr === correctNr) {
         btn.classList.add('correct');
         quizScore++;
@@ -966,6 +1145,9 @@ function checkAnswer(selectedNr: number, correctNr: number, btn: HTMLElement): v
         const correctBtn = document.querySelector(`.quiz-option[data-nr="${correctNr}"]`);
         if (correctBtn) {
             correctBtn.classList.add('correct');
+            // Reveal Arabic Text for the correct button too
+            const correctAr = correctBtn.querySelector('.quiz-answer-ar') as HTMLElement;
+            if (correctAr) correctAr.style.display = 'inline';
         }
     }
 
@@ -977,11 +1159,19 @@ function checkAnswer(selectedNr: number, correctNr: number, btn: HTMLElement): v
 }
 
 function updateQuizProgress(): void {
-    const fill = document.getElementById('quizProgressFill');
     const scoreText = document.getElementById('quizScore');
 
-    if (fill) fill.style.width = `${((currentQuestionIndex) / quizQuestions.length) * 100}%`;
-    if (scoreText) scoreText.textContent = `${currentQuestionIndex}/${quizQuestions.length}`;
+    // Update Current Segment Indicator
+    if (currentQuestionIndex < 10) {
+        const currentSegment = document.getElementById(`quiz-segment-${currentQuestionIndex}`);
+        if (currentSegment) {
+            // Ensure no conflicting classes
+            currentSegment.classList.remove('future', 'correct', 'wrong');
+            currentSegment.classList.add('current');
+        }
+    }
+
+    if (scoreText) scoreText.textContent = `${Math.min(currentQuestionIndex + 1, quizQuestions.length)}/10`;
 }
 
 function showQuizResults(container: HTMLElement): void {

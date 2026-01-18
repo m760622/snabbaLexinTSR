@@ -470,8 +470,8 @@ body:not(.desktop-explicit) {
 
 .memory-hud,
 .gr-hud {
-    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     background: rgba(12, 12, 20, 0.8);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     padding: 0.75rem 1rem;
@@ -515,8 +515,8 @@ body:not(.desktop-explicit) {
     top: 0;
     z-index: 100;
     background: rgba(10, 10, 20, 0.85);
-    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     padding: 0.75rem 1rem;
     margin: -0.2rem -1.5rem 0.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -527,8 +527,8 @@ body:not(.desktop-explicit) {
     top: 60px;
     z-index: 99;
     background: rgba(10, 10, 20, 0.75);
-    backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
     margin: 0 -1.5rem;
     padding: 0.5rem 1.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.03);
@@ -630,8 +630,8 @@ button {
     left: 50%;
     transform: translateX(-50%) translateY(100px);
     background: rgba(30, 30, 45, 0.95);
-    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     padding: 0.75rem 1.5rem;
     border-radius: 30px;
     color: white;
