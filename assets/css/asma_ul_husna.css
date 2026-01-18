@@ -2097,17 +2097,31 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            box-sizing: border-box;
+            /* CRITICAL FIX: Prevent padding from adding to width */
+        }
+
+        .flashcard-modal * {
+            box-sizing: border-box;
+            /* Ensure all children behave correctly */
         }
 
         .flashcard-modal.active {
             display: flex !important;
+            min-height: 100vh;
+            /* Ensure full viewport height for centering */
+            padding-bottom: 5vh;
+            /* Slight offset to visually balance */
         }
 
         .flashcard-container {
             perspective: 1000px;
-            width: 100%;
-            max-width: 400px;
-            height: 280px;
+            width: 70%;
+            /* Reduced to 70% */
+            max-width: 300px;
+            /* Reduced max-width to 300px */
+            height: 320px;
+            margin: 0 auto;
         }
 
         .flashcard {
@@ -2141,14 +2155,26 @@
         }
 
         .flashcard-front {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.85), rgba(96, 165, 250, 0.75));
-            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 1));
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(251, 191, 36, 0.05);
+            /* Inner Glow */
+            /* Subtle texture overlay */
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.05) 0%, transparent 60%),
+                linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 1));
         }
 
         .flashcard-back {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(29, 78, 216, 0.75));
-            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: linear-gradient(135deg, rgba(8, 12, 22, 0.98), rgba(15, 23, 42, 0.95));
+            border: 1px solid rgba(251, 191, 36, 0.3);
             transform: rotateY(180deg);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(251, 191, 36, 0.05);
+
+            /* Texture */
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.03) 0%, transparent 70%),
+                linear-gradient(135deg, rgba(8, 12, 22, 0.98), rgba(15, 23, 42, 0.95));
         }
 
         .flashcard-number {
@@ -2162,27 +2188,33 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 800;
             color: #1e293b;
             font-size: 0.9rem;
-            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .flashcard-name {
             font-family: 'Amiri', serif;
-            font-size: 3rem;
-            color: #ffffff;
-            text-shadow:
-                0 2px 4px rgba(0, 0, 0, 0.5),
-                0 4px 8px rgba(0, 0, 0, 0.3),
-                0 8px 16px rgba(0, 0, 0, 0.2);
+            font-size: 3.5rem;
+            color: #fbbf24;
+            /* Golden Gradient Text */
+            background: linear-gradient(to bottom, #fbbf24 0%, #fde68a 50%, #d97706 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(251, 191, 36, 0.2);
             margin-bottom: 0.75rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
         }
 
         .flashcard-hint {
-            font-size: 0.95rem;
-            color: rgba(255, 255, 255, 0.7);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            font-size: 0.9rem;
+            color: rgba(148, 163, 184, 0.8);
+            text-shadow: none;
+            font-style: italic;
+            margin-top: 1rem;
         }
 
         .flashcard-meaning {
@@ -2191,47 +2223,52 @@
 
         .flashcard-meaning-ar {
             font-family: 'Amiri', serif;
-            font-size: 1.4rem;
-            color: #ffffff;
+            font-size: 1.6rem;
+            color: #fbbf24;
             margin-bottom: 0.75rem;
             line-height: 1.8;
-            text-shadow:
-                0 2px 4px rgba(0, 0, 0, 0.5),
-                0 4px 8px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 0 15px rgba(251, 191, 36, 0.15);
         }
 
         .flashcard-meaning-sv {
             font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.85);
+            color: #e2e8f0;
             line-height: 1.6;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+            text-shadow: none;
         }
 
         .flashcard-controls {
             display: flex;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
+            gap: 1rem;
+            margin-top: 5rem;
+            /* Drastic increase to "drop" buttons */
             width: 100%;
             justify-content: center;
+            padding-bottom: 4rem;
+            z-index: 10;
         }
 
         .flashcard-btn {
-            padding: 0.75rem 1.25rem;
+            padding: 0.5rem 1rem;
+            /* Reduced padding */
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
+            border-radius: 14px;
+            /* Slightly tighter radius */
             background: rgba(255, 255, 255, 0.08);
             -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
             color: #e2e8f0;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            /* Reduced font size */
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.4rem;
             flex: 1;
-            max-width: 140px;
+            max-width: 120px;
+            /* Reduced max-width */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
@@ -2303,16 +2340,18 @@
             }
 
             .flashcard-btn {
-                padding: 0.7rem 1rem;
-                font-size: 0.9rem;
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
                 flex: 1 1 auto;
-                min-width: 100px;
+                min-width: 80px;
             }
 
             .flashcard-container {
-                width: 95%;
-                max-width: 100%;
-                height: 300px;
+                width: 80%;
+                /* 80% on mobile but capped at 300px */
+                max-width: 300px;
+                height: 340px;
+                margin: 0 auto;
             }
 
             .flashcard-name {
