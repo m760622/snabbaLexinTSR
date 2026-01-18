@@ -10,6 +10,7 @@ import { initMainUI } from './main-ui';
 import { LanguageManager, t } from './i18n';
 import './i18n-apply';
 import { TypeColorSystem } from './type-color-system';
+import { debounce } from './performance-utils';
 
 /**
  * Main SnabbaLexin Application
@@ -18,6 +19,7 @@ import { TypeColorSystem } from './type-color-system';
 export class App {
     private isLoading = true;
     private searchIndex: string[] = [];
+    private searchIndexArabic: string[] = []; // Pre-normalized Arabic index
     private currentResults: any[][] = [];
     private readonly BATCH_SIZE = 20;
     private renderedCount = 0;
@@ -25,8 +27,18 @@ export class App {
     private activeFilterMode = 'all';
     private activeTypeFilter = 'all';
     private activeSortMethod = 'relevance';
+    // Performance: Cache for type categories
+    private typeCategoryCache: Map<string, string> = new Map();
+    // Performance: Debounced search handler
+    private debouncedSearch: (query: string) => void;
+    // Performance: Flag to track if type counts need update
+    private typeCountsNeedUpdate = true;
 
     constructor() {
+        // Initialize debounced search (150ms delay for responsive feel)
+        this.debouncedSearch = debounce((query: string) => {
+            this.performSearchInternal(query);
+        }, 150);
         this.init();
     }
 
@@ -200,8 +212,19 @@ export class App {
         const data = (window as any).dictionaryData as any[][];
         if (!data) return;
 
-        // Optimization: search index
-        this.searchIndex = data.map(row => `${row[2]} ${row[3]}`.toLowerCase());
+        // PERFORMANCE: Build optimized search indices
+        console.time('[Perf] Building search index');
+        this.searchIndex = data.map(row => row[2].toLowerCase());
+        this.searchIndexArabic = data.map(row => normalizeArabic(row[3] || '').toLowerCase());
+
+        // PERFORMANCE: Pre-cache type categories for all words
+        this.typeCategoryCache.clear();
+        data.forEach((row, index) => {
+            const cacheKey = `${index}`;
+            const cat = TypeColorSystem.getCategory(row[1], row[2], row[6], row[13] || '', row[3] || '');
+            this.typeCategoryCache.set(cacheKey, cat);
+        });
+        console.timeEnd('[Perf] Building search index');
 
         // Initialize Word of the Day
         this.initWordOfTheDay();
@@ -240,12 +263,22 @@ export class App {
     }
 
     private updateTypeCounts(data: any[][]) {
+        console.time('[Perf] updateTypeCounts');
         const counts: Record<string, number> = {};
+        const fullData = (window as any).dictionaryData as any[][];
 
-        data.forEach(row => {
-            // Grammar Types
-            // Map TypeColorSystem categories to Select values
-            const cat = TypeColorSystem.getCategory(row[1], row[2], row[6], row[13] || '', row[3] || '');
+        data.forEach((row) => {
+            // PERFORMANCE: Use cached category if available
+            // Find the original index in fullData to use cache
+            const originalIdx = fullData.indexOf(row);
+            let cat: string;
+
+            if (originalIdx !== -1 && this.typeCategoryCache.has(`${originalIdx}`)) {
+                cat = this.typeCategoryCache.get(`${originalIdx}`)!;
+            } else {
+                cat = TypeColorSystem.getCategory(row[1], row[2], row[6], row[13] || '', row[3] || '');
+            }
+
             let key = cat;
             if (cat === 'noun') key = 'subst';
             if (cat === 'conj') key = 'konj';
@@ -298,6 +331,7 @@ export class App {
                 opt.textContent = `${baseText} (${counts[val]})`;
             }
         });
+        console.timeEnd('[Perf] updateTypeCounts');
     }
 
     private initWordOfTheDay() {
@@ -417,11 +451,25 @@ export class App {
         }
         sessionStorage.setItem('snabbaLexin_lastSearch', query);
 
-        this.performSearch(input.value);
+        // PERFORMANCE: Use debounced search for typing
+        this.debouncedSearch(input.value);
     }
 
+    /**
+     * Public performSearch - wrapper that uses debounce for user input
+     * but can be called directly for programmatic searches
+     */
     public performSearch(query: string) {
+        this.performSearchInternal(query);
+    }
+
+    /**
+     * Internal search implementation with all optimizations
+     */
+    private performSearchInternal(query: string) {
+        console.time('[Perf] performSearch');
         const normalizedQuery = query.toLowerCase().trim();
+        const normalizedQueryArabic = normalizeArabic(normalizedQuery);
 
         // Update URL to persist state
         if (window.history.replaceState) {
@@ -432,7 +480,7 @@ export class App {
         }
 
         const data = (window as any).dictionaryData || [];
-        if (!data) return;
+        if (!data || data.length === 0) return;
 
         const landingPage = document.getElementById('landingPageContent');
         const searchResults = document.getElementById('searchResults');
@@ -440,49 +488,54 @@ export class App {
 
         this.renderedCount = 0; // Reset pagination
 
-        // Apply filters
-        let filtered = data;
+        // PERFORMANCE: Use indices for faster filtering
+        let filteredIndices: number[] = [];
 
         // 1. Mode Filter (Favorites, etc)
         if (this.activeFilterMode === 'favorites') {
-            filtered = filtered.filter((row: any[]) => FavoritesManager.has(row[0].toString()));
+            for (let i = 0; i < data.length; i++) {
+                if (FavoritesManager.has(data[i][0].toString())) {
+                    filteredIndices.push(i);
+                }
+            }
+        } else {
+            // Start with all indices
+            filteredIndices = Array.from({ length: data.length }, (_, i) => i);
         }
 
-        // 2. Search Query Filter
+        // 2. Search Query Filter - OPTIMIZED with pre-built indices
         if (normalizedQuery) {
-            filtered = filtered.filter((row: any[]) => {
-                const swe = row[2].toLowerCase();
-
-                // Arabic: Normalize to ignore diacritics
-                const arb = normalizeArabic(row[3] || '').toLowerCase();
-
-                // Normalize query too (e.g. if user types diacritics, we match without)
-                const q = normalizeArabic(normalizedQuery);
+            filteredIndices = filteredIndices.filter((idx) => {
+                const swe = this.searchIndex[idx];
+                const arb = this.searchIndexArabic[idx];
 
                 if (this.activeFilterMode === 'start') {
-                    return swe.startsWith(q) || arb.startsWith(q);
+                    return swe.startsWith(normalizedQuery) || arb.startsWith(normalizedQueryArabic);
                 }
                 if (this.activeFilterMode === 'end') {
-                    return swe.endsWith(q) || arb.endsWith(q);
+                    return swe.endsWith(normalizedQuery) || arb.endsWith(normalizedQueryArabic);
                 }
                 if (this.activeFilterMode === 'exact') {
-                    return swe === q || arb === q;
+                    return swe === normalizedQuery || arb === normalizedQueryArabic;
                 }
 
-                // Default: Contains (Check both explicitly)
-                return swe.includes(q) || arb.includes(q);
+                // Default: Contains
+                return swe.includes(normalizedQuery) || arb.includes(normalizedQueryArabic);
             });
         }
 
-        // NEW: Update counts based on query matches (before type filtering)
-        // This ensures the user sees how many Nouns/Verbs match the current search query
-        this.updateTypeCounts(filtered);
+        // PERFORMANCE: Only update type counts when filters change, not on every search
+        if (this.typeCountsNeedUpdate) {
+            const filteredData = filteredIndices.map(i => data[i]);
+            this.updateTypeCounts(filteredData);
+            this.typeCountsNeedUpdate = false;
+        }
 
-        // 3. Type Filter
+        // 3. Type Filter - OPTIMIZED with cached categories
         if (this.activeTypeFilter !== 'all') {
-            filtered = filtered.filter((row: any[]) => {
-                const cat = TypeColorSystem.getCategory(row[1], row[2], row[6], row[13] || '', row[3] || '');
-                return cat === this.activeTypeFilter;
+            filteredIndices = filteredIndices.filter((idx) => {
+                const cachedCat = this.typeCategoryCache.get(`${idx}`);
+                return cachedCat === this.activeTypeFilter;
             });
         }
 
@@ -490,47 +543,45 @@ export class App {
         const categorySelect = document.getElementById('categorySelect') as HTMLSelectElement | null;
         if (categorySelect && categorySelect.value !== 'all') {
             const topic = categorySelect.value;
-            filtered = filtered.filter((row: any[]) => {
+            filteredIndices = filteredIndices.filter((idx) => {
                 // Topic matches usually involve checking if the word belongs to a certain set
                 // For now we use the word category field if available (row[11] is usually tags/categories in Lexin)
-                const tags = (row[11] || '').toLowerCase();
+                const tags = (data[idx][11] || '').toLowerCase();
                 return tags.includes(topic);
             });
         }
 
-        // 4. Sorting
+        // 4. Sorting - OPTIMIZED: Sort indices, then map to data
+        // Use pre-computed search indices for faster sorting
         if (this.activeSortMethod === 'az' || this.activeSortMethod === 'alpha_asc') {
-            filtered = [...filtered].sort((a, b) => a[2].localeCompare(b[2], 'sv'));
+            filteredIndices.sort((a, b) => this.searchIndex[a].localeCompare(this.searchIndex[b], 'sv'));
         } else if (this.activeSortMethod === 'za' || this.activeSortMethod === 'alpha_desc') {
-            filtered = [...filtered].sort((a, b) => b[2].localeCompare(a[2], 'sv'));
+            filteredIndices.sort((a, b) => this.searchIndex[b].localeCompare(this.searchIndex[a], 'sv'));
         } else if (this.activeSortMethod === 'richness') {
-            filtered = [...filtered].sort((a, b) => {
-                const aLen = (a[5] || '').length + (a[7] || '').length;
-                const bLen = (b[5] || '').length + (b[7] || '').length;
+            filteredIndices.sort((a, b) => {
+                const aLen = (data[a][5] || '').length + (data[a][7] || '').length;
+                const bLen = (data[b][5] || '').length + (data[b][7] || '').length;
                 return bLen - aLen;
             });
-        } else {
+        } else if (normalizedQuery) {
             // Default: Relevance (Exact match > Starts with > Original)
-            filtered = [...filtered].sort((a, b) => {
-                const aSwe = a[2].toLowerCase();
-                const bSwe = b[2].toLowerCase();
-
-                // Arabic: Normalize to ignore diacritics
-                const aArb = normalizeArabic(a[3] || '').toLowerCase();
-                const bArb = normalizeArabic(b[3] || '').toLowerCase();
-
-                const q = normalizeArabic(normalizedQuery);
+            // OPTIMIZED: Use pre-computed indices instead of calling normalizeArabic repeatedly
+            filteredIndices.sort((a, b) => {
+                const aSwe = this.searchIndex[a];
+                const bSwe = this.searchIndex[b];
+                const aArb = this.searchIndexArabic[a];
+                const bArb = this.searchIndexArabic[b];
 
                 // 1. Exact match priority (Check BOTH languages)
-                const aExact = (aSwe === q || aArb === q);
-                const bExact = (bSwe === q || bArb === q);
+                const aExact = (aSwe === normalizedQuery || aArb === normalizedQueryArabic);
+                const bExact = (bSwe === normalizedQuery || bArb === normalizedQueryArabic);
 
                 if (aExact && !bExact) return -1;
                 if (!aExact && bExact) return 1;
 
                 // 2. Starts with priority (Check BOTH languages)
-                const aStarts = (aSwe.startsWith(q) || aArb.startsWith(q));
-                const bStarts = (bSwe.startsWith(q) || bArb.startsWith(q));
+                const aStarts = (aSwe.startsWith(normalizedQuery) || aArb.startsWith(normalizedQueryArabic));
+                const bStarts = (bSwe.startsWith(normalizedQuery) || bArb.startsWith(normalizedQueryArabic));
 
                 if (aStarts && !bStarts) return -1;
                 if (!aStarts && bStarts) return 1;
@@ -539,6 +590,8 @@ export class App {
             });
         }
 
+        // Map indices to actual data rows
+        const filtered = filteredIndices.map(idx => data[idx]);
         this.currentResults = filtered;
 
         const showLanding = !normalizedQuery && this.activeFilterMode === 'all';
@@ -564,6 +617,7 @@ export class App {
         }
 
         this.updateResultCount();
+        console.timeEnd('[Perf] performSearch');
     }
 
     private renderNextBatch() {
