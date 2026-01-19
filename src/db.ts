@@ -269,6 +269,49 @@ export const DictionaryDB = {
     },
 
     /**
+     * Get a random word from the database
+     */
+    async getRandomWord(): Promise<any | null> {
+        if (!this.db) await this.init();
+        if (!this.db) return null;
+
+        return new Promise(async (resolve) => {
+            try {
+                const count = await this.getWordCount();
+                if (count === 0) {
+                    resolve(null);
+                    return;
+                }
+
+                const randomIndex = Math.floor(Math.random() * count);
+                const tx = this.db!.transaction([this.STORE_NAME], 'readonly');
+                const store = tx.objectStore(this.STORE_NAME);
+                const request = store.openCursor(); // Use cursor to advance to random position
+                let hasAdvanced = false;
+
+                request.onsuccess = (event: any) => {
+                    const cursor = event.target.result;
+                    if (!cursor) {
+                        resolve(null);
+                        return;
+                    }
+
+                    if (!hasAdvanced && randomIndex > 0) {
+                        hasAdvanced = true;
+                        cursor.advance(randomIndex);
+                    } else {
+                        resolve(cursor.value.raw || cursor.value); // Return raw word data
+                    }
+                };
+                request.onerror = () => resolve(null);
+            } catch (e) {
+                console.error('[DB] getRandomWord error:', e);
+                resolve(null);
+            }
+        });
+    },
+
+    /**
      * Save a single word to IndexedDB
      */
     async saveWord(word: any): Promise<boolean> {

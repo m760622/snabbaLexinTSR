@@ -1,8 +1,8 @@
 {
-  "status": "commited",
+  "status": "init",
   "type": "frontend",
   "scope": "codebase",
-  "localEndpoint": "http://localhost:5173/learn/asma_ul_husna.html",
+  "localEndpoint": "http://localhost:5173/learn/learn.html",
   "executionArgs": {
     "projectName": "snabbaLexinTSR",
     "projectPath": "/Users/mohammedabunada/Documents/Vipe/snabbaLexinTSR",

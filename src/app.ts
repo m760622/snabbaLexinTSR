@@ -2,7 +2,7 @@ import { Loader } from './loader';
 import './utils';
 import './quiz';
 import './confetti';
-import { ThemeManager, showToast, TextSizeManager, VoiceSearchManager, normalizeArabic } from './utils';
+import { ThemeManager, showToast, TextSizeManager, VoiceSearchManager, normalizeArabic, levenshteinDistance } from './utils';
 import { FavoritesManager } from './favorites';
 import { SearchHistoryManager } from './search-history';
 import { QuizStats } from './quiz-stats';
@@ -57,6 +57,7 @@ export class App {
         this.setupFilters();
         this.setupVoiceSearch();
         this.setupVoiceSelection();
+        this.setupKeyboardShortcuts();
         this.updateDailyChallenge(); // Initial update
         this.updateDailyProgressBar(); // Update daily progress bar
 
@@ -117,8 +118,6 @@ export class App {
         const streakEl = document.getElementById('currentStreak');
         if (streakEl) {
             streakEl.innerHTML = streak.toString();
-            // The 🔥 icon is handled in the template or should be added if needed, 
-            // but currentStreak in index.html is just the number span.
         }
     }
 
@@ -148,14 +147,33 @@ export class App {
         });
 
         const clearSearch = document.getElementById('clearSearch');
+
+        const toggleClearBtn = () => {
+            if (clearSearch) {
+                if (searchInput.value.length > 0) {
+                    clearSearch.classList.remove('hidden');
+                    clearSearch.style.display = 'flex'; // Ensure flex layout if needed
+                } else {
+                    clearSearch.classList.add('hidden');
+                    clearSearch.style.display = ''; // Reset inline style
+                }
+            }
+        };
+
         searchInput.addEventListener('input', () => {
-            if (clearSearch) clearSearch.style.display = searchInput.value.length > 0 ? 'flex' : 'none';
+            toggleClearBtn();
         });
+
+        // Initialize button state with a slight delay to catch browser autofill/restoration
+        setTimeout(() => {
+            toggleClearBtn();
+        }, 100);
 
         if (clearSearch) {
             clearSearch.addEventListener('click', () => {
                 searchInput.value = '';
-                clearSearch.style.display = 'none';
+                clearSearch.classList.add('hidden');
+                clearSearch.style.display = '';
                 this.performSearch('');
             });
         }
@@ -165,7 +183,7 @@ export class App {
         const modeSelect = document.getElementById('filterModeSelect') as HTMLSelectElement | null;
         const typeSelect = document.getElementById('typeSelect') as HTMLSelectElement | null;
         const sortSelect = document.getElementById('sortSelect') as HTMLSelectElement | null;
-        const categorySelect = document.getElementById('categorySelect') as HTMLSelectElement | null;
+
         const quickFavBtn = document.getElementById('quickFavBtn');
 
         const updateFilters = () => {
@@ -180,7 +198,7 @@ export class App {
         if (modeSelect) modeSelect.addEventListener('change', updateFilters);
         if (typeSelect) typeSelect.addEventListener('change', updateFilters);
         if (sortSelect) sortSelect.addEventListener('change', updateFilters);
-        if (categorySelect) categorySelect.addEventListener('change', updateFilters);
+
 
         if (quickFavBtn) {
             quickFavBtn.addEventListener('click', () => {
@@ -198,6 +216,23 @@ export class App {
                 filterContainer.classList.toggle('hidden');
                 filterToggleBtn.classList.toggle('active');
             });
+        }
+    }
+
+    private setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            // '/' to focus search
+            if (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) searchInput.focus();
+            }
+        });
+
+        // Desktop Autofocus (if not mobile)
+        if (window.innerWidth > 768 && !('ontouchstart' in window)) {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) setTimeout(() => searchInput.focus(), 100);
         }
     }
 
@@ -298,19 +333,15 @@ export class App {
             counts[key] = (counts[key] || 0) + 1;
 
             // Specialized Topics (Simple keyword check in Type column)
-            // Specialized Topics (Robust Check)
             if (typeLower.includes('juridik')) counts['juridik'] = (counts['juridik'] || 0) + 1;
             if (typeLower.includes('medicin')) counts['medicin'] = (counts['medicin'] || 0) + 1;
 
-            // IT: Data, Dator, IT, Teknik
             if (typeLower.includes('data') || typeLower.includes('dator') || typeLower.includes('it') || typeLower.includes('teknik')) {
                 counts['it'] = (counts['it'] || 0) + 1;
             }
-            // Politik: Politik, Samhälle
             if (typeLower.includes('politik') || typeLower.includes('samhäll')) {
                 counts['politik'] = (counts['politik'] || 0) + 1;
             }
-            // Religion: Religion, Islam, Kristendom, Bibel, Koran...
             if (typeLower.includes('religion') || typeLower.includes('islam') || typeLower.includes('krist') || typeLower.includes('bibel') || typeLower.includes('koran')) {
                 counts['religion'] = (counts['religion'] || 0) + 1;
             }
@@ -326,7 +357,6 @@ export class App {
                 return;
             }
             if (counts[val]) {
-                // Reset to base text if needed (simple approach: split by '(')
                 const baseText = opt.textContent?.split(' (')[0].trim();
                 opt.textContent = `${baseText} (${counts[val]})`;
             }
@@ -338,7 +368,6 @@ export class App {
         const data = (window as any).dictionaryData as any[][];
         if (!data || data.length === 0) return;
 
-        // Try to find a word with long example or idiom
         let word = null;
         let attempts = 0;
         while (attempts < 500) {
@@ -355,7 +384,6 @@ export class App {
         }
         if (!word) word = data[Math.floor(Math.random() * data.length)];
 
-        // Record as studied
         QuizStats.recordStudy(word[0].toString());
 
         this.renderWod(word);
@@ -381,8 +409,6 @@ export class App {
         }
         if (typeBadge) typeBadge.textContent = word[1];
 
-        // Toggle sections based on data
-        // User Request: Show only Swedish, Arabic, and Type. Hide all other details.
         const sectionsToHide = [
             '.wod-forms-preview',
             '.wod-def-preview',
@@ -396,7 +422,6 @@ export class App {
             if (el) el.classList.add('hidden');
         });
 
-        // Setup individual WOD buttons
         const ttsBtn = document.getElementById('wodTTSBtn');
         if (ttsBtn) {
             ttsBtn.onclick = () => (window as any).TTSManager?.speak(word[2], 'sv');
@@ -412,7 +437,6 @@ export class App {
             loopBtn.onclick = () => this.initWordOfTheDay();
         }
 
-        // Favorite button for Word of the Day
         const favBtn = document.getElementById('wodFavBtn');
         if (favBtn) {
             const wordId = word[0].toString();
@@ -451,27 +475,18 @@ export class App {
         }
         sessionStorage.setItem('snabbaLexin_lastSearch', query);
 
-        // PERFORMANCE: Use debounced search for typing
         this.debouncedSearch(input.value);
     }
 
-    /**
-     * Public performSearch - wrapper that uses debounce for user input
-     * but can be called directly for programmatic searches
-     */
     public performSearch(query: string) {
         this.performSearchInternal(query);
     }
 
-    /**
-     * Internal search implementation with all optimizations
-     */
     private performSearchInternal(query: string) {
         console.time('[Perf] performSearch');
         const normalizedQuery = query.toLowerCase().trim();
         const normalizedQueryArabic = normalizeArabic(normalizedQuery);
 
-        // Update URL to persist state
         if (window.history.replaceState) {
             const newUrl = normalizedQuery
                 ? `${window.location.pathname}?s=${encodeURIComponent(normalizedQuery)}`
@@ -488,10 +503,8 @@ export class App {
 
         this.renderedCount = 0; // Reset pagination
 
-        // PERFORMANCE: Use indices for faster filtering
         let filteredIndices: number[] = [];
 
-        // 1. Mode Filter (Favorites, etc)
         if (this.activeFilterMode === 'favorites') {
             for (let i = 0; i < data.length; i++) {
                 if (FavoritesManager.has(data[i][0].toString())) {
@@ -499,11 +512,9 @@ export class App {
                 }
             }
         } else {
-            // Start with all indices
             filteredIndices = Array.from({ length: data.length }, (_, i) => i);
         }
 
-        // 2. Search Query Filter - OPTIMIZED with pre-built indices
         if (normalizedQuery) {
             filteredIndices = filteredIndices.filter((idx) => {
                 const swe = this.searchIndex[idx];
@@ -518,20 +529,16 @@ export class App {
                 if (this.activeFilterMode === 'exact') {
                     return swe === normalizedQuery || arb === normalizedQueryArabic;
                 }
-
-                // Default: Contains
                 return swe.includes(normalizedQuery) || arb.includes(normalizedQueryArabic);
             });
         }
 
-        // PERFORMANCE: Only update type counts when filters change, not on every search
         if (this.typeCountsNeedUpdate) {
             const filteredData = filteredIndices.map(i => data[i]);
             this.updateTypeCounts(filteredData);
             this.typeCountsNeedUpdate = false;
         }
 
-        // 3. Type Filter - OPTIMIZED with cached categories
         if (this.activeTypeFilter !== 'all') {
             filteredIndices = filteredIndices.filter((idx) => {
                 const cachedCat = this.typeCategoryCache.get(`${idx}`);
@@ -539,20 +546,15 @@ export class App {
             });
         }
 
-        // 3.5 Category Filter (Topic)
         const categorySelect = document.getElementById('categorySelect') as HTMLSelectElement | null;
         if (categorySelect && categorySelect.value !== 'all') {
             const topic = categorySelect.value;
             filteredIndices = filteredIndices.filter((idx) => {
-                // Topic matches usually involve checking if the word belongs to a certain set
-                // For now we use the word category field if available (row[11] is usually tags/categories in Lexin)
                 const tags = (data[idx][11] || '').toLowerCase();
                 return tags.includes(topic);
             });
         }
 
-        // 4. Sorting - OPTIMIZED: Sort indices, then map to data
-        // Use pre-computed search indices for faster sorting
         if (this.activeSortMethod === 'az' || this.activeSortMethod === 'alpha_asc') {
             filteredIndices.sort((a, b) => this.searchIndex[a].localeCompare(this.searchIndex[b], 'sv'));
         } else if (this.activeSortMethod === 'za' || this.activeSortMethod === 'alpha_desc') {
@@ -564,22 +566,18 @@ export class App {
                 return bLen - aLen;
             });
         } else if (normalizedQuery) {
-            // Default: Relevance (Exact match > Starts with > Original)
-            // OPTIMIZED: Use pre-computed indices instead of calling normalizeArabic repeatedly
             filteredIndices.sort((a, b) => {
                 const aSwe = this.searchIndex[a];
                 const bSwe = this.searchIndex[b];
                 const aArb = this.searchIndexArabic[a];
                 const bArb = this.searchIndexArabic[b];
 
-                // 1. Exact match priority (Check BOTH languages)
                 const aExact = (aSwe === normalizedQuery || aArb === normalizedQueryArabic);
                 const bExact = (bSwe === normalizedQuery || bArb === normalizedQueryArabic);
 
                 if (aExact && !bExact) return -1;
                 if (!aExact && bExact) return 1;
 
-                // 2. Starts with priority (Check BOTH languages)
                 const aStarts = (aSwe.startsWith(normalizedQuery) || aArb.startsWith(normalizedQueryArabic));
                 const bStarts = (bSwe.startsWith(normalizedQuery) || bArb.startsWith(normalizedQueryArabic));
 
@@ -590,7 +588,6 @@ export class App {
             });
         }
 
-        // Map indices to actual data rows
         const filtered = filteredIndices.map(idx => data[idx]);
         this.currentResults = filtered;
 
@@ -604,7 +601,6 @@ export class App {
             }
             if (emptyState) emptyState.style.display = 'block';
 
-            // Render History
             this.renderSearchHistory();
         } else {
             if (landingPage) landingPage.style.display = 'none';
@@ -612,7 +608,15 @@ export class App {
                 searchResults.style.display = 'grid';
                 searchResults.innerHTML = '';
             }
-            if (emptyState) emptyState.style.display = filtered.length === 0 ? 'block' : 'none';
+            if (emptyState) {
+                emptyState.style.display = filtered.length === 0 ? 'block' : 'none';
+                if (filtered.length === 0 && normalizedQuery.length > 2) {
+                    this.showDidYouMean(normalizedQuery, emptyState);
+                } else {
+                    const suggestionBox = emptyState.querySelector('.suggestion-box');
+                    if (suggestionBox) suggestionBox.remove();
+                }
+            }
             this.renderNextBatch();
         }
 
@@ -632,7 +636,6 @@ export class App {
         searchResults.insertAdjacentHTML('beforeend', html);
         this.renderedCount += nextBatch.length;
 
-        // Apply dynamic text sizing to newly rendered cards
         TextSizeManager.autoApply();
     }
 
@@ -642,10 +645,10 @@ export class App {
         const arb = row[3];
         const type = row[1];
         const forms = row[6] || '';
-        const gender = row[13] || ''; // en/ett from dictionary
+        const gender = row[13] || '';
 
         const grammarBadge = TypeColorSystem.generateBadge(type, swe, forms, gender, arb);
-        const dataType = TypeColorSystem.getDataType(type, swe, forms, gender, arb); // For CSS styling (keeps en/ett distinct)
+        const dataType = TypeColorSystem.getDataType(type, swe, forms, gender, arb);
         const isFav = FavoritesManager.has(id.toString());
 
         const starIcon = isFav
@@ -654,11 +657,9 @@ export class App {
 
         const copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
 
-        // Optimized: Condense by removing examples/idioms from list view as requested
         const speakerIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`;
 
         const formsHtml = forms ? `<div class="ghost-forms">${forms}</div>` : '';
-        // Mock mastery for visual demonstration (based on ID to be consistent)
         const mockMastery = (parseInt(id) % 4) * 33;
 
         return `
@@ -687,6 +688,55 @@ export class App {
         `;
     }
 
+    private showDidYouMean(query: string, container: HTMLElement) {
+        const bestMatch = this.findDetailedSuggestion(query);
+
+        const existing = container.querySelector('.suggestion-box');
+        if (existing) existing.remove();
+
+        if (bestMatch) {
+            const html = `
+                <div class="suggestion-box" style="margin-top: 1rem; text-align: center;">
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">
+                        <span class="sv-text">Menade du:</span>
+                        <span class="ar-text">هل تقصد:</span>
+                        <button class="suggestion-link" onclick="window.app.performSearch('${bestMatch.replace(/'/g, "\\'")}')" style="
+                            background: none; 
+                            border: none; 
+                            color: var(--primary); 
+                            text-decoration: underline; 
+                            cursor: pointer; 
+                            font-weight: bold;
+                            font-size: 1rem;
+                            margin: 0 5px;
+                        ">${bestMatch}</button>?
+                    </p>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        }
+    }
+
+    private findDetailedSuggestion(query: string): string | null {
+        const candidates = this.searchIndex;
+
+        let bestWord = null;
+        let minDist = 3;
+
+        for (let i = 0; i < candidates.length; i++) {
+            const word = candidates[i];
+            if (Math.abs(word.length - query.length) > 2) continue;
+
+            const dist = levenshteinDistance(query, word);
+            if (dist < minDist) {
+                minDist = dist;
+                bestWord = word;
+            }
+            if (dist === 0) return word;
+        }
+
+        return bestWord;
+    }
 
     private setupInfiniteScroll() {
         window.addEventListener('scroll', () => {
@@ -843,7 +893,6 @@ export class App {
         });
     }
 
-    // History Renderer
     private renderSearchHistory() {
         const historyContainer = document.getElementById('searchHistoryContainer');
         const historyList = document.getElementById('searchHistoryList');

@@ -806,6 +806,7 @@
             margin-bottom: 0.2rem;
             background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 4px 20px rgba(251, 191, 36, 0.15);
         }
@@ -3636,8 +3637,8 @@
             height: 38px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
             border-radius: 12px;
             color: #cbd5e1;
             display: flex;
@@ -4128,6 +4129,7 @@
             font-weight: 800;
             background: linear-gradient(45deg, #FFD700, #FDB931);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 30px;
         }
@@ -4357,149 +4359,148 @@
             background: rgba(251, 191, 36, 0.1);
             color: #fbbf24;
             border: 1px solid rgba(251, 191, 36, 0.3);
-            backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
             pointer-events: none;
             /* Let clicks pass through to card */
             display: block !important;
             /* Ensure visibility */
-        }
 
-        /* Category Specific Colors for Header Badge */
-        .asma-card .category-badge-header.jalal {
-            background: rgba(239, 68, 68, 0.1);
-            color: #fca5a5;
-            border-color: rgba(239, 68, 68, 0.2);
-        }
+            /* Category Specific Colors for Header Badge */
+            .asma-card .category-badge-header.jalal {
+                background: rgba(239, 68, 68, 0.1);
+                color: #fca5a5;
+                border-color: rgba(239, 68, 68, 0.2);
+            }
 
-        .asma-card .category-badge-header.jamal {
-            background: rgba(30, 58, 138, 0.3);
-            /* Navy Blue background */
-            color: #93c5fd;
-            border-color: rgba(30, 58, 138, 0.4);
-        }
+            .asma-card .category-badge-header.jamal {
+                background: rgba(30, 58, 138, 0.3);
+                /* Navy Blue background */
+                color: #93c5fd;
+                border-color: rgba(30, 58, 138, 0.4);
+            }
 
-        .asma-card .category-badge-header.kamal {
-            background: rgba(59, 130, 246, 0.1);
-            color: #93c5fd;
-            border-color: rgba(59, 130, 246, 0.2);
-        }
+            .asma-card .category-badge-header.kamal {
+                background: rgba(59, 130, 246, 0.1);
+                color: #93c5fd;
+                border-color: rgba(59, 130, 246, 0.2);
+            }
 
-        /* REMOVE old styles or override them aggressively */
+            /* REMOVE old styles or override them aggressively */
 
-        .asma-card-head {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 0.5rem;
-            gap: 0.5rem;
-            min-height: auto;
-            /* Let content dictate height */
-        }
+            .asma-card-head {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 0.5rem;
+                gap: 0.5rem;
+                min-height: 0;
+                /* Let content dictate height */
+            }
 
-        /* Row 1: Top (Number & Badge) */
-        .head-row-top {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            width: 100%;
-            margin-bottom: 0.5rem;
-            direction: ltr;
-            /* Force LTR so Number is Left of Badge */
-        }
+            /* Row 1: Top (Number & Badge) */
+            .head-row-top {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.8rem;
+                width: 100%;
+                margin-bottom: 0.5rem;
+                direction: ltr;
+                /* Force LTR so Number is Left of Badge */
+            }
 
-        /* Reset Number positioning but KEEP premium styles */
-        .asma-number {
-            position: static;
-            /* No longer absolute */
-            width: 32px;
-            height: 32px;
-            font-size: 0.9rem;
-            margin: 0;
-            /* Restore Premium Look */
-            background: linear-gradient(135deg, #d4af37, #b8860b);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
-            border: none;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
+            /* Reset Number positioning but KEEP premium styles */
+            .asma-number {
+                position: static;
+                /* No longer absolute */
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+                margin: 0;
+                /* Restore Premium Look */
+                background: linear-gradient(135deg, #d4af37, #b8860b);
+                box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+                border: none;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+            }
 
-        /* Reset Badge positioning */
-        .asma-card .category-badge-header {
-            position: static;
-            /* No longer absolute */
-            transform: none;
-            margin: 0;
-            top: auto;
-            left: auto;
-            right: auto;
-        }
+            /* Reset Badge positioning */
+            .asma-card .category-badge-header {
+                position: static;
+                /* No longer absolute */
+                transform: none;
+                margin: 0;
+                top: auto;
+                left: auto;
+                right: auto;
+            }
 
 
-        /* Row 2: Names */
-        .head-row-names {
-            display: flex;
-            flex-direction: row-reverse;
-            /* Arabic Right, Swedish Left */
-            align-items: center;
-            /* Align vertically */
-            justify-content: center;
-            text-align: center;
-            gap: 1rem;
-            /* Space between words */
-            width: 100%;
-        }
+            /* Row 2: Names */
+            .head-row-names {
+                display: flex;
+                flex-direction: row-reverse;
+                /* Arabic Right, Swedish Left */
+                align-items: center;
+                /* Align vertically */
+                justify-content: center;
+                text-align: center;
+                gap: 1rem;
+                /* Space between words */
+                width: 100%;
+            }
 
-        .asma-name-ar-mini {
-            font-size: 1.8rem;
-            margin: 0;
-            line-height: 1;
-        }
+            .asma-name-ar-mini {
+                font-size: 1.8rem;
+                margin: 0;
+                line-height: 1;
+            }
 
-        .asma-name-sv-mini {
-            font-size: 1.1rem;
-            color: #94a3b8;
-            margin-top: 0.2rem;
-            /* Slight adjustment for visual baseline */
-        }
+            .asma-name-sv-mini {
+                font-size: 1.1rem;
+                color: #94a3b8;
+                margin-top: 0.2rem;
+                /* Slight adjustment for visual baseline */
+            }
 
-        /* Row 3: Actions */
-        .card-head-actions {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            width: 100%;
-            margin-top: 0.5rem;
-        }
+            /* Row 3: Actions */
+            .card-head-actions {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.8rem;
+                width: 100%;
+                margin-top: 0.5rem;
+            }
 
-        /* Ensure buttons are visible */
-        .asma-action-btn {
-            width: 40px;
-            height: 40px;
-        }
+            /* Ensure buttons are visible */
+            .asma-action-btn {
+                width: 40px;
+                height: 40px;
+            }
 
-        /* Hide Expand Icon in this new layout? Or keep it? 
+            /* Hide Expand Icon in this new layout? Or keep it? 
    User asked for buttons below. Maybe expand icon is redundant if whole card clicks, 
    but good to keep as indicator. Let's make it standard button size.
 */
-        .expand-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 255, 255, 0.3);
-            width: 30px;
-            height: 30px;
-        }
+            .expand-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: rgba(255, 255, 255, 0.3);
+                width: 30px;
+                height: 30px;
+            }
 
-        /* Clean up old overrides */
-        .card-head-left,
-        .asma-names-stack {
-            display: none;
-            /* In case they linger, but we removed them from HTML */
-        }
+            /* Clean up old overrides */
+            .card-head-left,
+            .asma-names-stack {
+                display: none;
+                /* In case they linger, but we removed them from HTML */
+            }            }

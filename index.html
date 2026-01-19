@@ -263,7 +263,7 @@
 
                 <!-- Sort Dropdown (Styled as Chip) -->
                 <div class="select-chip-wrapper">
-                    <span class="chip-label">Sortering:</span>
+
                     <select id="sortSelect" class="chip-select" aria-label="Sortera">
                         <option value="relevance">Relevans</option>
                         <option value="richness">Mest info</option>
@@ -276,7 +276,7 @@
 
                 <!-- Type Dropdown (Styled as Chip) -->
                 <div class="select-chip-wrapper">
-                    <span class="chip-label">Typ:</span>
+
                     <select id="typeSelect" class="chip-select" aria-label="Filtrera typ">
                         <option value="all">Alla</option>
                         <optgroup label="📝 Grammatik">
@@ -304,21 +304,7 @@
                 </div>
 
                 <!-- Topic Category Dropdown -->
-                <div class="select-chip-wrapper">
-                    <span class="chip-label">🏷️</span>
-                    <select id="categorySelect" class="chip-select" aria-label="Kategori">
-                        <option value="all">Ämnen</option>
-                        <option value="food">🍽️ Mat</option>
-                        <option value="work">💼 Arbete</option>
-                        <option value="health">🏥 Hälsa</option>
-                        <option value="family">👨‍👩‍👧 Familj</option>
-                        <option value="travel">✈️ Resa</option>
-                        <option value="school">📚 Skola</option>
-                        <option value="home">🏠 Hem</option>
-                        <option value="nature">🌳 Natur</option>
-                    </select>
-                    <span class="chip-arrow">▼</span>
-                </div>
+
             </div>
         </div>
     </div>
@@ -327,29 +313,33 @@
 
     <!-- شريط الاختصارات السريعة - يظهر دائماً -->
     <div class="quick-actions-bar">
-        <button type="button" class="quick-action-btn hidden" id="quickWodBtn" title="كلمة اليوم / Dagens Ord">
+        <button type="button" class="quick-action-btn hidden" id="quickWodBtn" data-tooltip="Ord / كلمة"
+            aria-label="Ord / كلمة">
             <span class="quick-icon">📅</span>
-            <span class="quick-label"><span class="sv-text">Ord</span><span class="ar-text">كلمة</span></span>
+
         </button>
-        <a href="games/games.html" class="quick-action-btn" title="ألعاب / Spel">
+        <a href="games/games.html" class="quick-action-btn" data-tooltip="Spel / ألعاب" aria-label="Spel / ألعاب">
             <span class="quick-icon">🎮</span>
-            <span class="quick-label"><span class="sv-text">Spel</span><span class="ar-text">ألعاب</span></span>
+
         </a>
-        <a href="learn/learn.html" class="quick-action-btn" title="تعلم / Lär">
+        <a href="learn/learn.html" class="quick-action-btn" data-tooltip="Lär / تعلم" aria-label="Lär / تعلم">
             <span class="quick-icon">📚</span>
-            <span class="quick-label"><span class="sv-text">Lär</span><span class="ar-text">تعلم</span></span>
+
         </a>
-        <a href="ramadan/index.html" class="quick-action-btn" title="Ramadan / رمضان">
+        <a href="ramadan/index.html" class="quick-action-btn" data-tooltip="Ramadan / رمضان"
+            aria-label="Ramadan / رمضان">
             <span class="quick-icon">🌙</span>
-            <span class="quick-label"><span class="sv-text">Ramadan</span><span class="ar-text">رمضان</span></span>
+
         </a>
-        <button type="button" class="quick-action-btn" id="quickFavBtn" title="مفضلة / Favoriter">
+        <button type="button" class="quick-action-btn" id="quickFavBtn" data-tooltip="Favoriter / مفضلة"
+            aria-label="Favoriter / مفضلة">
             <span class="quick-icon">⭐</span>
-            <span class="quick-label"><span class="sv-text">Favoriter</span><span class="ar-text">مفضلة</span></span>
+
         </button>
-        <button type="button" class="quick-action-btn premium-border-animated" id="quickQuizBtn" title="اختبار / Quiz">
+        <button type="button" class="quick-action-btn" id="quickQuizBtn" data-tooltip="Quiz / اختبار"
+            aria-label="Quiz / اختبار">
             <span class="quick-icon">⚡</span>
-            <span class="quick-label"><span class="sv-text">Quiz</span><span class="ar-text">اختبار</span></span>
+
         </button>
     </div>
 

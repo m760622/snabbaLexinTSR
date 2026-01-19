@@ -821,7 +821,7 @@ function exportToWindow(): void {
 }
 
 // Initialize Word of the Day (Random on each page load)
-function initWordOfDay(): void {
+async function initWordOfDay(): Promise<void> {
     const wodWord = document.getElementById('wodWord');
     const wodTranslation = document.getElementById('wodTranslation');
     const wodExampleSwe = document.getElementById('wodExampleSwe');
@@ -831,23 +831,17 @@ function initWordOfDay(): void {
 
     if (!wodWord) return;
 
-    // Wait for dictionaryData to be loaded
-    const tryLoadWord = () => {
-        if (typeof dictionaryData !== 'undefined' && Array.isArray(dictionaryData) && dictionaryData.length > 0) {
-            // Select a word based on the day (persistent for 24h)
-            const today = new Date();
-            const dateStr = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    // Use DictionaryDB
+    try {
+        // Import dynamically to avoid top-level await issues if not supported
+        const { DictionaryDB } = await import('./db');
 
-            // Simple hash for date string
-            let hash = 0;
-            for (let i = 0; i < dateStr.length; i++) {
-                hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
-                hash |= 0;
-            }
+        // Wait for DB init
+        await DictionaryDB.init();
 
-            const index = Math.abs(hash) % dictionaryData.length;
-            const word = dictionaryData[index];
+        const word = await DictionaryDB.getRandomWord();
 
+        if (word) {
             console.log('[LearnUI] Word of the Day:', word.swedish);
 
             if (wodWord) wodWord.textContent = word.swedish;
@@ -862,12 +856,14 @@ function initWordOfDay(): void {
 
             if (wodCategory) wodCategory.textContent = `🏷️ ${word.type || 'Ord'}`;
         } else {
-            // Data not loaded yet, retry after 200ms
-            setTimeout(tryLoadWord, 200);
+            console.warn('[LearnUI] No words found in DB for Word of the Day');
+            if (wodWord) wodWord.textContent = 'Välkommen';
+            if (wodTranslation) wodTranslation.textContent = 'مرحباً';
         }
-    };
 
-    tryLoadWord();
+    } catch (e) {
+        console.error('[LearnUI] Failed to load Word of the Day:', e);
+    }
 
     // Format date: "30 December"
     const today = new Date();
