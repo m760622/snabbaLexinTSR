@@ -50,7 +50,13 @@ class Onboarding {
     }
 
     public start(): void {
-        if (localStorage.getItem('onboardingComplete') === 'true') {
+        const isTestMode = new URLSearchParams(window.location.search).has('test_mode');
+
+        if (localStorage.getItem('onboardingComplete') === 'true' || isTestMode) {
+            if (isTestMode) {
+                console.log('[Onboarding] Test mode detected, skipping...');
+                this.complete();
+            }
             return;
         }
 

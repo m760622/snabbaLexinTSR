@@ -1,0 +1,53 @@
+{
+    "tech_stack": [
+        "TypeScript",
+        "HTML5",
+        "CSS3",
+        "Vite",
+        "PWA"
+    ],
+    "features": [
+        {
+            "name": "Asma Ul Husna Module",
+            "description": "Learning module for the 99 Names of Allah, featuring browsing, flashcards, quizes, and premium UI.",
+            "files": [
+                "src/learn/asmaUlHusna.ts",
+                "assets/css/asma_ul_husna.css",
+                "learn/asma_ul_husna.html"
+            ]
+        },
+        {
+            "name": "Learn Manager",
+            "description": "Manages different learning views and navigation.",
+            "files": [
+                "src/learn/LearnViewManager.ts",
+                "src/learn-ui.ts"
+            ]
+        },
+        {
+            "name": "Settings System",
+            "description": "User preference management including font size, dark mode, and data clearing.",
+            "files": [
+                "src/settings.ts",
+                "src/settings-menu.ts"
+            ]
+        },
+        {
+            "name": "Core UI",
+            "description": "Core UI components, FAB menu, and Toast notifications.",
+            "files": [
+                "src/ui-enhancements.ts",
+                "src/fab-menu.ts",
+                "src/toast-manager.ts"
+            ]
+        },
+        {
+            "name": "Database & Storage",
+            "description": "IndexedDB handling and local storage wrappers.",
+            "files": [
+                "src/db.ts",
+                "src/utils.ts"
+            ]
+        }
+    ]
+}

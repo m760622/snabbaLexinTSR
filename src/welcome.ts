@@ -17,15 +17,17 @@ class WelcomeScreen {
         // Start UI animations
         this.startSplashUI();
 
-        // Safety Timeout: 15 seconds to force-hide/redirect
+        // Safety Timeout: 15 seconds normally, 2s if test mode
+        const isTestMode = new URLSearchParams(window.location.search).has('test_mode');
+        const timeoutDuration = isTestMode ? 2000 : 15000;
+
         setTimeout(() => {
-            console.warn('[Welcome] Timeout reached (15s). Forcing redirect...');
-            // We force flags to true to attempt to avoid a redirect loop, 
-            // though without data the app might be empty.
+            console.warn(`[Welcome] Timeout reached (${timeoutDuration}ms). Forcing redirect...`);
+            // We force flags to true to attempt to avoid a redirect loop
             localStorage.setItem('snabbaLexin_dataReady', 'true');
             localStorage.setItem('snabbaLexin_version', AppConfig.DATA_VERSION);
             this.redirectToApp();
-        }, 15000);
+        }, timeoutDuration);
 
         try {
             console.log('[Welcome] Initializing DB...');
