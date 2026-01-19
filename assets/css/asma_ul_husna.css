@@ -229,6 +229,46 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
+        /* 
+           HEADER CATEGORY BADGE 
+           Hidden by default (collapsed), Visible in Expanded
+        */
+        .category-badge-header {
+            display: none !important;
+            /* Force hide in collapsed state */
+            font-size: 0.8rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            color: #1e293b;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            order: 2;
+            /* Middle visual position in expanded sequence */
+            white-space: nowrap;
+        }
+
+        .category-badge-header.jalal {
+            background: linear-gradient(135deg, #fcd34d, #f59e0b);
+        }
+
+        .category-badge-header.jamal {
+            background: linear-gradient(135deg, #a7f3d0, #34d399);
+        }
+
+        .category-badge-header.kamal {
+            background: linear-gradient(135deg, #e9d5ff, #c084fc);
+        }
+
+        .asma-card.expanded .category-badge-header {
+            display: inline-block !important;
+            margin: 0 1rem;
+            animation: fadeIn 0.4s ease-out;
+            order: 2;
+            /* Ensure it stays in middle */
+        }
+
         /* Asma ul Husna Specific Styles */
         .asma-container {
             max-width: 414px;
@@ -434,50 +474,71 @@
             gap: 1.5rem;
         }
 
-        /* Name Card */
+        /* ==================== EXPANDABLE ASMA CARD ==================== */
         .asma-card {
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(20, 20, 20, 0.6));
-            border: 1px solid rgba(251, 191, 36, 0.2);
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(251, 191, 36, 0.1);
             border-radius: 20px;
-            padding: 1.5rem;
-            /* Performance Optimization: Removed blur on cards */
-            -webkit-backdrop-filter: none;
-            backdrop-filter: none;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            position: relative;
+            padding: 0;
+            margin-bottom: 1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             overflow: hidden;
-            /* CONTENT CONTAINMENT: Helps browser optimize rendering */
-            contain: content;
-        }
-
-        .asma-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            cursor: pointer;
+            position: relative;
+            max-height: 130px;
+            /* Increased to fit 2 rows in collapsed state */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .asma-card:hover {
-            transform: translateY(-2px);
             border-color: rgba(251, 191, 36, 0.5);
-            /* Simpler shadow for performance */
-            box-shadow: 0 5px 15px rgba(251, 191, 36, 0.1);
+            /* Stronger border on hover */
+            /* background: rgba(30, 41, 59, 0.6); REMOVED GLOW */
+            transform: translateY(-2px);
         }
 
-        /* Card Header */
-        .asma-card-header {
+        .asma-card.expanded {
+            max-height: 800px;
+            /* Deep Premium Black Background */
+            background: rgba(10, 10, 15, 0.98) !important;
+            border-color: rgba(251, 191, 36, 0.6);
+            /* Refined Gold Border Glow */
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.25),
+                0 0 0 1px rgba(251, 191, 36, 0.1);
+            /* Remove any other shadows */
+            cursor: default;
+        }
+
+        .asma-card.expanded .asma-names-stack {
+            display: none;
+        }
+
+        /* Card Head - Collapsed (Default) Layout */
+        .asma-card-head {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            justify-content: space-between;
+            padding: 1rem 1.2rem;
+            min-height: 135px;
+            flex-wrap: wrap;
+            /* Allow wrapping for 2 rows */
+            gap: 0.5rem;
         }
 
+        /*
+           Collapsed Layout Strategy:
+           Use display: contents on wrapper to unwrap children
+           so we can re-order them freely in the main grid.
+        */
+        .card-head-left {
+            display: contents;
+        }
+
+        /* Top Left: Number */
         .asma-number {
-            width: 40px;
-            height: 40px;
+            order: -2;
+            width: 32px;
+            height: 32px;
             background: linear-gradient(135deg, #fbbf24, #f59e0b);
             border-radius: 50%;
             display: flex;
@@ -485,41 +546,348 @@
             justify-content: center;
             font-weight: 700;
             color: #1e293b;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 10px rgba(251, 191, 36, 0.2);
+            flex-shrink: 0;
+            margin-bottom: 0.5rem;
+            /* Space below number in top row */
+        }
+
+        /* Top Right: Actions */
+        .card-head-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: auto;
+            /* Allow it to sit next to number */
+            justify-content: flex-end;
+            order: 100;
+            /* FORCE TO BOTTOM */
+            margin-bottom: 0.5rem;
+            padding-bottom: 0;
+            border: none;
+        }
+
+        /* Bottom Row: Names (Full Width) */
+        .asma-names-stack {
+            display: flex;
+            flex-direction: row-reverse;
+            /* Arabic Right, Swedish Left */
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            order: 10;
+            /* Force to bottom */
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            /* Separator between rows */
+            padding-top: 0.5rem;
+        }
+
+        .asma-name-ar-mini {
+            font-family: 'Scheherazade New', serif;
+            font-size: 2.2rem;
+            /* Larger as requested */
+            color: #fbbf24;
+            line-height: 1;
+        }
+
+        .asma-name-sv-mini {
+            font-size: 1.1rem;
+            /* Larger */
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        /* ... existing styles ... */
+
+        /*
+           ===== EXPANDED HEADER LAYOUT REORGANIZATION =====
+        */
+
+        .asma-card.expanded .asma-card-head {
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-bottom: 0.5rem;
+        }
+
+        /* 1. Expanded Header Layout */
+        .asma-card.expanded .asma-card-head {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Top Row: Number + Badge */
+        .asma-card.expanded .head-row-top {
+            display: flex !important;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            order: 1;
+            /* First */
+            margin-bottom: 1rem;
+        }
+
+        /* Ensure Number is visible in Expanded */
+        .asma-card.expanded .asma-number {
+            display: flex !important;
+            /* Ensure premium style sticks */
+            width: 40px;
+            height: 40px;
             font-size: 1rem;
         }
 
-        .asma-speak-btn {
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: rgba(251, 191, 36, 0.2);
-            border-radius: 50%;
-            cursor: pointer;
+        /* 3. The Names Stack */
+        .asma-card.expanded .head-row-names {
+            order: 2;
+            /* Second */
+            margin-bottom: 1rem;
+            gap: 1.5rem;
+        }
+
+        /* Wait, .asma-names-stack is INSIDE .card-head-left. 
+           Structure: .card-head-left > .asma-number, .asma-names-stack
+        */
+
+        .asma-card.expanded .card-head-left {
+            /* Override the default align-items center */
+            align-items: center;
+        }
+
+        /* We need the stack to assume full control */
+        .asma-card.expanded .asma-names-stack {
+            display: flex !important;
+            /* Force show */
+            flex-direction: row-reverse;
+            /* Arabic first (visually right), Swedish last (visually left) */
+            flex-grow: 1;
+            align-items: baseline;
+            margin-left: 1rem;
+            /* Space from number */
+        }
+
+        /* 4. Style the Expanded Header Names */
+        /* 4. Style the Expanded Header Names */
+        .asma-card.expanded .asma-name-ar-mini {
+            font-size: 3.5rem;
+            /* Larger */
+            line-height: 1.2;
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+        }
+
+        .asma-card.expanded .asma-name-sv-mini {
             font-size: 1.2rem;
-            transition: all 0.3s;
+            color: #cbd5e1;
+            font-weight: 600;
+            margin-right: auto;
+            /* Push to far left */
+            order: 3;
+            /* Leftmost in row-reverse */
+            display: block;
+            /* Ensure it's visible */
         }
 
-        .asma-speak-btn:hover {
-            background: rgba(251, 191, 36, 0.4);
-            transform: scale(1.1);
+        /* Hide the number in expanded mode to clean up? Or keep it? 
+           User didn't specify, but "Swedish on Left" usually implies the name starts the line.
+           Let's hide the number in expanded mode for a cleaner header.
+        */
+        .asma-card.expanded .asma-number {
+            display: none;
         }
 
-        /* Name Display */
-        .asma-name-ar {
-            font-family: 'Amiri', serif;
-            font-size: 2.2rem;
-            color: #fbbf24;
-            text-align: center;
-            margin-bottom: 0.5rem;
-            direction: rtl;
+        .asma-card.expanded .asma-names-stack {
+            margin-left: 0;
         }
 
-        .asma-name-sv {
-            text-align: center;
-            color: #e2e8f0;
+
+        /* 5. The Buttons (Actions) - Move to Bottom Row */
+        /* 5. The Buttons (Actions) - Move to Bottom Row */
+        .asma-card.expanded .card-head-actions {
+            width: 100%;
+            justify-content: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 2rem;
+            order: 3;
+            /* Third */
+        }
+
+        .asma-card.expanded .asma-action-btn {
+            width: 44px;
+            /* Larger buttons in expanded */
+            height: 44px;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Hide the chevron in expanded mode since we have a dedicated header now? 
+           Or keep it to toggle close? Keep it. */
+        .asma-card.expanded .expand-icon {
+            display: none;
+            /* Usually clicking anywhere closes/toggles, icon might be redundant or distracting in this layout */
+        }
+
+        /* 
+           ===== HIDE BODY DUPLICATES ===== 
+           Since names are now giant in the header.
+        */
+        .expanded-section:first-child {
+            /* This targets the first section which usually contains the names */
+            display: none;
+        }
+
+        /* Wait, first-child might be the badge. Let's be safer. */
+        .expanded-section .asma-name-ar.lang-primary,
+        .expanded-section .asma-name-sv.lang-primary {
+            display: none;
+        }
+
+        /* If the section becomes empty, hide it? */
+        .expanded-section:has(.asma-name-ar.lang-primary) {
+            display: none;
+        }
+
+        .asma-card .expanded-only-btn {
+            display: none !important;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .asma-card.expanded .expanded-only-btn {
+            display: flex !important;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .asma-card-head .card-head-actions {
+            gap: 0.6rem;
+        }
+
+        .expanded-section {
+            margin-bottom: 1.5rem;
+            padding-top: 0.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        /* Staggered Animation for Expanded Sections */
+        .expanded-section:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .expanded-section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .expanded-section:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .expanded-section:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .expanded-section .asma-name-ar.lang-primary {
+            font-size: 2.8rem;
+            margin-bottom: 0.2rem;
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 20px rgba(251, 191, 36, 0.15);
+        }
+
+        .expanded-section .asma-name-sv.lang-primary {
             font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 1rem;
+            color: #cbd5e1;
+            letter-spacing: 0.5px;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(251, 191, 36, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .meaning-ar {
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .meaning-sv {
+            font-size: 1rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            font-weight: 300;
+        }
+
+        .verse-ar {
+            font-family: 'Amiri', serif;
+            font-size: 1.3rem;
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.03);
+            padding: 1.2rem;
+            border-radius: 16px;
+            border-right: 3px solid rgba(251, 191, 36, 0.5);
+            margin-bottom: 0.5rem;
+            direction: rtl;
+            line-height: 1.8;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .verse-sv {
+            font-size: 0.95rem;
+            font-style: italic;
+            color: #94a3b8;
+            padding: 0 0.8rem;
+            opacity: 0.8;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin: 1rem 0;
+            border: 1px solid transparent;
+        }
+
+        .category-badge.jalal {
+            background: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .category-badge.jamal {
+            background: rgba(34, 197, 94, 0.1);
+            color: #86efac;
+            border-color: rgba(34, 197, 94, 0.2);
+        }
+
+        .category-badge.kamal {
+            background: rgba(59, 130, 246, 0.1);
+            color: #93c5fd;
+            border-color: rgba(59, 130, 246, 0.2);
         }
 
         /* Language Size Modifiers */
@@ -609,8 +977,8 @@
         /* Quran Verse */
         .asma-verse {
             background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05));
-            border-left: 3px solid #fbbf24;
-            border-radius: 0 12px 12px 0;
+            border-right: 3px solid #fbbf24;
+            border-radius: 12px 0 0 12px;
             padding: 1rem;
         }
 
@@ -900,13 +1268,7 @@
         }
 
         /* Memorized Badge */
-        .asma-card.memorized {
-            border-color: rgba(34, 197, 94, 0.5);
-        }
 
-        .asma-card.memorized::before {
-            background: linear-gradient(90deg, #22c55e, #16a34a);
-        }
 
         .memorized-badge {
             position: absolute;
@@ -2005,10 +2367,33 @@
             height: 100%;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            border-radius: 20px;
             overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Category Glow / Borders */
+        .asma-card.jalal {
+            border-color: rgba(220, 38, 38, 0.5);
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.15);
+        }
+
+        .asma-card.jamal {
+            border-color: rgba(30, 58, 138, 0.5);
+            /* Navy Blue */
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.15);
+        }
+
+        .asma-card.kamal {
+            border-color: rgba(37, 99, 235, 0.5);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
+        }
+
+        /* HIDE TEXT IN NORMAL MODE */
+        .asma-card:not(.expanded) .hide-in-collapsed {
+            display: none !important;
         }
 
         /* Glass Shine */
@@ -3246,6 +3631,32 @@
             background: #ef4444;
         }
 
+        .asma-action-btn {
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 12px;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .asma-action-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(251, 191, 36, 0.4);
+            color: #fbbf24;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(251, 191, 36, 0.15);
+        }
+
         @media (max-width: 414px) {
             .audio-player-bar {
                 width: 90%;
@@ -3918,4 +4329,177 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
+        }
+
+        /* PRIORITY OVERRIDES */
+        /* Memorized Badge - Must override category borders */
+        .asma-card.memorized {
+            border-color: rgba(34, 197, 94, 0.5) !important;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.2) !important;
+        }
+
+        .asma-card.memorized::before {
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+        }
+
+        /* Header Badge Absolute Positioning */
+        .asma-card .category-badge-header {
+            position: absolute;
+            top: 8px;
+            /* Raised higher */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            pointer-events: none;
+            /* Let clicks pass through to card */
+            display: block !important;
+            /* Ensure visibility */
+        }
+
+        /* Category Specific Colors for Header Badge */
+        .asma-card .category-badge-header.jalal {
+            background: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .asma-card .category-badge-header.jamal {
+            background: rgba(30, 58, 138, 0.3);
+            /* Navy Blue background */
+            color: #93c5fd;
+            border-color: rgba(30, 58, 138, 0.4);
+        }
+
+        .asma-card .category-badge-header.kamal {
+            background: rgba(59, 130, 246, 0.1);
+            color: #93c5fd;
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        /* REMOVE old styles or override them aggressively */
+
+        .asma-card-head {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            gap: 0.5rem;
+            min-height: auto;
+            /* Let content dictate height */
+        }
+
+        /* Row 1: Top (Number & Badge) */
+        .head-row-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            width: 100%;
+            margin-bottom: 0.5rem;
+            direction: ltr;
+            /* Force LTR so Number is Left of Badge */
+        }
+
+        /* Reset Number positioning but KEEP premium styles */
+        .asma-number {
+            position: static;
+            /* No longer absolute */
+            width: 32px;
+            height: 32px;
+            font-size: 0.9rem;
+            margin: 0;
+            /* Restore Premium Look */
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+            border: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        /* Reset Badge positioning */
+        .asma-card .category-badge-header {
+            position: static;
+            /* No longer absolute */
+            transform: none;
+            margin: 0;
+            top: auto;
+            left: auto;
+            right: auto;
+        }
+
+
+        /* Row 2: Names */
+        .head-row-names {
+            display: flex;
+            flex-direction: row-reverse;
+            /* Arabic Right, Swedish Left */
+            align-items: center;
+            /* Align vertically */
+            justify-content: center;
+            text-align: center;
+            gap: 1rem;
+            /* Space between words */
+            width: 100%;
+        }
+
+        .asma-name-ar-mini {
+            font-size: 1.8rem;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .asma-name-sv-mini {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-top: 0.2rem;
+            /* Slight adjustment for visual baseline */
+        }
+
+        /* Row 3: Actions */
+        .card-head-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        /* Ensure buttons are visible */
+        .asma-action-btn {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Hide Expand Icon in this new layout? Or keep it? 
+   User asked for buttons below. Maybe expand icon is redundant if whole card clicks, 
+   but good to keep as indicator. Let's make it standard button size.
+*/
+        .expand-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.3);
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Clean up old overrides */
+        .card-head-left,
+        .asma-names-stack {
+            display: none;
+            /* In case they linger, but we removed them from HTML */
         }

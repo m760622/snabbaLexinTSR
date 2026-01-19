@@ -774,67 +774,99 @@ function createCardHTML(name: AsmaName): string {
     const categoryLabel = category === 'jalal' ? 'الجلال' : category === 'jamal' ? 'الجمال' : 'الكمال';
 
     return `
-        <div class="asma-card${isMemorized ? ' memorized' : ''}" data-nr="${name.nr}" style="animation: fadeInUp 0.4s ease-out forwards; animation-delay: ${name.nr * 0.02}s; opacity: 0;">
-            ${isMemorized ? '<div class="memorized-badge">✓ محفوظ</div>' : ''}
+        <div class="asma-card ${category}${isMemorized ? ' memorized' : ''}" data-nr="${name.nr}" 
+             onclick="toggleCardExpansion(${name.nr})"
+             style="animation: fadeInUp 0.2s ease-out forwards;">
             
-            <div class="category-badge ${category}">${categoryLabel}</div>
+            <!-- Card Head: Visible when collapsed -->
+            <div class="asma-card-head">
+                <!-- Row 1: Number & Badge -->
+                <div class="head-row-top">
+                     <div class="asma-number">${name.nr}</div>
+                     <div class="category-badge-header ${category}">${categoryLabel}</div>
+                </div>
 
-            <div class="asma-card-header">
-                <div class="asma-number">${name.nr}</div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="asma-speak-btn" onclick="speakName(${name.nr})" title="استمع">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                        </svg>
+                <!-- Row 2: Names -->
+                <div class="head-row-names">
+                    <div class="asma-name-ar-mini">${name.nameAr}</div>
+                    <div class="asma-name-sv-mini">${name.nameSv}</div>
+                </div>
+
+                <!-- Row 3: Actions -->
+                <div class="card-head-actions">
+                    <button class="asma-action-btn speak-btn" onclick="event.stopPropagation(); speakName(${name.nr})" title="استماع">
+                        🔊
                     </button>
-                    <button class="asma-favorite-btn${isFavorite ? ' favorited' : ''}" onclick="toggleFavorite(${name.nr})" title="المفضلة">
+                    <button class="asma-action-btn asma-memorize-btn ${isMemorized ? 'active' : ''}" 
+                            onclick="event.stopPropagation(); toggleMemorized(${name.nr})" title="حفظ">
+                        ${isMemorized ? '✓' : '📝'}
+                    </button>
+                    <button class="asma-action-btn favorite-btn ${isFavorite ? 'active' : ''}" 
+                            onclick="event.stopPropagation(); toggleFavorite(${name.nr})" title="المفضلة">
                         ${isFavorite ? '❤️' : '🤍'}
                     </button>
+                    <div class="expand-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
                 </div>
             </div>
-            
-            <div class="asma-name-ar ${currentLang === 'ar' ? 'lang-primary' : 'lang-secondary'}">${name.nameAr}</div>
-            <div class="asma-name-sv ${currentLang === 'sv' ? 'lang-primary' : 'lang-secondary'}">${name.nameSv}</div>
-            
-            <div class="asma-meaning">
-                <div class="asma-meaning-ar ${currentLang === 'ar' ? 'lang-primary' : 'lang-secondary'}">${name.meaningAr}</div>
-                <div class="asma-meaning-sv ${currentLang === 'sv' ? 'lang-primary' : 'lang-secondary'}">${name.meaningSv}</div>
-            </div>
-            
-            ${hasConjugation ? `
-            <div class="asma-conjugation">
-                <div class="conj-item">
-                    <div class="conj-label">الماضي</div>
-                    <div class="conj-ar">${name.pastAr}</div>
-                    <div class="conj-sv">${name.pastSv}</div>
+
+            <!-- Card Body: Visible when expanded -->
+            <div class="asma-card-body">
+                <!-- Badge moved to header -->
+                
+                <div class="expanded-section">
+                    <div class="asma-name-ar lang-primary">${name.nameAr}</div>
+                    <div class="asma-name-sv lang-primary">${name.nameSv}</div>
                 </div>
-                <div class="conj-item">
-                    <div class="conj-label">المضارع</div>
-                    <div class="conj-ar">${name.presentAr}</div>
-                    <div class="conj-sv">${name.presentSv}</div>
+
+                <div class="expanded-section">
+                    <div class="meaning-ar">${name.meaningAr}</div>
+                    <div class="meaning-sv">${name.meaningSv}</div>
                 </div>
-                <div class="conj-item">
-                    <div class="conj-label">المصدر</div>
-                    <div class="conj-ar">${name.masdarAr}</div>
-                    <div class="conj-sv">${name.masdarSv}</div>
+
+                ${hasConjugation ? `
+                <div class="expanded-section">
+                    <div class="asma-conjugation">
+                        <div class="conj-item">
+                            <div class="conj-ar">${name.pastAr}</div>
+                            <div class="conj-sv">${name.pastSv}</div>
+                        </div>
+                        <div class="conj-item">
+                            <div class="conj-ar">${name.presentAr}</div>
+                            <div class="conj-sv">${name.presentSv}</div>
+                        </div>
+                        <div class="conj-item">
+                            <div class="conj-ar">${name.masdarAr}</div>
+                            <div class="conj-sv">${name.masdarSv}</div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            ` : ''}
-            
-            <div class="asma-verse">
-                <div class="verse-icon">📖</div>
-                <div class="verse-ar">${name.verseAr}</div>
-                <div class="verse-sv">${name.verseSv}</div>
-            </div>
-            
-            <div class="asma-card-actions">
-                <button class="asma-memorize-btn${isMemorized ? ' active' : ''}" onclick="toggleMemorized(${name.nr})">
-                    ${isMemorized ? '✓ تم الحفظ' : '📝 تحديد كمحفوظ'}
-                </button>
+                ` : ''}
+
+                <div class="expanded-section">
+                    <div class="verse-ar">${name.verseAr}</div>
+                    <div class="verse-sv">${name.verseSv}</div>
+                </div>
             </div>
         </div>
     `;
+}
+
+function toggleCardExpansion(nr: number): void {
+    const card = document.querySelector(`.asma-card[data-nr="${nr}"]`);
+    if (card) {
+        card.classList.toggle('expanded');
+
+        // If expanded, scroll into view if needed
+        if (card.classList.contains('expanded')) {
+            setTimeout(() => {
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 300);
+        }
+    }
 }
 
 // Filter names (for search input)
@@ -1635,6 +1667,7 @@ function toggleFilters(): void {
 (window as any).toggleFilters = toggleFilters;
 (window as any).filterNames = applyFilters; // Export filterNames
 (window as any).switchMode = switchMode;
+(window as any).toggleCardExpansion = toggleCardExpansion;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Other init functions are called within their specific blocks or global scope?

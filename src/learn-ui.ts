@@ -2,8 +2,9 @@
  * Learn UI - Handles all learn page UI interactions
  */
 
-import { lessonsData, Lesson, LessonSection } from './learn/lessonsData';
+import { lessonsData, Lesson, LessonSection, ExampleItem } from './learn/lessonsData';
 import { TTSManager } from './tts';
+import { LearnViewManager, LearnView, createLearnViewManager } from './learn/LearnViewManager';
 
 // Dictionary data is loaded globally via script
 declare const dictionaryData: any[];
@@ -14,6 +15,7 @@ console.log('[LearnUI] Module loaded with', lessonsData.length, 'lessons');
 let currentFilter = 'all';
 let currentLesson: Lesson | null = null;
 let searchQuery = '';
+let currentView: LearnView = 'browse';
 
 // Gamification State
 let xp = 0;
@@ -21,6 +23,18 @@ let level = 1;
 let streak = 0;
 let completedLessons: Set<string> = new Set();
 let lastVisitDate = '';
+let savedWords: Set<string> = new Set();
+
+// Quiz State
+let quizQuestions: any[] = [];
+let currentQuestionIndex = 0;
+let quizScore = 0;
+let quizType: 'swe-to-arb' | 'arb-to-swe' = 'swe-to-arb';
+
+// Flashcard State
+let flashcardItems: any[] = [];
+let currentFlashcardIndex = 0;
+let isFlipped = false;
 
 // XP Requirements per level
 const XP_PER_LEVEL = 100;
@@ -100,6 +114,352 @@ function showLevelUpAnimation(): void {
         levelBadge.classList.add('level-up');
         setTimeout(() => levelBadge.classList.remove('level-up'), 1000);
     }
+}
+
+// ========== VIEW MANAGER ==========
+const viewManager = createLearnViewManager();
+
+function initViewManager() {
+    viewManager.registerViews({
+        'browse': {
+            viewId: 'browseView',
+            onActivate: () => {
+                console.log('[LearnUI] Browse View Activated');
+                renderLessons();
+            }
+        },
+        'quiz': {
+            viewId: 'quizView',
+            onActivate: () => {
+                console.log('[LearnUI] Quiz View Activated');
+                initQuiz();
+            }
+        },
+        'flashcard': {
+            viewId: 'flashcardView',
+            onActivate: () => {
+                console.log('[LearnUI] Flashcard View Activated');
+                initFlashcards();
+            }
+        },
+        'saved': {
+            viewId: 'savedView',
+            onActivate: () => {
+                console.log('[LearnUI] Saved View Activated');
+                renderSavedLessons();
+            }
+        }
+    });
+}
+
+function switchMode(mode: string) {
+    viewManager.switchTo(mode as LearnView);
+
+    // Update Mode Bar UI
+    document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+    const btnId = `btn-${mode}`;
+    const activeBtn = document.getElementById(btnId);
+
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+        updateModeIndicator(activeBtn);
+    }
+}
+
+function updateModeIndicator(activeBtn: HTMLElement) {
+    const indicator = document.getElementById('modeIndicator');
+    const bar = document.getElementById('modeSelectionBar');
+    if (!indicator || !bar) return;
+
+    const barRect = bar.getBoundingClientRect();
+    const btnRect = activeBtn.getBoundingClientRect();
+
+    // Calculate offset relative to the bar
+    const offsetLeft = btnRect.left - barRect.left;
+
+    indicator.style.width = `${btnRect.width}px`;
+    indicator.style.transform = `translateX(${offsetLeft - 6}px)`; // -6px for padding offset
+}
+
+// ========== QUIZ LOGIC ==========
+
+function initQuiz() {
+    console.log('[LearnUI] Initializing Quiz...');
+    const container = document.getElementById('quizContent');
+    if (!container) return;
+
+    // Reset State
+    quizScore = 0;
+    currentQuestionIndex = 0;
+
+    // Generate Questions from lessonsData
+    quizQuestions = generateQuizQuestions();
+
+    if (quizQuestions.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <p class="sv-text">Inga frågor tillgängliga än.</p>
+                <p class="ar-text">لا توجد أسئلة متاحة بعد.</p>
+                <button class="retry-btn" onclick="switchMode('browse')">Tillbaka / رجوع</button>
+            </div>
+        `;
+        return;
+    }
+
+    showQuestion();
+}
+
+function generateQuizQuestions() {
+    const allExamples: ExampleItem[] = [];
+    lessonsData.forEach(lesson => {
+        lesson.sections.forEach(section => {
+            allExamples.push(...section.examples);
+        });
+    });
+
+    // Shuffle and pick 10
+    const shuffled = [...allExamples].sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, 10);
+
+    return selected.map(ex => {
+        const isSweToArb = Math.random() > 0.5;
+
+        // Generate options
+        const otherExamples = allExamples.filter(e => e.swe !== ex.swe);
+        const distractors = [...otherExamples]
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 3)
+            .map(e => isSweToArb ? e.arb : e.swe);
+
+        const options = [...distractors, isSweToArb ? ex.arb : ex.swe].sort(() => Math.random() - 0.5);
+
+        return {
+            question: isSweToArb ? ex.swe : ex.arb,
+            answer: isSweToArb ? ex.arb : ex.swe,
+            options: options,
+            type: isSweToArb ? 'swe-to-arb' : 'arb-to-swe',
+            example: ex
+        };
+    });
+}
+
+function showQuestion() {
+    const container = document.getElementById('quizContent');
+    if (!container || !quizQuestions[currentQuestionIndex]) return;
+
+    const q = quizQuestions[currentQuestionIndex];
+    const progress = ((currentQuestionIndex) / quizQuestions.length) * 100;
+
+    container.innerHTML = `
+        <div class="quiz-header">
+            <div class="quiz-progress-bar">
+                <div class="quiz-progress-fill" style="width: ${progress}%"></div>
+            </div>
+            <div class="quiz-stats">
+                <span>Fråga ${currentQuestionIndex + 1}/${quizQuestions.length}</span>
+                <span>Poäng: ${quizScore}</span>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-label">${q.type === 'swe-to-arb' ? 'Översätt till arabiska:' : 'Översätt till svenska:'}</div>
+            <div class="question-text ${q.type === 'arb-to-swe' ? 'ar-text' : 'sv-text'}" dir="${q.type === 'arb-to-swe' ? 'rtl' : 'ltr'}">
+                ${q.question}
+            </div>
+        </div>
+
+        <div class="options-grid">
+            ${q.options.map((opt: string) => `
+                <button class="option-btn ${q.type === 'swe-to-arb' ? 'ar-text' : 'sv-text'}" 
+                        onclick="checkAnswer('${opt.replace(/'/g, "\\'")}')" 
+                        dir="${q.type === 'swe-to-arb' ? 'rtl' : 'ltr'}">
+                    ${opt}
+                </button>
+            `).join('')}
+        </div>
+    `;
+
+    // Parse emojis
+    if (typeof (window as any).twemoji !== 'undefined') {
+        (window as any).twemoji.parse(container, { folder: 'svg', ext: '.svg' });
+    }
+}
+
+function checkAnswer(selected: string) {
+    const q = quizQuestions[currentQuestionIndex];
+    const options = document.querySelectorAll('.option-btn');
+
+    options.forEach(btn => {
+        const btnText = (btn as HTMLElement).textContent?.trim();
+        if (btnText === q.answer) {
+            btn.classList.add('correct');
+        } else if (btnText === selected && selected !== q.answer) {
+            btn.classList.add('wrong');
+        }
+        (btn as HTMLButtonElement).disabled = true;
+    });
+
+    if (selected === q.answer) {
+        quizScore++;
+        addXP(5);
+    }
+
+    setTimeout(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizQuestions.length) {
+            showQuestion();
+        } else {
+            showQuizResults();
+        }
+    }, 1500);
+}
+
+function showQuizResults() {
+    const container = document.getElementById('quizContent');
+    if (!container) return;
+
+    const percentage = (quizScore / quizQuestions.length) * 100;
+
+    container.innerHTML = `
+        <div class="quiz-results">
+            <div class="result-icon">${percentage >= 70 ? '🎉' : '💪'}</div>
+            <h2>Quiz klart!</h2>
+            <div class="result-score">${quizScore} / ${quizQuestions.length}</div>
+            <p>${percentage >= 70 ? 'Bra jobbat! Du börjar behärska detta.' : 'Bra försök! Fortsätt öva så kommer du snart ihåg allt.'}</p>
+            
+            <div class="result-actions">
+                <button class="primary-btn" onclick="initQuiz()">Försök igen / حاول مرة أخرى</button>
+                <button class="secondary-btn" onclick="switchMode('browse')">Klar / تم</button>
+            </div>
+        </div>
+    `;
+}
+
+// ========== FLASHCARD LOGIC ==========
+function initFlashcards() {
+    console.log('[LearnUI] Initializing Flashcards...');
+    const container = document.getElementById('flashcardContent');
+    if (!container) return;
+
+    // Grab all examples
+    const allExamples: ExampleItem[] = [];
+    lessonsData.forEach(lesson => {
+        lesson.sections.forEach(section => {
+            allExamples.push(...section.examples);
+        });
+    });
+
+    // Shuffle
+    flashcardItems = [...allExamples].sort(() => Math.random() - 0.5).slice(0, 15);
+    currentFlashcardIndex = 0;
+    isFlipped = false;
+
+    if (flashcardItems.length === 0) {
+        container.innerHTML = `<div class="empty-state">Inga exempel att visa.</div>`;
+        return;
+    }
+
+    showFlashcard();
+}
+
+function showFlashcard() {
+    const container = document.getElementById('flashcardContent');
+    if (!container) return;
+
+    const item = flashcardItems[currentFlashcardIndex];
+    const progress = ((currentFlashcardIndex + 1) / flashcardItems.length) * 100;
+
+    container.innerHTML = `
+        <div class="flashcard-header">
+            <div class="quiz-progress-bar">
+                <div class="quiz-progress-fill" style="width: ${progress}%"></div>
+            </div>
+            <div class="flashcard-counter">${currentFlashcardIndex + 1} / ${flashcardItems.length}</div>
+        </div>
+
+        <div class="flashcard-wrapper ${isFlipped ? 'flipped' : ''}" onclick="flipFlashcard()">
+            <div class="flashcard-inner">
+                <div class="flashcard-front">
+                    <div class="flashcard-label">Svenska</div>
+                    <div class="flashcard-text sv-text">${item.swe}</div>
+                    <div class="flashcard-hint">Klicka för att vända / انقر للقلب</div>
+                </div>
+                <div class="flashcard-back">
+                    <div class="flashcard-label">Arabiska / العربية</div>
+                    <div class="flashcard-text ar-text" dir="rtl">${item.arb}</div>
+                    <div class="flashcard-hint">Klicka för att vända / انقر للقلب</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flashcard-controls">
+            <button class="dont-know-btn" onclick="nextFlashcard(false)">
+                ❌ <span class="sv-text">Kan inte</span><span class="ar-text">لا أعرف</span>
+            </button>
+            <button class="know-btn" onclick="nextFlashcard(true)">
+                ✅ <span class="sv-text">Kan!</span><span class="ar-text">أعرفها</span>
+            </button>
+        </div>
+    `;
+}
+
+function flipFlashcard() {
+    isFlipped = !isFlipped;
+    const wrapper = document.querySelector('.flashcard-wrapper');
+    if (wrapper) {
+        wrapper.classList.toggle('flipped', isFlipped);
+    }
+}
+
+function nextFlashcard(known: boolean) {
+    if (known) addXP(2);
+
+    currentFlashcardIndex++;
+    isFlipped = false;
+
+    if (currentFlashcardIndex < flashcardItems.length) {
+        showFlashcard();
+    } else {
+        finishFlashcards();
+    }
+}
+
+function finishFlashcards() {
+    const container = document.getElementById('flashcardContent');
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="quiz-results">
+            <div class="result-icon">🎓</div>
+            <h2>Flashcards klara!</h2>
+            <p>Du har gått igenom ${flashcardItems.length} kort.</p>
+            <div class="result-actions">
+                <button class="primary-btn" onclick="initFlashcards()">Börja om / ابدأ من جديد</button>
+                <button class="secondary-btn" onclick="switchMode('browse')">Klar / تم</button>
+            </div>
+        </div>
+    `;
+}
+
+// ========== SAVED LOGIC ==========
+function renderSavedLessons() {
+    console.log('[LearnUI] Rendering Saved Lessons...');
+    const container = document.getElementById('savedList');
+    if (!container) return;
+
+    const completed = lessonsData.filter(l => completedLessons.has(l.id));
+
+    if (completed.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <p class="sv-text">Du har inte slutfört några lektioner än.</p>
+                <p class="ar-text">لم تكمل أي دروس بعد.</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = completed.map(lesson => createLessonCardHTML(lesson)).join('');
 }
 
 // Render lessons grid
@@ -453,6 +813,11 @@ function exportToWindow(): void {
     (window as any).openReviewSession = openReviewSession;
     (window as any).handleCardTilt = handleCardTilt;
     (window as any).resetCardTilt = resetCardTilt;
+    (window as any).switchMode = switchMode;
+    (window as any).initQuiz = initQuiz;
+    (window as any).checkAnswer = checkAnswer;
+    (window as any).flipFlashcard = flipFlashcard;
+    (window as any).nextFlashcard = nextFlashcard;
 }
 
 // Initialize Word of the Day (Random on each page load)
@@ -469,8 +834,18 @@ function initWordOfDay(): void {
     // Wait for dictionaryData to be loaded
     const tryLoadWord = () => {
         if (typeof dictionaryData !== 'undefined' && Array.isArray(dictionaryData) && dictionaryData.length > 0) {
-            // Select a random word on each page load
-            const index = Math.floor(Math.random() * dictionaryData.length);
+            // Select a word based on the day (persistent for 24h)
+            const today = new Date();
+            const dateStr = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+
+            // Simple hash for date string
+            let hash = 0;
+            for (let i = 0; i < dateStr.length; i++) {
+                hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
+                hash |= 0;
+            }
+
+            const index = Math.abs(hash) % dictionaryData.length;
             const word = dictionaryData[index];
 
             console.log('[LearnUI] Word of the Day:', word.swedish);
@@ -505,6 +880,7 @@ export function initLearnUI(): void {
     console.log('[LearnUI] Initializing...');
 
     loadState();
+    initViewManager();
     exportToWindow();
     setupFilters();
     setupSearch();
@@ -815,15 +1191,339 @@ style.textContent = `
         margin-top: 2rem;
     }
     
-    /* Level up animation */
-    .level-badge.level-up {
-        animation: levelUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    
     @keyframes levelUp {
         0% { transform: scale(1); }
         50% { transform: scale(1.3); }
         100% { transform: scale(1); }
+    }
+
+    /* --- Mode selection bar --- */
+    .mode-selection-bar {
+        display: flex;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        margin: 1rem;
+        padding: 4px;
+        border-radius: 20px;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        z-index: 10;
+    }
+
+    .mode-btn {
+        flex: 1;
+        background: none;
+        border: none;
+        padding: 0.8rem 0.5rem;
+        border-radius: 16px;
+        color: #94a3b8;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        position: relative;
+        z-index: 2;
+        transition: color 0.3s;
+    }
+
+    .mode-btn.active {
+        color: #fbbf24;
+    }
+
+    .mode-icon {
+        font-size: 1.2rem;
+    }
+
+    .mode-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .mode-indicator {
+        position: absolute;
+        bottom: 4px;
+        top: 4px;
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(251, 191, 36, 0.05));
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        border-radius: 16px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 1;
+    }
+
+    /* --- View Sections --- */
+    .view-section {
+        display: none;
+    }
+    .view-section.active {
+        display: block;
+        animation: viewIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes viewIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Quiz Styles --- */
+    .quiz-container {
+        padding: 1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .quiz-progress-bar {
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+    }
+    .quiz-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #fbbf24, #f59e0b);
+        border-radius: 10px;
+        transition: width 0.4s ease;
+        box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    }
+    .quiz-stats {
+        display: flex;
+        justify-content: space-between;
+        color: #94a3b8;
+        font-size: 0.85rem;
+        margin-bottom: 2rem;
+    }
+    .question-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 28px;
+        padding: 3rem 2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+    .question-label {
+        color: #60a5fa;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 1.5rem;
+        opacity: 0.8;
+    }
+    .question-text {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #f8fafc;
+        line-height: 1.4;
+    }
+    .options-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+    }
+    .option-btn {
+        background: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1.5rem 1rem;
+        border-radius: 20px;
+        color: #e2e8f0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .option-btn:hover:not(:disabled) {
+        transform: translateY(-3px);
+        background: rgba(96, 165, 250, 0.1);
+        border-color: #60a5fa;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    }
+    .option-btn:active:not(:disabled) { transform: scale(0.95); }
+    .option-btn.correct {
+        background: rgba(34, 197, 94, 0.2) !important;
+        border-color: #22c55e !important;
+        color: #4ade80 !important;
+        box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+    }
+    .option-btn.wrong {
+        background: rgba(239, 68, 68, 0.2) !important;
+        border-color: #ef4444 !important;
+        color: #f87171 !important;
+        box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+    }
+
+    /* --- Flashcard Styles --- */
+    .flashcard-container {
+        padding: 1rem;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    .flashcard-header { margin-bottom: 2rem; }
+    .flashcard-wrapper {
+        perspective: 1200px;
+        height: 400px;
+        width: 100%;
+        margin-bottom: 3rem;
+        cursor: pointer;
+    }
+    .flashcard-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-style: preserve-3d;
+    }
+    .flashcard-wrapper.flipped .flashcard-inner {
+        transform: rotateY(180deg);
+    }
+    .flashcard-front, .flashcard-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 2px solid rgba(251, 191, 36, 0.15);
+        border-radius: 40px;
+        padding: 3rem 2rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    .flashcard-back {
+        transform: rotateY(180deg);
+        border-color: rgba(96, 165, 250, 0.2);
+    }
+    .flashcard-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        color: #94a3b8;
+        margin-bottom: 2rem;
+    }
+    .flashcard-text {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #f8fafc;
+        line-height: 1.3;
+    }
+    .flashcard-hint {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-top: 2rem;
+        font-style: italic;
+    }
+    .flashcard-controls {
+        display: flex;
+        gap: 1.5rem;
+    }
+    .flashcard-controls button {
+        flex: 1;
+        padding: 1.2rem;
+        border-radius: 20px;
+        border: none;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+    }
+    .flashcard-controls button:hover { transform: translateY(-3px); }
+    .flashcard-controls button:active { transform: scale(0.95); }
+    
+    .dont-know-btn { 
+        background: rgba(239, 68, 68, 0.15); 
+        color: #f87171; 
+        border: 1px solid rgba(239, 68, 68, 0.25) !important; 
+    }
+    .know-btn { 
+        background: rgba(34, 197, 94, 0.15); 
+        color: #4ade80; 
+        border: 1px solid rgba(34, 197, 94, 0.25) !important; 
+    }
+    
+    .flashcard-counter {
+        text-align: center;
+        margin-top: 1rem;
+        color: #64748b;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    /* Results */
+    .quiz-results {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: rgba(30, 41, 59, 0.5);
+        border-radius: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .result-icon { font-size: 5rem; margin-bottom: 1.5rem; filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.3)); }
+    .result-score { font-size: 4rem; font-weight: 900; color: #fbbf24; margin: 1.5rem 0; }
+    .result-actions { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 3rem; }
+    .primary-btn { 
+        background: linear-gradient(135deg, #fbbf24, #f59e0b); 
+        color: #1e293b; 
+        padding: 1.3rem; 
+        border-radius: 20px; 
+        border: none; 
+        font-weight: 800; 
+        font-size: 1.1rem;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(251, 191, 36, 0.2);
+    }
+    .secondary-btn { 
+        background: rgba(255, 255, 255, 0.05); 
+        color: #f8fafc; 
+        padding: 1.3rem; 
+        border-radius: 20px; 
+        border: 1px solid rgba(255, 255, 255, 0.1); 
+        font-weight: 700; 
+        font-size: 1rem;
+        cursor: pointer; 
+    }
+
+    /* Saved List */
+    .saved-container { padding: 1rem; }
+    .saved-list { display: grid; gap: 1rem; }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 5rem 2rem;
+        color: #64748b;
+        background: rgba(30, 41, 59, 0.3);
+        border-radius: 24px;
+        margin: 2rem 0;
+    }
+    .empty-state p { margin-bottom: 1rem; font-size: 1.1rem; }
+    .retry-btn {
+        background: rgba(96, 165, 250, 0.2);
+        color: #60a5fa;
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        padding: 0.8rem 1.5rem;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+        .options-grid { grid-template-columns: 1fr; }
+        .question-text { font-size: 1.6rem; }
+        .flashcard-text { font-size: 1.8rem; }
+        .flashcard-wrapper { height: 350px; }
     }
 `;
 document.head.appendChild(style);
