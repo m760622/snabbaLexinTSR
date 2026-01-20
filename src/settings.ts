@@ -533,13 +533,45 @@ const UIController = {
         }
 
         if (container) {
-            container.innerHTML = recommendations.map(rec => `
-                <div class="recommendation-item">
-                    <div class="rec-item-icon">${rec.icon}</div>
-                    <div class="rec-item-text"><span class="sv-text">${rec.textSv}</span><span class="ar-text">${rec.textAr}</span></div>
-                    <span class="rec-item-action"><span class="sv-text">${rec.actionSv}</span><span class="ar-text">${rec.actionAr}</span></span>
-                </div>
-            `).join('');
+            // XSS-Safe: Build DOM elements programmatically
+            container.innerHTML = '';
+
+            recommendations.forEach(rec => {
+                const item = document.createElement('div');
+                item.className = 'recommendation-item';
+
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'rec-item-icon';
+                iconDiv.textContent = rec.icon;
+
+                const textDiv = document.createElement('div');
+                textDiv.className = 'rec-item-text';
+                const svText = document.createElement('span');
+                svText.className = 'sv-text';
+                svText.textContent = rec.textSv;
+                const arText = document.createElement('span');
+                arText.className = 'ar-text';
+                arText.textContent = rec.textAr;
+                textDiv.appendChild(svText);
+                textDiv.appendChild(arText);
+
+                const actionSpan = document.createElement('span');
+                actionSpan.className = 'rec-item-action';
+                const actionSv = document.createElement('span');
+                actionSv.className = 'sv-text';
+                actionSv.textContent = rec.actionSv;
+                const actionAr = document.createElement('span');
+                actionAr.className = 'ar-text';
+                actionAr.textContent = rec.actionAr;
+                actionSpan.appendChild(actionSv);
+                actionSpan.appendChild(actionAr);
+
+                item.appendChild(iconDiv);
+                item.appendChild(textDiv);
+                item.appendChild(actionSpan);
+
+                container.appendChild(item);
+            });
         }
     },
 
@@ -571,20 +603,22 @@ const UIController = {
         const settings = SettingsManager.get();
 
         if (grid) {
-            grid.innerHTML = avatars.map(avatar => `
-                <button class="avatar-option ${avatar === settings.avatar ? 'selected' : ''}" data-avatar="${avatar}">
-                    ${avatar}
-                </button>
-            `).join('');
+            // XSS-Safe: Build DOM elements programmatically
+            grid.innerHTML = '';
 
-            grid.querySelectorAll('.avatar-option').forEach(btn => {
+            avatars.forEach(avatar => {
+                const btn = document.createElement('button');
+                btn.className = `avatar-option ${avatar === settings.avatar ? 'selected' : ''}`;
+                btn.dataset.avatar = avatar; // Safe - dataset escapes automatically
+                btn.textContent = avatar; // XSS-safe
+
                 btn.addEventListener('click', () => {
-                    const avatar = btn.getAttribute('data-avatar') || '👤';
-                    SettingsManager.update('avatar', avatar);
+                    const selectedAvatar = btn.dataset.avatar || '👤';
+                    SettingsManager.update('avatar', selectedAvatar);
 
                     // Update display
                     const avatarEmoji = document.querySelector('.avatar-emoji');
-                    if (avatarEmoji) avatarEmoji.textContent = avatar;
+                    if (avatarEmoji) avatarEmoji.textContent = selectedAvatar;
 
                     // Update selection
                     grid.querySelectorAll('.avatar-option').forEach(b => b.classList.remove('selected'));
@@ -593,6 +627,8 @@ const UIController = {
                     closeAvatarModal();
                     showToast('✅ ' + t('settings.avatarChanged'));
                 });
+
+                grid.appendChild(btn);
             });
         }
     },

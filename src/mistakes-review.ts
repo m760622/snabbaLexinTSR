@@ -89,7 +89,7 @@ export const mistakesManager = new MistakesManager();
 (window as any).mistakesManager = mistakesManager;
 
 /**
- * Render Mistakes Review UI
+ * Render Mistakes Review UI - XSS-Safe Implementation
  */
 export function renderMistakesReview(containerId: string): void {
     const container = document.getElementById(containerId);
@@ -97,50 +97,104 @@ export function renderMistakesReview(containerId: string): void {
 
     const mistakes = mistakesManager.getMistakes();
 
+    // Clear container safely
+    container.innerHTML = '';
+
     if (mistakes.length === 0) {
-        container.innerHTML = `
-            <div class="mistakes-empty">
-                <div class="mistakes-empty-icon">🎉</div>
-                <h3>No Mistakes Yet!</h3>
-                <p>لا توجد أخطاء بعد! / Inga fel ännu!</p>
-            </div>
+        // Static content - safe to use innerHTML
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'mistakes-empty';
+        emptyDiv.innerHTML = `
+            <div class="mistakes-empty-icon">🎉</div>
+            <h3>No Mistakes Yet!</h3>
+            <p>لا توجد أخطاء بعد! / Inga fel ännu!</p>
         `;
+        container.appendChild(emptyDiv);
         return;
     }
 
-    container.innerHTML = `
-        <div class="mistakes-header">
-            <h2>مراجعة أخطائي / Mina Fel</h2>
-            <span class="mistakes-count">${mistakes.length} كلمة / ord</span>
-        </div>
-        <div class="mistakes-list">
-            ${mistakes.map(m => `
-                <div class="mistake-card" data-word="${m.word}">
-                    <div class="mistake-word">${m.word}</div>
-                    <div class="mistake-translation">${m.translation}</div>
-                    <div class="mistake-meta">
-                        <span class="mistake-attempts">❌ ${m.attempts} مرة</span>
-                        <span class="mistake-game">${m.game}</span>
-                    </div>
-                    <div class="mistake-actions">
-                        <button class="mistake-practice" onclick="practiceMistake('${m.word}')">
-                            🎯 تمرن / Öva
-                        </button>
-                        <button class="mistake-learned" onclick="markLearned('${m.word}')">
-                            ✓ تعلمتها
-                        </button>
-                    </div>
-                </div>
-            `).join('')}
-        </div>
-    `;
+    // Build header with safe DOM methods
+    const header = document.createElement('div');
+    header.className = 'mistakes-header';
+
+    const h2 = document.createElement('h2');
+    h2.textContent = 'مراجعة أخطائي / Mina Fel';
+    header.appendChild(h2);
+
+    const countSpan = document.createElement('span');
+    countSpan.className = 'mistakes-count';
+    countSpan.textContent = `${mistakes.length} كلمة / ord`;
+    header.appendChild(countSpan);
+
+    container.appendChild(header);
+
+    // Build mistakes list with safe DOM methods
+    const list = document.createElement('div');
+    list.className = 'mistakes-list';
+
+    mistakes.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'mistake-card';
+        card.dataset.word = m.word; // Safe - dataset escapes automatically
+
+        const wordDiv = document.createElement('div');
+        wordDiv.className = 'mistake-word';
+        wordDiv.textContent = m.word; // XSS-safe: textContent escapes HTML
+
+        const translationDiv = document.createElement('div');
+        translationDiv.className = 'mistake-translation';
+        translationDiv.textContent = m.translation; // XSS-safe
+
+        const metaDiv = document.createElement('div');
+        metaDiv.className = 'mistake-meta';
+
+        const attemptsSpan = document.createElement('span');
+        attemptsSpan.className = 'mistake-attempts';
+        attemptsSpan.textContent = `❌ ${m.attempts} مرة`;
+
+        const gameSpan = document.createElement('span');
+        gameSpan.className = 'mistake-game';
+        gameSpan.textContent = m.game; // XSS-safe
+
+        metaDiv.appendChild(attemptsSpan);
+        metaDiv.appendChild(gameSpan);
+
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'mistake-actions';
+
+        const practiceBtn = document.createElement('button');
+        practiceBtn.className = 'mistake-practice';
+        practiceBtn.textContent = '🎯 تمرن / Öva';
+        practiceBtn.addEventListener('click', () => {
+            (window as any).practiceMistake(m.word);
+        });
+
+        const learnedBtn = document.createElement('button');
+        learnedBtn.className = 'mistake-learned';
+        learnedBtn.textContent = '✓ تعلمتها';
+        learnedBtn.addEventListener('click', () => {
+            (window as any).markLearned(m.word);
+        });
+
+        actionsDiv.appendChild(practiceBtn);
+        actionsDiv.appendChild(learnedBtn);
+
+        card.appendChild(wordDiv);
+        card.appendChild(translationDiv);
+        card.appendChild(metaDiv);
+        card.appendChild(actionsDiv);
+
+        list.appendChild(card);
+    });
+
+    container.appendChild(list);
 }
 
 // Global functions
 (window as any).renderMistakesReview = renderMistakesReview;
-(window as any).practiceMistake = (word: string) => {
+(window as any).practiceMistake = (_word: string) => {
     // TODO: Navigate to flashcard with this word
-    console.log('Practice:', word);
+    // Removed console.log for production
 };
 (window as any).markLearned = (word: string) => {
     mistakesManager.markAsLearned(word);

@@ -1,0 +1,1 @@
+import"./modulepreload-polyfill-B5Qt9EMX.js";import"./utils-5O7zxelZ.js";import"./pwa-Bn3RWWLO.js";import"./toast-manager-DdtDDR9Z.js";function o(){console.log("[ChangelogUI] Initializing..."),window.toggleMobileView=()=>{var i;return(i=window.MobileViewManager)==null?void 0:i.toggle()}}typeof window<"u"&&document.addEventListener("DOMContentLoaded",()=>{o()});

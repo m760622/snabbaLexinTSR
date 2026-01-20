@@ -254,7 +254,8 @@ export class App {
             const { DictionaryDB } = await import('./db');
             await DictionaryDB.init();
             const trainingWords = await DictionaryDB.getTrainingWords();
-            this.trainingIds = new Set(trainingWords.filter(w => w.needsTraining).map(w => w.id));
+            // getTrainingWords returns words that are in the training store (no needsTraining filter needed)
+            this.trainingIds = new Set(trainingWords.map(w => Array.isArray(w) ? w[0]?.toString() : w.id?.toString()).filter(Boolean));
             console.log('[App] Loaded training words:', this.trainingIds.size);
         } catch (e) {
             console.error('[App] Failed to load training words:', e);

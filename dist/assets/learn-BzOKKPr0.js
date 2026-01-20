@@ -1,0 +1,988 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/db-C5HhRm-y.js","assets/config-BpQc0ceR.js"])))=>i.map(i=>d[i]);
+import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css              */import{normalizeArabic as R}from"./utils-5O7zxelZ.js";import{_ as ae}from"./preload-helper-D7HrI6pR.js";import{T as F}from"./tts-CfZZetlp.js";import{c as re}from"./LearnViewManager-Cv5S66Z5.js";import{d as te}from"./performance-utils-PTy-sCWq.js";import{DictionaryDB as M}from"./db-C5HhRm-y.js";import{L as se}from"./i18n-BpwFYk4h.js";import"./pwa-Bn3RWWLO.js";import"./toast-manager-DdtDDR9Z.js";import"./config-BpQc0ceR.js";const m=[{id:"wordOrder",title:"📝 Ordföljd - V2-regeln",level:"intermediate",sections:[{title:"🎯 Vad är V2-regeln?",content:[{type:"p",html:"I svenska huvudsatser står verbet ALLTID på plats 2. Det spelar ingen roll vad som kommer först!"},{type:"p",html:"في الجمل السويدية الرئيسية، يأتي الفعل دائماً في الموضع الثاني!"}],examples:[]},{title:"📚 Struktur",content:[{type:"div",html:`
+                    <strong>Plats 1</strong> + <strong>VERB</strong> + Subjekt + Resten
+                `}],examples:[]},{title:"💡 50 Exempel / أمثلة",content:[],examples:[{swe:"1. Jag äter frukost varje dag.",arb:"أنا آكل الفطور كل يوم."},{swe:"2. Idag äter jag frukost tidigt.",arb:"اليوم آكل الفطور باكراً. (الفعل في الموضع الثاني)"},{swe:"3. På morgonen dricker vi kaffe.",arb:"في الصباح نشرب القهوة."},{swe:"4. Igår köpte hon en ny bok.",arb:"أمس اشترت كتاباً جديداً."},{swe:"5. I Sverige talar man svenska.",arb:"في السويد يتحدث المرء السويدية."},{swe:"6. Varje helg spelar de fotboll.",arb:"كل عطلة نهاية أسبوع يلعبون كرة القدم."},{swe:"7. Förra året reste vi till Spanien.",arb:"العام الماضي سافرنا إلى إسبانيا."},{swe:"8. Sedan gick han hem.",arb:"ثم ذهب إلى المنزل."},{swe:"9. Tyvärr kan jag inte komma.",arb:"للأسف لا أستطيع المجيء."},{swe:"10. Nu måste du lyssna!",arb:"الآن يجب أن تستمع!"},{swe:"11. Snart kommer bussen.",arb:"قريباً سيأتي الحافلة."},{swe:"12. Kanske vill hon stanna.",arb:"ربما تريد البقاء."},{swe:"13. Här bor min familj.",arb:"هنا تعيش عائلتي."},{swe:"14. Därför stannade vi hemma.",arb:"لذلك بقينا في المنزل."},{swe:"15. Ofta läser jag tidningen.",arb:"غالباً أقرأ الجريدة."},{swe:"16. Aldrig har jag sett något sådant.",arb:"أبداً لم أرَ شيئاً كهذا."},{swe:"17. Ibland går vi på bio.",arb:"أحياناً نذهب إلى السينما."},{swe:"18. I köket lagar mamma mat.",arb:"في المطبخ تطبخ أمي الطعام."},{swe:"19. Plötsligt ringde telefonen.",arb:"فجأة رن الهاتف."},{swe:"20. Alltid kommer han för sent.",arb:"دائماً يأتي متأخراً."},{swe:"21. Nästa vecka börjar kursen.",arb:"الأسبوع القادم تبدأ الدورة."},{swe:"22. På kvällen tittar vi på TV.",arb:"في المساء نشاهد التلفزيون."},{swe:"23. Till slut hittade hon nycklarna.",arb:"في النهاية وجدت المفاتيح."},{swe:"24. Naturligtvis hjälper jag dig.",arb:"بالطبع سأساعدك."},{swe:"25. I Stockholm finns många museer.",arb:"في ستوكهولم توجد متاحف كثيرة."},{swe:"26. Under sommaren badar vi ofta.",arb:"خلال الصيف نسبح كثيراً."},{swe:"27. Egentligen ville jag inte gå.",arb:"في الحقيقة لم أكن أريد الذهاب."},{swe:"28. På natten sover alla.",arb:"في الليل ينام الجميع."},{swe:"29. Först åt vi middag.",arb:"أولاً تناولنا العشاء."},{swe:"30. Sedan gick vi på bio.",arb:"ثم ذهبنا إلى السينما."},{swe:"31. Sällan äter jag kött.",arb:"نادراً ما آكل اللحم."},{swe:"32. Faktiskt gillar jag inte det.",arb:"في الواقع لا أحب ذلك."},{swe:"33. I morse vaknade jag tidigt.",arb:"هذا الصباح استيقظت باكراً."},{swe:"34. Förmodligen kommer det att regna.",arb:"على الأرجح سيمطر."},{swe:"35. Då visste jag inte svaret.",arb:"حينها لم أكن أعرف الجواب."},{swe:"36. Med bilen kör vi till jobbet.",arb:"بالسيارة نذهب إلى العمل."},{swe:"37. Enligt läkaren mår jag bra.",arb:"بحسب الطبيب أنا بخير."},{swe:"38. Troligen har han rätt.",arb:"على الأرجح هو على حق."},{swe:"39. Utan tvekan är hon bäst.",arb:"بدون شك هي الأفضل."},{swe:"40. Lyckligtvis kunde vi hjälpa.",arb:"لحسن الحظ استطعنا المساعدة."},{swe:"41. På vintern snöar det mycket.",arb:"في الشتاء يتساقط الثلج كثيراً."},{swe:"42. Antagligen stannar han hemma.",arb:"على الأرجح سيبقى في المنزل."},{swe:"43. I affären köpte vi mjölk.",arb:"في المتجر اشترينا الحليب."},{swe:"44. Dessvärre missade jag bussen.",arb:"للأسف فاتني الباص."},{swe:"45. Vanligtvis vaknar jag klockan sju.",arb:"عادةً أستيقظ الساعة السابعة."},{swe:"46. Dit ska vi åka imorgon.",arb:"إلى هناك سنذهب غداً."},{swe:"47. Givetvis tar jag med kaffe.",arb:"بالتأكيد سأحضر القهوة."},{swe:"48. Ute spelar barnen.",arb:"في الخارج يلعب الأطفال."},{swe:"49. Inne är det varmt.",arb:"في الداخل الجو دافئ."},{swe:"50. Hemma hos oss äter vi klockan sex.",arb:"في منزلنا نأكل الساعة السادسة."}]},{title:"⚠️ Vanliga misstag",content:[],examples:[]}]},{id:"pronouns",title:"👤 Pronomen",level:"beginner",sections:[{title:"📋 Personliga pronomen - Subjekt",content:[],examples:[]},{title:"📋 Personliga pronomen - Objekt",content:[],examples:[]},{title:"💡 50 Exempel / أمثلة",content:[],examples:[{swe:"1. Jag älskar dig.",arb:"أنا أحبك."},{swe:"2. Han ser mig varje dag.",arb:"هو يراني كل يوم."},{swe:"3. Vi hjälper dem med läxorna.",arb:"نحن نساعدهم في الواجبات."},{swe:"4. Kan du ge mig boken?",arb:"هل يمكنك إعطائي الكتاب؟"},{swe:"5. Hon ringde honom igår.",arb:"هي اتصلت به أمس."},{swe:"6. De besökte oss i helgen.",arb:"هم زارونا في عطلة نهاية الأسبوع."},{swe:"7. Jag träffade henne på jobbet.",arb:"قابلتها في العمل."},{swe:"8. Läraren frågade er om svaret.",arb:"المعلم سألكم عن الإجابة."},{swe:"9. Min mamma lagade mat åt oss.",arb:"أمي طبخت الطعام لنا."},{swe:"10. Barnen lyssnade på honom.",arb:"الأطفال استمعوا إليه."},{swe:"11. Det är mitt hus.",arb:"هذا منزلي."},{swe:"12. Hon tog sin väska.",arb:"أخذت حقيبتها."},{swe:"13. Han glömde sin bok.",arb:"نسي كتابه."},{swe:"14. Vi älskar vår stad.",arb:"نحب مدينتنا."},{swe:"15. De sålde sitt hus.",arb:"باعوا منزلهم."},{swe:"16. Jag ser mig själv i spegeln.",arb:"أرى نفسي في المرآة."},{swe:"17. Hon tvättar sig varje morgon.",arb:"تغسل نفسها كل صباح."},{swe:"18. De skyndar sig till skolan.",arb:"يسرعون إلى المدرسة."},{swe:"19. Vem ringde dig?",arb:"من اتصل بك؟"},{swe:"20. Vilken är din favorit?",arb:"أيهم مفضلك؟"},{swe:"21. Det regnar idag.",arb:"إنها تمطر اليوم."},{swe:"22. Man kan inte göra så.",arb:"لا يمكن للمرء فعل ذلك."},{swe:"23. Någon knackade på dörren.",arb:"شخص ما طرق الباب."},{swe:"24. Ingen förstår mig.",arb:"لا أحد يفهمني."},{swe:"25. Alla älskar choklad.",arb:"الجميع يحب الشوكولاتة."},{swe:"26. Hon gav mig en present.",arb:"أعطتني هدية."},{swe:"27. Jag ska berätta det för dig.",arb:"سأخبرك بذلك."},{swe:"28. Han lärde oss svenska.",arb:"علمنا السويدية."},{swe:"29. Kan jag hjälpa er?",arb:"هل يمكنني مساعدتكم؟"},{swe:"30. Det här är hennes bil.",arb:"هذه سيارتها."},{swe:"31. Boken är hans.",arb:"الكتاب له."},{swe:"32. Huset är vårt.",arb:"المنزل لنا."},{swe:"33. Pengarna är deras.",arb:"المال لهم."},{swe:"34. Är det ert problem?",arb:"هل هذه مشكلتكم؟"},{swe:"35. Jag känner mig trött.",arb:"أشعر بالتعب."},{swe:"36. Han skäms för sig själv.",arb:"يخجل من نفسه."},{swe:"37. Vi träffades på festen.",arb:"تقابلنا في الحفلة."},{swe:"38. De hjälper varandra.",arb:"يساعدون بعضهم البعض."},{swe:"39. Varför ringde du inte till mig?",arb:"لماذا لم تتصل بي؟"},{swe:"40. Jag saknar dig mycket.",arb:"أفتقدك كثيراً."},{swe:"41. Hon tänker på honom.",arb:"تفكر فيه."},{swe:"42. Vi litar på er.",arb:"نثق بكم."},{swe:"43. De skrattade åt oss.",arb:"ضحكوا علينا."},{swe:"44. Hon presenterade sig.",arb:"قدمت نفسها."},{swe:"45. Jag lugnade ner mig.",arb:"هدأت نفسي."},{swe:"46. Han klär på sig snabbt.",arb:"يرتدي ملابسه بسرعة."},{swe:"47. Vi bestämde oss för att stanna.",arb:"قررنا البقاء."},{swe:"48. De log mot mig.",arb:"ابتسموا لي."},{swe:"49. Jag pratade med henne i telefon.",arb:"تحدثت معها عبر الهاتف."},{swe:"50. Han skickade ett meddelande till dem.",arb:"أرسل رسالة لهم."}]}]},{id:"verbs",title:"🏃 Verb och tempus",level:"beginner",sections:[{title:"⏰ Tempus (الأزمنة)",content:[{type:"div",html:`
+                    <strong>Infinitiv:</strong> att tala (أن يتكلم)<br>
+                    <strong>Presens:</strong> talar (يتكلم - الآن)<br>
+                    <strong>Preteritum:</strong> talade (تكلم - في الماضي)<br>
+                    <strong>Perfekt:</strong> har talat (قد تكلم)
+                `}],examples:[]},{title:"📊 Verbgrupper",content:[{type:"div",html:`
+                    <strong>Grupp 1:</strong> tala → talar → talade → har talat (-ar)<br>
+                    <strong>Grupp 2:</strong> läsa → läser → läste → har läst (-er)<br>
+                    <strong>Grupp 3:</strong> bo → bor → bodde → har bott (-r)<br>
+                    <strong>Grupp 4:</strong> skriva → skriver → skrev → har skrivit (oregelbundna)
+                `}],examples:[]},{title:"💡 50 Exempel / أمثلة",content:[],examples:[{swe:"1. Jag arbetar på ett kontor. (Presens)",arb:"أعمل في مكتب. (المضارع)"},{swe:"2. Hon läste en bok igår. (Preteritum)",arb:"قرأت كتاباً أمس. (الماضي)"},{swe:"3. Vi har bott här i tre år. (Perfekt)",arb:"سكنا هنا منذ ثلاث سنوات. (التام)"},{swe:"4. De ska resa till Spanien. (Futurum)",arb:"سوف يسافرون إلى إسبانيا. (المستقبل)"},{swe:"5. Han dricker kaffe varje morgon.",arb:"يشرب القهوة كل صباح."},{swe:"6. Barnen lekte i parken hela dagen.",arb:"لعب الأطفال في الحديقة طوال اليوم."},{swe:"7. Jag har ätit lunch redan.",arb:"تناولت الغداء بالفعل."},{swe:"8. Hon kommer att hjälpa dig imorgon.",arb:"ستساعدك غداً."},{swe:"9. Vi tittade på en film i helgen.",arb:"شاهدنا فيلماً في عطلة نهاية الأسبوع."},{swe:"10. De har skrivit ett långt brev.",arb:"كتبوا رسالة طويلة."},{swe:"11. Jag springer varje morgon.",arb:"أركض كل صباح."},{swe:"12. Hon sjöng en vacker sång.",arb:"غنت أغنية جميلة."},{swe:"13. Vi har köpt ett nytt hus.",arb:" اشترينا منزلاً جديداً."},{swe:"14. De ska flytta nästa månad.",arb:"سينتقلون الشهر القادم."},{swe:"15. Han sover fortfarande.",arb:"لا يزال نائماً."},{swe:"16. Jag vaknade klockan sex.",arb:"استيقظت الساعة السادسة."},{swe:"17. Hon har tränat hela dagen.",arb:"تدربت طوال اليوم."},{swe:"18. Vi kommer att vinna matchen.",arb:"سنفوز بالمباراة."},{swe:"19. De lagar middag nu.",arb:"يطبخون العشاء الآن."},{swe:"20. Han glömde sina nycklar.",arb:"نسي مفاتيحه."},{swe:"21. Jag har lärt mig svenska.",arb:"تعلمت السويدية."},{swe:"22. Hon vill resa till Japan.",arb:"تريد السفر إلى اليابان."},{swe:"23. Vi måste gå nu.",arb:"يجب أن نذهب الآن."},{swe:"24. De kan simma bra.",arb:"يستطيعون السباحة جيداً."},{swe:"25. Han borde studera mer.",arb:"يجب أن يدرس أكثر."},{swe:"26. Jag brukar äta frukost tidigt.",arb:"عادةً آكل الفطور باكراً."},{swe:"27. Hon fortsätter att arbeta.",arb:"تستمر في العمل."},{swe:"28. Vi slutade spela fotboll.",arb:"توقفنا عن لعب كرة القدم."},{swe:"29. De började lära sig svenska.",arb:"بدأوا تعلم السويدية."},{swe:"30. Han hoppades kunna komma.",arb:"كان يأمل أن يتمكن من المجيء."},{swe:"31. Jag förstår inte.",arb:"لا أفهم."},{swe:"32. Hon blev sjuk.",arb:"مرضت."},{swe:"33. Vi har sett den filmen.",arb:"شاهدنا ذلك الفيلم."},{swe:"34. De kommer att stanna hemma.",arb:"سيبقون في المنزل."},{swe:"35. Han gick till skolan.",arb:"ذهب إلى المدرسة."},{swe:"36. Jag satt på bussen.",arb:"جلست في الحافلة."},{swe:"37. Hon stod och väntade.",arb:"وقفت تنتظر."},{swe:"38. Vi låg på stranden.",arb:"استلقينا على الشاطئ."},{swe:"39. De vet svaret.",arb:"يعرفون الجواب."},{swe:"40. Han visste inte vad han skulle göra.",arb:"لم يكن يعرف ماذا يفعل."},{swe:"41. Jag behöver hjälp.",arb:"أحتاج مساعدة."},{swe:"42. Hon heter Anna.",arb:"اسمها آنا."},{swe:"43. Vi tycker om att resa.",arb:"نحب السفر."},{swe:"44. De tyckte att filmen var bra.",arb:"اعتقدوا أن الفيلم كان جيداً."},{swe:"45. Han försöker lära sig varje dag.",arb:"يحاول التعلم كل يوم."},{swe:"46. Jag klarade provet!",arb:"نجحت في الامتحان!"},{swe:"47. Hon har jobbat här i fem år.",arb:"عملت هنا منذ خمس سنوات."},{swe:"48. Vi ska träffas imorgon.",arb:"سنتقابل غداً."},{swe:"49. De bad om ursäkt.",arb:"طلبوا العفو."},{swe:"50. Han hade glömt boken hemma.",arb:"كان قد نسي الكتاب في المنزل."}]}]},{id:"adjectives",title:"🎨 Adjektiv",level:"beginner",sections:[{title:"📋 Böjning efter genus",content:[{type:"div",html:`
+                    <strong>En-ord:</strong> en stor bil (سيارة كبيرة)<br>
+                    <strong>Ett-ord:</strong> ett stort hus (بيت كبير)<br>
+                    <strong>Plural:</strong> stora bilar / stora hus (كبار)<br>
+                    <strong>Bestämd:</strong> den stora bilen (السيارة الكبيرة)
+                `}],examples:[]},{title:"💡 50 Exempel / أمثلة",content:[],examples:[{swe:"1. en vacker blomma → ett vackert träd",arb:"زهرة جميلة → شجرة جميلة"},{swe:"2. en grön bil → ett grönt äpple",arb:"سيارة خضراء → تفاحة خضراء"},{swe:"3. Den gamla mannen bor här.",arb:"الرجل العجوز يسكن هنا."},{swe:"4. Det lilla barnet sover.",arb:"الطفل الصغير ينام."},{swe:"5. Röda rosor är vackra.",arb:"الورود الحمراء جميلة."},{swe:"6. Han köpte en ny dator → ett nytt hus.",arb:"اشترى حاسوباً جديداً → بيتاً جديداً."},{swe:"7. Katten är svart. Huset är vitt.",arb:"القطة سوداء. البيت أبيض."},{swe:`8. Det är en snabb bil → Det är ett snabbt tåg.
+                    `,arb:"إنها سيارة سريعة → إنه قطار سريع."},{swe:"9. De höga bergen ligger i norr.",arb:"الجبال العالية تقع في الشمال."},{swe:"10. Det var en kall vinter → ett kallt år.",arb:"كان شتاءً بارداً → سنة باردة."},{swe:"11. en stor stad → ett stort land",arb:"مدينة كبيرة → بلد كبير"},{swe:"12. en liten hund → ett litet barn",arb:"كلب صغير → طفل صغير"},{swe:"13. Det är dyrt att bo i Stockholm.",arb:"من المكلف السكن في ستوكهولم."},{swe:"14. Hon har långt hår.",arb:"لديها شعر طويل."},{swe:"15. Han är stark och modig.",arb:"هو قوي وشجاع."},{swe:"16. Den svenska sommaren är kort.",arb:"الصيف السويدي قصير."},{swe:"17. Det varma vädret fortsätter.",arb:"الطقس الدافئ مستمر."},{swe:"18. Jag gillar färska grönsaker.",arb:"أحب الخضروات الطازجة."},{swe:"19. Det är en intressant bok.",arb:"إنه كتاب مثير للاهتمام."},{swe:"20. Han är en ärlig person.",arb:"هو شخص صادق."},{swe:"21. Det är svårt att lära sig svenska.",arb:"من الصعب تعلم السويدية."},{swe:"22. Det är lätt att förstå.",arb:"من السهل الفهم."},{swe:"23. en söt kaka → ett sött äpple",arb:"كعكة حلوة → تفاحة حلوة"},{swe:"24. en sur citron → ett surt bär",arb:"ليمونة حامضة → توت حامض"},{swe:"25. Maten var god. Vinet var gott.",arb:"كان الطعام لذيذاً. كان النبيذ لذيذاً."},{swe:"26. Jobbet är tråkigt.",arb:"العمل ممل."},{swe:"27. Filmen var spännande.",arb:"كان الفيلم مثيراً."},{swe:"28. Hon är glad idag.",arb:"هي سعيدة اليوم."},{swe:"29. Han ser ledsen ut.",arb:"يبدو حزيناً."},{swe:"30. Barnet är trött.",arb:"الطفل متعب."},{swe:"31. Den rika mannen äger många hus.",arb:"الرجل الغني يملك منازل كثيرة."},{swe:"32. Det fattiga området behöver hjälp.",arb:"المنطقة الفقيرة تحتاج مساعدة."},{swe:"33. en bred väg → ett brett fält",arb:"طريق عريض → حقل عريض"},{swe:"34. en smal gata → ett smalt rum",arb:"شارع ضيق → غرفة ضيقة"},{swe:"35. Väskan är tung.",arb:"الحقيبة ثقيلة."},{swe:"36. paketet är lätt.",arb:"الطرد خفيف."},{swe:"37. Han är en klok man.",arb:"هو رجل حكيم."},{swe:"38. Hon är mycket smart.",arb:"هي ذكية جداً."},{swe:"39. Det var ett roligt skämt.",arb:"كانت نكتة مضحكة."},{swe:"40. Hon har en vänlig personlighet.",arb:"لديها شخصية لطيفة."},{swe:"41. Det är ett farligt djur.",arb:"إنه حيوان خطير."},{swe:"42. Det är en säker plats.",arb:"إنه مكان آمن."},{swe:"43. en ren skjorta → ett rent rum",arb:"قميص نظيف → غرفة نظيفة"},{swe:"44. en smutsig bil → ett smutsigt golv",arb:"سيارة متسخة → أرضية متسخة"},{swe:"45. Det blå havet är vackert.",arb:"البحر الأزرق جميل."},{swe:"46. Han bär en grå kostym.",arb:"يرتدي بدلة رمادية."},{swe:"47. Det är ett viktigt beslut.",arb:"إنه قرار مهم."},{swe:"48. Hon har ett lyckligt liv.",arb:"لديها حياة سعيدة."},{swe:"49. Det var en underbar upplevelse.",arb:"كانت تجربة رائعة."},{swe:"50. Han är en erfaren lärare.",arb:"هو معلم ذو خبرة."}]}]},{id:"prepositions",title:"📍 Prepositioner",level:"intermediate",sections:[{title:"📋 Vanliga prepositioner",content:[{type:"div",html:`
+                    <strong>i</strong> = i | <strong>på</strong> = på | <strong>till</strong> = till<br>
+                    <strong>från</strong> = från | <strong>med</strong> = med | <strong>utan</strong> = utan<br>
+                    <strong>för</strong> = för | <strong>av</strong> = av | <strong>om</strong> = om
+                `}],examples:[]},{title:"💡 50 Exempel / أمثلة",content:[],examples:[{swe:"1. Boken ligger på bordet.",arb:"الكتاب موجود على الطاولة."},{swe:"2. Hon bor i Stockholm.",arb:"هي تسكن في ستوكهولم."},{swe:"3. Vi går till skolan varje dag.",arb:"نذهب إلى المدرسة كل يوم."},{swe:"4. Han kommer från Syrien.",arb:"هو قادم من سوريا."},{swe:"5. Jag dricker kaffe med mjölk.",arb:"أشرب القهوة مع الحليب."},{swe:"6. De åt middag utan oss.",arb:"تناولوا العشاء بدوننا."},{swe:"7. Det är en present för dig.",arb:"هذه هدية لك."},{swe:"8. Boken är skriven av Astrid Lindgren.",arb:"الكتاب مكتوب من قبل أستريد ليندغرين."},{swe:"9. Vi pratade om resan.",arb:"تحدثنا عن الرحلة."},{swe:"10. Katten sitter under bordet.",arb:"القطة تجلس تحت الطاولة."},{swe:"11. Lampan hänger över bordet.",arb:"المصباح معلق فوق الطاولة."},{swe:"12. Han står framför huset.",arb:"يقف أمام البيت."},{swe:"13. Bilen är parkerad bakom byggnaden.",arb:"السيارة واقفة خلف المبنى."},{swe:"14. Affären ligger bredvid banken.",arb:"المتجر بجانب البنك."},{swe:"15. Vi bor nära stationen.",arb:"نسكن قريباً من المحطة."},{swe:"16. De bor långt från staden.",arb:"يسكنون بعيداً عن المدينة."},{swe:"17. Jag arbetar för ett stort företag.",arb:"أعمل عند شركة كبيرة."},{swe:"18. Vi träffas efter jobbet.",arb:"نتقابل بعد العمل."},{swe:"19. Jag äter frukost före skolan.",arb:"آكل الفطور قبل المدرسة."},{swe:"20. Han kom vid midnatt.",arb:"وصل عند منتصف الليل."},{swe:"21. Vi går genom tunneln.",arb:"نمر عبر النفق."},{swe:"22. Tåget går norrut.",arb:"القطار يتجه نحو الشمال."},{swe:"23. Hon gick längs stranden.",arb:"مشت على طول الشاطئ."},{swe:"24. Fågeln flög över sjön.",arb:"طار الطائر فوق البحيرة."},{swe:"25. Vi arbetar under natten.",arb:"نعمل خلال الليل."},{swe:"26. Jag bor mellan skolan och parken.",arb:"أسكن بين المدرسة والحديقة."},{swe:"27. Alla utom han kom till festen.",arb:"الجميع ما عداه حضر الحفلة."},{swe:"28. Jag bor hos mina föräldrar.",arb:"أسكن عند والديّ."},{swe:"29. Mötet slutade klockan tre.",arb:"انتهى الاجتماع عند الثالثة."},{swe:"30. Hon tittar på TV varje kväll.",arb:"تشاهد التلفزيون كل مساء."},{swe:"31. Vi väntar på bussen.",arb:"ننتظر الحافلة."},{swe:"32. Han tänker på dig.",arb:"يفكر فيك."},{swe:"33. Jag är rädd för hundar.",arb:"أخاف من الكلاب."},{swe:"34. Vi är på semester i Spanien.",arb:"نحن في إجازة في إسبانيا."},{swe:"35. Hon tränar i parken.",arb:"تتدرب في الحديقة."},{swe:"36. Jag sitter i soffan.",arb:"أجلس في الأريكة."},{swe:"37. Han är intresserad av konst.",arb:"هو مهتم بالفن."},{swe:"38. Jag drömmer om att resa.",arb:"أحلم بالسفر."},{swe:"39. Festen börjar om en timme.",arb:"الحفلة تبدأ بعد ساعة."},{swe:"40. Hon är duktig på matte.",arb:"هي جيدة في الرياضيات."},{swe:"41. Jag är trött på att vänta.",arb:"أنا تعبان من الانتظار."},{swe:"42. Vi åker med tåg till Göteborg.",arb:"نسافر بالقطار إلى يوتبوري."},{swe:"43. Han betalar med kort.",arb:"يدفع بالبطاقة."},{swe:"44. Jag är klar med läxorna.",arb:"انتهيت من الواجبات."},{swe:"45. Hon går till gymmet varje dag.",arb:"تذهب إلى الجيم كل يوم."},{swe:"46. Min bror bor i Södermalm.",arb:"أخي يسكن في سودرمالم."},{swe:"47. Jag jobbar i en affär.",arb:"أعمل في محل."},{swe:"48. Katten hoppade på bordet.",arb:"قفزت القطة على الطاولة."},{swe:"49. Hon lämnade rummet.",arb:"خرجت من الغرفة."},{swe:"50. Vi gick runt sjön.",arb:"تمشينا حول البحيرة."}]}]},{id:"gender",title:"⚖️ En-ord och Ett-ord",level:"beginner",sections:[{title:"📋 Regler",content:[{type:"p",html:"Svenska har två genus: <strong>utrum (en)</strong> och <strong>neutrum (ett)</strong>"},{type:"p",html:"السويدية لها نوعان: (en) و (ett)"},{type:"div",html:`
+                    <strong>En-ord (≈75%):</strong> en bok, en stol, en bil<br>
+                    <strong>Ett-ord (≈25%):</strong> ett bord, ett hus, ett äpple
+                `}],examples:[]},{title:"💡 Tips",content:[],examples:[{swe:"Levande varelser är oftast EN-ord",arb:"الكائنات الحية غالباً (en)"},{swe:"Ord som slutar på -tion, -ing, -het är EN-ord",arb:"الكلمات التي تنتهي بـ -tion, -ing, -het هي (en)"}]},{title:"📚 50 Exempel / أمثلة",content:[],examples:[{swe:"1. en flicka | ett barn",arb:"فتاة | طفل"},{swe:"2. en skola | ett universitet",arb:"مدرسة | جامعة"},{swe:"3. en telefon | ett meddelande",arb:"هاتف | رسالة"},{swe:"4. en lampa | ett ljus",arb:"مصباح | ضوء"},{swe:"5. en tallrik | ett glas",arb:"صحن | كوب"},{swe:"6. en dator | ett tangentbord",arb:"حاسوب | لوحة مفاتيح"},{swe:"7. en väska | ett paket",arb:"حقيبة | طرد"},{swe:"8. en fråga | ett svar",arb:"سؤال | جواب"},{swe:"9. en tidning | ett program",arb:"صحيفة | برنامج"},{swe:"10. en känsla | ett minne",arb:"شعور | ذكرى"},{swe:"11. en bil | ett tåg",arb:"سيارة | قطار"},{swe:"12. en cykel | ett flygplan",arb:"دراجة | طائرة"},{swe:"13. en bok | ett häfte",arb:"كتاب | دفتر"},{swe:"14. en penna | ett papper",arb:"قلم | ورقة"},{swe:"15. en stol | ett bord",arb:"كرسي | طاولة"},{swe:"16. en soffa | ett skåp",arb:"أريكة | خزانة"},{swe:"17. en dörr | ett fönster",arb:"باب | نافذة"},{swe:"18. en nyckel | ett lås",arb:"مفتاح | قفل"},{swe:"19. en gata | ett torg",arb:"شارع | ميدان"},{swe:"20. en park | ett centrum",arb:"حديقة | مركز"},{swe:"21. en stad | ett land",arb:"مدينة | بلد"},{swe:"22. en gård | ett hus",arb:"فناء | بيت"},{swe:"23. en lägenhet | ett rum",arb:"شقة | غرفة"},{swe:"24. en kopp | ett fat",arb:"فنجان | صحن"},{swe:"25. en sked | ett glas",arb:"ملعقة | كوب"},{swe:"26. en gaffel | ett kniv",arb:"شوكة | سكين"},{swe:"27. en frukt | ett äpple",arb:"فاكهة | تفاحة"},{swe:"28. en banan | ett päron",arb:"موزة | إجاصة"},{swe:"29. en tomat | ett bröd",arb:"طماطم | خبز"},{swe:"30. en potatis | ett ägg",arb:"بطاطا | بيضة"},{swe:"31. en katt | ett djur",arb:"قطة | حيوان"},{swe:"32. en hund | ett husdjur",arb:"كلب | حيوان أليف"},{swe:"33. en fågel | ett träd",arb:"طائر | شجرة"},{swe:"34. en blomma | ett blad",arb:"زهرة | ورقة شجر"},{swe:"35. en sjö | ett hav",arb:"بحيرة | بحر"},{swe:"36. en flod | ett berg",arb:"نهر | جبل"},{swe:"37. en strand | ett moln",arb:"شاطئ | غيمة"},{swe:"38. en sol | ett regn",arb:"شمس | مطر"},{swe:"39. en vinter | ett väder",arb:"شتاء | طقس"},{swe:"40. en sommar | ett år",arb:"صيف | سنة"},{swe:"41. en dag | ett dygn",arb:"يوم | يوم كامل (24_timer)"},{swe:"42. en vecka | ett kvartal",arb:"أسبوع | ربع"},{swe:"43. en minut | ett ögonblick",arb:"دقيقة | لحظة"},{swe:"44. en sekund | ett tag",arb:"ثانية | لحظة"},{swe:"45. en lektion | ett prov",arb:"درس | امتحان"},{swe:"46. en lärare | ett betyg",arb:"معلم | درجة"},{swe:"47. en elev | ett schema",arb:"تلميذ | جدول"},{swe:"48. en familj | ett hem",arb:"عائلة | منزل"},{swe:"49. en vän | ett förhållande",arb:"صديق | علاقة"},{swe:"50. en dröm | ett mål",arb:"حلم | هدف"}]}]},{id:"questions",title:"❓ Frågor och Nekande",level:"intermediate",sections:[{title:"🔄 Frågeord (كلمات الاستفهام)",content:[{type:"div",html:`
+                    <strong>Vad</strong> = Vad | <strong>Vem</strong> = Vem | <strong>Var</strong> = Var<br>
+                    <strong>När</strong> = När | <strong>Hur</strong> = Hur | <strong>Varför</strong> = Varför<br>
+                    <strong>Vilken/Vilket</strong> = Vilken
+                `}],examples:[]},{title:"💡 50 Exempel / أمثلة",content:[],examples:[{swe:"1. Vad heter du?",arb:"ما اسمك؟"},{swe:"2. Var bor din familj?",arb:"أين تسكن عائلتك؟"},{swe:"3. När börjar lektionen?",arb:"متى تبدأ الحصة؟"},{swe:"4. Varför är du ledsen?",arb:"لماذا أنت حزين؟"},{swe:"5. Hur mår du idag?",arb:"كيف حالك اليوم؟"},{swe:"6. Talar du svenska? (Ja/Nej-fråga)",arb:"هل تتحدث السويدية؟"},{swe:"7. Jag talar inte arabiska.",arb:"لا أتحدث العربية."},{swe:"8. Hon kommer inte idag.",arb:"لن تأتي اليوم."},{swe:"9. Vi har inte tid nu.",arb:"ليس لدينا وقت الآن."},{swe:"10. Det är inget problem.",arb:"لا توجد مشكلة."},{swe:"11. Vem är det?",arb:"من هذا؟"},{swe:"12. Vilken film vill du see?",arb:"أي فيلم تريد مشاهدته؟"},{swe:"13. Vilket språk talar du?",arb:"أي لغة تتحدث؟"},{swe:"14. Hur långt är det till stationen?",arb:"كم المسافة إلى المحطة؟"},{swe:"15. Hur mycket kostar det?",arb:"كم يكلف ذلك؟"},{swe:"16. Hur många personer kommer?",arb:"كم عدد الأشخاص القادمين؟"},{swe:"17. Hur ofta tränar du?",arb:"كم مرة تتدرب؟"},{swe:"18. Hur länge har du bott här?",arb:"منذ متى تسكن هنا؟"},{swe:"19. Varifrån kommer du?",arb:"من أين أنت؟"},{swe:"20. Vart ska du gå?",arb:"إلى أين تذهب؟"},{swe:"21. Vad gör du?",arb:"ماذا تفعل؟"},{swe:"22. Vad tycker du om det?",arb:"ما رأيك في ذلك؟"},{swe:"23. Når kommer bussen?",arb:"متى يأتي الباص؟"},{swe:"24. Vill du ha kaffe?",arb:"هل تريد قهوة؟"},{swe:"25. Kan du hjälpa mig?",arb:"هل يمكنك مساعدتي؟"},{swe:"26. Jag har aldrig varit i Sverige.",arb:"لم أزر السويد أبداً."},{swe:"27. Det finns inga platser kvar.",arb:"لا توجد أماكن متبقية."},{swe:"28. Ingen vet svaret.",arb:"لا أحد يعرف الجواب."},{swe:"29. Han säger ingenting.",arb:"لا يقول شيئاً."},{swe:"30. De går ingenstans.",arb:"لا يذهبون إلى أي مكان."},{swe:"31. Varför gråter hon?",arb:"لماذا تبكي؟"},{swe:"32. Hur går det för dig?",arb:"كيف حالك؟"},{swe:"33. Vad betyder det?",arb:"ماذا يعني ذلك؟"},{swe:"34. Hur stavar man det?",arb:"كيف تهجئ ذلك؟"},{swe:"35. Vad sa du?",arb:"ماذا قلت؟"},{swe:"36. Varför kom du sent?",arb:"لماذا جئت متأخراً؟"},{swe:"37. Har du ätit lunch?",arb:"هل أكلت الغداء؟"},{swe:"38. Ska vi gå nu?",arb:"هل نذهب الآن؟"},{swe:"39. Skulle du vilja följa med?",arb:"هل ترغب في المجيء معنا؟"},{swe:"40. Förstår du svenska?",arb:"هل تفهم السويدية؟"},{swe:"41. Jag förstår inte.",arb:"لا أفهم."},{swe:"42. Det är inte sant.",arb:"هذا ليس صحيحاً."},{swe:"43. Vem ringde?",arb:"من اتصل؟"},{swe:"44. Vilka kommer till festen?",arb:"من سيأتي إلى الحفلة؟"},{swe:"45. Var köpte du den?",arb:"أين اشتريتها؟"},{swe:"46. När kom du hem?",arb:"متى وصلت إلى المنزل؟"},{swe:"47. Hon har inte ringt ännu.",arb:"لم تتصل بعد."},{swe:"48. Vi kan inte komma imorgon.",arb:"لا نستطيع المجيء غداً."},{swe:"49. Vad för slags mat gillar du?",arb:"ما نوع الطعام الذي تحبه؟"},{swe:"50. Hur dags börjar mötet?",arb:"في أي ساعة يبدأ الاجتماع؟"}]}]},{id:"numbers",title:"🔢 Tal och Tid",level:"beginner",sections:[{title:"🔢 Grundtal / الأرقام الأساسية",content:[{type:"div",html:`
+                    1 = ett | 2 = två | 3 = tre | 4 = fyra | 5 = fem<br>
+                    6 = sex | 7 = sju | 8 = åtta | 9 = nio | 10 = tio<br>
+                    11 = elva | 12 = tolv | 20 = tjugo | 100 = hundra
+                `}],examples:[]},{title:"💡 50 Exempel / أمثلة",content:[],examples:[{swe:"1. Jag har tre barn.",arb:"لدي ثلاثة أطفال."},{swe:"2. Boken kostar hundra kronor.",arb:"الكتاب يكلف مئة كرونا."},{swe:"3. Vad är klockan? - Klockan är tre.",arb:"كم الساعة؟ - الساعة الثالثة."},{swe:"4. Halv fyra = 3:30",arb:"الثالثة والنصف (نصف الرابعة)"},{swe:"5. Kvart över fem = 5:15",arb:"الخامسة والربع"},{swe:"6. Idag är måndag.",arb:"اليوم الاثنين."},{swe:"7. Vi ses på fredag!",arb:"نراك يوم الجمعة!"},{swe:"8. Det är januari nu.",arb:"إنه شهر يناير الآن."},{swe:"9. Jag fyller tjugofem år.",arb:"أبلغ خمسة وعشرين عاماً."},{swe:"10. Tåget kommer klockan nio.",arb:"القطار يأتي الساعة التاسعة."},{swe:"11. Kvart i åtta = 7:45",arb:"الثامنة إلا ربع."},{swe:"12. Fem över tio = 10:05",arb:"العاشرة وخمس دقائق."},{swe:"13. Tjugo i tolv = 11:40",arb:"الثانية عشرة إلا عشرين دقيقة."},{swe:"14. Mötet börjar klockan halv två.",arb:"الاجتماع يبدأ الساعة الواحدة والنصف."},{swe:"15. Jag är född nittonhundraåttio (1980).",arb:"ولدت عام 1980."},{swe:"16. Vi ses den femte maj.",arb:"نتقابل في الخامس من مايو."},{swe:"17. Det är första gången jag är här.",arb:"هذه المرة الأولى أكون هنا."},{swe:"18. Han bor på tredje våningen.",arb:"يسكن في الطابق الثالث."},{swe:"19. Vi firar midsommar i juni.",arb:"نحتفل بعيد منتصف الصيف في يونيو."},{swe:"20. Julafton är den 24 december.",arb:"عشية الميلاد في 24 ديسمبر."},{swe:"21. Det finns sju dagar i en vecka.",arb:"يوجد سبعة أيام في الأسبوع."},{swe:"22. Februari har tjugoåtta dagar.",arb:"فبراير فيه 28 يوماً."},{swe:"23. Jag jobbar åtta timmar om dagen.",arb:"أعمل ثماني ساعات يومياً."},{swe:"24. Butiken stänger klockan sex.",arb:"المتجر يغلق الساعة السادسة."},{swe:"25. Resan tar två timmar.",arb:"الرحلة تستغرق ساعتين."},{swe:"26. Jag behöver fem minuter.",arb:"أحتاج خمس دقائق."},{swe:"27. Hon är trettio år gammal.",arb:"عمرها ثلاثون سنة."},{swe:"28. Vi har fyra årstider i Sverige.",arb:"لدينا أربعة فصول في السويد."},{swe:"29. Nyårsafton är den 31 december.",arb:"ليلة رأس السنة في 31 ديسمبر."},{swe:"30. Bussen kommer var tionde minut.",arb:"الحافلة تأتي كل عشر دقائق."},{swe:"31. Tisdag och torsdag har jag svenska.",arb:"الثلاثاء والخميس عندي سويدية."},{swe:"32. Lördag och söndag är helg.",arb:"السبت والأحد عطلة نهاية الأسبوع."},{swe:"33. Jag vaknar klockan sju varje dag.",arb:"أستيقظ الساعة السابعة كل يوم."},{swe:"34. Skolan börjar i augusti.",arb:"المدرسة تبدأ في أغسطس."},{swe:"35. Mars och april är vårmånader.",arb:"مارس وأبريل أشهر الربيع."},{swe:"36. Jag har tusen kronor.",arb:"لدي ألف كرونا."},{swe:"37. Det kostar femtio kronor.",arb:"يكلف خمسين كرونا."},{swe:"38. Jag bor på nummer tjugofyra.",arb:"أسكن في رقم 24."},{swe:"39. Onsdag är mitt i veckan.",arb:"الأربعاء في منتصف الأسبوع."},{swe:"40. Vi äter lunch klockan tolv.",arb:"نأكل الغداء الساعة الثانية عشرة."},{swe:"41. Oktober och november är höstmånader.",arb:"أكتوبر ونوفمبر أشهر الخريف."},{swe:"42. Jag lägger mig klockan elva.",arb:"أنام الساعة الحادية عشرة."},{swe:"43. Det är noll grader ute.",arb:"الحرارة صفر درجة في الخارج."},{swe:"44. Jag köpte sex äpplen.",arb:"اشتريت ست تفاحات."},{swe:"45. Vi har tolv månader i ett år.",arb:"لدينا اثنا عشر شهراً في السنة."},{swe:"46. Midnatt = klockan tolv på natten.",arb:"منتصف الليل = الساعة 12 ليلاً."},{swe:"47. Middag = klockan tolv på dagen.",arb:"منتصف النهار = الساعة 12 ظهراً."},{swe:"48. Festen börjar klockan åtta i kväll.",arb:"الحفلة تبدأ الساعة الثامنة هذا المساء."},{swe:"49. Jag har femton minuters rast.",arb:"لدي استراحة خمس عشرة دقيقة."},{swe:"50. Det är andra gången jag frågar.",arb:"هذه المرة الثانية أسأل."}]}]},{id:"phrases",title:"💬 Vanliga Fraser",level:"beginner",sections:[{title:"💡 50 Exempel / أمثلة",content:[],examples:[{swe:"1. Hej! / Hejsan!",arb:"مرحباً! / أهلاً!"},{swe:"2. God morgon! / God kväll!",arb:"صباح الخير! / مساء الخير!"},{swe:"3. Hur mår du? - Jag mår bra, tack!",arb:"كيف حالك؟ - أنا بخير، شكراً!"},{swe:"4. Vad heter du? - Jag heter Ahmad.",arb:"ما اسمك؟ - اسمي أحمد."},{swe:"5. Tack så mycket! - Varsågod!",arb:"شكراً جزيلاً! - عفواً!"},{swe:"6. Ursäkta! Var ligger stationen?",arb:"عفواً! أين المحطة؟"},{swe:"7. Förlåt! - Det gör inget.",arb:"آسف! - لا بأس."},{swe:"8. Hej då! / Vi ses!",arb:"مع السلامة! / نراك لاحقاً!"},{swe:"9. Jag förstår inte. Kan du upprepa?",arb:"لا أفهم. هل يمكنك الإعادة؟"},{swe:"10. Ja! / Nej! / Kanske.",arb:"نعم! / لا! / ربما."},{swe:"11. Grattis!",arb:"مبروك!"},{swe:"12. Lycka till!",arb:"حظاً سعيداً!"},{swe:"13. Välkommen!",arb:"أهلاً وسهلاً!"},{swe:"14. God natt!",arb:"تصبح على خير!"},{swe:"15. Sov gott!",arb:"نوماً هنيئاً!"},{swe:"16. Vad sa du?",arb:"ماذا قلت؟"},{swe:"17. Vänta lite!",arb:"انتظر قليلاً!"},{swe:"18. Snälla! / Är du snäll.",arb:"من فضلك!"},{swe:"19. Ingen orsak!",arb:"لا داعي للشكر!"},{swe:"20. Det var så lite!",arb:"على الرحب والسعة!"},{swe:"21. Hur går det?",arb:"كيف الحال؟"},{swe:"22. Det är ingen fara.",arb:"لا بأس / لا تقلق."},{swe:"23. Vad kul!",arb:"كم هذا ممتع!"},{swe:"24. Verkligen?",arb:"حقاً؟"},{swe:"25. Självklart!",arb:"بالطبع!"},{swe:"26. Absolut!",arb:"بالتأكيد!"},{swe:"27. Det stämmer!",arb:"هذا صحيح!"},{swe:"28. Precis!",arb:"بالضبط!"},{swe:"29. Jag håller med.",arb:"أنا موافق."},{swe:"30. Jag vet inte.",arb:"لا أعرف."},{swe:"31. Vad synd!",arb:"يا للأسف!"},{swe:"32. Stackars dig!",arb:"مسكين!"},{swe:"33. Ta hand om dig!",arb:"اعتنِ بنفسك!"},{swe:"34. Krya på dig!",arb:"سلامتك / شفاك الله!"},{swe:"35. Jag är hungrig.",arb:"أنا جائع."},{swe:"36. Jag är törstig.",arb:"أنا عطشان."},{swe:"37. Jag är trött.",arb:"أنا متعب."},{swe:"38. Skål!",arb:"في صحتك!"},{swe:"39. Smaklig måltid!",arb:"بالعافية!"},{swe:"40. Glad påsk!",arb:"عيد فصح سعيد!"},{swe:"41. God jul!",arb:"عيد ميلاد مجيد!"},{swe:"42. Gott nytt år!",arb:"سنة سعيدة!"},{swe:"43. Jag kommer snart.",arb:"سآتي قريباً."},{swe:"44. Ett ögonblick!",arb:"لحظة!"},{swe:"45. Kan jag hjälpa dig?",arb:"هل يمكنني مساعدتك؟"},{swe:"46. Det gör detsamma.",arb:"لا فرق / سِيّان."},{swe:"47. Hur mycket kostar det?",arb:"كم يكلف هذا؟"},{swe:"48. Kan jag få notan?",arb:"هل يمكنني الحصول على الفاتورة؟"},{swe:"49. Trevlig helg!",arb:"عطلة نهاية أسبوع سعيدة!"},{swe:"50. Ha det bra!",arb:"أتمنى لك يوماً جيداً!"}]}]},{id:"falseFriends",title:"🎭 Falska vänner",level:"intermediate",sections:[{title:"⚠️ Vad är Falska vänner?",content:[{type:"p",html:"Ord som låter liknande på arabiska och svenska men har helt olika betydelser!"},{type:"p",html:"كلمات تبدو متشابهة في العربية والسويدية لكن لها معاني مختلفة تماماً!"}],examples:[]},{title:"💡 50 Exempel / أمثلة",content:[],examples:[{swe:"1. Kalkon = ديك رومي (ليس بلقون!)",arb:"Turkey (not balcony!)"},{swe:"2. Kamera = كاميرا ✓ (نفس المعنى)",arb:"Camera (same meaning!)"},{swe:"3. Banan = موز (ليس بنانة!)",arb:"Banana (not pinky finger!)"},{swe:"4. Mamma = أم ✓ (نفس المعنى)",arb:"Mother (same meaning!)"},{swe:"5. Kanon = رائع/مدفع (ليس قانون!)",arb:"Great/Cannon (not law!)"},{swe:"6. Massa = كتلة/كثير (ليس ماء!)",arb:"Mass/Lots (not water!)"},{swe:"7. Fin = جميل (ليس فن!)",arb:"Nice/Beautiful (not art!)"},{swe:"8. Fast = ثابت/لكن (ليس سريع!)",arb:"Fixed/But (not fast!)"},{swe:"9. Gift = سم أو متزوج (ليس هدية!)",arb:"Poison/Married (not gift!)"},{swe:"10. Slut = نهاية (ليس كلمة سيئة!)",arb:"End/Finished (not a bad word!)"},{swe:"11. Bra = جيد (ليس صدرية!)",arb:"Good (not the undergarment!)"},{swe:"12. Bröd = خبز (ليس برد!)",arb:"Bread (not cold!)"},{swe:"13. Pappa = أب ✓ (نفس المعنى)",arb:"Father (same meaning!)"},{swe:"14. Sex = ستة (الرقم 6!)",arb:"Six (the number!)"},{swe:"15. Kock = طباخ (احذر اللفظ!)",arb:"Chef/Cook (careful pronunciation!)"},{swe:"16. Fart = سرعة",arb:"Speed (not what you think!)"},{swe:"17. Kissa = قطة (أو يتبول)",arb:"Cat/Kitty (or to pee)"},{swe:"18. Rolig = مضحك (ليس اسم!)",arb:"Funny (not a name!)"},{swe:"19. Semester = إجازة (ليس فصل دراسي!)",arb:"Vacation (not semester!)"},{swe:"20. Barn = أطفال (ليس حظيرة!)",arb:"Children (not a farm barn!)"},{swe:"21. Bagage = أمتعة ✓ (نفس المعنى)",arb:"Luggage (same meaning!)"},{swe:"22. Telefon = هاتف ✓ (نفس المعنى)",arb:"Telephone (same meaning!)"},{swe:"23. Anka = بطة (ليس أنكا!)",arb:"Duck (not a name!)"},{swe:"24. Full = ممتلئ أو سكران",arb:"Full or Drunk"},{swe:"25. Glass = آيس كريم",arb:"Ice cream (not glass!)"},{swe:"26. Kiss = بول التبول",arb:"Pee (not kiss!)"},{swe:"27. Puss = قبلة",arb:"Kiss (not cat!)"},{swe:"28. Kok = غليان",arb:"Boiling"},{swe:"29. Hora = عاهرة (كلمة سيئة!)",arb:"A bad word (not hour!)"},{swe:"30. Timme = ساعة (وقت)",arb:"Hour (time)"},{swe:"31. Smör = زبدة (ليس سمر!)",arb:"Butter (not a name!)"},{swe:"32. Nej = لا",arb:'No (sounds like English \\"nay\\")'},{swe:"33. Problem = مشكلة ✓",arb:"Problem (same meaning!)"},{swe:"34. Bil = سيارة (ليس فاتورة!)",arb:"Car (not bill!)"},{swe:"35. Räkning = فاتورة",arb:"Bill/Invoice"},{swe:"36. Ren = نظيف أو رنة (حيوان)",arb:"Clean or Reindeer"},{swe:"37. Rocker = هزاز (ليس روك!)",arb:"Rocking chair (not rock music!)"},{swe:"38. Musik = موسيقى ✓",arb:"Music (same meaning!)"},{swe:"39. Smal = نحيف (ليس صغير!)",arb:"Thin/Slim (not small!)"},{swe:"40. Liten = صغير",arb:"Small/Little"},{swe:"41. Bränd = محروق",arb:"Burned (not brand!)"},{swe:"42. Varumärke = علامة تجارية",arb:"Brand (trademark)"},{swe:"43. Ring = حلقة أو اتصل",arb:"Ring or To call"},{swe:"44. Stol = كرسي",arb:"Chair (not stool!)"},{swe:"45. Pall = مقعد صغير",arb:"Stool (not ball!)"},{swe:"46. Boll = كرة",arb:"Ball"},{swe:"47. Salt = ملح",arb:'Salt (sounds like \\"salty\\" context!)'},{swe:"48. Tak = سقف (ليس شكراً!)",arb:"Roof (not thank you!)"},{swe:"49. Tack = شكراً ✓",arb:"Thank you"},{swe:"50. Rum = غرفة (ليس روم!)",arb:"Room (not rum drink!)"}]},{title:"🏆 الكلمات الأكثر شيوعاً (The Classics)",content:[{type:"p",html:"هذه الكلمات تتكرر يومياً ومعانيها متناقضة جداً!"}],examples:[{swe:"Mat (مات) = طعام",arb:"تشبه: مات (توفي)"},{swe:"Min (مِين) = لِي / خاصتي",arb:"تشبه: مِن (حرف جر)"},{swe:"Man (مان) = رَجُل / المرء",arb:"تشبه: مَن (أداة استفهام)"},{swe:"Kan (كان) = يستطيع",arb:"تشبه: كان (فعل ماضي)"},{swe:"Vi (في) = نحن",arb:"تشبه: في (حرف جر - داخل)"},{swe:"Tom (توم) = فارغ",arb:"تشبه: ثوم (نبات الثوم)"},{swe:"Full (فُل) = سكران / ممتلئ",arb:"تشبه: فُل (زهرة الياسمين / الفول)"},{swe:"Sur (سُور) = غاضب / حامض",arb:"تشبه: سور (جدار / سياج)"},{swe:"Ras (راس) = انهيار / عِرق",arb:"تشبه: رأس (جزء من الجسم)"},{swe:"Tal (تال) = خُطبة / رقم",arb:"تشبه: تل (هضبة مرتفعة)"},{swe:"Bil (بيل) = سيارة",arb:"تشبه: بِل (حرف جر - بِـ الـ)"},{swe:"Bas (باس) = قاعدة / صوت جهوري",arb:"تشبه: بس (فقط / كفى - عامية)"},{swe:"Fall (فال) = حالة / سقوط",arb:"تشبه: فأل (طالع / حظ)"},{swe:"Bal (بال) = حفلة راقصة",arb:"تشبه: بال (خَاطِر / ذِهن)"},{swe:"Sök (سُوك) = ابحث",arb:"تشبه: سوق (مكان البيع)"},{swe:"Mur (مُور) = جدار",arb:"تشبه: مُر (طعم مرير)"},{swe:"Led (ليد) = مِفصل / عانى",arb:"تشبه: لِد (فعل أمر - يَلِد)"},{swe:"Bar (بار) = عارٍ / حانة",arb:"تشبه: بَر (يابسة / إحسان)"},{swe:"Kol (كُول) = فحم",arb:"تشبه: كُل (فعل أمر - طعام)"},{swe:"Får (فور) = خروف / يحصل على",arb:"تشبه: فأر (حيوان الفأر)"}]},{title:"😅 كلمات قد تسبب مواقف محرجة (Funny & Risky)",content:[{type:"p",html:"⚠️ انتبه عند استخدام هذه الكلمات!"}],examples:[{swe:"Kiss (كِيس) = تبول",arb:"تشبه: كيس (حقيبة بلاستيكية)"},{swe:"Kaka (كاكا) = كعكة / بسكويت",arb:"تشبه: كاكا (براز - لغة أطفال)"},{swe:"Baka (باكا) = يخبز",arb:"تشبه: بكى (ذرف الدموع)"},{swe:"Skit (شِيت) = براز / سيء جداً",arb:"تشبه: سكت (صمت)"},{swe:"Ful (فُول) = قبيح",arb:"تشبه: فول (طعام الفول)"},{swe:"Lås (لوس) = قُفل",arb:"تشبه: لص (سارق)"},{swe:"Val (فال) = حوت / انتخاب",arb:"تشبه: وال (حاكم - والي)"},{swe:"Ratt (رَت) = مقود السيارة",arb:"تشبه: رَتّ الملابس (أصلحها)"},{swe:"Mys (مِيس) = وقت دافئ ومريح (Cosy)",arb:"تشبه: ميس (اسم / يأس عامية)"}]},{title:"📏 كلمات قصيرة ومتشابهة (Short & Sound-alikes)",content:[],examples:[{swe:"Sen (سِين) = متأخر",arb:"تشبه: سِن (ضرس / عُمر)"},{swe:"Du (دُو) = أنت",arb:"تشبه: ذو (صاحب - ذو علم)"},{swe:"Ni (نِي) = أنتم",arb:"تشبه: ني (غير مطبوخ - نيء)"},{swe:"Hej (هَي) = مرحباً",arb:"تشبه: حي (على قيد الحياة)"},{swe:"Damm (دَم) = غبار",arb:"تشبه: دم (سائل الدم)"},{swe:"Dom (دُوم) = هُم / حُكم قضائي",arb:"تشبه: دوم (استمرار / نبات)"},{swe:"Hatt (هات) = قبعة",arb:"تشبه: هات (أعطني)"},{swe:"Mal (مال) = حشرة العتة",arb:"تشبه: مال (نقود)"},{swe:"Fin (فِين) = جميل",arb:"تشبه: فين (أين - عامية مصرية)"},{swe:"Rad (رَد) = سطر / صف",arb:"تشبه: رَد (أجاب)"},{swe:"Lån (لون) = قَرْض مالي",arb:"تشبه: لون (صبغة / Color)"},{swe:"Sot (سُوت) = سُخام (رماد أسود)",arb:"تشبه: صوت (ضجيج / كلام)"},{swe:"Surr (سُر) = طنين (صوت النحل)",arb:"تشبه: سِر (أمر خفي)"},{swe:"Tala (تالا) = يتكلم",arb:"تشبه: تلا (قرأ القرآن)"},{swe:"Vad (فاد) = ماذا",arb:"تشبه: واد (وادي - عامية)"},{swe:"Ren (رِين) = نظيف / رنّة",arb:"تشبه: رنّ (أصدر صوتاً)"},{swe:"Sol (سُول) = شمس",arb:"تشبه: سُل (مرض السل)"},{swe:"Dal (دال) = وادي",arb:"تشبه: دلّ (أرشد)"},{swe:"Tak (تاك) = سقف",arb:"تشبه: طق (انفجر - عامية)"},{swe:"Bo (بُو) = يسكن",arb:"تشبه: بو (والد - أبو عامية)"},{swe:"Ö (أو) = جزيرة",arb:"تشبه: أو (للتخيير)"},{swe:"Sju (خُو/شو) = رقم سبعة",arb:"تشبه: شو (ماذا - عامية شامي)"},{swe:"Katt (كات) = قطة",arb:"تشبه: قات (نبات القات)"},{swe:"Lamm (لام) = لحم حمل",arb:"تشبه: لام (عاتب - من اللوم)"},{swe:"Bok (بوك) = كتاب",arb:"تشبه: بوك (محفظة - عامية)"},{swe:"Mil (ميل) = 10 كيلومتر",arb:"تشبه: ميل (انحناء)"}]},{title:"📚 أفعال وأسماء متشابهة (Verbs & Nouns)",content:[],examples:[{swe:"Slå (سلو) = يضرب",arb:"تشبه: سلو (نسيان / تسلية)"},{swe:"Dyr (دير) = غالي الثمن",arb:"تشبه: دير (دير الرهبان)"},{swe:"Kurr (كُر) = قرقرة البطن",arb:"تشبه: كُر (هجوم - كر وفر)"},{swe:"Rop (روب) = صرخة / نداء",arb:"تشبه: رُب (رُبما / صوص)"},{swe:"Sal (سال) = قاعة",arb:"تشبه: سال (جرى - للماء)"},{swe:"Här (هَار) = هنا",arb:"تشبه: حار (ساخن)"},{swe:"Var (فار) = أين / كان",arb:"تشبه: فأر (حيوان)"},{swe:"Vas (فاز) = مزهرية",arb:"تشبه: فاز (انتصر)"},{swe:"Väg (فيج) = طريق",arb:"تشبه: فج (طريق واسع)"},{swe:"Vin (فين) = نبيذ",arb:"تشبه: فين (أين - عامية)"},{swe:"Ton (تون) = نغمة",arb:"تشبه: تون (سمك التونة)"},{swe:"Ur (أور) = ساعة / من (خارج)",arb:"تشبه: حور العين (تشابه صوتي)"},{swe:"Tysk (تِيسك) = ألماني",arb:"تشابه طريف مع تيس!"},{swe:"Rak (راك) = مستقيم",arb:"تشبه: راك (رآك - شاهدك)"},{swe:"Ram (رام) = إطار",arb:"تشبه: رام (أراد / قصد)"},{swe:"Sky (خي/شي) = مرق / سماء",arb:"تشبه: شي (شيء)"},{swe:"Tur (تور) = حظ / دور",arb:"تشبه: ثور (حيوان الثور)"},{swe:"Stam (ستام) = جذع",arb:"تشبه: شتم (سبّ)"},{swe:"Lik (ليك) = جثة / يشبه",arb:"تشبه: ليك (لك - عامية شامية)"},{swe:"Sann (سان) = حقيقي",arb:"تشبه: سن (ضرس)"},{swe:"Fas (فاز) = مرحلة",arb:"تشبه: فاز (انتصر)"},{swe:"Son (سُون) = ابن",arb:"تشبه: صون (حماية)"},{swe:"Alla (ألّا) = الجميع",arb:"تشبه صوتياً: الله (لفظ الجلالة)"},{swe:"Rast (راست) = استراحة",arb:"تشبه: رصد (مراقبة)"},{swe:"Sill (سِل) = سمك رنجة",arb:"تشبه: سُل (مرض السل)"},{swe:"Mål (مول) = هدف / وجبة",arb:"تشبه: مال (نقود)"},{swe:"Säl (سيل) = فقمة",arb:"تشبه: سيل (مطر غزير)"},{swe:"Dör (دُور) = يموت",arb:"تشبه: دور (طوابق / نوبة)"}]}]},{id:"hospital",title:"🏥 På sjukhuset",level:"advanced",sections:[{title:"📋 Viktiga ord / كلمات مهمة",content:[{type:"div",html:"\\n                    <strong>Läkare</strong> = طبيب | <strong>Sjuksköterska</strong> = ممرضة<br>\\n                    <strong>Vårdcentral</strong> = مركز صحي | <strong>Akuten</strong> = الطوارئ<br>\\n                    <strong>Recept</strong> = وصفة طبية | <strong>Medicin</strong> = دواء\\n                "}],examples:[]},{title:"💡 50 Fraser / عبارات",content:[],examples:[{swe:"1. Jag mår inte bra.",arb:"أنا لا أشعر بخير."},{swe:"2. Jag har ont i huvudet.",arb:"عندي صداع (ألم في الرأس)."},{swe:"3. Jag behöver träffa en läkare.",arb:"أحتاج أن أقابل طبيباً."},{swe:"4. Jag har feber och hosta.",arb:"عندي حرارة وسعال."},{swe:"5. Var gör det ont?",arb:"أين يؤلمك؟"},{swe:"6. Jag är allergisk mot penicillin.",arb:"أنا أعاني حساسية من البنسلين."},{swe:"7. Jag vill boka en tid.",arb:"أريد حجز موعد."},{swe:"8. Hur ofta ska jag ta medicinen?",arb:"كم مرة يجب أن آخذ الدواء؟"},{swe:"9. Det är en nödsituation!",arb:"إنها حالة طوارئ!"},{swe:"10. Tack för hjälpen, doktor.",arb:"شكراً على المساعدة، دكتور."},{swe:"11. Jag har ont i magen.",arb:"عندي ألم في البطن."},{swe:"12. Jag har svårt att andas.",arb:"أجد صعوبة في التنفس."},{swe:"13. Jag känner mig yr.",arb:"أشعر بالدوار."},{swe:"14. Hur länge måste jag vänta?",arb:"كم يجب أن أنتظر؟"},{swe:"15. Jag tar blodtrycksmedicin.",arb:"أتناول دواء ضغط الدم."},{swe:"16. Jag behöver en sjukskrivning.",arb:"أحتاج إجازة مرضية."},{swe:"17. Kan jag få remiss till specialist?",arb:"هل يمكنني الحصول على تحويل لأخصائي؟"},{swe:"18. Jag har brutit benet.",arb:"كسرت ساقي."},{swe:"19. Var kan jag hämta medicinen?",arb:"أين يمكنني استلام الدواء؟"},{swe:"20. Jag måste opereras.",arb:"يجب أن أجري عملية جراحية."},{swe:"21. Jag har ont i ryggen.",arb:"عندي ألم في الظهر."},{swe:"22. Jag har ont i halsen.",arb:"عندي ألم في الحلق."},{swe:"23. Jag har ont i örat.",arb:"عندي ألم في الأذن."},{swe:"24. Jag har tandvärk.",arb:"عندي ألم في الأسنان."},{swe:"25. Jag är förkylde.",arb:"عندي رشح/زكام."},{swe:"26. Jag har kräkts.",arb:"تقيأت."},{swe:"27. Jag har diarré.",arb:"عندي إسهال."},{swe:"28. Jag är gravid.",arb:"أنا حامل."},{swe:"29. Jag har diabetes.",arb:"عندي سكري."},{swe:"30. Jag har högt blodtryck.",arb:"عندي ضغط دم مرتفع."},{swe:"31. Jag är illamående.",arb:"أشعر بالغثيان."},{swe:"32. Kan jag få smärtstillande?",arb:"هل يمكنني الحصول على مسكن ألم؟"},{swe:"33. Jag sov inte bra i natt.",arb:"لم أنم جيداً الليلة الماضية."},{swe:"34. Hur länge har du haft symptomen?",arb:"منذ متى لديك الأعراض؟"},{swe:"35. Ta en tablett tre gånger om dagen.",arb:"خذ حبة ثلاث مرات يومياً."},{swe:"36. Du behöver vila.",arb:"أنت بحاجة للراحة."},{swe:"37. Jag har en utslag.",arb:"عندي طفح جلدي."},{swe:"38. Jag har skurit mig.",arb:"جرحت نفسي."},{swe:"39. Jag har bränt mig.",arb:"أحرقت نفسي."},{swe:"40. Jag behöver en röntgen.",arb:"أحتاج أشعة سينية."},{swe:"41. Jag behöver ta blodprov.",arb:"أحتاج فحص دم."},{swe:"42. Var är närmaste apotek?",arb:"أين أقرب صيدلية؟"},{swe:"43. Jag mår bättre nu.",arb:"أشعر بتحسن الآن."},{swe:"44. Ring 112 för ambulans.",arb:"اتصل 112 للإسعاف."},{swe:"45. Jag har hjärtproblem.",arb:"عندي مشاكل في القلب."},{swe:"46. Jag har astma.",arb:"عندي ربو."},{swe:"47. Jag behöver min inhalator.",arb:"أحتاج جهاز الاستنشاق."},{swe:"48. Kan jag få en tolk?",arb:"هل يمكنني الحصول على مترجم؟"},{swe:"49. Jag förstår inte läkarens instruktioner.",arb:"لا أفهم تعليمات الطبيب."},{swe:"50. När är mitt nästa besök?",arb:"متى موعدي التالي؟"}]}]},{id:"work",title:"💼 På jobbet",level:"advanced",sections:[{title:"📋 Viktiga ord / كلمات مهمة",content:[{type:"div",html:"\\n                    <strong>Arbete/Jobb</strong> = عمل | <strong>Chef</strong> = مدير<br>\\n                    <strong>Kollega</strong> = زميل | <strong>Möte</strong> = اجتماع<br>\\n                    <strong>Lön</strong> = راتب | <strong>Semester</strong> = إجازة\\n                "}],examples:[]},{title:"💡 50 Fraser / عبارات",content:[],examples:[{swe:"1. Jag börjar klockan åtta.",arb:"أبدأ العمل الساعة الثامنة."},{swe:"2. Jag slutar klockan fem.",arb:"أنهي العمل الساعة الخامسة."},{swe:"3. Vi har möte klockan två.",arb:"لدينا اجتماع الساعة الثانية."},{swe:"4. Kan jag ta ledigt imorgon?",arb:"هل يمكنني أخذ إجازة غداً؟"},{swe:"5. Jag vill prata med min chef.",arb:"أريد التحدث مع مديري."},{swe:"6. Var ligger kopiatorn?",arb:"أين آلة التصوير؟"},{swe:"7. Jag är sjuk idag, jag kan inte komma.",arb:"أنا مريض اليوم، لا أستطيع المجيء."},{swe:"8. Kan du skicka rapporten?",arb:"هل يمكنك إرسال التقرير؟"},{swe:"9. Fikapaus klockan tio!",arb:"استراحة قهوة الساعة العاشرة!"},{swe:"10. Trevlig helg!",arb:"عطلة نهاية أسبوع سعيدة!"},{swe:"11. Jag behöver höja min lön.",arb:"أحتاج زيادة في راتبي."},{swe:"12. När får jag semester?",arb:"متى أحصل على إجازة؟"},{swe:"13. Jag arbetar hemifrån idag.",arb:"أعمل من المنزل اليوم."},{swe:"14. Kan vi skjuta upp mötet?",arb:"هل يمكننا تأجيل الاجتماع؟"},{swe:"15. Jag har för mycket att göra.",arb:"لدي الكثير لأفعله."},{swe:"16. Var är personalrummet?",arb:"أين غرفة الموظفين؟"},{swe:"17. Jag ska gå på intervju.",arb:"سأذهب لمقابلة عمل."},{swe:"18. Mitt kontrakt går ut snart.",arb:"عقدي ينتهي قريباً."},{swe:"19. Jag måste jobba övertid.",arb:"يجب أن أعمل ساعات إضافية."},{swe:"20. Vem är ansvarig för det här?",arb:"من المسؤول عن هذا؟"},{swe:"21. Jag söker jobb.",arb:"أنا أبحث عن عمل."},{swe:"22. Har du erfarenhet?",arb:"هل لديك خبرة؟"},{swe:"23. Jag kan börja direkt.",arb:"أستطيع البدء فوراً."},{swe:"24. Vad är arbetstiderna?",arb:"ما هي أوقات العمل؟"},{swe:"25. Vi har flexi-tid.",arb:"لدينا وقت عمل مرن."},{swe:"26. Jag har ett heltidsjobb.",arb:"لدي وظيفة بدوام كامل."},{swe:"27. Jag jobbar deltid.",arb:"أعمل بدوام جزئي."},{swe:"28. Jag är arbetslös.",arb:"أنا عاطل عن العمل."},{swe:"29. Kan du skriva på här?",arb:"هل يمكنك التوقيع هنا؟"},{swe:"30. Jag behöver skicka ett mejl.",arb:"أحتاج إرسال بريد إلكتروني."},{swe:"31. Telefonen ringer!",arb:"الهاتف يرن!"},{swe:"32. Jag är upptagen just nu.",arb:"أنا مشغول حالياً."},{swe:"33. När är deadline?",arb:"متى الموعد النهائي؟"},{swe:"34. Vi måste samarbeta.",arb:"يجب أن نتعاون."},{swe:"35. Det var bra jobbat!",arb:"كان عملاً جيداً!"},{swe:"36. Jag tar lunchrast nu.",arb:"سأخذ استراحة الغداء الآن."},{swe:"37. Vill du ha kaffe?",arb:"هل تريد قهوة؟"},{swe:"38. Jag är pensionär.",arb:"أنا متقاعد."},{swe:"39. Jag har eget företag.",arb:"لدي شركتي الخاصة."},{swe:"40. Schema för veckan.",arb:"جدول الأسبوع."},{swe:"41. Jag fick sparken.",arb:"تم طردي من العمل."},{swe:"42. Jag sa upp mig.",arb:"استقلت من العمل."},{swe:"43. Vi har personalfest.",arb:"لدينا حفلة للموظفين."},{swe:"44. Var är skrivaren?",arb:"أين الطابعة؟"},{swe:"45. Datorn fungerar inte.",arb:"الكمبيوتر لا يعمل."},{swe:"46. Jag behöver lösenordet.",arb:"أحتاج كلمة المرور."},{swe:"47. Kan du hjälpa mig med kopiering?",arb:"هل يمكنك مساعدتي في النسخ؟"},{swe:"48. Mötet är inställt.",arb:"تم إلغاء الاجتماع."},{swe:"49. Jag jobbar skift.",arb:"أعمل بنظام الورديات."},{swe:"50. Tack för idag!",arb:"شكراً لليوم (عند المغادرة)!"}]}]},{id:"bank",title:"🏦 På banken",level:"advanced",sections:[{title:"📋 Viktiga ord / كلمات مهمة",content:[{type:"div",html:"\\n                    <strong>Konto</strong> = حساب | <strong>Ränta</strong> = فائدة<br>\\n                    <strong>Lån</strong> = قرض | <strong>Insättning</strong> = إيداع<br>\\n                    <strong>Uttag</strong> = سحب | <strong>Överföring</strong> = تحويل\\n                "}],examples:[]},{title:"💡 50 Fraser / عبارات",content:[],examples:[{swe:"1. Jag vill öppna ett konto.",arb:"أريد فتح حساب."},{swe:"2. Vad är saldot på mitt konto?",arb:"ما هو رصيد حسابي؟"},{swe:"3. Jag vill ta ut pengar.",arb:"أريد سحب أموال."},{swe:"4. Jag vill sätta in pengar.",arb:"أريد إيداع أموال."},{swe:"5. Kan jag överföra pengar?",arb:"هل يمكنني تحويل أموال؟"},{swe:"6. Mitt kort fungerar inte.",arb:"بطاقتي لا تعمل."},{swe:"7. Jag har glömt min PIN-kod.",arb:"نسيت رمز PIN الخاص بي."},{swe:"8. Jag vill ansöka om ett lån.",arb:"أريد التقدم للحصول على قرض."},{swe:"9. Var finns närmaste bankomat?",arb:"أين أقرب صراف آلي؟"},{swe:"10. Kan jag få ett kontoutdrag?",arb:"هل يمكنني الحصول على كشف حساب؟"},{swe:"11. Jag vill beställa ett nytt kort.",arb:"أريد طلب بطاقة جديدة."},{swe:"12. Vad är räntan på sparkontot?",arb:"ما هي الفائدة على حساب التوفير؟"},{swe:"13. Jag vill stänga mitt konto.",arb:"أريد إغلاق حسابي."},{swe:"14. Kan jag få swish?",arb:"هل يمكنني الحصول على سويش؟"},{swe:"15. Hur aktiverar jag internetbanken?",arb:"كيف أفعّل البنك الإلكتروني؟"},{swe:"16. Jag vill betala en räkning.",arb:"أريد دفع فاتورة."},{swe:"17. Mitt kort har blivit stulet.",arb:"سُرقت بطاقتي."},{swe:"18. Kan jag få amortera på lånet?",arb:"هل يمكنني تسديد جزء من القرض؟"},{swe:"19. Jag behöver valuta till resan.",arb:"أحتاج عملة للسفر."},{swe:"20. Vem kan hjälpa mig med bolån?",arb:"من يمكنه مساعدتي في قرض السكن؟"},{swe:"21. Jag vill spärra mitt kort.",arb:"أريد إيقاف بطاقتي."},{swe:"22. Vad är växelkursen idag?",arb:"ما هو سعر الصرف اليوم؟"},{swe:"23. Jag har tappat min bankdosa.",arb:"أضعت جهاز البنك (token)."},{swe:"24. Kan jag höja min beloppsgräns?",arb:"هل يمكنني رفع حد المبلغ؟"},{swe:"25. Jag vill ha e-faktura.",arb:"أريد فاتورة إلكترونية."},{swe:"26. Vad kostar det att ha kortet?",arb:"كم تكلفة امتلاك البطاقة؟"},{swe:"27. Jag kan inte logga in.",arb:"لا أستطيع تسجيل الدخول."},{swe:"28. Jag behöver BankID.",arb:"أحتاج BankID."},{swe:"29. Hur betalar jag till utlandet?",arb:"كيف أدفع للخارج؟"},{swe:"30. Jag vill spara i fonder.",arb:"أريد التوفير في الصناديق الاستثمارية."},{swe:"31. Kan jag få rådgivning?",arb:"هل يمكنني الحصول على استشارة؟"},{swe:"32. Jag vill köpa aktier.",arb:"أريد شراء أسهم."},{swe:"33. Har ni studentrabatt?",arb:"هل لديكم خصم للطلاب؟"},{swe:"34. Jag vill ändra min adress.",arb:"أريد تغيير عنواني."},{swe:"35. Kontot är övertrasserat.",arb:"الحساب مكشوف (تم سحب أكثر من الرصيد)."},{swe:"36. Jag har fått felaktig debitering.",arb:"حصلت على خصم خاطئ."},{swe:"37. Kan jag dela upp betalningen?",arb:"هل يمكنني تقسيم الدفعة؟"},{swe:"38. När dras pengarna?",arb:"متى يتم سحب الأموال؟"},{swe:"39. Jag vill ha automatiskt sparande.",arb:"أريد توفيراً تلقائياً."},{swe:"40. Var skriver jag under?",arb:"أين أوقع؟"},{swe:"41. Jag behöver ett intyg.",arb:"أحتاج شهادة/إثبات."},{swe:"42. Kan jag betala med kort här?",arb:"هل يمكنني الدفع بالبطاقة هنا؟"},{swe:"43. Tar ni kontanter?",arb:"هل تقبلون النقد؟"},{swe:"44. Jag har glömt min plånbok.",arb:"نسيت محفظتي."},{swe:"45. Kan jag få kvitto?",arb:"هل يمكنني الحصول على إيصال؟"},{swe:"46. Jag vill lösa in en check.",arb:"أريد صرف شيك."},{swe:"47. Hur lång tid tar överföringen?",arb:"كم يستغرق التحويل؟"},{swe:"48. Jag vill avsluta min tjänst.",arb:"أريد إنهاء خدمتي."},{swe:"49. Är det säkert?",arb:"هل هذا آمن؟"},{swe:"50. Tack för hjälpen!",arb:"شكراً للمساعدة!"}]}]},{id:"mistakes",title:"⚠️ Vanliga misstag",level:"intermediate",sections:[{title:"📋 Typiska fel för arabisktalande",content:[{type:"p",html:"أخطاء شائعة يرتكبها الناطقون بالعربية عند تعلم السويدية"}],examples:[]},{title:"💡 50 Vanliga fel / أخطاء",content:[],examples:[{swe:'1. ❌ "Jag är 25 år" | ✅ "Jag är 25 år gammal"',arb:'لا تنسَ كلمة "gammal" عند ذكر العمر'},{swe:'2. ❌ "Han gör bra" | ✅ "Han mår bra"',arb:'استخدم "mår" للحالة الصحية، وليس "gör"'},{swe:'3. ❌ "Igår jag åt" | ✅ "Igår åt jag"',arb:"قاعدة V2: الفعل دائماً في الموضع الثاني"},{swe:'4. ❌ "En stor hus" | ✅ "Ett stort hus"',arb:"انتبه لجنس الكلمة (en/ett) والصفة"},{swe:'5. ❌ "Jag gillar spela" | ✅ "Jag gillar att spela"',arb:'استخدم "att" (أن) بين فعلين في المصدر'},{swe:'6. ❌ "Jag kommer på måndag" | ✅ "Jag kommer på måndag"',arb:"حروف الجر ثابتة مع الأيام ✓ (لا خطأ هنا)"},{swe:'7. ❌ "Mycket tack" | ✅ "Tack så mycket"',arb:"الصيغة الصحيحة للشكر"},{swe:'8. ❌ "Jag vill ha kaffe tack" | ✅ "Jag skulle vilja ha..."',arb:'للأدب أكثر: "أرغب في" بدلاً من "أريد"'},{swe:'9. ❌ "Det är kallt idag" (om väder) | ✅ "Det är kallt ute"',arb:"حدد المكان أو السياق للطقس"},{swe:'10. ❌ "Jag har 3 syskon" | ✅ "Jag har tre syskon"',arb:"اكتب الأرقام الصغيرة بالحروف"},{swe:'11. ❌ "Jag gå hem" | ✅ "Jag går hem"',arb:"لا تنسَ تصريف الفعل في الحاضر (r)"},{swe:'12. ❌ "Hon är lärare" | ✅ "Hon är lärare"',arb:"بدون أداة تعريف (en) مع المهن ✓"},{swe:'13. ❌ "Jag vet honom" | ✅ "Jag känner honom"',arb:"Känner للأشخاص، Vet للمعلومات"},{swe:'14. ❌ "Jag tittar på TV" | ✅ "Jag tittar på TV"',arb:"احفظ الفعل مع حرف الجر الخاص به"},{swe:'15. ❌ "Jag bor i Sverige i 2 år" | ✅ "... i två år"',arb:'استخدم "i" للمدة الزمنية المكتملة'},{swe:'16. ❌ "Jag tycker om det" | ✅ "Jag tycker om det"',arb:"لا تنسَ المفعول به"},{swe:'17. ❌ "Vem bok är det?" | ✅ "Vems bok är det?"',arb:"للملكية نستخدم Vems (لمن)"},{swe:'18. ❌ "Jag har inte bil" | ✅ "Jag har ingen bil"',arb:"للنفي مع الأسماء النكرة نستخدم Ingen"},{swe:'19. ❌ "Han är snäll man" | ✅ "Han är en snäll man"',arb:"الصفة تتطلب أداة التنكير قبلها"},{swe:'20. ❌ "Tack för hjälper" | ✅ "Tack för hjälpen"',arb:"الاسم المعرفة بعد حروف الجر"},{swe:'21. ❌ "Jag bor i Stockholm" | ✅ "Jag bor i Stockholm"',arb:"استخدم i مع المدن والدول."},{swe:'22. ❌ "Jag åker till hem" | ✅ "Jag åker hem"',arb:"كلمة hem (إلى المنزل) لا تحتاج till قبلها."},{swe:'23. ❌ "Jag är hemma" | ✅ "Jag är hemma"',arb:"للبقاء في المنزل نستخدم hemma وليس hem."},{swe:'24. ❌ "Jag är intresserad av sport" | ✅ "Jag är intresserad av..."',arb:"لاحظ الإملاء (ss في intresserad)."},{swe:'25. ❌ "Jag har mycket pengar" | ✅ "Jag har mycket pengar"',arb:"لغير المعدود (نقود) نستخدم mycket (الكثير)."},{swe:'26. ❌ "Jag har många vänner" | ✅ "Jag har många vänner"',arb:"للمعدود (الأصدقاء) نستخدم många (العديد)."},{swe:'27. ❌ "Jag gillar inte det" | ✅ "Det gillar jag inte" / "Jag gillar inte det"',arb:"مكان inte يعتمد على نوع الجملة."},{swe:'28. ❌ "Jag vill studera svenska" | ✅ "Jag vill lära mig svenska"',arb:"لدراسة لغة (اكتسابها) نستخدم lära sig، أما studera فهي للدراسة الأكاديمية."},{swe:'29. ❌ "Jag lyssnar musik" | ✅ "Jag lyssnar på musik"',arb:"الفعل lyssnar يأخذ حرف الجر på."},{swe:'30. ❌ "Jag väntar på dig" | ✅ "Jag väntar på dig"',arb:"الفعل väntar (ينتظر) يأخذ حرف الجر på."},{swe:'31. ❌ "Jag tycker om att resa" | ✅ "Jag tycker om att resa"',arb:"لا تنس att قبل الفعل في المصدر بعد tycker om."},{swe:'32. ❌ "I morgon jag ska arbeta" | ✅ "I morgon ska jag arbeta"',arb:"قاعدة V2: إذا بدأت بظرف زمان، يأتي الفعل بعده مباشرة."},{swe:'33. ❌ "Han är gifta" | ✅ "Han är gift"',arb:"الصفة تتبع الموصوف (مفرد مذكر)."},{swe:'34. ❌ "De är gift" | ✅ "De är gifta"',arb:"للجمع نستخدم صيغة الجمع للصفة."},{swe:'35. ❌ "Vilken tid är det?" | ✅ "Vad är klockan?"',arb:"للسؤال عن الوقت نستخدم Vad är klockan."},{swe:'36. ❌ "Hur mycket är klockan?" | ✅ "Vad är klockan?"',arb:"خطأ شائع، الصحيح Vad är klockan."},{swe:'37. ❌ "Jag är född i 1990" | ✅ "Jag är född nittonhundranittio (1990)"',arb:"لا نستخدم i قبل السنة عند قول سنة الميلاد مباشرة، أو نقول år 1990."},{swe:'38. ❌ "På sommaren det är varmt" | ✅ "På sommaren är det varmt"',arb:"قاعدة V2 مرة أخرى."},{swe:'39. ❌ "Jag kan simma inte" | ✅ "Jag kan inte simma"',arb:"inte يأتي بعد الفعل الأول المساعد (kan)."},{swe:'40. ❌ "Jag måste att gå" | ✅ "Jag måste gå"',arb:"بعد الأفعال المساعدة (måste, kan, vill) لا نستخدم att."},{swe:'41. ❌ "Min brors bil" | ✅ "Min brors bil"',arb:"إضافة s للملكية (صحيح، لكن انتبه للاسم)."},{swe:'42. ❌ "Bilen av min bror" | ✅ "Min brors bil"',arb:"لا نستخدم av للملكية، نستخدم s-genitiv."},{swe:'43. ❌ "Jag ringer till dig" | ✅ "Jag ringer dig"',arb:"الفعل ringer يأخذ مفعولاً مباشراً (أحياناً يقبل till ولكن الأفضل بدونه)."},{swe:'44. ❌ "Jag frågar till dig" | ✅ "Jag frågar dig"',arb:"frågar يأخذ مفعولاً مباشراً."},{swe:'45. ❌ "Jag jobbar som läkare" | ✅ "Jag jobbar som läkare"',arb:"نستخدم som لبيان الوظيفة."},{swe:'46. ❌ "En glas vatten" | ✅ "Ett glas vatten"',arb:"كلمة glas هي ett-ord."},{swe:'47. ❌ "En barn" | ✅ "Ett barn"',arb:"كلمة barn هي ett-ord."},{swe:'48. ❌ "Jag hoppas att du kommer" | ✅ "Jag hoppas att du kommer"',arb:"استخدام att للربط صحيح وضروري أحياناً."},{swe:'49. ❌ "Jag tror att det är bra" | ✅ "Jag tror det är bra"',arb:"يمكن حذف att في الكلام الشفهي، لكن كتابةً يفضل وجودها."},{swe:'50. ❌ "Sluta att prata" | ✅ "Sluta prata"',arb:"بعد sluta غالباً ما نحذف att، لكن يمكن استخدامها."}]}]},{id:"shopping",title:"🛒 Handla & Shopping",level:"beginner",sections:[{title:"🛍️ I affären / في المتجر",content:[{type:"p",html:"Här är viktiga fraser när du handlar mat eller kläder."}],examples:[{swe:"Kan jag hjälpa dig?",arb:"هل يمكنني مساعدتك؟"},{swe:"Jag tittar bara, tack.",arb:"أنا أتفرج فقط، شكراً."},{swe:"Har ni den här i storlek Medium?",arb:"هل لديكم هذا بمقاس متوسط؟"},{swe:"Var är provrummet?",arb:"أين غرفة القياس؟"},{swe:"Vad kostar det?",arb:"كم سعر هذا؟"},{swe:"Det är för dyrt.",arb:"هذا غالي جداً."},{swe:"Har ni rea?",arb:"هل لديكم تخفيضات؟"},{swe:"Jag tar den.",arb:"سآخذها."}]},{title:"🍞 Matvaror / مواد غذائية",content:[],examples:[{swe:"Bröd och mjölk",arb:"خبز وحليب"},{swe:"Frukt och grönsaker",arb:"فواكه وخضروات"},{swe:"Kött och fisk",arb:"لحم وسمك"},{swe:"Ost och smör",arb:"جبن وزبدة"},{swe:"Ägg och ris",arb:"بيض وأرز"},{swe:"Jag behöver en kasse.",arb:"أحتاج كيس تسوق."}]},{title:"💳 Betalning / الدفع",content:[],examples:[{swe:"Kort eller kontant?",arb:"بطاقة أم نقداً؟"},{swe:"Jag betalar med kort.",arb:"سأدفع بالبطاقة."},{swe:"Slå din kod.",arb:"أدخل الرمز السري."},{swe:"Vill du ha kvittot?",arb:"هل تريد الإيصال؟"},{swe:"Nej tack, det är bra så.",arb:"لا شكراً، هذا جيد هكذا."},{swe:"Här är din växel.",arb:"هنا باقي نقودك."}]}]},{id:"airport",title:"✈️ På flygplatsen",level:"intermediate",sections:[{title:"🛫 Incheckning / تسجيل الوصول",content:[{type:"p",html:"Fraser du behöver vid incheckning på flygplatsen."},{type:"p",html:"عبارات تحتاجها عند تسجيل الوصول في المطار."}],examples:[{swe:"Jag vill checka in.",arb:"أريد تسجيل الوصول."},{swe:"Här är mitt pass.",arb:"هنا جواز سفري."},{swe:"Har du baggage att checka in?",arb:"هل لديك أمتعة لتسجيلها؟"},{swe:"Endast handbagage.",arb:"حقيبة يد فقط."},{swe:"Jag har en väska att checka in.",arb:"لدي حقيبة واحدة للتسجيل."},{swe:"Var kan jag checka in bagaget?",arb:"أين يمكنني تسجيل الأمتعة؟"},{swe:"Kan jag få ett fönsterplats?",arb:"هل يمكنني الحصول على مقعد بجانب النافذة؟"},{swe:"Jag vill sitta vid gången.",arb:"أريد الجلوس بجانب الممر."}]},{title:"🛂 Säkerhetskontroll / التفتيش الأمني",content:[],examples:[{swe:"Ta av dig skorna.",arb:"اخلع حذاءك."},{swe:"Lägg din väska på bandet.",arb:"ضع حقيبتك على الحزام."},{swe:"Har du vätska med dig?",arb:"هل معك سوائل؟"},{swe:"Ta ut datorn ur väskan.",arb:"أخرج الحاسوب من الحقيبة."},{swe:"Gå igenom detektorn.",arb:"امشِ عبر جهاز الكشف."},{swe:"Öppna din väska, tack.",arb:"افتح حقيبتك، من فضلك."}]},{title:"🚪 Boardinggate / بوابة الصعود",content:[],examples:[{swe:"Vilken gate flyger planet från?",arb:"من أي بوابة تقلع الطائرة؟"},{swe:"Boarding startar klockan 14:30.",arb:"يبدأ الصعود الساعة 14:30."},{swe:"Sista anrop för flight SK123.",arb:"النداء الأخير للرحلة SK123."},{swe:"Var är gate B12?",arb:"أين البوابة B12؟"},{swe:"Planet är försenat.",arb:"الطائرة متأخرة."},{swe:"Ny avgångstid är 16:00.",arb:"وقت الإقلاع الجديد هو 16:00."}]},{title:"✈️ Ombord / على متن الطائرة",content:[],examples:[{swe:"Var är min plats?",arb:"أين مقعدي؟"},{swe:"Kan du hjälpa mig med väskan?",arb:"هل يمكنك مساعدتي بالحقيبة؟"},{swe:"Spänn fast säkerhetsbältet.",arb:"اربط حزام الأمان."},{swe:"Kaffe eller te?",arb:"قهوة أم شاي؟"},{swe:"Jag vill ha vatten, tack.",arb:"أريد ماء، من فضلك."},{swe:"Var är toaletten?",arb:"أين الحمام؟"},{swe:"Vi landar om 30 minuter.",arb:"نهبط بعد 30 دقيقة."}]},{title:"🧳 Bagageuthämtning / استلام الأمتعة",content:[],examples:[{swe:"Var hämtar man bagaget?",arb:"أين أستلم الأمتعة؟"},{swe:"Mitt bagage har försvunnit.",arb:"أمتعتي مفقودة."},{swe:"Hur anmäler jag förlorat bagage?",arb:"كيف أبلغ عن أمتعة مفقودة؟"},{swe:"Min väska är skadad.",arb:"حقيبتي متضررة."},{swe:"Var är tullen?",arb:"أين الجمارك؟"},{swe:"Har du något att förtulla?",arb:"هل لديك شيء للتصريح الجمركي؟"}]}]},{id:"onlineShopping",title:"🛒 Handla online",level:"intermediate",sections:[{title:"🔍 Söka produkter / البحث عن المنتجات",content:[{type:"p",html:"Ord och fraser för att handla på nätet."},{type:"p",html:"كلمات وعبارات للتسوق عبر الإنترنت."}],examples:[{swe:"Sök efter produkter",arb:"ابحث عن المنتجات"},{swe:"Filtrera efter pris",arb:"فلتر حسب السعر"},{swe:"Sortera efter betyg",arb:"رتب حسب التقييم"},{swe:"Visa endast rabatterade varor",arb:"اعرض المنتجات المخفضة فقط"},{swe:"Läs kundrecensioner",arb:"اقرأ آراء العملاء"},{swe:"Produkten finns i lager.",arb:"المنتج متوفر في المخزون."},{swe:"Produkten är slut.",arb:"المنتج نفد."}]},{title:"🛒 Varukorgen / سلة التسوق",content:[],examples:[{swe:"Lägg i varukorgen",arb:"أضف إلى السلة"},{swe:"Ta bort från varukorgen",arb:"احذف من السلة"},{swe:"Ändra antal",arb:"غيّر الكمية"},{swe:"Gå till kassan",arb:"انتقل للدفع"},{swe:"Totalt pris: 299 kr",arb:"السعر الإجمالي: 299 كرون"},{swe:"Fri frakt vid köp över 500 kr",arb:"شحن مجاني للطلبات فوق 500 كرون"}]},{title:"💳 Betalning / الدفع",content:[],examples:[{swe:"Välj betalningsmetod",arb:"اختر طريقة الدفع"},{swe:"Betala med kort",arb:"ادفع بالبطاقة"},{swe:"Betala med Swish",arb:"ادفع بـ Swish"},{swe:"Faktura",arb:"فاتورة"},{swe:"Delbetalning",arb:"الدفع بالتقسيط"},{swe:"Ange rabattkod",arb:"أدخل كود الخصم"},{swe:"Betalningen godkänd",arb:"تمت الموافقة على الدفع"}]},{title:"📦 Leverans / التوصيل",content:[],examples:[{swe:"Välj leveransadress",arb:"اختر عنوان التوصيل"},{swe:"Hemleverans",arb:"توصيل للمنزل"},{swe:"Hämta i butik",arb:"استلام من المتجر"},{swe:"Leveranstid: 2-4 arbetsdagar",arb:"وقت التوصيل: 2-4 أيام عمل"},{swe:"Spåra din beställning",arb:"تتبع طلبك"},{swe:"Paketet är på väg.",arb:"الطرد في الطريق."},{swe:"Din beställning har levererats.",arb:"تم تسليم طلبك."}]},{title:"↩️ Retur och reklamation / الإرجاع والشكوى",content:[],examples:[{swe:"Jag vill returnera varan.",arb:"أريد إرجاع المنتج."},{swe:"Ångerrätt i 14 dagar.",arb:"حق الإلغاء خلال 14 يوماً."},{swe:"Skriv ut retursedeln.",arb:"اطبع ورقة الإرجاع."},{swe:"Varan är defekt.",arb:"المنتج معطل."},{swe:"Jag fick fel vara.",arb:"استلمت منتجاً خاطئاً."},{swe:"Pengarna återbetalas inom 5 dagar.",arb:"يتم استرداد المبلغ خلال 5 أيام."}]}]}];console.log("[LearnUI] Module loaded with",m.length,"lessons");let S="all",$="",T=0,I=1,J=0,y=new Set,x="",d=[],u=0,L=0,b=[],g=0,h=!1,E=!1,D=12;const q=12;let j=null;const ne=100;function oe(){try{T=parseInt(localStorage.getItem("learn_xp")||"0"),I=parseInt(localStorage.getItem("learn_level")||"1"),J=parseInt(localStorage.getItem("learn_streak")||"0"),x=localStorage.getItem("learn_last_visit")||"";const e=localStorage.getItem("learn_completed");e&&(y=new Set(JSON.parse(e))),ie()}catch(e){console.error("[LearnUI] Failed to load state:",e)}}function K(){localStorage.setItem("learn_xp",T.toString()),localStorage.setItem("learn_level",I.toString()),localStorage.setItem("learn_streak",J.toString()),localStorage.setItem("learn_last_visit",x),localStorage.setItem("learn_completed",JSON.stringify([...y]))}function ie(){const e=new Date().toISOString().split("T")[0];if(x!==e){if(x){const a=new Date(x),r=new Date(e),t=Math.abs(r.getTime()-a.getTime()),s=Math.ceil(t/(1e3*60*60*24));s===1?J++:s>1&&(J=1)}else J=1;x=e,K()}}function H(e){T+=e;const a=Math.floor(T/ne)+1;a>I&&(I=a,le()),K()}function le(){const e=document.querySelector(".level-badge");e&&(e.classList.add("level-up"),setTimeout(()=>e.classList.remove("level-up"),1e3))}const U=re();function be(){U.registerViews({browse:{viewId:"browseView",onActivate:()=>{console.log("[LearnUI] Browse View Activated"),k()}},quiz:{viewId:"quizView",onActivate:()=>{console.log("[LearnUI] Quiz View Activated"),_()}},flashcard:{viewId:"flashcardView",onActivate:()=>{console.log("[LearnUI] Flashcard View Activated"),fe()}},saved:{viewId:"savedView",onActivate:()=>{console.log("[LearnUI] Saved View Activated"),ye()}}})}let w=null,V=new Set;function de(){w||(w=new Map,typeof dictionaryData<"u"&&dictionaryData.forEach(e=>{const a=e[0],r=(e[2]||"").toLowerCase().trim();r&&!w.has(r)&&w.set(r,a)}))}function ge(e){w||de();const a=e.toLowerCase().trim();if(w.has(a))return w.get(a)||null;const r=a.replace(/[!?,.-]/g,"");return w.has(r)&&w.get(r)||null}async function ce(){try{const e=await M.getTrainingWords();V=new Set(e.map(a=>Array.isArray(a)?a[0]:a.id))}catch(e){console.error("Failed to load training ids",e)}}function O(e){U.switchTo(e),document.querySelectorAll(".mode-btn").forEach(t=>t.classList.remove("active"));const a=`btn-${e}`,r=document.getElementById(a);r&&(r.classList.add("active"),we(r))}function we(e){const a=document.getElementById("modeIndicator"),r=document.getElementById("modeSelectionBar");if(!a||!r)return;const t=r.getBoundingClientRect(),s=e.getBoundingClientRect(),o=s.left-t.left;a.style.width=`${s.width}px`,a.style.transform=`translateX(${o-6}px)`}function _(){console.log("[LearnUI] Initializing Quiz...");const e=document.getElementById("quizContent");e&&(e.innerHTML=`
+        <div class="empty-state">
+            <div class="spinner"></div> <!-- Ensure you have CSS for this or use simple text -->
+            <p>Laddar quiz...</p>
+        </div>
+    `,setTimeout(()=>{if(L=0,u=0,d=me(),d.length===0){e.innerHTML=`
+                <div class="empty-state">
+                    <p class="sv-text">Inga frågor tillgängliga än.</p>
+                    <p class="ar-text">لا توجد أسئلة متاحة بعد.</p>
+                    <button class="retry-btn" onclick="switchMode('browse')">Tillbaka / رجوع</button>
+                </div>
+            `;return}G()},50))}function me(){const e=[];return m.forEach(t=>{t.sections.forEach(s=>{e.push(...s.examples)})}),[...e].sort(()=>Math.random()-.5).slice(0,10).map(t=>{const s=Math.random()>.5,n=[...[...e.filter(l=>l.swe!==t.swe)].sort(()=>Math.random()-.5).slice(0,3).map(l=>s?l.arb:l.swe),s?t.arb:t.swe].sort(()=>Math.random()-.5);return{question:s?t.swe:t.arb,answer:s?t.arb:t.swe,options:n,type:s?"swe-to-arb":"arb-to-swe",example:t}})}function G(){const e=document.getElementById("quizContent");if(!e||!d[u])return;const a=d[u],r=u/d.length*100;e.innerHTML=`
+        <div class="quiz-header">
+            <div class="quiz-progress-bar">
+                <div class="quiz-progress-fill" style="width: ${r}%"></div>
+            </div>
+            <div class="quiz-stats">
+                <span>Fråga ${u+1}/${d.length}</span>
+                <span>Poäng: ${L}</span>
+            </div>
+        </div>
+
+        <div class="question-card">
+
+            <div class="question-text ${a.type==="arb-to-swe"?"ar-text":"sv-text"}" dir="${a.type==="arb-to-swe"?"rtl":"ltr"}">
+                ${a.question}
+            </div>
+        </div>
+
+        <div class="options-grid">
+            ${a.options.map(t=>`
+                <button class="option-btn ${a.type==="swe-to-arb"?"ar-text":"sv-text"}" 
+                        onclick="checkAnswer('${t.replace(/'/g,"\\'")}')" 
+                        dir="${a.type==="swe-to-arb"?"rtl":"ltr"}">
+                    ${t}
+                </button>
+            `).join("")}
+        </div>
+    `,typeof window.twemoji<"u"&&window.twemoji.parse(e,{folder:"svg",ext:".svg"})}function pe(e){const a=d[u];document.querySelectorAll(".option-btn").forEach(t=>{var o;const s=(o=t.textContent)==null?void 0:o.trim();s===a.answer?t.classList.add("correct"):s===e&&e!==a.answer&&t.classList.add("wrong"),t.disabled=!0}),e===a.answer&&(L++,H(5)),setTimeout(()=>{u++,u<d.length?G():ue()},1500)}function ue(){const e=document.getElementById("quizContent");if(!e)return;const a=L/d.length*100;e.innerHTML=`
+        <div class="quiz-results">
+            <div class="result-icon">${a>=70?"🎉":"💪"}</div>
+            <h2>Quiz klart!</h2>
+            <div class="result-score">${L} / ${d.length}</div>
+            <p>${a>=70?"Bra jobbat! Du börjar behärska detta.":"Bra försök! Fortsätt öva så kommer du snart ihåg allt."}</p>
+            
+            <div class="result-actions">
+                <button class="primary-btn" onclick="initQuiz()">Försök igen / حاول مرة أخرى</button>
+                <button class="secondary-btn" onclick="switchMode('browse')">Klar / تم</button>
+            </div>
+        </div>
+    `}function fe(){if(E)return;console.log("[LearnUI] Initializing Flashcards...");const e=document.getElementById("flashcardContent");e&&(e.innerHTML=`
+        <div class="empty-state">
+            <p>Blandar kort...</p>
+        </div>
+    `,setTimeout(()=>{const a=[];if(m.forEach(r=>{r.sections.forEach(t=>{a.push(...t.examples)})}),b=[...a].sort(()=>Math.random()-.5).slice(0,15),g=0,h=!1,b.length===0){e.innerHTML='<div class="empty-state">Inga ord att träna på. Lägg till ord från ordboken!</div>';return}z()},50))}async function A(){console.log("[LearnUI] Starting Training Session..."),E=!0,O("flashcard");const e=document.getElementById("flashcardContent");e&&(e.innerHTML='<div class="empty-state"><p>Hämtar dina ord...</p></div>');try{const a=await M.getTrainingWords();if(!a||a.length===0){e&&(e.innerHTML=`
+                <div class="empty-state">
+                    <div class="emoji-lg">💪</div>
+                    <h3>Inga ord än</h3>
+                    <p>Markera ord med "💪" i ordboken för att träna på dem här.</p>
+                </div>
+            `);return}b=a.map(r=>{const t=Array.isArray(r);return{id:t?r[0]:r.id||"",swe:t?r[2]:r.swe||"",arb:t?r[3]:r.arb||"",type:t?r[1]:r.type||"",exSwe:t?r[7]||"":r.sweEx||"",exArb:t?r[8]||"":r.arbEx||"",isTraining:!0}}),g=0,h=!1,z()}catch(a){console.error("Error starting training:",a)}}function z(){const e=document.getElementById("flashcardContent");if(!e)return;const a=b[g],r=(g+1)/b.length*100,t=a.exSwe&&a.exSwe.length>2,s=a.exArb&&a.exArb.length>2;e.innerHTML=`
+        <div class="flashcard-header">
+            <div class="quiz-progress-bar">
+                <div class="quiz-progress-fill" style="width: ${r}%"></div>
+            </div>
+            <div class="flashcard-counter">${g+1} / ${b.length}</div>
+        </div>
+
+        <div class="flashcard-wrapper ${h?"flipped":""}" onclick="flipFlashcard()">
+            <div class="flashcard-inner">
+                <div class="flashcard-front">
+                    <!-- Label Removed -->
+                    <div class="flashcard-text sv-text">${a.swe}</div>
+                    ${t?`<div class="flashcard-example sv-text">"${a.exSwe}"</div>`:""}
+                    <div class="flashcard-hint">Klicka för att vända / انقر للقلب</div>
+                </div>
+                <div class="flashcard-back">
+                    <!-- Label Removed -->
+                    <div class="flashcard-text ar-text" dir="rtl">${a.arb}</div>
+                    ${s?`<div class="flashcard-example ar-text" dir="rtl">"${a.exArb}"</div>`:""}
+                    <div class="flashcard-hint">Klicka för att vända / انقر للقلب</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flashcard-controls">
+            ${E?`
+                <button class="know-btn" style="background: #fbbf24; color: #000;" onclick="markAsMastered('${a.id}')">
+                    🏆 <span class="sv-text">Klarad</span><span class="ar-text">أتقنتها</span>
+                </button>
+                <div class="spacer" style="width: 20px;"></div>
+            `:""}
+
+            <button class="dont-know-btn" onclick="nextFlashcard(false)">
+                ❌ <span class="sv-text">Nästa</span><span class="ar-text">التالي</span>
+            </button>
+            ${E?"":`
+            <button class="know-btn" onclick="nextFlashcard(true)">
+                ✅ <span class="sv-text">Kan!</span><span class="ar-text">أعرفها</span>
+            </button>`}
+        </div>
+    `}async function he(e){if(await M.updateTrainingStatus(e,!1),b.splice(g,1),b.length===0){const a=document.getElementById("flashcardContent");a&&(a.innerHTML=`
+            <div class="empty-state">
+                <div class="emoji-lg">🎉</div>
+                <h3>Bra jobbat!</h3>
+                <p>Du har tränat klart alla dina ord.</p>
+                <button class="primary-btn" onclick="switchMode('browse')">Tillbaka</button>
+            </div>
+        `);return}g>=b.length&&(g=0),z()}function ke(){h=!h;const e=document.querySelector(".flashcard-wrapper");e&&e.classList.toggle("flipped",h)}function ve(e){e&&H(2),g++,h=!1,g<b.length?z():xe()}function xe(){const e=document.getElementById("flashcardContent");e&&(e.innerHTML=`
+        <div class="quiz-results">
+            <div class="result-icon">🎓</div>
+            <h2>Flashcards klara!</h2>
+            <p>Du har gått igenom ${b.length} kort.</p>
+            <div class="result-actions">
+                <button class="primary-btn" onclick="initFlashcards()">Börja om / ابدأ من جديد</button>
+                <button class="secondary-btn" onclick="switchMode('browse')">Klar / تم</button>
+            </div>
+        </div>
+    `)}function ye(){console.log("[LearnUI] Rendering Saved Lessons...");const e=document.getElementById("savedList");if(!e)return;e.innerHTML="";const a=m.filter(t=>y.has(t.id));if(a.length===0){e.innerHTML=`
+            <div class="empty-state">
+                <p class="sv-text">Du har inte slutfört några lektioner än.</p>
+                <p class="ar-text">لم تكمل أي دروس بعد.</p>
+            </div>
+        `;return}const r=document.createDocumentFragment();a.forEach(t=>{const s=document.createElement("div");for(s.innerHTML=W(t);s.firstChild;)r.appendChild(s.firstChild)}),e.appendChild(r),requestAnimationFrame(()=>{typeof window.twemoji<"u"&&window.twemoji.parse(e,{folder:"svg",ext:".svg"})})}function k(e=!1){const a=document.getElementById("lessonsGrid");if(!a){console.error("[LearnUI] Lessons grid not found");return}let r=m;if(S!=="all"&&(r=m.filter(n=>n.level===S)),$){const n=$.toLowerCase().trim(),l=R(n);r=r.filter(i=>i.title.toLowerCase().includes(n)||i.id.toLowerCase().includes(n)?!0:i.sections.some(f=>f.title.toLowerCase().includes(n)||f.content.some(v=>v.html.toLowerCase().includes(n))?!0:f.examples.some(v=>{const Z=v.swe.toLowerCase(),ee=R(v.arb);return Z.includes(n)||ee.includes(l)})))}e||(D=q,a.innerHTML="",window.scrollTo({top:0,behavior:"instant"}));const t=e?D:0;e&&(D+=q);const s=D,o=r.slice(t,s);if(o.length===0&&e)return;console.log(`[LearnUI] Rendering batch ${t}-${s} (Total: ${r.length})`);const c=o.map(n=>W(n)).join("");if(e){const n=document.getElementById("lessons-sentinel");n&&n.remove(),a.insertAdjacentHTML("beforeend",c)}else a.innerHTML=c;if(s<r.length){const n=document.createElement("div");n.id="lessons-sentinel",n.style.height="50px",n.style.width="100%",a.appendChild(n),j&&j.observe(n)}requestAnimationFrame(()=>{typeof window.twemoji<"u"&&window.twemoji.parse(a,{folder:"svg",ext:".svg"})})}function W(e){const a=y.has(e.id),r={beginner:"🟢",intermediate:"🟡",advanced:"🔴"};let t="";a&&(t=`
+            <div class="mastery-stars">
+                <span class="star active">★</span>
+                <span class="star active">★</span>
+                <span class="star active">★</span>
+            </div>
+        `);const s=window.t,o=s?s("learn.sections"):"avsnitt",c=o==="learn.sections"||!o?"avsnitt":o,n=`${e.sections.length} ${c}`,l=`${Math.max(3,e.sections.length*2)} min`,i=e.id==="wordOrder"?"ترتيب الكلمات - قاعدة V2":e.id==="verbs"?"الأفعال والأزمنة":e.id==="pronouns"?"الضمائر الشخصية":e.id==="adjectives"?"الصفات - التذكير والتأنيث":"درس قواعد";return`
+        <div class="lesson-card search-result-style ${a?"completed":""}" 
+             onclick="openLesson('${e.id}')" 
+             data-level="${e.level}"
+             onmousemove="handleCardTilt(event, this)"
+             onmouseleave="resetCardTilt(this)">
+             
+            <div class="lesson-card-header">
+                <div class="lesson-text-group">
+                    <h2 class="lesson-title search-result-title">${e.title}</h2>
+                    <span class="lesson-level-badge ${e.level}">${r[e.level]||"📚"} ${e.level}</span>
+                </div>
+                ${a?'<span class="check-icon">✓</span>':""}
+            </div>
+            
+            <p class="lesson-subtitle-arb" dir="rtl">${i}</p>
+            
+            <div class="lesson-meta-row">
+                <span class="meta-item"><span class="icon">📄</span> ${n}</span>
+                <span class="meta-item"><span class="icon">⚡</span> ${l}</span>
+            </div>
+
+            ${t}
+
+            <div class="lesson-progress-bar">
+                <div class="lesson-progress-fill" style="width: ${a?"100":"0"}%"></div>
+            </div>
+        </div>
+    `}let p=null,B=null;window.addEventListener("resize",()=>{p=null,B=null});function Je(e,a){if(B!==a&&(p=a.getBoundingClientRect(),B=a),!p)return;const r=e.clientX-p.left,t=e.clientY-p.top;requestAnimationFrame(()=>{a.style.setProperty("--mouse-x",`${r}px`),a.style.setProperty("--mouse-y",`${t}px`);const s=p.width/2,o=p.height/2,c=(t-o)/o*-10,n=(r-s)/s*10;a.style.transform=`perspective(1000px) rotateX(${c}deg) rotateY(${n}deg) scale(1.02)`})}function je(e){e.style.transform="perspective(1000px) rotateX(0) rotateY(0) scale(1)",B=null,p=null}async function Q(e){const a=m.find(o=>o.id===e);if(!a)return;await ce();const r=document.getElementById("lessonModal"),t=document.getElementById("modalTitle"),s=document.getElementById("lessonContent");r&&r.classList.add("active"),t&&(t.textContent=a.title),s&&(s.innerHTML=Ve(a)),H(5)}function Ve(e){return`
+        <div class="lesson-sections">
+            ${e.sections.map((a,r)=>`
+                <div class="lesson-section" data-section="${r}">
+                    <h3 class="section-title">${a.title}</h3>
+                    
+                    ${a.content.map(t=>`
+                        <div class="content-item ${t.type}">
+                            ${t.html}
+                        </div>
+                    `).join("")}
+                    
+                    ${a.examples.length>0?`
+                        <div class="examples-list">
+                            ${N(a.examples.slice(0,10))}
+                            
+                            ${a.examples.length>10?`
+                                <button class="show-more-btn" onclick="this.parentElement.classList.add('expanded'); this.remove();">
+                                    Visa ${a.examples.length-10} till...
+                                </button>
+                                <div class="more-examples">
+                                    ${N(a.examples.slice(10))}
+                                </div>
+                            `:""}
+                        </div>
+                    `:""}
+                </div>
+            `).join("")}
+
+            <div class="lesson-actions">
+                <button class="complete-lesson-btn" onclick="completeLesson('${e.id}')">
+                    ✅ <span class="sv-text">Markera som klar</span><span class="ar-text">اكتمل</span>
+                </button>
+            </div>
+        </div>
+    `}function N(e){return e.map(a=>{let r=ge(a.swe),t="";r||(r=Fe(a.swe),t=encodeURIComponent(JSON.stringify(a)));const s=r&&V.has(r);return`
+            <div class="example-item">
+                <div class="example-swe">
+                    <button class="speak-btn" onclick="speakText('${a.swe.replace(/'/g,"\\'")}', 'sv')">🔊</button>
+                    <span>${a.swe}</span>
+                </div>
+                <div class="example-actions-row">
+                    <div class="example-arb">${a.arb}</div>
+                    <button class="train-mini-btn ${s?"active":""}" 
+                            onclick="toggleTrainingWord('${r}', this, '${t}')"
+                            aria-label="Träna / تدريب">
+                        ${s?"🧠":"💪"}
+                    </button>
+                </div>
+            </div>
+        `}).join("")}function Se(e){y.has(e)||(y.add(e),H(20),K(),k()),Y()}function Y(){const e=document.getElementById("lessonModal");e&&e.classList.remove("active")}function C(e,a){if(typeof F<"u"&&F)F.speak(e,a);else{const r=new SpeechSynthesisUtterance(e);r.lang=a==="sv"?"sv-SE":"ar-SA",speechSynthesis.speak(r)}}function Le(){const e=document.querySelectorAll(".filter-chip");e.forEach(a=>{a.addEventListener("click",()=>{e.forEach(r=>r.classList.remove("active")),a.classList.add("active"),a.classList.add("active"),S=a.getAttribute("data-filter")||"all",S==="training"?A():k()})})}function He(){const e=document.getElementById("lessonSearchInput");if(e){const t=te(()=>{$=e.value,k()},300);e.addEventListener("input",t)}const a=document.getElementById("filterToggleBtn"),r=document.querySelector(".filter-scroll-container");a&&r&&a.addEventListener("click",()=>{r.classList.contains("expanded")?(r.classList.remove("expanded"),a.classList.remove("active")):(r.classList.add("expanded"),a.classList.add("active"))})}function P(){console.log("[LearnUI] Opening random quiz...");const e=m[Math.floor(Math.random()*m.length)];Q(e.id)}function De(){console.log("[LearnUI] Opening daily challenge..."),P(),H(10)}function Te(){const e=document.getElementById("wodWord"),a=document.getElementById("wodExampleSwe");e&&(C(e.textContent||"","sv"),a&&setTimeout(()=>{C(a.textContent||"","sv")},1500))}function Ie(e){document.querySelectorAll(".filter-chip").forEach(t=>{t.getAttribute("data-filter")===e?t.classList.add("active"):t.classList.remove("active")}),S=e,k();const r=document.getElementById("lessonsGrid");r&&r.scrollIntoView({behavior:"smooth"})}function Ee(){console.log("[LearnUI] Opening review session..."),P()}function Be(){window.openLesson=Q,window.closeLessonModal=Y,window.completeLesson=Se,window.speakText=C,window.openRandomQuiz=P,window.openDailyChallenge=De,window.speakWordOfDay=Te,window.setPathFilter=Ie,window.openReviewSession=Ee,window.handleCardTilt=Je,window.resetCardTilt=je,window.switchMode=O,window.initQuiz=_,window.checkAnswer=pe,window.flipFlashcard=ke,window.nextFlashcard=ve,window.toggleTrainingWord=Me,window.markAsMastered=he,window.startTrainingSession=A}async function Me(e,a){if(e)try{const r=!V.has(e);r?(V.add(e),a.classList.add("active"),a.textContent="🧠"):(V.delete(e),a.classList.remove("active"),a.textContent="💪"),await M.updateTrainingStatus(e,r)}catch(r){console.error("Failed to toggle training:",r)}}async function ze(){const e=document.getElementById("wodWord"),a=document.getElementById("wodTranslation"),r=document.getElementById("wodExampleSwe"),t=document.getElementById("wodExampleArb"),s=document.querySelector(".wod-category"),o=document.getElementById("wodDate");if(!e)return;try{const{DictionaryDB:l}=await ae(async()=>{const{DictionaryDB:f}=await import("./db-C5HhRm-y.js");return{DictionaryDB:f}},__vite__mapDeps([0,1]));await l.init();const i=await l.getRandomWord();if(i){console.log("[LearnUI] Word of the Day:",i.swedish),e&&(e.textContent=i.swedish),a&&(a.textContent=i.arabic);const f=i.example||`${i.swedish} är ett bra ord.`,v=i.example_ar||`كلمة ${i.arabic} كلمة جيدة.`;r&&(r.textContent=f),t&&(t.textContent=v),s&&(s.textContent=`🏷️ ${i.type||"Ord"}`)}else console.warn("[LearnUI] No words found in DB for Word of the Day"),e&&(e.textContent="Välkommen"),a&&(a.textContent="مرحباً")}catch(l){console.error("[LearnUI] Failed to load Word of the Day:",l)}const c=new Date,n={day:"numeric",month:"long"};o&&(o.textContent=c.toLocaleDateString("sv-SE",n))}function Fe(e){let a=0;for(let r=0;r<e.length;r++){const t=e.charCodeAt(r);a=(a<<5)-a+t,a=a&a}return"cust_"+Math.abs(a).toString(36)}function $e(){console.log("[LearnUI] Initializing..."),oe(),be(),Be(),Le(),He(),Ce(),k(),ze(),new URLSearchParams(window.location.search).get("mode")==="training"&&setTimeout(()=>{const r=document.querySelector(".filter-training");r?r.click():A()},100),console.log("[LearnUI] Initialized successfully")}function Ce(){j&&j.disconnect(),j=new IntersectionObserver(e=>{e[0].isIntersecting&&requestAnimationFrame(()=>{k(!0)})},{root:null,rootMargin:"300px",threshold:.1})}const X=document.createElement("style");X.textContent=`
+    /* --- Premium Lesson Card Styling --- */
+    .lesson-card {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Force children to left */
+        text-align: left;        /* Force text to left */
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 1.5rem;
+        cursor: pointer;
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                    box-shadow 0.4s ease, 
+                    border-color 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transform-style: preserve-3d;
+    }
+    
+    .lesson-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                                  rgba(96, 165, 250, 0.15) 0%, 
+                                  transparent 50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .lesson-card:hover::before {
+        opacity: 1;
+    }
+    
+    .lesson-card:hover {
+        transform: translateY(-5px) scale(1.01);
+        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2), 
+                    0 0 15px rgba(96, 165, 250, 0.1);
+        border-color: rgba(96, 165, 250, 0.3);
+    }
+    
+    .lesson-card.completed {
+        border-color: rgba(34, 197, 94, 0.4);
+        background: linear-gradient(145deg, rgba(34, 197, 94, 0.05), rgba(30, 41, 59, 0.7));
+    }
+
+    /* Mastery Stars */
+    .mastery-stars {
+        display: flex;
+        gap: 4px;
+        margin-top: 8px;
+        justify-content: center;
+    }
+
+    .star {
+        font-size: 1.1rem;
+        color: #475569;
+        transition: color 0.3s, transform 0.3s;
+    }
+
+    .star.active {
+        color: #fbbf24;
+        filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.5));
+        animation: starPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes starPop {
+        50% { transform: scale(1.4); }
+    }
+
+    /* Neon Progress */
+    .lesson-progress-bar {
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        overflow: visible;
+        margin-top: 12px;
+        position: relative;
+    }
+    
+    .lesson-progress-fill {
+        height: 100%;
+        background: #60a5fa;
+        border-radius: 4px;
+        transition: width 0.5s ease;
+        position: relative;
+        box-shadow: 0 0 10px rgba(96, 165, 250, 0.8);
+    }
+    
+    .lesson-card.completed .lesson-progress-fill {
+        background: #22c55e;
+        box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+    }
+    
+    /* --- Search Result Style Layout --- */
+    .lesson-card-header {
+        display: flex;
+        justify-content: space-between; /* Push checkmark to right */
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        width: 100%; /* Ensure header takes full width */
+    }
+
+    .lesson-text-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Align Title and Badge to Left */
+        gap: 0.5rem;
+        flex: 1; /* Take available space */
+        min-width: 0; /* Prevent overflow issues */
+    }
+
+    .lesson-title.search-result-title {
+        font-size: 1.3rem; 
+        font-weight: 700;
+        color: #f8fafc;
+        margin: 0;
+        line-height: 1.2;
+        width: 100%;
+        white-space: nowrap;       /* Keep text on one line */
+        overflow: hidden;          /* Hide overflow */
+        text-overflow: ellipsis;   /* Add ... if too long */
+        text-align: left;          /* Force left alignment */
+    }
+
+    .lesson-level-badge {
+        font-size: 0.75rem;
+        padding: 2px 8px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #cbd5e1;
+        width: fit-content;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        text-transform: capitalize;
+    }
+
+    .lesson-subtitle-arb {
+        color: #94a3b8;
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+        font-family: 'Tajawal', sans-serif;
+    }
+
+    .lesson-meta-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #64748b;
+        font-size: 0.85rem;
+        background: rgba(15, 23, 42, 0.4);
+        padding: 4px 10px;
+        border-radius: 8px;
+    }
+    
+    .meta-item .icon {
+        opacity: 0.8;
+    }
+
+    .check-icon {
+        color: #4ade80;
+        font-weight: bold;
+        background: rgba(74, 222, 128, 0.1);
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    /* Lesson Modal Styles */
+    .lesson-sections {
+        padding-bottom: 2rem;
+    }
+    
+    .lesson-section {
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+        color: #60a5fa;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .content-item {
+        color: #e2e8f0;
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+    
+    .examples-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .example-item {
+        background: rgba(15, 23, 42, 0.6);
+        border-radius: 12px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .example-swe {
+        color: #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .example-actions-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Matching .action-btn-premium style */
+    .train-mini-btn {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, #1e3a8a 0%, #0ea5e9 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        flex-shrink: 0;
+        box-shadow: 0 4px 10px rgba(0, 91, 150, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .train-mini-btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.4s, height 0.4s;
+    }
+
+    .train-mini-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(0, 91, 150, 0.4);
+    }
+
+    .train-mini-btn:hover::before {
+        width: 100px;
+        height: 100px;
+    }
+
+    .train-mini-btn.active {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: none;
+        color: #94a3b8;
+    }
+    
+    .example-arb {
+        color: #94a3b8;
+        direction: rtl;
+        text-align: right;
+        font-size: 0.9rem;
+    }
+    
+    .speak-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+    
+    .speak-btn:hover {
+        opacity: 1;
+    }
+    
+    .show-more-btn {
+        background: rgba(96, 165, 250, 0.2);
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        color: #60a5fa;
+        padding: 0.8rem;
+        border-radius: 12px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+    }
+    
+    .show-more-btn:hover {
+        background: rgba(96, 165, 250, 0.3);
+    }
+    
+    .more-examples {
+        display: none;
+    }
+    
+    .examples-list.expanded .more-examples {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .complete-lesson-btn {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 16px;
+        font-size: 1rem;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 1rem;
+        transition: all 0.3s;
+    }
+    
+    .complete-lesson-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+    }
+    
+    .lesson-actions {
+        margin-top: 2rem;
+    }
+    
+    @keyframes levelUp {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+        100% { transform: scale(1); }
+    }
+
+    /* --- Mode selection bar --- */
+    .mode-selection-bar {
+        display: flex;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        margin: 1rem;
+        padding: 4px;
+        border-radius: 20px;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        z-index: 10;
+    }
+
+    .mode-btn {
+        flex: 1;
+        background: none;
+        border: none;
+        padding: 0.8rem 0.5rem;
+        border-radius: 16px;
+        color: #94a3b8;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        position: relative;
+        z-index: 2;
+        transition: color 0.3s;
+    }
+
+    .mode-btn.active {
+        color: #fbbf24;
+    }
+
+    .mode-icon {
+        font-size: 1.2rem;
+    }
+
+    .mode-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .mode-indicator {
+        position: absolute;
+        bottom: 4px;
+        top: 4px;
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(251, 191, 36, 0.05));
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        border-radius: 16px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 1;
+    }
+
+    /* --- View Sections --- */
+    .view-section {
+        display: none;
+    }
+    .view-section.active {
+        display: block;
+        animation: viewIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes viewIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Quiz Styles --- */
+    .quiz-container {
+        padding: 1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .quiz-progress-bar {
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+    }
+    .quiz-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #fbbf24, #f59e0b);
+        border-radius: 10px;
+        transition: width 0.4s ease;
+        box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    }
+    .quiz-stats {
+        display: flex;
+        justify-content: space-between;
+        color: #94a3b8;
+        font-size: 0.85rem;
+        margin-bottom: 2rem;
+    }
+    .question-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 28px;
+        padding: 3rem 2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+    .question-label {
+        color: #60a5fa;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 1.5rem;
+        opacity: 0.8;
+    }
+    .question-text {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #f8fafc;
+        line-height: 1.4;
+    }
+    .question-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    .question-text { margin-bottom: 1rem; }
+    
+    .options-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    .option-btn {
+        background: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        border-radius: 16px;
+        color: #e2e8f0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .option-btn:hover:not(:disabled) {
+        transform: translateY(-3px);
+        background: rgba(96, 165, 250, 0.1);
+        border-color: #60a5fa;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    }
+    .option-btn:active:not(:disabled) { transform: scale(0.95); }
+    .option-btn.correct {
+        background: rgba(34, 197, 94, 0.2) !important;
+        border-color: #22c55e !important;
+        color: #4ade80 !important;
+        box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+    }
+    .option-btn.wrong {
+        background: rgba(239, 68, 68, 0.2) !important;
+        border-color: #ef4444 !important;
+        color: #f87171 !important;
+        box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+    }
+
+    /* --- Flashcard Styles --- */
+    .flashcard-container {
+        padding: 1rem;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    .flashcard-header { 
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .flashcard-wrapper {
+        perspective: 1200px;
+        height: 340px;
+        width: 100%;
+        margin-bottom: 1.5rem;
+        cursor: pointer;
+    }
+    .flashcard-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-style: preserve-3d;
+    }
+    .flashcard-wrapper.flipped .flashcard-inner {
+        transform: rotateY(180deg);
+    }
+    .flashcard-front, .flashcard-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 32px;
+        padding: 1.5rem;
+        box-shadow: 
+            0 20px 40px -10px rgba(0, 0, 0, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    .flashcard-front::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 32px;
+        padding: 1px;
+        background: linear-gradient(to bottom right, rgba(255,255,255,0.1), rgba(255,255,255,0));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+    }
+    .flashcard-back {
+        transform: rotateY(180deg);
+        border-color: rgba(96, 165, 250, 0.2);
+    }
+    .flashcard-label {
+        display: none;
+    }
+    .flashcard-text {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #f8fafc;
+        line-height: 1.2;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        margin-bottom: 0.5rem;
+    }
+    .flashcard-example {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem 1.25rem;
+        border-radius: 16px;
+        margin-top: 1rem;
+        font-size: 1rem;
+        color: #cbd5e1;
+        font-style: italic;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        max-width: 90%;
+        line-height: 1.6;
+    }
+    .flashcard-hint {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-top: 1rem;
+        font-style: italic;
+    }
+    .flashcard-controls {
+        display: flex;
+        gap: 1.5rem;
+    }
+    .flashcard-controls button {
+        flex: 1;
+        padding: 1.2rem;
+        border-radius: 20px;
+        border: none;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+    }
+    .flashcard-controls button:hover { transform: translateY(-3px); }
+    .flashcard-controls button:active { transform: scale(0.95); }
+    
+    .dont-know-btn { 
+        background: rgba(239, 68, 68, 0.15); 
+        color: #f87171; 
+        border: 1px solid rgba(239, 68, 68, 0.25) !important; 
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+    }
+    .know-btn { 
+        background: linear-gradient(135deg, #fbbf24, #d97706);
+        color: #1e293b; 
+        border: none !important;
+        box-shadow: 0 8px 20px rgba(251, 191, 36, 0.3);
+    }
+    .know-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(251, 191, 36, 0.4);
+    }
+    
+    .flashcard-counter {
+        text-align: right;
+        margin: 0;
+        color: #94a3b8;
+        font-size: 1rem;
+        font-weight: 600;
+        white-space: nowrap;
+        min-width: fit-content;
+    }
+
+    /* Results */
+    .quiz-results {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: rgba(30, 41, 59, 0.5);
+        border-radius: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .result-icon { font-size: 5rem; margin-bottom: 1.5rem; filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.3)); }
+    .result-score { font-size: 4rem; font-weight: 900; color: #fbbf24; margin: 1.5rem 0; }
+    .result-actions { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 3rem; }
+    .primary-btn { 
+        background: linear-gradient(135deg, #fbbf24, #f59e0b); 
+        color: #1e293b; 
+        padding: 1.3rem; 
+        border-radius: 20px; 
+        border: none; 
+        font-weight: 800; 
+        font-size: 1.1rem;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(251, 191, 36, 0.2);
+    }
+    .secondary-btn { 
+        background: rgba(255, 255, 255, 0.05); 
+        color: #f8fafc; 
+        padding: 1.3rem; 
+        border-radius: 20px; 
+        border: 1px solid rgba(255, 255, 255, 0.1); 
+        font-weight: 700; 
+        font-size: 1rem;
+        cursor: pointer; 
+    }
+
+    /* Saved List */
+    .saved-container { padding: 1rem; }
+    .saved-list { display: grid; gap: 1rem; }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 5rem 2rem;
+        color: #64748b;
+        background: rgba(30, 41, 59, 0.3);
+        border-radius: 24px;
+        margin: 2rem 0;
+    }
+    .empty-state p { margin-bottom: 1rem; font-size: 1.1rem; }
+    .retry-btn {
+        background: rgba(96, 165, 250, 0.2);
+        color: #60a5fa;
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        padding: 0.8rem 1.5rem;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+        .options-grid { grid-template-columns: 1fr; }
+        .question-text { font-size: 1.6rem; }
+        .flashcard-text { font-size: 1.8rem; }
+        .flashcard-wrapper { height: 350px; }
+    }
+
+    .flashcard-example {
+        font-size: 1.1rem;
+        margin-top: 1.5rem;
+        opacity: 0.9;
+        font-style: italic;
+        padding: 0 1rem;
+        line-height: 1.6;
+        color: #e2e8f0;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.8rem;
+        border-radius: 12px;
+        width: 100%;
+    }
+`;document.head.appendChild(X);typeof window<"u"&&document.addEventListener("DOMContentLoaded",()=>{se.init(),$e()});

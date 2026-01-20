@@ -1130,6 +1130,8 @@ function exportToWindow(): void {
     (window as any).flipFlashcard = flipFlashcard;
     (window as any).nextFlashcard = nextFlashcard;
     (window as any).toggleTrainingWord = toggleTrainingWord;
+    (window as any).markAsMastered = markAsMastered;
+    (window as any).startTrainingSession = startTrainingSession;
 }
 
 // Toggle Training Word

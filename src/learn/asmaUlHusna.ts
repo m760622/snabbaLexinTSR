@@ -3,7 +3,7 @@ import asmaData from '../data/asmaUlHusna.json';
 import { TTSManager } from '../tts';
 import { LearnViewManager, LearnView, createLearnViewManager } from './LearnViewManager';
 
-console.log('[AsmaUlHusna] Module loaded');
+// Asma ul Husna - Game Logic
 
 // Define interface locally since we're using JSON
 interface AsmaName {
@@ -652,7 +652,6 @@ function updateFilterCounts(): void {
 
 // Initialize
 function init(): void {
-    console.log('[AsmaUlHusna] Initializing...');
     initViewManager();
     loadSavedState();
     allNames = ASMA_UL_HUSNA;
@@ -1558,7 +1557,7 @@ async function shareStats(): Promise<void> {
             });
             return;
         } catch (e) {
-            console.log('Share failed', e);
+            // Share failed silently
         }
     }
 
@@ -1594,7 +1593,6 @@ async function exportMemorizedList(): Promise<void> {
 
 // DOM Ready
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('[AsmaUlHusna] DOM Ready');
     init();
     loadMobileView();
 });
@@ -1610,14 +1608,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Toggle Player Repeat
 function togglePlayerRepeat(): void {
-    console.log('[AsmaUlHusna] Toggling repeat. Current:', repeatCount);
     // Cycle 1 -> 3 -> 5 -> 7 -> 1
     const counts = [1, 3, 5, 7];
     const idx = counts.indexOf(repeatCount);
     // If current count is not in list (e.g. customized?), default to 0
     const currentIdx = idx === -1 ? 0 : idx;
     const nextIdx = (currentIdx + 1) % counts.length;
-    console.log('[AsmaUlHusna] New count:', counts[nextIdx]);
     setRepeatCount(counts[nextIdx]);
 }
 

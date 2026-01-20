@@ -449,21 +449,52 @@ export const DictionaryDB = {
         if (!this.db) return [];
 
         return new Promise((resolve, reject) => {
-            const tx = this.db!.transaction([this.STORE_NAME], 'readonly');
-            const store = tx.objectStore(this.STORE_NAME);
-            const request = store.getAll();
+            // First, get all training entries
+            const tx = this.db!.transaction([this.TRAINING_STORE, this.STORE_NAME], 'readonly');
+            const trainingStore = tx.objectStore(this.TRAINING_STORE);
+            const wordsStore = tx.objectStore(this.STORE_NAME);
 
-            request.onsuccess = () => {
-                const allWords = request.result;
-                const trainingWords = allWords
-                    .filter((w: any) => w.needsTraining === true)
-                    .map((w: any) => w.raw || w);
+            const trainingRequest = trainingStore.getAll();
 
-                console.log(`[DB] Found ${trainingWords.length} words for training`);
-                resolve(trainingWords);
+            trainingRequest.onsuccess = async () => {
+                const trainingEntries = trainingRequest.result;
+
+                if (trainingEntries.length === 0) {
+                    console.log('[DB] Found 0 words for training');
+                    resolve([]);
+                    return;
+                }
+
+                // Hydrate with full word data from words store
+                const trainingWords: any[] = [];
+                let completed = 0;
+
+                for (const entry of trainingEntries) {
+                    const wordRequest = wordsStore.get(entry.id);
+                    wordRequest.onsuccess = () => {
+                        if (wordRequest.result) {
+                            trainingWords.push(wordRequest.result.raw || wordRequest.result);
+                        } else {
+                            // Word not in words store, create minimal entry
+                            trainingWords.push({ id: entry.id });
+                        }
+                        completed++;
+                        if (completed === trainingEntries.length) {
+                            console.log(`[DB] Found ${trainingWords.length} words for training`);
+                            resolve(trainingWords);
+                        }
+                    };
+                    wordRequest.onerror = () => {
+                        completed++;
+                        if (completed === trainingEntries.length) {
+                            console.log(`[DB] Found ${trainingWords.length} words for training`);
+                            resolve(trainingWords);
+                        }
+                    };
+                }
             };
 
-            request.onerror = (e) => reject(e);
+            trainingRequest.onerror = (e) => reject(e);
         });
     },
 
@@ -475,12 +506,13 @@ export const DictionaryDB = {
         if (!this.db) return false;
 
         return new Promise((resolve) => {
-            const tx = this.db!.transaction([this.STORE_NAME], 'readonly');
-            const store = tx.objectStore(this.STORE_NAME);
+            const tx = this.db!.transaction([this.TRAINING_STORE], 'readonly');
+            const store = tx.objectStore(this.TRAINING_STORE);
             const request = store.get(wordId);
 
             request.onsuccess = () => {
-                resolve(!!(request.result && request.result.needsTraining));
+                // If the entry exists in the training store, the word is marked for training
+                resolve(!!request.result);
             };
             request.onerror = () => resolve(false);
         });

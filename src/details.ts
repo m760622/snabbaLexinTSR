@@ -738,7 +738,6 @@ class MiniQuizManager {
 
     static setDifficulty(level: QuizDifficulty) {
         this.difficulty = level;
-        console.log(`[Quiz] Difficulty set to: ${level}`);
     }
 
     static adjustDifficulty(isCorrect: boolean) {
@@ -843,15 +842,6 @@ class MiniQuizManager {
             }
         }
 
-        console.log('[Quiz] EXTREME distractors:', {
-            correct: arb,
-            features: this.getArabicFeatures(arb),
-            distractors: distractors.map(d => ({
-                text: d,
-                score: this.similarityScore(arb, d),
-                features: this.getArabicFeatures(d)
-            }))
-        });
         return distractors;
     }
 
@@ -939,16 +929,6 @@ class MiniQuizManager {
                 }
             }
         }
-
-        console.log('[Quiz] EXTREME Swedish distractors:', {
-            correct: swe,
-            correctLen: swe.length,
-            distractors: distractors.map(d => ({
-                text: d,
-                len: d.length,
-                score: this.swedishSimilarityScore(swe, d)
-            }))
-        });
 
         return distractors;
     }
@@ -1076,7 +1056,6 @@ class MiniQuizManager {
             `;
             modeLabel = `<span class="sv-text">Bildquiz</span><span class="ar-text">اختبار الصور</span>`;
             modeIcon = '🖼️';
-            console.log('[Quiz] EMOJI mode:', { emoji, correctAnswer: swe });
 
         } else if (quizType === 1 && hasSentence) {
             // FILL-IN-THE-BLANK: Show sentence with blank
@@ -1091,7 +1070,6 @@ class MiniQuizManager {
             `;
             modeLabel = `<span class="sv-text">Fyll i</span><span class="ar-text">إكمال</span>`;
             modeIcon = '📝';
-            console.log('[Quiz] FILL BLANK mode:', { sentence: exSwe, correctAnswer: swe });
 
         } else if (quizType === 2) {
             // LISTENING: Play audio, pick the word
@@ -1110,7 +1088,6 @@ class MiniQuizManager {
             modeIcon = '🎧';
             // Auto-play audio
             setTimeout(() => TTSManager.speak(swe, 'sv'), 500);
-            console.log('[Quiz] LISTENING mode:', { correctAnswer: swe });
 
         } else {
             // TRANSLATION: Normal or Reverse
@@ -1329,7 +1306,6 @@ class MiniQuizManager {
  */
 class RelatedWordsManager {
     static async init(wordData: any[]) {
-        console.log('[RelatedWords] init called with:', wordData?.[2]);
         const container = document.getElementById('relatedWordsContainer');
         if (!container) return;
 
@@ -2086,7 +2062,6 @@ export class DetailsManager {
             const cachedWord = await DictionaryDB.getWordById(this.wordId);
 
             if (cachedWord) {
-                console.log('[Details] ⚡ Instant load from cache');
                 this.wordData = cachedWord;
                 // Render immediately
                 this.renderDetails();
@@ -2211,7 +2186,6 @@ export class DetailsManager {
             // Init new professional features
             NotesManager.init(this.wordId!);
             MiniQuizManager.init(this.wordData);
-            console.log('[handleDataReady] Calling RelatedWordsManager.init...');
             RelatedWordsManager.init(this.wordData);
         } else {
             const area = document.getElementById('detailsArea');

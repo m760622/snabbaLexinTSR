@@ -1,0 +1,1 @@
+function i(n,e){let t=null;return function(...o){t&&clearTimeout(t),t=setTimeout(()=>n(...o),e)}}function l(n,e){let t=0;return function(...o){const c=Date.now();c-t>=e&&(t=c,n(...o))}}function u(n){const e=document.createElement("link");e.rel="prefetch",e.href=n,document.head.appendChild(e)}window.debounce=i;window.throttle=l;window.prefetchPage=u;export{i as d};
