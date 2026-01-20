@@ -118,9 +118,13 @@ export class QuizManager {
         QuizStats.resetSession();
 
         // Show container
+        this.container = document.getElementById('quizInlineContainer'); // Re-query DOM
         if (this.container) {
             this.container.classList.remove('hidden');
             this.container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            console.log('[Quiz] Container shown:', this.container);
+        } else {
+            console.error('[Quiz] Container element NOT FOUND!');
         }
 
         // Hide end screen, show quiz body

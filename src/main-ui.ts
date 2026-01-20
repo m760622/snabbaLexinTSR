@@ -93,6 +93,34 @@ function initQuickActions() {
             (window as any).QuizManager?.start?.();
         });
     }
+
+    const quickHomeBtn = document.getElementById('quickHomeBtn');
+    if (quickHomeBtn) {
+        quickHomeBtn.addEventListener('click', () => {
+            // 1. Clear Search
+            const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+            if (searchInput) {
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                searchInput.focus();
+            }
+
+            // 2. Hide Quiz if open
+            const quizContainer = document.getElementById('quizInlineContainer');
+            if (quizContainer) {
+                quizContainer.classList.add('hidden');
+            }
+
+            // 3. Ensure Landing Page is visible (handled by search input event usually, but force specific visibility here if needed)
+            const landingPage = document.getElementById('landingPageContent');
+            const searchResults = document.getElementById('searchResults');
+            if (landingPage) landingPage.classList.remove('hidden');
+            if (searchResults) {
+                searchResults.innerHTML = '';
+                searchResults.classList.remove('active');
+            }
+        });
+    }
 }
 
 function initOnboarding() {

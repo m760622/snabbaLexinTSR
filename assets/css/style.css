@@ -12885,3 +12885,34 @@ body.lang-ar .sv-text {
     font-size: 1.2rem;
   }
 }
+
+/* Quiz Inline Container Styling (Relocated) */
+.container-quiz-inline {
+  width: 100%;
+  max-width: 600px;
+  margin: 1.5rem auto 0;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 10;
+}
+
+.container-quiz-inline .game-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

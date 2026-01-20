@@ -318,6 +318,10 @@
             <span class="quick-icon">📅</span>
 
         </button>
+        <button type="button" class="quick-action-btn" id="quickHomeBtn" data-tooltip="Hem / الرئيسية"
+            aria-label="Hem / الرئيسية">
+            <span class="quick-icon">🏠</span>
+        </button>
         <a href="games/games.html" class="quick-action-btn" data-tooltip="Spel / ألعاب" aria-label="Spel / ألعاب">
             <span class="quick-icon">🎮</span>
 
@@ -344,6 +348,76 @@
     </div>
 
     <!-- Landing Page Content - Everything that shows when NOT searching -->
+    <!-- Quiz Container (Inline) - Enhanced Professional Version -->
+    <div class="container container-quiz-inline">
+        <div id="quizInlineContainer" class="game-container hidden">
+            <!-- Header with Mode, Score, Timer -->
+            <div class="quiz-header-compact">
+                <div class="quiz-header-left">
+                    <h2><span class="sv-text">Snabbtest</span><span class="ar-text">اختبار سريع</span></h2>
+                    <select id="quizModeSelect" class="mode-select-compact" aria-label="Läge">
+                        <option value="normal">🎯 Normal</option>
+                        <option value="reverse">🔄 Omvänd</option>
+                        <option value="listening">🔊 Lyssna</option>
+                        <option value="timed">⏱️ Tidsutmaning</option>
+                        <option value="picture">🖼️ Bildquiz</option>
+                        <option value="sentence">🧩 Meningen</option>
+                        <option value="favorites">⭐ Favoriter</option>
+                        <option value="weak">🎓 Svåra ord</option>
+                    </select>
+                </div>
+                <div class="quiz-header-right">
+                    <div class="quiz-timer" id="quizTimer">10</div>
+                    <div class="quiz-progress-text" id="quizProgressText">1/10</div>
+                    <div class="quiz-score-inline" id="quizScore">0</div>
+                    <button type="button" id="quizFavBtn" class="quiz-fav-btn-header" aria-label="Spara / حفظ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                    </button>
+                    <button type="button" id="closeQuiz" class="close-btn" aria-label="Stäng / إغلاق">&times;</button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="quiz-progress-bar">
+                <div id="quizProgress" class="quiz-progress-fill"></div>
+            </div>
+
+            <!-- Quiz Body -->
+            <div class="quiz-body">
+                <div class="question-card">
+                    <h3 id="quizQuestion">...</h3>
+                    <p id="quizExample" class="quiz-example"></p>
+                    <p id="quizHelp" class="text-xs text-secondary mt-2 hidden">🎯 Lyssna på det svenska ordet och
+                        välj rätt arabisk översättning.<br>استمع للكلمة السويدية واختر الترجمة العربية الصحيحة.</p>
+                </div>
+                <div id="quizOptions" class="quiz-options"></div>
+                <div id="quizFeedback" class="quiz-feedback"></div>
+                <button type="button" id="nextQuestion" class="action-btn primary next-btn-styled"><span
+                        class="sv-text">Nästa</span><span class="ar-text">التالي</span> ➡️</button>
+
+                <!-- End Screen -->
+                <div id="quizEndScreen" class="quiz-end-screen hidden">
+                    <div class="end-icon">🎉</div>
+                    <h3 class="end-title"><span class="sv-text">Testet avslutat!</span><span class="ar-text">انتهى
+                            الاختبار!</span></h3>
+                    <div class="end-score">
+                        <span class="end-score-value" id="endScoreValue">0</span>
+                        <span class="end-score-total">/ 10</span>
+                    </div>
+                    <p class="end-message" id="endMessage"><span class="sv-text">Bra jobbat!</span><span
+                            class="ar-text">أحسنت!</span></p>
+                    <div id="endStats" class="end-stats"></div>
+                    <button type="button" id="restartQuiz" class="action-btn primary"><span class="sv-text">Spela
+                            igen</span><span class="ar-text">إعادة</span> 🔄</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="landingPageContent">
         <!-- Recent Search History -->
         <div id="searchHistoryContainer" class="history-container hidden">
@@ -400,77 +474,7 @@
             </div>
         </div>
 
-        <!-- Quiz Container (Inline) - Enhanced Professional Version -->
-        <div class="container container-quiz-inline">
-            <div id="quizInlineContainer" class="game-container hidden">
-                <!-- Header with Mode, Score, Timer -->
-                <div class="quiz-header-compact">
-                    <div class="quiz-header-left">
-                        <h2><span class="sv-text">Snabbtest</span><span class="ar-text">اختبار سريع</span></h2>
-                        <select id="quizModeSelect" class="mode-select-compact" aria-label="Läge">
-                            <option value="normal">🎯 Normal</option>
-                            <option value="reverse">🔄 Omvänd</option>
-                            <option value="listening">🔊 Lyssna</option>
-                            <option value="timed">⏱️ Tidsutmaning</option>
-                            <option value="picture">🖼️ Bildquiz</option>
-                            <option value="sentence">🧩 Meningen</option>
-                            <option value="favorites">⭐ Favoriter</option>
-                            <option value="weak">🎓 Svåra ord</option>
-                        </select>
-                    </div>
-                    <div class="quiz-header-right">
-                        <div class="quiz-timer" id="quizTimer">10</div>
-                        <div class="quiz-progress-text" id="quizProgressText">1/10</div>
-                        <div class="quiz-score-inline" id="quizScore">0</div>
-                        <button type="button" id="quizFavBtn" class="quiz-fav-btn-header" aria-label="Spara / حفظ">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2">
-                                <path
-                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                                </path>
-                            </svg>
-                        </button>
-                        <button type="button" id="closeQuiz" class="close-btn"
-                            aria-label="Stäng / إغلاق">&times;</button>
-                    </div>
-                </div>
 
-                <!-- Progress Bar -->
-                <div class="quiz-progress-bar">
-                    <div id="quizProgress" class="quiz-progress-fill"></div>
-                </div>
-
-                <!-- Quiz Body -->
-                <div class="quiz-body">
-                    <div class="question-card">
-                        <h3 id="quizQuestion">...</h3>
-                        <p id="quizExample" class="quiz-example"></p>
-                        <p id="quizHelp" class="text-xs text-secondary mt-2 hidden">🎯 Lyssna på det svenska ordet och
-                            välj rätt arabisk översättning.<br>استمع للكلمة السويدية واختر الترجمة العربية الصحيحة.</p>
-                    </div>
-                    <div id="quizOptions" class="quiz-options"></div>
-                    <div id="quizFeedback" class="quiz-feedback"></div>
-                    <button type="button" id="nextQuestion" class="action-btn primary next-btn-styled"><span
-                            class="sv-text">Nästa</span><span class="ar-text">التالي</span> ➡️</button>
-
-                    <!-- End Screen -->
-                    <div id="quizEndScreen" class="quiz-end-screen hidden">
-                        <div class="end-icon">🎉</div>
-                        <h3 class="end-title"><span class="sv-text">Testet avslutat!</span><span class="ar-text">انتهى
-                                الاختبار!</span></h3>
-                        <div class="end-score">
-                            <span class="end-score-value" id="endScoreValue">0</span>
-                            <span class="end-score-total">/ 10</span>
-                        </div>
-                        <p class="end-message" id="endMessage"><span class="sv-text">Bra jobbat!</span><span
-                                class="ar-text">أحسنت!</span></p>
-                        <div id="endStats" class="end-stats"></div>
-                        <button type="button" id="restartQuiz" class="action-btn primary"><span class="sv-text">Spela
-                                igen</span><span class="ar-text">إعادة</span> 🔄</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <main id="resultsArea">
             <!-- Word of the Day -->
