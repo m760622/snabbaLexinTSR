@@ -15,6 +15,16 @@ const COL_EX_ARB = AppConfig.COLUMNS.EXAMPLE_ARB;
 // Game state
 let cards: HTMLElement[] = [];
 let flippedCards: HTMLElement[] = [];
+// Tilt State (Shared)
+let activeMemoryCard: HTMLElement | null = null;
+let memoryCardRect: DOMRect | null = null;
+
+// Handle Resize
+window.addEventListener('resize', () => {
+    memoryCardRect = null;
+    activeMemoryCard = null;
+});
+
 let matchedPairs = 0;
 let moves = 0;
 let score = 0;
@@ -179,22 +189,34 @@ function createCards() {
         card.addEventListener('click', () => handleCardClick(card, cardData));
 
         // 3D Tilt Effect
+        // Shared state optimization
+        card.addEventListener('mouseenter', () => {
+            memoryCardRect = card.getBoundingClientRect();
+            activeMemoryCard = card;
+        });
+
         card.addEventListener('mousemove', (e) => {
-            if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            if (activeMemoryCard !== card || card.classList.contains('flipped') || card.classList.contains('matched') || !memoryCardRect) return;
 
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+            const x = e.clientX - memoryCardRect.left;
+            const y = e.clientY - memoryCardRect.top;
 
-            const rotateX = ((y - centerY) / centerY) * -10; // Max 10deg
-            const rotateY = ((x - centerX) / centerX) * 10;
+            requestAnimationFrame(() => {
+                const centerX = memoryCardRect!.width / 2;
+                const centerY = memoryCardRect!.height / 2;
 
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+                const rotateX = ((y - centerY) / centerY) * -10; // Max 10deg
+                const rotateY = ((x - centerX) / centerX) * 10;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+            });
         });
 
         card.addEventListener('mouseleave', () => {
+            if (activeMemoryCard === card) {
+                activeMemoryCard = null;
+                memoryCardRect = null;
+            }
             if (!card.classList.contains('flipped') && !card.classList.contains('matched')) {
                 card.style.transform = '';
             }

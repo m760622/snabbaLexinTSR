@@ -2357,28 +2357,37 @@ export class DetailsManager {
         }, 100);
 
         // 3D Parallax Effect for Hero
+        let heroRect: DOMRect | null = null;
+
+        // Clear cache on resize
+        window.addEventListener('resize', () => {
+            heroRect = null;
+        });
+
+        detailsArea.addEventListener('mouseenter', () => {
+            const hero = detailsArea.querySelector('.hero-inner') as HTMLElement;
+            if (hero) heroRect = hero.getBoundingClientRect();
+        }, { capture: true }); // Capture to ensure we get it early
+
         detailsArea.addEventListener('mousemove', (e) => {
             const hero = detailsArea.querySelector('.hero-inner') as HTMLElement;
-            if (!hero) {
-                // Try finding it again if updated
-                const newHero = detailsArea.querySelector('.hero-inner') as HTMLElement;
-                if (!newHero) return;
-                // Re-assign if needed, but 'hero' var is local.
-                // Simplified: just return for now.
-                return;
-            }
+            if (!hero) return;
 
-            const rect = hero.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            // Fallback if not captured on enter (e.g. initial load under mouse)
+            if (!heroRect) heroRect = hero.getBoundingClientRect();
 
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+            const x = e.clientX - heroRect.left;
+            const y = e.clientY - heroRect.top;
 
-            const rotateX = ((y - centerY) / centerY) * -10;
-            const rotateY = ((x - centerX) / centerX) * 10;
+            requestAnimationFrame(() => {
+                const centerX = heroRect!.width / 2;
+                const centerY = heroRect!.height / 2;
 
-            hero.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+
+                hero.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
         });
 
         detailsArea.addEventListener('mouseleave', () => {
@@ -2386,6 +2395,7 @@ export class DetailsManager {
             if (hero) {
                 hero.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
             }
+            heroRect = null;
         });
 
         // Double Tap to Love (Heart Explosion)

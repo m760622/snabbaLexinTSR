@@ -10,9 +10,18 @@
 // ============================================================
 
 export const TiltEffect = {
+    activeElement: null as HTMLElement | null,
+    elementRect: null as DOMRect | null,
+
     init(): void {
         document.querySelectorAll('.game-card-item').forEach(card => {
             this.addTiltEffect(card as HTMLElement);
+        });
+
+        // Clear cache on resize
+        window.addEventListener('resize', () => {
+            this.elementRect = null;
+            this.activeElement = null;
         });
     },
 
@@ -23,26 +32,40 @@ export const TiltEffect = {
         shine.className = 'tilt-shine';
         element.appendChild(shine);
 
+        element.addEventListener('mouseenter', () => {
+            this.elementRect = element.getBoundingClientRect();
+            this.activeElement = element;
+        });
+
         element.addEventListener('mousemove', (e: MouseEvent) => {
-            const rect = element.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+            if (this.activeElement !== element || !this.elementRect) return;
 
-            const tiltX = (y - centerY) / 10;
-            const tiltY = (centerX - x) / 10;
+            const x = e.clientX - this.elementRect.left;
+            const y = e.clientY - this.elementRect.top;
 
-            element.style.setProperty('--tilt-x', `${tiltX}deg`);
-            element.style.setProperty('--tilt-y', `${tiltY}deg`);
+            requestAnimationFrame(() => {
+                const centerX = this.elementRect!.width / 2;
+                const centerY = this.elementRect!.height / 2;
 
-            // Update shine position
-            shine.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.2) 0%, transparent 50%)`;
+                const tiltX = (y - centerY) / 10;
+                const tiltY = (centerX - x) / 10;
+
+                element.style.setProperty('--tilt-x', `${tiltX}deg`);
+                element.style.setProperty('--tilt-y', `${tiltY}deg`);
+
+                // Update shine position
+                shine.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.2) 0%, transparent 50%)`;
+            });
         });
 
         element.addEventListener('mouseleave', () => {
             element.style.setProperty('--tilt-x', '0deg');
             element.style.setProperty('--tilt-y', '0deg');
+
+            if (this.activeElement === element) {
+                this.activeElement = null;
+                this.elementRect = null;
+            }
         });
     }
 };
@@ -182,8 +205,8 @@ export const RecommendationStars = {
         container.className = 'recommendation-stars';
 
         for (let i = 1; i <= 5; i++) {
-            const star = document.createElement('svg');
-            star.className = `recommendation-star ${i > rating ? 'empty' : ''}`;
+            const star = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            star.setAttribute('class', `recommendation-star ${i > rating ? 'empty' : ''}`);
             star.setAttribute('viewBox', '0 0 24 24');
             star.innerHTML = '<path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>';
             container.appendChild(star);

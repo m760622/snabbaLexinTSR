@@ -293,6 +293,15 @@ function loadWordOfTheDay() {
 }
 
 // ========== 3D TILT EFFECT ==========
+// ========== 3D TILT EFFECT ==========
+let activeTiltCard: HTMLElement | null = null;
+let tiltCardRect: DOMRect | null = null;
+
+window.addEventListener('resize', () => {
+    tiltCardRect = null;
+    activeTiltCard = null;
+});
+
 function setupTiltEffect() {
     const cards = document.querySelectorAll('.game-card-item');
     if (!cards.length) return;
@@ -300,23 +309,41 @@ function setupTiltEffect() {
     cards.forEach(card => {
         const el = card as HTMLElement;
 
+        el.addEventListener('mouseenter', () => {
+            // Cache dimensions once on entry
+            tiltCardRect = el.getBoundingClientRect();
+            activeTiltCard = el;
+        });
+
         el.addEventListener('mousemove', (e: MouseEvent) => {
-            const rect = el.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            if (activeTiltCard !== el || !tiltCardRect) return;
 
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+            // Read from cached rect (No Layout Thrashing)
+            const x = e.clientX - tiltCardRect.left;
+            const y = e.clientY - tiltCardRect.top;
 
-            // Limit rotation to small angles for elegance
-            const rotateX = ((y - centerY) / centerY) * -8;
-            const rotateY = ((x - centerX) / centerX) * 8;
+            // Schedule visual update
+            requestAnimationFrame(() => {
+                const centerX = tiltCardRect!.width / 2;
+                const centerY = tiltCardRect!.height / 2;
 
-            el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                // Limit rotation to small angles for elegance
+                const rotateX = ((y - centerY) / centerY) * -8;
+                const rotateY = ((x - centerX) / centerX) * 8;
+
+                el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
         });
 
         el.addEventListener('mouseleave', () => {
+            // Reset style
             el.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+
+            // Clear cache if we left the active card
+            if (activeTiltCard === el) {
+                activeTiltCard = null;
+                tiltCardRect = null;
+            }
         });
     });
 }

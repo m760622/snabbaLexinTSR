@@ -688,8 +688,15 @@ function createLessonCardHTML(lesson: Lesson): string {
 
 // 3D Tilt Effect
 // 3D Tilt Effect - Optimized to avoid layout thrashing
+// 3D Tilt Effect - Optimized to avoid layout thrashing
 let tiltRect: DOMRect | null = null;
 let activeCard: HTMLElement | null = null;
+
+// Handle window resize to prevent stale coordinates
+window.addEventListener('resize', () => {
+    tiltRect = null;
+    activeCard = null;
+});
 
 function handleCardTilt(e: MouseEvent, card: HTMLElement) {
     if (activeCard !== card) {

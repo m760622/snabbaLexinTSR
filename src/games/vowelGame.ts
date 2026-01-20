@@ -57,16 +57,33 @@ const playArea = document.getElementById('playArea')!;
 
 // Tilt Logic
 const container = document.querySelector('.game-container') as HTMLElement;
+let containerRect: DOMRect | null = null;
+
+window.addEventListener('resize', () => {
+    containerRect = null;
+});
+
 if (container) {
-    container.addEventListener('mousemove', (e: MouseEvent) => {
-        if (isProcessing || !hasStarted) return;
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left; const y = e.clientY - rect.top;
-        const centerX = rect.width / 2; const centerY = rect.height / 2;
-        const rotateX = ((y - centerY) / centerY) * -5; const rotateY = ((x - centerX) / centerX) * 5;
-        cardFlipper.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    container.addEventListener('mouseenter', () => {
+        containerRect = container.getBoundingClientRect();
     });
-    container.addEventListener('mouseleave', () => { cardFlipper.style.transform = `rotateX(0) rotateY(0)`; });
+
+    container.addEventListener('mousemove', (e: MouseEvent) => {
+        if (isProcessing || !hasStarted || !containerRect) return;
+
+        const x = e.clientX - containerRect.left; const y = e.clientY - containerRect.top;
+
+        requestAnimationFrame(() => {
+            const centerX = containerRect!.width / 2; const centerY = containerRect!.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -5; const rotateY = ((x - centerX) / centerX) * 5;
+            cardFlipper.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+    });
+
+    container.addEventListener('mouseleave', () => {
+        containerRect = null;
+        cardFlipper.style.transform = `rotateX(0) rotateY(0)`;
+    });
 }
 
 function startGame() {
