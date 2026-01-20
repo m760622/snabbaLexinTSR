@@ -236,7 +236,9 @@ export class App {
         }
     }
 
-    private handleDataLoaded() {
+    private trainingIds: Set<string> = new Set(); // Cache for training words
+
+    private async handleDataLoaded() {
         if (!this.isLoading) return;
         this.isLoading = false;
         console.log('[App] Data loaded, initializing...');
@@ -246,6 +248,17 @@ export class App {
 
         const data = (window as any).dictionaryData as any[][];
         if (!data) return;
+
+        // Initialize DB and load training words
+        try {
+            const { DictionaryDB } = await import('./db');
+            await DictionaryDB.init();
+            const trainingWords = await DictionaryDB.getTrainingWords();
+            this.trainingIds = new Set(trainingWords.filter(w => w.needsTraining).map(w => w.id));
+            console.log('[App] Loaded training words:', this.trainingIds.size);
+        } catch (e) {
+            console.error('[App] Failed to load training words:', e);
+        }
 
         // PERFORMANCE: Build optimized search indices
         console.time('[Perf] Building search index');
@@ -650,6 +663,7 @@ export class App {
         const grammarBadge = TypeColorSystem.generateBadge(type, swe, forms, gender, arb);
         const dataType = TypeColorSystem.getDataType(type, swe, forms, gender, arb);
         const isFav = FavoritesManager.has(id.toString());
+        const isTraining = this.trainingIds.has(id.toString()); // Use class state
 
         const starIcon = isFav
             ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#F59E0B" stroke="#F59E0B" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`
@@ -673,6 +687,13 @@ export class App {
                         <button class="copy-btn action-button" onclick="copyWord('${swe.replace(/'/g, "\\'")}', event)" title="Kopiera">
                             ${copyIcon}
                         </button>
+                        <!-- Training Button -->
+                        <button class="action-button train-btn ${isTraining ? 'active' : ''}" 
+                                onclick="toggleTraining('${id}', this, event)" 
+                                title="${isTraining ? 'Ta bort från träning' : 'Lägg till i träning'}"
+                                data-id="${id}">
+                            ${isTraining ? '🧠' : '💪'}
+                        </button>
                         <button class="fav-btn action-button ${isFav ? 'active' : ''}" onclick="toggleFavorite('${id}', this, event)" title="Spara">
                             ${starIcon}
                         </button>
@@ -683,7 +704,7 @@ export class App {
                     ${formsHtml}
                     <p class="word-arb" dir="rtl" data-auto-size data-max-lines="1">${arb}</p>
                 </div>
-                <div class="mastery-bar-container"><div class="mastery-fill" style="width: ${mockMastery}%"></div></div>
+                <!-- <div class="mastery-bar-container"><div class="mastery-fill" style="width: ${mockMastery}%"></div></div> -->
             </div>
         `;
     }
@@ -762,6 +783,33 @@ export class App {
             btn.innerHTML = isFav
                 ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#F59E0B" stroke="#F59E0B" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`
                 : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+        };
+
+        (window as any).toggleTraining = async (id: string, btn: HTMLElement, e: Event) => {
+            e.stopPropagation();
+            const sid = id.toString();
+
+            // Toggle local state
+            const isNowTraining = !this.trainingIds.has(sid);
+            if (isNowTraining) {
+                this.trainingIds.add(sid);
+                btn.classList.add('active');
+                btn.textContent = '🧠';
+                btn.title = 'Ta bort från träning';
+            } else {
+                this.trainingIds.delete(sid);
+                btn.classList.remove('active');
+                btn.textContent = '💪';
+                btn.title = 'Lägg till i träning';
+            }
+
+            // Persist
+            try {
+                const { DictionaryDB } = await import('./db');
+                await DictionaryDB.updateTrainingStatus(sid, isNowTraining);
+            } catch (err) {
+                console.error('Failed to update training status', err);
+            }
         };
     }
 

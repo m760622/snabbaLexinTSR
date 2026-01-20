@@ -962,7 +962,7 @@ function renderExamplesList(examples: ExampleItem[]): string {
                     <button class="train-mini-btn ${isTraining ? 'active' : ''}" 
                             onclick="toggleTrainingWord('${wordId}', this, '${exampleDataEncoded}')"
                             aria-label="Träna / تدريب">
-                        ${isTraining ? '💪' : '➕'}
+                        ${isTraining ? '🧠' : '💪'}
                     </button>
                 </div>
             </div>
@@ -1143,11 +1143,11 @@ async function toggleTrainingWord(wordId: string, btn: HTMLElement) {
         if (isNowTraining) {
             trainingIds.add(wordId);
             btn.classList.add('active');
-            btn.textContent = '💪';
+            btn.textContent = '🧠';
         } else {
             trainingIds.delete(wordId);
             btn.classList.remove('active');
-            btn.textContent = '➕';
+            btn.textContent = '💪';
         }
 
         // Persist
@@ -1515,34 +1515,54 @@ style.textContent = `
         gap: 0.5rem;
     }
 
+    /* Matching .action-btn-premium style */
     .train-mini-btn {
-        background: rgba(255, 255, 255, 0.05);
-        color: #94a3b8;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, #1e3a8a 0%, #0ea5e9 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.9rem;
-        transition: all 0.2s;
+        font-size: 1.2rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         flex-shrink: 0;
+        box-shadow: 0 4px 10px rgba(0, 91, 150, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .train-mini-btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.4s, height 0.4s;
     }
 
     .train-mini-btn:hover {
-        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(0, 91, 150, 0.4);
+    }
+
+    .train-mini-btn:hover::before {
+        width: 100px;
+        height: 100px;
     }
 
     .train-mini-btn.active {
-        background: rgba(251, 191, 36, 0.15);
-        border-color: rgba(251, 191, 36, 0.3);
-        color: #fbbf24;
-    }
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.3rem;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: none;
+        color: #94a3b8;
     }
     
     .example-arb {

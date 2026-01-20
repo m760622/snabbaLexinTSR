@@ -12,6 +12,7 @@ export const DictionaryDB = {
     STORE_NAME: 'words',
     META_STORE: 'meta',
     NOTES_STORE: 'notes',
+    TRAINING_STORE: 'training',
 
     db: null as IDBDatabase | null,
     isReady: false,
@@ -59,6 +60,12 @@ export const DictionaryDB = {
                 if (!db.objectStoreNames.contains(this.NOTES_STORE)) {
                     db.createObjectStore(this.NOTES_STORE, { keyPath: 'id' });
                     console.log('[DB] Notes store created');
+                }
+
+                // Create training store
+                if (!db.objectStoreNames.contains(this.TRAINING_STORE)) {
+                    db.createObjectStore(this.TRAINING_STORE, { keyPath: 'id' });
+                    console.log('[DB] Training store created');
                 }
             };
         });
@@ -393,20 +400,19 @@ export const DictionaryDB = {
         if (!this.db) return;
 
         return new Promise((resolve, reject) => {
-            const tx = this.db!.transaction([this.STORE_NAME], 'readwrite');
-            const store = tx.objectStore(this.STORE_NAME);
+            const tx = this.db!.transaction([this.TRAINING_STORE], 'readwrite');
+            const store = tx.objectStore(this.TRAINING_STORE);
 
-            const request = store.get(wordId);
-            request.onsuccess = () => {
-                const word = request.result;
-                if (word) {
-                    word.needsTraining = needsTraining;
-                    store.put(word);
-                    console.log(`[DB] Word ${wordId} updated: needsTraining = ${needsTraining}`);
-                }
+            if (needsTraining) {
+                store.put({ id: wordId, addedAt: Date.now() });
+            } else {
+                store.delete(wordId);
+            }
+
+            tx.oncomplete = () => {
+                console.log(`[DB] Training status updated for ${wordId}: ${needsTraining}`);
+                resolve();
             };
-
-            tx.oncomplete = () => resolve();
             tx.onerror = (e) => reject(e);
         });
     },
