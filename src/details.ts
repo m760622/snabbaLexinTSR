@@ -2426,6 +2426,44 @@ export class DetailsManager {
             favBtn.onclick = () => this.toggleFavorite(id, favBtn);
         }
 
+        const trainBtn = document.getElementById('headerTrainingBtn');
+        if (trainBtn) {
+            // Init state
+            DictionaryDB.isWordMarkedForTraining(id).then(isTraining => {
+                trainBtn.innerHTML = isTraining ? '🧠' : '💪';
+                trainBtn.classList.toggle('active', isTraining);
+                trainBtn.setAttribute('aria-label', isTraining ? 'Ta bort från träning / إزالة من التدريب' : 'Lägg till i träning / إضافة للتدريب');
+            });
+
+            trainBtn.onclick = async () => {
+                const currentState = trainBtn.classList.contains('active');
+                const newState = !currentState;
+
+                // Optimistic UI
+                trainBtn.classList.toggle('active');
+                trainBtn.innerHTML = newState ? '🧠' : '💪';
+                trainBtn.setAttribute('aria-label', newState ? 'Ta bort från träning / إزالة من التدريب' : 'Lägg till i träning / إضافة للتدريب');
+
+                // Animate
+                const heart = document.createElement('div');
+                heart.innerHTML = newState ? '🧠' : '💨';
+                heart.className = 'heart-particle'; // Reuse existing class for floating effect
+                const rect = trainBtn.getBoundingClientRect();
+                heart.style.left = (rect.left + rect.width / 2) + 'px';
+                heart.style.top = (rect.top + rect.height / 2) + 'px';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 1000);
+
+                await DictionaryDB.updateTrainingStatus(id, newState);
+
+                if (newState) {
+                    showToast('Tillagd i träning / تمت الإضافة للتدريب');
+                } else {
+                    showToast('Borttagen från träning / تمت الإزالة من التدريب');
+                }
+            };
+        }
+
         const flashBtn = document.getElementById('headerFlashcardBtn');
         if (flashBtn) {
             flashBtn.onclick = () => {

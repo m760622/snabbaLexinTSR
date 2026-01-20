@@ -383,6 +383,101 @@ export const DictionaryDB = {
             tx.oncomplete = () => resolve(true);
             tx.onerror = (e) => reject(e);
         });
+    },
+
+    /**
+     * Update training status for a word
+     */
+    async updateTrainingStatus(wordId: string, needsTraining: boolean): Promise<void> {
+        if (!this.db) await this.init();
+        if (!this.db) return;
+
+        return new Promise((resolve, reject) => {
+            const tx = this.db!.transaction([this.STORE_NAME], 'readwrite');
+            const store = tx.objectStore(this.STORE_NAME);
+
+            const request = store.get(wordId);
+            request.onsuccess = () => {
+                const word = request.result;
+                if (word) {
+                    word.needsTraining = needsTraining;
+                    store.put(word);
+                    console.log(`[DB] Word ${wordId} updated: needsTraining = ${needsTraining}`);
+                }
+            };
+
+            tx.oncomplete = () => resolve();
+            tx.onerror = (e) => reject(e);
+        });
+    },
+
+    /**
+     * Ensure a custom word exists in the database
+     */
+    async ensureCustomWord(wordObj: any): Promise<void> {
+        if (!this.db) await this.init();
+        if (!this.db) return;
+
+        return new Promise((resolve, reject) => {
+            const tx = this.db!.transaction([this.STORE_NAME], 'readwrite');
+            const store = tx.objectStore(this.STORE_NAME);
+
+            const request = store.get(wordObj.id);
+            request.onsuccess = () => {
+                if (!request.result) {
+                    store.put(wordObj);
+                    console.log(`[DB] Custom word ${wordObj.id} created`);
+                }
+            };
+
+            tx.oncomplete = () => resolve();
+            tx.onerror = (e) => reject(e);
+        });
+    },
+
+    /**
+     * Get all words marked for training
+     */
+    async getTrainingWords(): Promise<any[]> {
+        if (!this.db) await this.init();
+        if (!this.db) return [];
+
+        return new Promise((resolve, reject) => {
+            const tx = this.db!.transaction([this.STORE_NAME], 'readonly');
+            const store = tx.objectStore(this.STORE_NAME);
+            const request = store.getAll();
+
+            request.onsuccess = () => {
+                const allWords = request.result;
+                const trainingWords = allWords
+                    .filter((w: any) => w.needsTraining === true)
+                    .map((w: any) => w.raw || w);
+
+                console.log(`[DB] Found ${trainingWords.length} words for training`);
+                resolve(trainingWords);
+            };
+
+            request.onerror = (e) => reject(e);
+        });
+    },
+
+    /**
+     * Check if a word is marked for training
+     */
+    async isWordMarkedForTraining(wordId: string): Promise<boolean> {
+        if (!this.db) await this.init();
+        if (!this.db) return false;
+
+        return new Promise((resolve) => {
+            const tx = this.db!.transaction([this.STORE_NAME], 'readonly');
+            const store = tx.objectStore(this.STORE_NAME);
+            const request = store.get(wordId);
+
+            request.onsuccess = () => {
+                resolve(!!(request.result && request.result.needsTraining));
+            };
+            request.onerror = () => resolve(false);
+        });
     }
 };
 

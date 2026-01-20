@@ -3,6 +3,7 @@ import { showToast, TextSizeManager } from './utils';
 import { FavoritesManager } from './favorites';
 import { QuizStats } from './quiz-stats';
 import { Achievements } from './achievements';
+import { DictionaryDB } from './db';
 import { WordEmojiMap } from './data/emoji-map';
 
 /**
@@ -384,6 +385,12 @@ export class QuizManager {
             this.showFeedback(`Rätt! ${timeStr} / صحيح ✅`, true);
         } else {
             btn.classList.add('wrong');
+
+            // Add to Smart Training
+            DictionaryDB.updateTrainingStatus(wordId, true).then(() => {
+                showToast('Tillagd i din träning 💪 / تمت الإضافة للتدريب');
+            });
+
             this.showFeedback(`Fel! Rätt: ${correct} / خطأ ❌`, false);
 
             document.querySelectorAll('.quiz-option').forEach(opt => {
@@ -439,6 +446,11 @@ export class QuizManager {
 
         const wordId = this.currentWord![0].toString();
         QuizStats.recordAnswer(wordId, false);
+
+        // Add to Smart Training
+        DictionaryDB.updateTrainingStatus(wordId, true).then(() => {
+            showToast('Tillagd i din träning 💪 / تمت الإضافة للتدريب');
+        });
 
         this.showFeedback('Tiden är slut! / انتهى الوقت ⏱️', false);
 

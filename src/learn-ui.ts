@@ -7,6 +7,7 @@ import { TTSManager } from './tts';
 import { LearnViewManager, LearnView, createLearnViewManager } from './learn/LearnViewManager';
 import { debounce } from './performance-utils';
 import { normalizeArabic } from './utils';
+import { DictionaryDB } from './db';
 
 // Dictionary data is loaded globally via script
 declare const dictionaryData: any[];
@@ -37,6 +38,7 @@ let quizType: 'swe-to-arb' | 'arb-to-swe' = 'swe-to-arb';
 let flashcardItems: any[] = [];
 let currentFlashcardIndex = 0;
 let isFlipped = false;
+let isTrainingSession = false;
 
 // Performance: Lazy Loading State
 let visibleLessonsCount = 12;
@@ -157,6 +159,47 @@ function initViewManager() {
             }
         }
     });
+}
+
+// Word Lookup Cache
+let wordIdMap: Map<string, string> | null = null;
+let trainingIds: Set<string> = new Set();
+
+function initWordLookup() {
+    if (wordIdMap) return;
+    wordIdMap = new Map();
+    if (typeof dictionaryData !== 'undefined') {
+        dictionaryData.forEach(row => {
+            const id = row[0];
+            const swe = (row[2] || '').toLowerCase().trim();
+            // Store mapping: "hej" -> "123"
+            if (swe && !wordIdMap!.has(swe)) {
+                wordIdMap!.set(swe, id);
+            }
+        });
+    }
+}
+
+function getWordId(text: string): string | null {
+    if (!wordIdMap) initWordLookup();
+    const key = text.toLowerCase().trim();
+    // Try exact match
+    if (wordIdMap!.has(key)) return wordIdMap!.get(key) || null;
+
+    // Try removing exclamation marks etc?
+    const cleanKey = key.replace(/[!?,.-]/g, '');
+    if (wordIdMap!.has(cleanKey)) return wordIdMap!.get(cleanKey) || null;
+
+    return null;
+}
+
+async function refreshTrainingIds() {
+    try {
+        const words = await DictionaryDB.getTrainingWords();
+        trainingIds = new Set(words.map((w: any) => Array.isArray(w) ? w[0] : w.id));
+    } catch (e) {
+        console.error('Failed to load training ids', e);
+    }
 }
 
 function switchMode(mode: string) {
@@ -280,7 +323,7 @@ function showQuestion() {
         </div>
 
         <div class="question-card">
-            <div class="question-label">${q.type === 'swe-to-arb' ? 'Översätt till arabiska:' : 'Översätt till svenska:'}</div>
+
             <div class="question-text ${q.type === 'arb-to-swe' ? 'ar-text' : 'sv-text'}" dir="${q.type === 'arb-to-swe' ? 'rtl' : 'ltr'}">
                 ${q.question}
             </div>
@@ -355,6 +398,10 @@ function showQuizResults() {
 
 // ========== FLASHCARD LOGIC ==========
 function initFlashcards() {
+    // If we are in training mode, don't override with lesson data!
+    if (isTrainingSession) {
+        return;
+    }
     console.log('[LearnUI] Initializing Flashcards...');
     const container = document.getElementById('flashcardContent');
     if (!container) return;
@@ -382,12 +429,62 @@ function initFlashcards() {
         isFlipped = false;
 
         if (flashcardItems.length === 0) {
-            container.innerHTML = `<div class="empty-state">Inga exempel att visa.</div>`;
+            container.innerHTML = `<div class="empty-state">Inga ord att träna på. Lägg till ord från ordboken!</div>`;
             return;
         }
 
         showFlashcard();
     }, 50);
+}
+
+// Start specific training session
+async function startTrainingSession() {
+    console.log('[LearnUI] Starting Training Session...');
+    isTrainingSession = true;
+    switchMode('flashcard');
+
+    const container = document.getElementById('flashcardContent');
+    if (container) {
+        container.innerHTML = `<div class="empty-state"><p>Hämtar dina ord...</p></div>`;
+    }
+
+    try {
+        const words = await DictionaryDB.getTrainingWords();
+
+        if (!words || words.length === 0) {
+            if (container) container.innerHTML = `
+                <div class="empty-state">
+                    <div class="emoji-lg">💪</div>
+                    <h3>Inga ord än</h3>
+                    <p>Markera ord med "💪" i ordboken för att träna på dem här.</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Map DB words to Flashcard Items
+        flashcardItems = words.map(w => {
+            // Handle both Raw Array (fresh) and Object (legacy/fallback) formats
+            const isArray = Array.isArray(w);
+            return {
+                id: isArray ? w[0] : (w.id || ''),
+                swe: isArray ? w[2] : (w.swe || ''),
+                arb: isArray ? w[3] : (w.arb || ''),
+                type: isArray ? w[1] : (w.type || ''),
+                exSwe: isArray ? (w[7] || '') : (w.sweEx || ''),
+                exArb: isArray ? (w[8] || '') : (w.arbEx || ''),
+                isTraining: true
+            };
+        }); // Shuffle? .sort(() => Math.random() - 0.5);
+
+        currentFlashcardIndex = 0;
+        isFlipped = false;
+
+        showFlashcard();
+
+    } catch (e) {
+        console.error('Error starting training:', e);
+    }
 }
 
 function showFlashcard() {
@@ -396,6 +493,10 @@ function showFlashcard() {
 
     const item = flashcardItems[currentFlashcardIndex];
     const progress = ((currentFlashcardIndex + 1) / flashcardItems.length) * 100;
+
+    // Check if we have examples
+    const hasExSwe = item.exSwe && item.exSwe.length > 2;
+    const hasExArb = item.exArb && item.exArb.length > 2;
 
     container.innerHTML = `
         <div class="flashcard-header">
@@ -408,27 +509,68 @@ function showFlashcard() {
         <div class="flashcard-wrapper ${isFlipped ? 'flipped' : ''}" onclick="flipFlashcard()">
             <div class="flashcard-inner">
                 <div class="flashcard-front">
-                    <div class="flashcard-label">Svenska</div>
+                    <!-- Label Removed -->
                     <div class="flashcard-text sv-text">${item.swe}</div>
+                    ${hasExSwe ? `<div class="flashcard-example sv-text">"${item.exSwe}"</div>` : ''}
                     <div class="flashcard-hint">Klicka för att vända / انقر للقلب</div>
                 </div>
                 <div class="flashcard-back">
-                    <div class="flashcard-label">Arabiska / العربية</div>
+                    <!-- Label Removed -->
                     <div class="flashcard-text ar-text" dir="rtl">${item.arb}</div>
+                    ${hasExArb ? `<div class="flashcard-example ar-text" dir="rtl">"${item.exArb}"</div>` : ''}
                     <div class="flashcard-hint">Klicka för att vända / انقر للقلب</div>
                 </div>
             </div>
         </div>
 
         <div class="flashcard-controls">
+            ${isTrainingSession ? `
+                <button class="know-btn" style="background: #fbbf24; color: #000;" onclick="markAsMastered('${item.id}')">
+                    🏆 <span class="sv-text">Klarad</span><span class="ar-text">أتقنتها</span>
+                </button>
+                <div class="spacer" style="width: 20px;"></div>
+            ` : ''}
+
             <button class="dont-know-btn" onclick="nextFlashcard(false)">
-                ❌ <span class="sv-text">Kan inte</span><span class="ar-text">لا أعرف</span>
+                ❌ <span class="sv-text">Nästa</span><span class="ar-text">التالي</span>
             </button>
+            ${!isTrainingSession ? `
             <button class="know-btn" onclick="nextFlashcard(true)">
                 ✅ <span class="sv-text">Kan!</span><span class="ar-text">أعرفها</span>
-            </button>
+            </button>` : ''}
         </div>
     `;
+}
+
+// Mastered logic
+async function markAsMastered(id: string) {
+    // Remove from DB
+    await DictionaryDB.updateTrainingStatus(id, false);
+
+    // Animate removal logic...
+    // For now simplistic:
+    flashcardItems.splice(currentFlashcardIndex, 1);
+
+    if (flashcardItems.length === 0) {
+        const container = document.getElementById('flashcardContent');
+        if (container) container.innerHTML = `
+            <div class="empty-state">
+                <div class="emoji-lg">🎉</div>
+                <h3>Bra jobbat!</h3>
+                <p>Du har tränat klart alla dina ord.</p>
+                <button class="primary-btn" onclick="switchMode('browse')">Tillbaka</button>
+            </div>
+        `;
+        return;
+    }
+
+    if (currentFlashcardIndex >= flashcardItems.length) {
+        currentFlashcardIndex = 0;
+    }
+
+    // Show confetti?
+
+    showFlashcard();
 }
 
 function flipFlashcard() {
@@ -731,11 +873,14 @@ function resetCardTilt(card: HTMLElement) {
 }
 
 // Open lesson
-function openLesson(lessonId: string): void {
+async function openLesson(lessonId: string): Promise<void> {
     const lesson = lessonsData.find(l => l.id === lessonId);
     if (!lesson) return;
 
     currentLesson = lesson;
+
+    // Refresh training status before rendering
+    await refreshTrainingIds();
 
     const modal = document.getElementById('lessonModal');
     const title = document.getElementById('modalTitle');
@@ -768,29 +913,14 @@ function renderLessonContent(lesson: Lesson): string {
                     
                     ${section.examples.length > 0 ? `
                         <div class="examples-list">
-                            ${section.examples.slice(0, 10).map(ex => `
-                                <div class="example-item">
-                                    <div class="example-swe">
-                                        <button class="speak-btn" onclick="speakText('${ex.swe.replace(/'/g, "\\'")}', 'sv')">🔊</button>
-                                        ${ex.swe}
-                                    </div>
-                                    <div class="example-arb">${ex.arb}</div>
-                                </div>
-                            `).join('')}
+                            ${renderExamplesList(section.examples.slice(0, 10))}
+                            
                             ${section.examples.length > 10 ? `
                                 <button class="show-more-btn" onclick="this.parentElement.classList.add('expanded'); this.remove();">
                                     Visa ${section.examples.length - 10} till...
                                 </button>
                                 <div class="more-examples">
-                                    ${section.examples.slice(10).map(ex => `
-                                        <div class="example-item">
-                                            <div class="example-swe">
-                                                <button class="speak-btn" onclick="speakText('${ex.swe.replace(/'/g, "\\'")}', 'sv')">🔊</button>
-                                                ${ex.swe}
-                                            </div>
-                                            <div class="example-arb">${ex.arb}</div>
-                                        </div>
-                                    `).join('')}
+                                    ${renderExamplesList(section.examples.slice(10))}
                                 </div>
                             ` : ''}
                         </div>
@@ -805,6 +935,39 @@ function renderLessonContent(lesson: Lesson): string {
             </div>
         </div>
     `;
+}
+
+function renderExamplesList(examples: ExampleItem[]): string {
+    return examples.map(ex => {
+        // Try dictionary ID first, fall back to stable custom ID
+        let wordId = getWordId(ex.swe);
+        let exampleDataEncoded = '';
+
+        if (!wordId) {
+            wordId = getStableId(ex.swe);
+            // Encode data for custom creation
+            exampleDataEncoded = encodeURIComponent(JSON.stringify(ex));
+        }
+
+        const isTraining = wordId && trainingIds.has(wordId);
+
+        return `
+            <div class="example-item">
+                <div class="example-swe">
+                    <button class="speak-btn" onclick="speakText('${ex.swe.replace(/'/g, "\\'")}', 'sv')">🔊</button>
+                    <span>${ex.swe}</span>
+                </div>
+                <div class="example-actions-row">
+                    <div class="example-arb">${ex.arb}</div>
+                    <button class="train-mini-btn ${isTraining ? 'active' : ''}" 
+                            onclick="toggleTrainingWord('${wordId}', this, '${exampleDataEncoded}')"
+                            aria-label="Träna / تدريب">
+                        ${isTraining ? '💪' : '➕'}
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
 // Complete lesson
@@ -843,8 +1006,14 @@ function setupFilters(): void {
         chip.addEventListener('click', () => {
             chips.forEach(c => c.classList.remove('active'));
             chip.classList.add('active');
+            chip.classList.add('active');
             currentFilter = chip.getAttribute('data-filter') || 'all';
-            renderLessons();
+
+            if (currentFilter === 'training') {
+                startTrainingSession();
+            } else {
+                renderLessons();
+            }
         });
     });
 }
@@ -960,6 +1129,38 @@ function exportToWindow(): void {
     (window as any).checkAnswer = checkAnswer;
     (window as any).flipFlashcard = flipFlashcard;
     (window as any).nextFlashcard = nextFlashcard;
+    (window as any).toggleTrainingWord = toggleTrainingWord;
+}
+
+// Toggle Training Word
+async function toggleTrainingWord(wordId: string, btn: HTMLElement) {
+    if (!wordId) return;
+
+    try {
+        const isNowTraining = !trainingIds.has(wordId);
+
+        // Optimistic UI Update
+        if (isNowTraining) {
+            trainingIds.add(wordId);
+            btn.classList.add('active');
+            btn.textContent = '💪';
+        } else {
+            trainingIds.delete(wordId);
+            btn.classList.remove('active');
+            btn.textContent = '➕';
+        }
+
+        // Persist
+        await DictionaryDB.updateTrainingStatus(wordId, isNowTraining);
+
+        // Feedback
+        // (window as any).showToast(isNowTraining ? 'Tillagd i träning' : 'Borttagen från träning');
+
+    } catch (e) {
+        console.error('Failed to toggle training:', e);
+        // Revert UI on error
+        // ...
+    }
 }
 
 // Initialize Word of the Day (Random on each page load)
@@ -1013,6 +1214,17 @@ async function initWordOfDay(): Promise<void> {
     if (wodDate) wodDate.textContent = today.toLocaleDateString('sv-SE', options);
 }
 
+// Helper: Simple stable hash for string
+function getStableId(text: string): string {
+    let hash = 0;
+    for (let i = 0; i < text.length; i++) {
+        const char = text.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return 'cust_' + Math.abs(hash).toString(36);
+}
+
 // Initialize
 export function initLearnUI(): void {
     console.log('[LearnUI] Initializing...');
@@ -1026,6 +1238,21 @@ export function initLearnUI(): void {
     renderLessons();
     // updateStatsUI(); // Removed
     initWordOfDay();
+
+    // Check URL params for mode
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get('mode');
+
+    if (mode === 'training') {
+        setTimeout(() => {
+            const trainingBtn = document.querySelector('.filter-training') as HTMLElement;
+            if (trainingBtn) {
+                trainingBtn.click();
+            } else {
+                startTrainingSession();
+            }
+        }, 100);
+    }
 
     console.log('[LearnUI] Initialized successfully');
 }
@@ -1278,6 +1505,43 @@ style.textContent = `
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .example-actions-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .train-mini-btn {
+        background: rgba(255, 255, 255, 0.05);
+        color: #94a3b8;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+        flex-shrink: 0;
+    }
+
+    .train-mini-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .train-mini-btn.active {
+        background: rgba(251, 191, 36, 0.15);
+        border-color: rgba(251, 191, 36, 0.3);
+        color: #fbbf24;
+    }
+        align-items: center;
+        gap: 0.5rem;
         margin-bottom: 0.3rem;
     }
     
@@ -1478,16 +1742,22 @@ style.textContent = `
         color: #f8fafc;
         line-height: 1.4;
     }
+    .question-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    .question-text { margin-bottom: 1rem; }
+    
     .options-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.2rem;
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
     }
     .option-btn {
         background: rgba(30, 41, 59, 0.5);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 1.5rem 1rem;
-        border-radius: 20px;
+        padding: 1rem;
+        border-radius: 16px;
         color: #e2e8f0;
         font-size: 1.1rem;
         font-weight: 600;
@@ -1521,12 +1791,17 @@ style.textContent = `
         max-width: 500px;
         margin: 0 auto;
     }
-    .flashcard-header { margin-bottom: 2rem; }
+    .flashcard-header { 
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
     .flashcard-wrapper {
         perspective: 1200px;
-        height: 400px;
+        height: 340px;
         width: 100%;
-        margin-bottom: 3rem;
+        margin-bottom: 1.5rem;
         cursor: pointer;
     }
     .flashcard-inner {
@@ -1549,35 +1824,59 @@ style.textContent = `
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background: rgba(30, 41, 59, 0.8);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 2px solid rgba(251, 191, 36, 0.15);
-        border-radius: 40px;
-        padding: 3rem 2rem;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 32px;
+        padding: 1.5rem;
+        box-shadow: 
+            0 20px 40px -10px rgba(0, 0, 0, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    .flashcard-front::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 32px;
+        padding: 1px;
+        background: linear-gradient(to bottom right, rgba(255,255,255,0.1), rgba(255,255,255,0));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
     }
     .flashcard-back {
         transform: rotateY(180deg);
         border-color: rgba(96, 165, 250, 0.2);
     }
     .flashcard-label {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        color: #94a3b8;
-        margin-bottom: 2rem;
+        display: none;
     }
     .flashcard-text {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
         font-weight: 800;
         color: #f8fafc;
-        line-height: 1.3;
+        line-height: 1.2;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        margin-bottom: 0.5rem;
+    }
+    .flashcard-example {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem 1.25rem;
+        border-radius: 16px;
+        margin-top: 1rem;
+        font-size: 1rem;
+        color: #cbd5e1;
+        font-style: italic;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        max-width: 90%;
+        line-height: 1.6;
     }
     .flashcard-hint {
         font-size: 0.8rem;
         color: #64748b;
-        margin-top: 2rem;
+        margin-top: 1rem;
         font-style: italic;
     }
     .flashcard-controls {
@@ -1605,19 +1904,27 @@ style.textContent = `
         background: rgba(239, 68, 68, 0.15); 
         color: #f87171; 
         border: 1px solid rgba(239, 68, 68, 0.25) !important; 
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
     }
     .know-btn { 
-        background: rgba(34, 197, 94, 0.15); 
-        color: #4ade80; 
-        border: 1px solid rgba(34, 197, 94, 0.25) !important; 
+        background: linear-gradient(135deg, #fbbf24, #d97706);
+        color: #1e293b; 
+        border: none !important;
+        box-shadow: 0 8px 20px rgba(251, 191, 36, 0.3);
+    }
+    .know-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(251, 191, 36, 0.4);
     }
     
     .flashcard-counter {
-        text-align: center;
-        margin-top: 1rem;
-        color: #64748b;
-        font-size: 0.9rem;
-        font-weight: 500;
+        text-align: right;
+        margin: 0;
+        color: #94a3b8;
+        font-size: 1rem;
+        font-weight: 600;
+        white-space: nowrap;
+        min-width: fit-content;
     }
 
     /* Results */
@@ -1682,6 +1989,20 @@ style.textContent = `
         .question-text { font-size: 1.6rem; }
         .flashcard-text { font-size: 1.8rem; }
         .flashcard-wrapper { height: 350px; }
+    }
+
+    .flashcard-example {
+        font-size: 1.1rem;
+        margin-top: 1.5rem;
+        opacity: 0.9;
+        font-style: italic;
+        padding: 0 1rem;
+        line-height: 1.6;
+        color: #e2e8f0;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.8rem;
+        border-radius: 12px;
+        width: 100%;
     }
 `;
 document.head.appendChild(style);
