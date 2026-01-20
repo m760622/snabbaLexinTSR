@@ -55,52 +55,60 @@ export class LearnViewManager {
      * Switch to a specific view
      */
     switchTo(view: LearnView): void {
-        console.log(`[LearnViewManager] Switching to: ${view}`);
+        const start = performance.now();
+        // console.log(`[LearnViewManager] Switching to: ${view}`);
 
-        // Hide all registered views
-        this.views.forEach((config, _v) => {
-            const element = document.getElementById(config.viewId);
-            if (element) {
-                element.classList.remove('active');
-                element.classList.add('hidden');
-            }
-        });
+        // Optimize: Use requestAnimationFrame to avoid layout thrashing during switch
+        requestAnimationFrame(() => {
+            // Hide all registered views
+            this.views.forEach((config, _v) => {
+                const element = document.getElementById(config.viewId);
+                if (element) {
+                    element.classList.remove('active');
+                    element.classList.add('hidden');
+                }
+            });
 
-        // Update tab states
-        document.querySelectorAll(this.tabSelector).forEach((tab) => {
-            const onclick = tab.getAttribute('onclick');
-            if (onclick && onclick.includes(`'${view}'`)) {
-                tab.classList.add('active');
-            } else {
-                tab.classList.remove('active');
-            }
-        });
+            // Update tab states
+            document.querySelectorAll(this.tabSelector).forEach((tab) => {
+                const onclick = tab.getAttribute('onclick');
+                if (onclick && onclick.includes(`'${view}'`)) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
 
-        // Show selected view
-        const targetConfig = this.views.get(view);
-        if (targetConfig) {
-            const element = document.getElementById(targetConfig.viewId);
-            if (element) {
-                element.classList.add('active');
-                element.classList.remove('hidden');
-            }
-
-            // Call activation callback if defined
-            if (targetConfig.onActivate) {
-                targetConfig.onActivate();
-            }
-        }
-
-        // Handle quiz variants that share the same view
-        if (view === 'quiz-fill' || view === 'quiz-match') {
-            const quizConfig = this.views.get('quiz');
-            if (quizConfig) {
-                const element = document.getElementById(quizConfig.viewId);
+            // Show selected view
+            const targetConfig = this.views.get(view);
+            if (targetConfig) {
+                const element = document.getElementById(targetConfig.viewId);
                 if (element) {
                     element.classList.add('active');
+                    element.classList.remove('hidden');
+                }
+
+                // Call activation callback if defined
+                // We run this in the next frame to allow the view to appear first
+                if (targetConfig.onActivate) {
+                    requestAnimationFrame(() => targetConfig.onActivate!());
                 }
             }
-        }
+
+            // Handle quiz variants that share the same view
+            if (view === 'quiz-fill' || view === 'quiz-match') {
+                const quizConfig = this.views.get('quiz');
+                if (quizConfig) {
+                    const element = document.getElementById(quizConfig.viewId);
+                    if (element) {
+                        element.classList.add('active');
+                    }
+                }
+            }
+
+            const end = performance.now();
+            console.log(`[LearnViewManager] Screen transition to '${view}' took: ${(end - start).toFixed(2)}ms`);
+        });
 
         this.currentView = view;
     }

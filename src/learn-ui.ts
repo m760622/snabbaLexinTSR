@@ -5,6 +5,8 @@
 import { lessonsData, Lesson, LessonSection, ExampleItem } from './learn/lessonsData';
 import { TTSManager } from './tts';
 import { LearnViewManager, LearnView, createLearnViewManager } from './learn/LearnViewManager';
+import { debounce } from './performance-utils';
+import { normalizeArabic } from './utils';
 
 // Dictionary data is loaded globally via script
 declare const dictionaryData: any[];
@@ -35,6 +37,11 @@ let quizType: 'swe-to-arb' | 'arb-to-swe' = 'swe-to-arb';
 let flashcardItems: any[] = [];
 let currentFlashcardIndex = 0;
 let isFlipped = false;
+
+// Performance: Lazy Loading State
+let visibleLessonsCount = 12;
+const PAGE_SIZE = 12;
+let scrollObserver: IntersectionObserver | null = null;
 
 // XP Requirements per level
 const XP_PER_LEVEL = 100;
@@ -188,25 +195,36 @@ function initQuiz() {
     const container = document.getElementById('quizContent');
     if (!container) return;
 
-    // Reset State
-    quizScore = 0;
-    currentQuestionIndex = 0;
+    // Fast Render: Show Loading State Immediately
+    container.innerHTML = `
+        <div class="empty-state">
+            <div class="spinner"></div> <!-- Ensure you have CSS for this or use simple text -->
+            <p>Laddar quiz...</p>
+        </div>
+    `;
 
-    // Generate Questions from lessonsData
-    quizQuestions = generateQuizQuestions();
+    // Defer Heavy Calculation to next tick
+    setTimeout(() => {
+        // Reset State
+        quizScore = 0;
+        currentQuestionIndex = 0;
 
-    if (quizQuestions.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <p class="sv-text">Inga frågor tillgängliga än.</p>
-                <p class="ar-text">لا توجد أسئلة متاحة بعد.</p>
-                <button class="retry-btn" onclick="switchMode('browse')">Tillbaka / رجوع</button>
-            </div>
-        `;
-        return;
-    }
+        // Generate Questions from lessonsData
+        quizQuestions = generateQuizQuestions();
 
-    showQuestion();
+        if (quizQuestions.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <p class="sv-text">Inga frågor tillgängliga än.</p>
+                    <p class="ar-text">لا توجد أسئلة متاحة بعد.</p>
+                    <button class="retry-btn" onclick="switchMode('browse')">Tillbaka / رجوع</button>
+                </div>
+            `;
+            return;
+        }
+
+        showQuestion();
+    }, 50);
 }
 
 function generateQuizQuestions() {
@@ -341,25 +359,35 @@ function initFlashcards() {
     const container = document.getElementById('flashcardContent');
     if (!container) return;
 
-    // Grab all examples
-    const allExamples: ExampleItem[] = [];
-    lessonsData.forEach(lesson => {
-        lesson.sections.forEach(section => {
-            allExamples.push(...section.examples);
+    // Fast Render: Loading State
+    container.innerHTML = `
+        <div class="empty-state">
+            <p>Blandar kort...</p>
+        </div>
+    `;
+
+    // Defer Heavy Logic
+    setTimeout(() => {
+        // Grab all examples
+        const allExamples: ExampleItem[] = [];
+        lessonsData.forEach(lesson => {
+            lesson.sections.forEach(section => {
+                allExamples.push(...section.examples);
+            });
         });
-    });
 
-    // Shuffle
-    flashcardItems = [...allExamples].sort(() => Math.random() - 0.5).slice(0, 15);
-    currentFlashcardIndex = 0;
-    isFlipped = false;
+        // Shuffle
+        flashcardItems = [...allExamples].sort(() => Math.random() - 0.5).slice(0, 15);
+        currentFlashcardIndex = 0;
+        isFlipped = false;
 
-    if (flashcardItems.length === 0) {
-        container.innerHTML = `<div class="empty-state">Inga exempel att visa.</div>`;
-        return;
-    }
+        if (flashcardItems.length === 0) {
+            container.innerHTML = `<div class="empty-state">Inga exempel att visa.</div>`;
+            return;
+        }
 
-    showFlashcard();
+        showFlashcard();
+    }, 50);
 }
 
 function showFlashcard() {
@@ -447,6 +475,9 @@ function renderSavedLessons() {
     const container = document.getElementById('savedList');
     if (!container) return;
 
+    // Clear current content
+    container.innerHTML = '';
+
     const completed = lessonsData.filter(l => completedLessons.has(l.id));
 
     if (completed.length === 0) {
@@ -459,11 +490,32 @@ function renderSavedLessons() {
         return;
     }
 
-    container.innerHTML = completed.map(lesson => createLessonCardHTML(lesson)).join('');
+    // Optimization: Use DocumentFragment to batch DOM insertions
+    const fragment = document.createDocumentFragment();
+
+    // Process in chunks if too large (e.g. > 50 items), for now generic optimization is enough
+    completed.forEach(lesson => {
+        // Create a temporary container to parse the HTML string
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = createLessonCardHTML(lesson);
+        while (tempDiv.firstChild) {
+            fragment.appendChild(tempDiv.firstChild);
+        }
+    });
+
+    container.appendChild(fragment);
+
+    // Helper: Parse emojis after render
+    requestAnimationFrame(() => {
+        if (typeof (window as any).twemoji !== 'undefined') {
+            (window as any).twemoji.parse(container, { folder: 'svg', ext: '.svg' });
+        }
+    });
 }
 
 // Render lessons grid
-function renderLessons(): void {
+// Render lessons grid with Lazy Loading
+function renderLessons(append = false): void {
     const grid = document.getElementById('lessonsGrid');
     if (!grid) {
         console.error('[LearnUI] Lessons grid not found');
@@ -472,29 +524,95 @@ function renderLessons(): void {
 
     let filteredLessons = lessonsData;
 
-    // Apply filter
+    // Apply filters
     if (currentFilter !== 'all') {
         filteredLessons = lessonsData.filter(l => l.level === currentFilter);
     }
 
-    // Apply search
+    // Apply deep search
     if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        filteredLessons = filteredLessons.filter(l =>
-            l.title.toLowerCase().includes(query) ||
-            l.id.toLowerCase().includes(query)
-        );
+        const query = searchQuery.toLowerCase().trim();
+        const cleanQuery = normalizeArabic(query);
+
+        filteredLessons = filteredLessons.filter(l => {
+            // 1. Search in Title or ID
+            if (l.title.toLowerCase().includes(query) || l.id.toLowerCase().includes(query)) return true;
+
+            // 2. Deep Search in Sections and Examples
+            return l.sections.some(section => {
+                // Search in Section Title
+                if (section.title.toLowerCase().includes(query)) return true;
+
+                // Search in Content Items (HTML text)
+                if (section.content.some(c => c.html.toLowerCase().includes(query))) return true;
+
+                // Search in Examples (Deepest Level)
+                return section.examples.some(ex => {
+                    const cleanSwe = ex.swe.toLowerCase();
+                    const cleanArb = normalizeArabic(ex.arb);
+                    return cleanSwe.includes(query) || cleanArb.includes(cleanQuery);
+                });
+            });
+        });
     }
 
-    console.log('[LearnUI] Rendering', filteredLessons.length, 'lessons');
-
-    grid.innerHTML = filteredLessons.map(lesson => createLessonCardHTML(lesson)).join('');
-
-    // Parse emojis with Twemoji for cross-platform support
-    if (typeof (window as any).twemoji !== 'undefined') {
-        (window as any).twemoji.parse(grid, { folder: 'svg', ext: '.svg' });
+    // Pagination Logic
+    if (!append) {
+        // Reset
+        visibleLessonsCount = PAGE_SIZE;
+        grid.innerHTML = '';
+        window.scrollTo({ top: 0, behavior: 'instant' });
     }
+
+    // Slice for this batch
+    // If appending, we want indices from [currentCount] to [currentCount + PAGE_SIZE]
+    // But wait, 'visibleLessonsCount' tracks TOTAL rendered.
+    // simpler:
+    const startIndex = append ? (visibleLessonsCount) : 0;
+    if (append) {
+        visibleLessonsCount += PAGE_SIZE;
+    }
+    const endIndex = visibleLessonsCount;
+
+    const lessonsToShow = filteredLessons.slice(startIndex, endIndex);
+
+    if (lessonsToShow.length === 0 && append) return; // End reached
+
+    console.log(`[LearnUI] Rendering batch ${startIndex}-${endIndex} (Total: ${filteredLessons.length})`);
+
+    const html = lessonsToShow.map(lesson => createLessonCardHTML(lesson)).join('');
+
+    // Append Sentinel Logic
+    if (append) {
+        // Remove old sentinel
+        const oldSentinel = document.getElementById('lessons-sentinel');
+        if (oldSentinel) oldSentinel.remove();
+
+        grid.insertAdjacentHTML('beforeend', html);
+    } else {
+        grid.innerHTML = html;
+    }
+
+    // Add Sentinel if more items exist
+    if (endIndex < filteredLessons.length) {
+        const sentinel = document.createElement('div');
+        sentinel.id = 'lessons-sentinel';
+        sentinel.style.height = '50px';
+        sentinel.style.width = '100%';
+        // sentinel.style.background = 'red'; // Debug
+        grid.appendChild(sentinel);
+
+        if (scrollObserver) scrollObserver.observe(sentinel);
+    }
+
+    // Defer non-critical Twemoji parsing
+    requestAnimationFrame(() => {
+        if (typeof (window as any).twemoji !== 'undefined') {
+            (window as any).twemoji.parse(grid, { folder: 'svg', ext: '.svg' });
+        }
+    });
 }
+
 
 // Create lesson card HTML
 function createLessonCardHTML(lesson: Lesson): string {
@@ -569,26 +687,40 @@ function createLessonCardHTML(lesson: Lesson): string {
 }
 
 // 3D Tilt Effect
+// 3D Tilt Effect - Optimized to avoid layout thrashing
+let tiltRect: DOMRect | null = null;
+let activeCard: HTMLElement | null = null;
+
 function handleCardTilt(e: MouseEvent, card: HTMLElement) {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    if (activeCard !== card) {
+        // Cache rect only when entering a new card
+        tiltRect = card.getBoundingClientRect();
+        activeCard = card;
+    }
 
-    // Calculate percentage for gradient
-    card.style.setProperty('--mouse-x', `${x}px`);
-    card.style.setProperty('--mouse-y', `${y}px`);
+    if (!tiltRect) return;
 
-    // Calculate rotation
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -10; // Max 10deg
-    const rotateY = ((x - centerX) / centerX) * 10;
+    // Use cached rect
+    const x = e.clientX - tiltRect.left;
+    const y = e.clientY - tiltRect.top;
 
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    requestAnimationFrame(() => {
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+
+        const centerX = tiltRect!.width / 2;
+        const centerY = tiltRect!.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -10; // Max 10deg
+        const rotateY = ((x - centerX) / centerX) * 10;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    });
 }
 
 function resetCardTilt(card: HTMLElement) {
     card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+    activeCard = null;
+    tiltRect = null;
 }
 
 // Open lesson
@@ -714,10 +846,13 @@ function setupFilters(): void {
 function setupSearch(): void {
     const searchInput = document.getElementById('lessonSearchInput') as HTMLInputElement;
     if (searchInput) {
-        searchInput.addEventListener('input', () => {
+        // Debounce search to avoid lag while typing
+        const debouncedRender = debounce(() => {
             searchQuery = searchInput.value;
             renderLessons();
-        });
+        }, 300);
+
+        searchInput.addEventListener('input', debouncedRender);
     }
 
     // Filter Toggle Logic
@@ -880,11 +1015,31 @@ export function initLearnUI(): void {
     exportToWindow();
     setupFilters();
     setupSearch();
+    initScrollObserver();
     renderLessons();
     // updateStatsUI(); // Removed
     initWordOfDay();
 
     console.log('[LearnUI] Initialized successfully');
+}
+
+// Initialize Intersection Observer for Infinite Scroll
+function initScrollObserver() {
+    if (scrollObserver) scrollObserver.disconnect();
+
+    scrollObserver = new IntersectionObserver((entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+            // Load more
+            requestAnimationFrame(() => {
+                renderLessons(true);
+            });
+        }
+    }, {
+        root: null, // viewport
+        rootMargin: '300px', // Load before reaching bottom
+        threshold: 0.1
+    });
 }
 
 // Add CSS for lesson cards
