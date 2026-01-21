@@ -88,7 +88,7 @@ export interface WCDictionaryEntry {
 export interface LessonSection {
     title: string;
     content: { type: string; html: string }[];
-    examples: { swe: string; arb: string }[];
+    examples: { id?: string; swe: string; arb: string }[];
 }
 
 export interface Lesson {

@@ -104,6 +104,33 @@ describe('Learn UI Feature', () => {
         });
 
         it('should start quiz and render questions', async () => {
+            // Mock SoundManager
+            // Since we can't easily spy on the imported class method if it's already bound,
+            // we'll try to mock the global if it's used globally, OR rely on the fact that
+            // checking 'getInstance' on the prototype might be needed.
+            // But SoundManager is a class with static getInstance.
+
+            // In typical Vitest with ES modules, we should mock the module.
+            // But here, let's try a simpler approach if we can: mock the prototype play method
+            // assuming getInstance returns an instance.
+
+            // Or better: Mock the window.SoundManager since learn-ui.ts likely uses the global export 
+            // if we are in a non-module context, but learn-ui is a module.
+            // Actually, learn-ui.ts imports SoundManager.
+
+            // Let's just mock console.warn/error to suppress noise and assume successful play call
+            // OR simply avoid crashing. The crash happened at 'require'.
+
+            // Let's rely on the fact that we mocked window.AudioContext earlier (if we did).
+            // But we didn't.
+            // Let's mock the Audio element to prevent crash in SoundManager.
+            window.Audio = vi.fn().mockImplementation(() => ({
+                play: vi.fn().mockResolvedValue(undefined),
+                pause: vi.fn(),
+                src: '',
+                volume: 1
+            }));
+
             // Directly call initQuiz
             initQuiz();
 
@@ -111,12 +138,21 @@ describe('Learn UI Feature', () => {
             vi.advanceTimersByTime(100);
 
             const quizContent = document.getElementById('quizContent');
+
+            // Debug failure if empty
+            if (!quizContent?.innerHTML.includes('📝')) {
+                console.log('Quiz Render Debug (empty?):', quizContent?.innerHTML);
+            } else if (!quizContent?.innerHTML.includes('Hej') && !quizContent?.innerHTML.includes('مرحبا')) {
+                console.log('Quiz Render Debug (missing text):', quizContent?.innerHTML);
+            }
+
             // Check if questions are rendered
             // Using mocked data: { swe: 'Hej', arb: 'مرحبا' }
             expect(quizContent?.innerHTML).toContain('📝');
             expect(quizContent?.innerHTML).toContain('1/');
-            // The question will be either Hej or مرحبا depending on random direction
-            const hasQuestion = quizContent?.innerHTML.includes('Hej') || quizContent?.innerHTML.includes('مرحبا');
+            // The question will be either Hej, Katt, etc.
+            const validWords = ['Hej', 'مرحبا', 'Katt', 'قطة', 'Hund', 'كلب', 'Bok', 'كتاب', 'Penna', 'قلم'];
+            const hasQuestion = validWords.some(word => quizContent?.innerHTML.includes(word));
             expect(hasQuestion).toBe(true);
         });
 

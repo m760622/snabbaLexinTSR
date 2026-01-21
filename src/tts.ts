@@ -106,14 +106,29 @@ export const TTSManager = {
         try {
             const AudioContextClass = (window as any).AudioContext || (window as any).webkitAudioContext;
             const audioContext = new AudioContextClass();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            gainNode.gain.value = 0;
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            oscillator.start(0);
-            oscillator.stop(0.001);
-            setTimeout(() => audioContext.close(), 100);
+
+            // Resume if suspended (common in modern browsers)
+            if (audioContext.state === 'suspended') {
+                audioContext.resume().then(() => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    gainNode.gain.value = 0;
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    oscillator.start(0);
+                    oscillator.stop(0.001);
+                    setTimeout(() => audioContext.close(), 100);
+                }).catch(() => { });
+            } else {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                gainNode.gain.value = 0;
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.start(0);
+                oscillator.stop(0.001);
+                setTimeout(() => audioContext.close(), 100);
+            }
         } catch (e) { }
 
         // Method 3: SpeechSynthesis

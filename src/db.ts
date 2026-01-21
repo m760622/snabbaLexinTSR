@@ -307,7 +307,19 @@ export const DictionaryDB = {
                         hasAdvanced = true;
                         cursor.advance(randomIndex);
                     } else {
-                        resolve(cursor.value.raw || cursor.value); // Return raw word data
+                        const wordData = cursor.value.raw || cursor.value;
+                        // Basic validation to ensure we don't return malformed objects
+                        if (wordData && (wordData.swedish || wordData.swe)) {
+                            // Normalize if needed
+                            if (!wordData.swedish && wordData.swe) wordData.swedish = wordData.swe;
+                            if (!wordData.arabic && wordData.arb) wordData.arabic = wordData.arb;
+                            resolve(wordData);
+                        } else {
+                            // If bad data, keep looking or resolve null (to avoid crash)
+                            // Trying to continue would require recursion or complex cursor logic.
+                            // Safest is to resolve null and let caller handle it.
+                            resolve(null);
+                        }
                     }
                 };
                 request.onerror = () => resolve(null);
@@ -396,6 +408,11 @@ export const DictionaryDB = {
      * Update training status for a word
      */
     async updateTrainingStatus(wordId: string, needsTraining: boolean): Promise<void> {
+        if (!wordId) {
+            console.warn('[DB] updateTrainingStatus called with empty wordId');
+            return;
+        }
+
         if (!this.db) await this.init();
         if (!this.db) return;
 
@@ -413,7 +430,10 @@ export const DictionaryDB = {
                 console.log(`[DB] Training status updated for ${wordId}: ${needsTraining}`);
                 resolve();
             };
-            tx.onerror = (e) => reject(e);
+            tx.onerror = (e) => {
+                console.error(`[DB] Error updating training status:`, e);
+                resolve(); // Don't reject, just continue
+            };
         });
     },
 

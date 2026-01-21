@@ -497,26 +497,40 @@ function showQuestion() {
     }
 }
 
+// Sound Manager
+import { SoundManager } from './utils/SoundManager';
+
+// ... (existing imports if any)
+
 function checkAnswer(selected: string) {
     const q = quizQuestions[currentQuestionIndex];
     const options = document.querySelectorAll('.option-btn');
+    const soundManager = SoundManager.getInstance();
 
     let isCorrect = (selected === q.answer);
 
     options.forEach(btn => {
         const btnText = (btn as HTMLElement).textContent?.trim();
         if (btnText === q.answer) {
-            btn.classList.add('correct');
+            btn.classList.add('correct-answer');
             if (isCorrect) {
+                // Play Sound
+                soundManager.play('correct');
+
                 // Animate correct button
                 btn.animate([
                     { transform: 'scale(1)' },
-                    { transform: 'scale(1.05)' },
+                    { transform: 'scale(1.05)', backgroundColor: 'rgba(34, 197, 94, 0.4)' },
                     { transform: 'scale(1)' }
                 ], { duration: 300 });
             }
         } else if (btnText === selected && !isCorrect) {
-            btn.classList.add('wrong');
+            btn.classList.add('wrong-answer');
+            soundManager.play('wrong');
+
+            // Haptic Feedback
+            if (navigator.vibrate) navigator.vibrate(200);
+
             // Shake animation for wrong answer
             btn.animate([
                 { transform: 'translateX(0)' },
@@ -533,27 +547,25 @@ function checkAnswer(selected: string) {
         quizScore++;
         quizStreak++;
 
-        // Clear mistake if mastered (optional rule: instant clear or need multiple?) 
-        // For simple "review", instant clear is encouraging.
-        // We need the word ID. Ideally passed in arguments or stored in question object.
-        // Current 'q' object has 'example' which has text but ID computation is complex?
-        // Let's use getWordId helper or re-compute stable ID.
         const wordId = getStableId(q.example.swe);
         clearMistake(wordId);
 
         // Base XP
         let earnedXP = 5;
 
-        // ... (Streak Bonus code) ...
         if (quizStreak >= 3) {
             earnedXP += 2;
+            // Streak Sound every 3
+            if (quizStreak % 3 === 0) soundManager.play('streak');
+
             const streakCounter = document.getElementById('streakCounter');
             if (streakCounter) {
+                streakCounter.parentElement?.classList.add('active'); // Ensure active
                 streakCounter.parentElement?.animate([
                     { transform: 'scale(1)' },
-                    { transform: 'scale(1.5)' },
+                    { transform: 'scale(1.5)', textShadow: '0 0 20px #f97316' },
                     { transform: 'scale(1)' }
-                ], { duration: 300, easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' });
+                ], { duration: 400, easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' });
             }
         }
 
@@ -579,25 +591,47 @@ function showQuizResults() {
     const container = document.getElementById('quizContent');
     if (!container) return;
 
+    const soundManager = SoundManager.getInstance();
     const percentage = (quizScore / quizQuestions.length) * 100;
+    const passed = percentage >= 70;
 
+    if (passed) soundManager.play('win');
+
+    // Use Overlay for Premium Feel
     container.innerHTML = `
-        <div class="quiz-results">
-            <div class="result-icon">${percentage >= 70 ? '🎉' : '💪'}</div>
-            <h2>Quiz klart!</h2>
-            <div class="result-score">${quizScore} / ${quizQuestions.length}</div>
-            <p>${percentage >= 70 ? 'Bra jobbat! Du börjar behärska detta.' : 'Bra försök! Fortsätt öva så kommer du snart ihåg allt.'}</p>
-            
-            <div class="result-actions">
-                <button class="primary-btn" onclick="initQuiz()">Försök igen / حاول مرة أخرى</button>
-                <button class="secondary-btn" onclick="switchMode('browse')">Klar / تم</button>
+        <div class="quiz-results-overlay">
+            <div class="quiz-results-card">
+                <span class="result-icon-large">${passed ? '🎉' : '💪'}</span>
+                <h2 style="font-size: 1.5rem; margin-bottom:0.5rem;">${passed ? 'Fantastiskt!' : 'Bra kämpat!'}</h2>
+                <div class="result-score-large">${quizScore}<span style="font-size:1.5rem; color:#94a3b8;">/${quizQuestions.length}</span></div>
+                <p style="color:var(--text-muted); margin-bottom: 2rem;">
+                    ${passed ? 'Du klarade det galant!' : 'Övning ger färdighet. Försök igen!'}
+                </p>
+                
+                <div class="result-actions" style="display:flex; flex-direction:column; gap:0.75rem;">
+                    <button class="primary-btn" onclick="initQuiz('${currentQuizLessonId || ''}')" style="width:100%; justify-content:center;">
+                        ${passed ? 'Spela igen / العودة' : 'Försök igen / حاول مرة أخرى'}
+                    </button>
+                    <button class="secondary-btn" onclick="switchMode('browse')" style="width:100%; justify-content:center; background:rgba(255,255,255,0.05);">
+                        Avsluta / إنهاء
+                    </button>
+                </div>
             </div>
         </div>
     `;
+
+    // Confetti Effect if passed (Optional, if confetti lib exists)
+    if (passed && (window as any).confetti) {
+        (window as any).confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    }
 }
 
 // ========== FLASHCARD LOGIC ==========
-function initFlashcards() {
+export function initFlashcards() {
     // If we are in training mode, don't override with lesson data!
     if (isTrainingSession) {
         return;
@@ -615,6 +649,17 @@ function initFlashcards() {
 
     // Defer Heavy Logic
     setTimeout(() => {
+        // Load mastered words from localStorage
+        let masteredIds: Set<string> = new Set();
+        try {
+            const saved = localStorage.getItem('snabbaLexin_mastered');
+            if (saved) {
+                masteredIds = new Set(JSON.parse(saved));
+            }
+        } catch (e) {
+            console.warn('Failed to load mastered words:', e);
+        }
+
         // Grab all examples
         const allExamples: ExampleItem[] = [];
         lessonsData.forEach(lesson => {
@@ -623,8 +668,22 @@ function initFlashcards() {
             });
         });
 
+        // Filter out mastered words
+        const availableExamples = allExamples.filter(ex => {
+            const id = ex.id || (ex.swe ? ex.swe.toLowerCase().replace(/\s+/g, '_') : '');
+            return !masteredIds.has(id);
+        });
+
+        // Use available examples if possible, otherwise fallback to all (reset)
+        const source = availableExamples.length > 0 ? availableExamples : allExamples;
+
+        if (availableExamples.length === 0 && allExamples.length > 0) {
+            // Optional: Show message that all words are mastered?
+            // For now, loop back to start.
+        }
+
         // Shuffle
-        flashcardItems = [...allExamples].sort(() => Math.random() - 0.5).slice(0, 15);
+        flashcardItems = [...source].sort(() => Math.random() - 0.5).slice(0, 15);
         currentFlashcardIndex = 0;
         isFlipped = false;
 
@@ -687,12 +746,18 @@ async function startTrainingSession() {
     }
 }
 
+
 function showFlashcard() {
     const container = document.getElementById('flashcardContent');
     if (!container) return;
 
+    if (currentFlashcardIndex >= flashcardItems.length) {
+        finishFlashcards();
+        return;
+    }
+
     const item = flashcardItems[currentFlashcardIndex];
-    const progress = ((currentFlashcardIndex + 1) / flashcardItems.length) * 100;
+    const progress = ((currentFlashcardIndex) / flashcardItems.length) * 100;
 
     // Check if we have examples
     const hasExSwe = item.exSwe && item.exSwe.length > 2;
@@ -708,89 +773,148 @@ function showFlashcard() {
 
         <div class="flashcard-wrapper ${isFlipped ? 'flipped' : ''}" onclick="flipFlashcard()">
             <div class="flashcard-inner">
-                <div class="flashcard-front">
-                    <!-- Label Removed -->
-                    <div class="flashcard-text sv-text">${item.swe}</div>
+                <div class="flashcard-face flashcard-front">
+                    <div class="flashcard-word sv-text" lang="sv">${item.swe}</div>
                     ${hasExSwe ? `<div class="flashcard-example sv-text">"${item.exSwe}"</div>` : ''}
-                    <div class="flashcard-hint">Klicka för att vända / انقر للقلب</div>
+                    <div class="flashcard-hint">
+                        <span class="pulse-icon">👆</span> Klicka för att vända / انقر للقلب
+                    </div>
                 </div>
-                <div class="flashcard-back">
-                    <!-- Label Removed -->
-                    <div class="flashcard-text ar-text" dir="rtl">${item.arb}</div>
-                    ${hasExArb ? `<div class="flashcard-example ar-text" dir="rtl">"${item.exArb}"</div>` : ''}
-                    <div class="flashcard-hint">Klicka för att vända / انقر للقلب</div>
-                </div>
+                <div class="flashcard-face flashcard-back">
+                    <div class="flashcard-translation" dir="rtl" lang="ar">${item.arb}</div>
+                    ${hasExArb ? `<div class="flashcard-example" dir="rtl">${item.exArb}</div>` : ''}
+                    <div class="flashcard-hint">
+                        <span class="pulse-icon">👆</span> Klicka för att vända / انقر للقلب
+                    </div>
             </div>
         </div>
 
         <div class="flashcard-controls">
-            ${isTrainingSession ? `
-                <button class="know-btn" style="background: #fbbf24; color: #000;" onclick="markAsMastered('${item.id}')">
-                    🏆 <span class="sv-text">Klarad</span><span class="ar-text">أتقنتها</span>
-                </button>
-                <div class="spacer" style="width: 20px;"></div>
-            ` : ''}
-
-            <button class="dont-know-btn" onclick="nextFlashcard(false)">
-                ❌ <span class="sv-text">Nästa</span><span class="ar-text">التالي</span>
+            <button class="fc-btn fc-btn-dont-know" onclick="nextFlashcard(false, event)">
+                ❌ Vet ej / لا أعرف
             </button>
-            ${!isTrainingSession ? `
-            <button class="know-btn" onclick="nextFlashcard(true)">
-                ✅ <span class="sv-text">Kan!</span><span class="ar-text">أعرفها</span>
-            </button>` : ''}
+            
+            <button class="fc-btn fc-btn-know" onclick="nextFlashcard(true, event)">
+                ✅ Kan det / أعرفها
+            </button>
         </div>
+        
+        <div style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.8rem;">
+            <p>Space: Vänd • ⬅️ Vet ej • ➡️ Kan det</p>
     `;
+
+    // Add keyboard listener if not already added
+    if (!(window as any).hasFlashcardListeners) {
+        document.addEventListener('keydown', handleFlashcardKeys);
+        (window as any).hasFlashcardListeners = true;
+    }
 }
 
-// Mastered logic
-async function markAsMastered(id: string) {
-    // Remove from DB
-    await DictionaryDB.updateTrainingStatus(id, false);
-
-    // Animate removal logic...
-    // For now simplistic:
-    flashcardItems.splice(currentFlashcardIndex, 1);
-
-    if (flashcardItems.length === 0) {
-        const container = document.getElementById('flashcardContent');
-        if (container) container.innerHTML = `
-            <div class="empty-state">
-                <div class="emoji-lg">🎉</div>
-                <h3>Bra jobbat!</h3>
-                <p>Du har tränat klart alla dina ord.</p>
-                <button class="primary-btn" onclick="switchMode('browse')">Tillbaka</button>
-            </div>
-        `;
-        return;
+// Keyboard handler
+function handleFlashcardKeys(e: KeyboardEvent) {
+    if (document.getElementById('flashcardContent')) {
+        if (e.code === 'Space') {
+            e.preventDefault();
+            flipFlashcard();
+        } else if (e.code === 'ArrowLeft') {
+            nextFlashcard(false);
+        } else if (e.code === 'ArrowRight') {
+            nextFlashcard(true);
+        }
     }
-
-    if (currentFlashcardIndex >= flashcardItems.length) {
-        currentFlashcardIndex = 0;
-    }
-
-    // Show confetti?
-
-    showFlashcard();
 }
 
-function flipFlashcard() {
+export function flipFlashcard() {
     isFlipped = !isFlipped;
     const wrapper = document.querySelector('.flashcard-wrapper');
     if (wrapper) {
-        wrapper.classList.toggle('flipped', isFlipped);
+        if (isFlipped) wrapper.classList.add('flipped');
+        else wrapper.classList.remove('flipped');
+
+        // Play subtle flip sound if available
+        // SoundManager.getInstance().play('flip');
     }
 }
 
-function nextFlashcard(known: boolean) {
-    if (known) addXP(2);
+export function nextFlashcard(known: boolean = false, event?: Event) {
+    if (event) event.stopPropagation(); // Prevent flip
 
-    currentFlashcardIndex++;
-    isFlipped = false;
+    const wrapper = document.querySelector('.flashcard-wrapper');
 
-    if (currentFlashcardIndex < flashcardItems.length) {
+    // Animation for "Don't Know" (Slide Left)
+    if (wrapper && !known) {
+        wrapper.classList.add('animate-dont-know');
+        SoundManager.getInstance().play('wrong');
+        if (navigator.vibrate) navigator.vibrate(50);
+    }
+
+    // Logic: If known, trigger Mastered flow
+    if (known) {
+        markAsMastered(flashcardItems[currentFlashcardIndex].id);
+        return;
+    }
+
+    setTimeout(() => {
+        isFlipped = false;
+        currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcardItems.length;
         showFlashcard();
-    } else {
-        finishFlashcards();
+    }, 300); // Wait for animation
+}
+
+// Re-implement markAsMastered for Training Mode compatibility
+async function markAsMastered(id: string) {
+    const wrapper = document.querySelector('.flashcard-wrapper');
+    if (wrapper) {
+        wrapper.classList.add('animate-mastered'); // Fly up!
+        // Wait for animation before removing
+        setTimeout(async () => {
+            // ALWAYS set as NOT needing training in DB, regardless of session type
+            // This ensures if it WAS in training list, it's removed.
+            // If it wasn't, no harm done.
+            try {
+                if (id) {
+                    await DictionaryDB.updateTrainingStatus(id, false);
+
+                    // Also save to localStorage for Random Mode persistence
+                    try {
+                        const saved = localStorage.getItem('snabbaLexin_mastered');
+                        const masteredIds = saved ? new Set(JSON.parse(saved)) : new Set();
+                        masteredIds.add(id);
+                        localStorage.setItem('snabbaLexin_mastered', JSON.stringify([...masteredIds]));
+                    } catch (e) {
+                        console.warn('Failed to save to localStorage:', e);
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to update DB:', e);
+            }
+
+            // Remove from local array
+            flashcardItems.splice(currentFlashcardIndex, 1);
+
+            // Show Toast Feedback
+            // showToast('Ord borttaget från träning! 🗑️'); // Need access to showToast or equivalent
+
+            if (flashcardItems.length === 0) {
+                const container = document.getElementById('flashcardContent');
+                if (container) container.innerHTML = `
+                <div class="empty-state">
+                    <div class="emoji-lg">🎉</div>
+                    <h3>Bra jobbat!</h3>
+                    <p>Du har tränat klart alla dina ord.</p>
+                    <button class="primary-btn" onclick="switchMode('browse')">Tillbaka</button>
+                </div>
+            `;
+                return;
+            }
+
+            if (currentFlashcardIndex >= flashcardItems.length) {
+                currentFlashcardIndex = 0;
+            }
+
+            isFlipped = false;
+            showFlashcard();
+        }, 600); // Match CSS animation duration
     }
 }
 
@@ -1433,14 +1557,18 @@ async function initWordOfDay(): Promise<void> {
         const word = await DictionaryDB.getRandomWord();
 
         if (word) {
-            console.log('[LearnUI] Word of the Day:', word.swedish);
+            // Provide fallback properties if missing (defensive)
+            const swe = word.swedish || word.swe || "???";
+            const arb = word.arabic || word.arb || "???";
 
-            if (wodWord) wodWord.textContent = word.swedish;
-            if (wodTranslation) wodTranslation.textContent = word.arabic;
+            console.log('[LearnUI] Word of the Day:', swe, word);
+
+            if (wodWord) wodWord.textContent = swe;
+            if (wodTranslation) wodTranslation.textContent = arb;
 
             // Find an example if available, or create a fallback
-            const exampleSwe = word.example || `${word.swedish} är ett bra ord.`;
-            const exampleArb = word.example_ar || `كلمة ${word.arabic} كلمة جيدة.`;
+            const exampleSwe = word.example || word.sweEx || `${swe} är ett bra ord.`;
+            const exampleArb = word.example_ar || word.arbEx || `كلمة ${arb} كلمة جيدة.`;
 
             if (wodExampleSwe) wodExampleSwe.textContent = exampleSwe;
             if (wodExampleArb) wodExampleArb.textContent = exampleArb;
