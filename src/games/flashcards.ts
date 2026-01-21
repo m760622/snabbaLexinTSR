@@ -1,5 +1,6 @@
 
 import { showToast, TextSizeManager } from '../utils';
+import { DictionaryDB } from '../db';
 // Note: We'll assume these are available globally or imported if needed.
 // For now, casting (window as any) to access them.
 
@@ -224,10 +225,10 @@ function showNextFlashcard() {
 
     document.getElementById('flashcardTranslation')!.textContent = card[FC_COL_ARB];
     TextSizeManager.apply(document.getElementById('flashcardTranslation')!, card[FC_COL_ARB]);
-    
+
     document.getElementById('flashcardBackWord')!.textContent = card[FC_COL_SWE];
     TextSizeManager.apply(document.getElementById('flashcardBackWord')!, card[FC_COL_SWE]);
-    
+
     const backSentence = document.getElementById('flashcardBackSentence')!;
     const exSwe = card[FC_COL_EX_SWE] || '';
     backSentence.textContent = exSwe;
@@ -263,10 +264,20 @@ export function handleFlashcardRating(rating: number) {
     sessionStats.totalTime += (Date.now() - cardStartTime);
 
     if (rating >= 3) {
-        LeitnerSystem.promoteWord(wordId);
+        const newBox = LeitnerSystem.promoteWord(wordId);
         flashcardScore++;
         sessionStats.correct++;
         updateSegmentedProgress(flashcardIndex, 'correct');
+
+        // Auto-remove from training when word reaches Box 5 (mastered)
+        if (newBox >= 5) {
+            DictionaryDB.updateTrainingStatus(wordId, false).then(() => {
+                const swedishWord = card[FC_COL_SWE] || '';
+                showToast(`🏆 Mästrat: ${swedishWord} / تم إتقانها!`, { type: 'success' });
+            }).catch(err => {
+                console.error('[Flashcards] Error removing from training:', err);
+            });
+        }
     } else {
         LeitnerSystem.demoteWord(wordId);
         sessionStats.wrong++;
@@ -276,7 +287,7 @@ export function handleFlashcardRating(rating: number) {
     const flashcard = document.getElementById('flashcard')!;
     const isFlipped = flashcard.classList.contains('flipped');
     const anim = rating >= 3 ? (isFlipped ? 'slide-out-right' : 'slide-out-right-front') : (isFlipped ? 'slide-out-left' : 'slide-out-left-front');
-    
+
     flashcard.classList.add(anim);
     setTimeout(() => {
         flashcard.classList.remove('slide-out-right', 'slide-out-left', 'slide-out-right-front', 'slide-out-left-front');

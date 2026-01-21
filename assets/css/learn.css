@@ -38,12 +38,42 @@
  body.iphone-view {
      max-width: 393px;
      margin: 2rem auto;
-     border: 12px solid #333;
+     border: 8px solid #38bdf8;
      border-radius: 50px;
      min-height: calc(100vh - 4rem);
-     box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+     box-shadow:
+         0 0 20px rgba(56, 189, 248, 0.9),
+         0 0 40px rgba(56, 189, 248, 0.7),
+         0 0 60px rgba(56, 189, 248, 0.5),
+         0 0 80px rgba(56, 189, 248, 0.3),
+         inset 0 0 30px rgba(56, 189, 248, 0.15);
      overflow-x: hidden;
      position: relative;
+     animation: iphoneGlow 2.5s ease-in-out infinite;
+ }
+
+ @keyframes iphoneGlow {
+
+     0%,
+     100% {
+         box-shadow:
+             0 0 20px rgba(56, 189, 248, 0.9),
+             0 0 40px rgba(56, 189, 248, 0.7),
+             0 0 60px rgba(56, 189, 248, 0.5),
+             0 0 80px rgba(56, 189, 248, 0.3),
+             inset 0 0 30px rgba(56, 189, 248, 0.15);
+         border-color: #38bdf8;
+     }
+
+     50% {
+         box-shadow:
+             0 0 30px rgba(125, 211, 252, 1),
+             0 0 60px rgba(56, 189, 248, 0.8),
+             0 0 90px rgba(56, 189, 248, 0.6),
+             0 0 120px rgba(56, 189, 248, 0.4),
+             inset 0 0 40px rgba(56, 189, 248, 0.2);
+         border-color: #7dd3fc;
+     }
  }
 
  body.iphone-view::before {
@@ -2872,11 +2902,17 @@
      max-width: 400px;
      height: 850px;
      margin: 20px auto;
-     border: 14px solid #1e293b;
+     border: 8px solid #38bdf8;
      border-radius: 40px;
-     box-shadow: 0 0 0 2px #334155, 0 20px 50px rgba(0, 0, 0, 0.5);
+     box-shadow:
+         0 0 20px rgba(56, 189, 248, 0.9),
+         0 0 40px rgba(56, 189, 248, 0.7),
+         0 0 60px rgba(56, 189, 248, 0.5),
+         0 0 80px rgba(56, 189, 248, 0.3),
+         inset 0 0 30px rgba(56, 189, 248, 0.15);
      position: relative;
      overflow: hidden;
+     animation: iphoneGlow 2.5s ease-in-out infinite;
  }
 
  body.iphone-view main {
@@ -3279,19 +3315,42 @@
      justify-content: center;
      align-items: center;
      padding: 1.5rem;
-     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-
-     /* Golden Frame */
-     border: 2px solid rgba(251, 191, 36, 0.4) !important;
-     /* Amber-400 */
-     box-shadow: 0 0 15px rgba(251, 191, 36, 0.1), inset 0 0 20px rgba(251, 191, 36, 0.05) !important;
+     /* Glowing Turquoise Frame */
+     border: 2px solid rgba(20, 184, 166, 0.6) !important;
+     box-shadow:
+         0 0 20px rgba(20, 184, 166, 0.3),
+         0 0 40px rgba(20, 184, 166, 0.2),
+         0 0 60px rgba(20, 184, 166, 0.1),
+         inset 0 0 20px rgba(20, 184, 166, 0.05) !important;
+     animation: glowPulse 3s ease-in-out infinite;
 
      /* Glassmorphism */
      background: rgba(15, 23, 42, 0.85) !important;
-     /* Slightly darker for contrast */
      backdrop-filter: blur(20px);
      -webkit-backdrop-filter: blur(20px);
      overflow: hidden;
+ }
+
+ @keyframes glowPulse {
+
+     0%,
+     100% {
+         box-shadow:
+             0 0 20px rgba(20, 184, 166, 0.3),
+             0 0 40px rgba(20, 184, 166, 0.2),
+             0 0 60px rgba(20, 184, 166, 0.1),
+             inset 0 0 20px rgba(20, 184, 166, 0.05);
+         border-color: rgba(20, 184, 166, 0.6);
+     }
+
+     50% {
+         box-shadow:
+             0 0 30px rgba(20, 184, 166, 0.5),
+             0 0 50px rgba(20, 184, 166, 0.3),
+             0 0 80px rgba(20, 184, 166, 0.2),
+             inset 0 0 30px rgba(20, 184, 166, 0.1);
+         border-color: rgba(20, 184, 166, 0.8);
+     }
  }
 
  .flashcard-front {
@@ -3314,8 +3373,9 @@
      line-height: 1.2;
      z-index: 10;
 
-     /* Solid Color for Swedish (Blue/Purple) */
-     color: #a78bfa;
+     /* Turquoise Color for Swedish */
+     color: #14b8a6;
+     text-shadow: 0 0 20px rgba(20, 184, 166, 0.4);
 
      /* Ensure long words break */
      word-wrap: break-word;
@@ -3330,8 +3390,10 @@
      display: block !important;
      visibility: visible !important;
      opacity: 1 !important;
-     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+     text-shadow: 0 0 15px rgba(251, 191, 36, 0.4), 0 1px 2px rgba(0, 0, 0, 0.8);
 
+     /* Matched font size with Swedish word */
+     font-size: clamp(1.8rem, 5vw, 3rem);
      margin-bottom: 1rem;
      font-family: 'Amiri', serif;
      line-height: 1.3;
