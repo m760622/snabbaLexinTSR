@@ -3488,3 +3488,18 @@
          font-size: 1.8rem;
      }
  }
+
+ /* ============================================
+    NUCLEAR OVERRIDE: Force Arabic Visibility in Flashcards
+    This beats body.lang-sv [lang="ar"] { display: none !important; }
+    by having higher specificity and coming later in cascade
+    ============================================ */
+ body.lang-sv .flashcard-wrapper .flashcard-face .flashcard-translation[lang="ar"],
+ body.lang-sv .flashcard-wrapper .flashcard-face .flashcard-translation[dir="rtl"],
+ body.lang-sv .flashcard-wrapper .flashcard-translation,
+ body.lang-sv .flashcard-translation,
+ .flashcard-wrapper .flashcard-translation {
+     display: block !important;
+     visibility: visible !important;
+     opacity: 1 !important;
+ }
