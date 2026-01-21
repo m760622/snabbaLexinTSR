@@ -306,6 +306,8 @@ function initSettingsModalHandlers(): void {
                 closeSettingsModal();
             }
         });
+
+
     }
 
     // Dark Mode Toggle

@@ -3,13 +3,12 @@
  * Extracted from index.html
  */
 import { TextSizeManager } from './utils';
-import { initSettingsModal } from './settings-modal';
 
 export function initMainUI() {
     console.log("Initializing Main UI...");
 
     iniThemeSelection();
-    initSettingsModal(); // Use full-screen settings modal
+    // Settings modal removed - using settings.html page
     initMobileView();
     initProgressBadge();
     initQuickActions();
