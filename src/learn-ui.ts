@@ -45,20 +45,48 @@ let visibleLessonsCount = 12;
 const PAGE_SIZE = 12;
 let scrollObserver: IntersectionObserver | null = null;
 
+// State
+let currentBatch = 0;
+const BATCH_Size = 12;
+let isLoading = false;
+let currentSearchTerm = '';
+let activeFilter = 'all';
+
+// User Stats (Gamification)
+let totalXP = 0;
+let userLevel = 1;
+
 // XP Requirements per level
 const XP_PER_LEVEL = 100;
+
+// Gamification State - Sets
+let trainingIds: Set<string> = new Set();
+const mistakesIds: Set<string> = new Set(); // Track mistake IDs
 
 // Load saved state
 function loadState(): void {
     try {
-        xp = parseInt(localStorage.getItem('learn_xp') || '0');
-        level = parseInt(localStorage.getItem('learn_level') || '1');
-        streak = parseInt(localStorage.getItem('learn_streak') || '0');
-        lastVisitDate = localStorage.getItem('learn_last_visit') || '';
-
+        const savedXP = localStorage.getItem('learn_xp');
+        const savedLevel = localStorage.getItem('learn_level');
+        const savedStreak = localStorage.getItem('learn_streak');
+        const savedLastVisit = localStorage.getItem('learn_last_visit');
         const savedCompleted = localStorage.getItem('learn_completed');
+        const savedTraining = localStorage.getItem('learn_training');
+        const savedMistakes = localStorage.getItem('learn_mistakes');
+
+        if (savedXP) totalXP = parseInt(savedXP);
+        if (savedLevel) userLevel = parseInt(savedLevel);
+        if (savedStreak) streak = parseInt(savedStreak);
+        if (savedLastVisit) lastVisitDate = savedLastVisit;
+
         if (savedCompleted) {
-            completedLessons = new Set(JSON.parse(savedCompleted));
+            JSON.parse(savedCompleted).forEach((id: string) => completedLessons.add(id));
+        }
+        if (savedTraining) {
+            JSON.parse(savedTraining).forEach((id: string) => trainingIds.add(id));
+        }
+        if (savedMistakes) {
+            JSON.parse(savedMistakes).forEach((id: string) => mistakesIds.add(id));
         }
 
         calculateStreak();
@@ -69,11 +97,29 @@ function loadState(): void {
 
 // Save state
 function saveState(): void {
-    localStorage.setItem('learn_xp', xp.toString());
-    localStorage.setItem('learn_level', level.toString());
+    localStorage.setItem('learn_xp', totalXP.toString());
+    localStorage.setItem('learn_level', userLevel.toString());
     localStorage.setItem('learn_streak', streak.toString());
     localStorage.setItem('learn_last_visit', lastVisitDate);
     localStorage.setItem('learn_completed', JSON.stringify([...completedLessons]));
+    localStorage.setItem('learn_training', JSON.stringify([...trainingIds]));
+    localStorage.setItem('learn_mistakes', JSON.stringify([...mistakesIds])); // Save mistakes
+
+    updateReviewButton(); // Update UI
+}
+
+// Helper to track mistakes
+function trackMistake(wordId: string) {
+    if (!wordId) return;
+    mistakesIds.add(wordId);
+    saveState();
+}
+
+function clearMistake(wordId: string) {
+    if (mistakesIds.has(wordId)) {
+        mistakesIds.delete(wordId);
+        saveState();
+    }
 }
 
 // Calculate streak
@@ -163,7 +209,7 @@ function initViewManager() {
 
 // Word Lookup Cache
 let wordIdMap: Map<string, string> | null = null;
-let trainingIds: Set<string> = new Set();
+// trainingIds moved to top level
 
 function initWordLookup() {
     if (wordIdMap) return;
@@ -233,76 +279,170 @@ function updateModeIndicator(activeBtn: HTMLElement) {
 
 // ========== QUIZ LOGIC ==========
 
-function initQuiz() {
-    console.log('[LearnUI] Initializing Quiz...');
+export function initQuiz(lessonId: string | null = null) {
+    const targetId = lessonId || currentQuizLessonId;
+    // Reset state after consuming it? 
+    // currentQuizLessonId = null; // Maybe keep it if we retry?
+
+    console.log('[LearnUI] Initializing Quiz...', targetId ? `for lesson: ${targetId}` : 'random mode');
     const container = document.getElementById('quizContent');
     if (!container) return;
 
     // Fast Render: Show Loading State Immediately
     container.innerHTML = `
         <div class="empty-state">
-            <div class="spinner"></div> <!-- Ensure you have CSS for this or use simple text -->
-            <p>Laddar quiz...</p>
+            <div class="spinner"></div>
+            <p>${lessonId ? 'Laddar lektionsquiz...' : 'Laddar quiz...'}</p>
         </div>
     `;
 
     // Defer Heavy Calculation to next tick
     setTimeout(() => {
-        // Reset State
-        quizScore = 0;
-        currentQuestionIndex = 0;
+        try {
+            // Reset State
+            quizScore = 0;
+            quizStreak = 0; // Reset streak
+            currentQuestionIndex = 0;
 
-        // Generate Questions from lessonsData
-        quizQuestions = generateQuizQuestions();
+            // Generate Questions from lessonsData
+            quizQuestions = generateQuizQuestions(lessonId);
 
-        if (quizQuestions.length === 0) {
+            if (quizQuestions.length === 0) {
+                const isReview = (lessonId === 'review') || (targetId === 'review');
+                const reviewMsgSv = "Du har inga sparade misstag att repetera! Bra jobbat! 🎉";
+                const reviewMsgAr = "ليس لديك أخطاء محفوظة لمراجعتها! أحسنت! 🎉";
+                const normalMsgSv = "Inga frågor tillgängliga för detta urval.";
+                const normalMsgAr = "لا توجد أسئلة متاحة لهذا الاختيار.";
+
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <p class="sv-text">${isReview ? reviewMsgSv : normalMsgSv}</p>
+                        <p class="ar-text">${isReview ? reviewMsgAr : normalMsgAr}</p>
+                        <button class="retry-btn" onclick="switchMode('browse')">Tillbaka / رجوع</button>
+                        ${isReview ? `<button class="secondary-btn" onclick="openRandomQuiz()" style="margin-top:1rem;background:none;border:1px solid #475569;color:#cbd5e1;padding:0.5rem 1rem;border-radius:8px;cursor:pointer;">Starta slumpmässigt quiz</button>` : ''}
+                    </div>
+                `;
+                return;
+            }
+
+            showQuestion();
+        } catch (error) {
+            console.error('[LearnUI] Quiz generation failed:', error);
             container.innerHTML = `
                 <div class="empty-state">
-                    <p class="sv-text">Inga frågor tillgängliga än.</p>
-                    <p class="ar-text">لا توجد أسئلة متاحة بعد.</p>
-                    <button class="retry-btn" onclick="switchMode('browse')">Tillbaka / رجوع</button>
+                    <p>Ett fel uppstod när quizet skulle laddas.</p>
+                    <p class="text-xs text-muted">${error}</p>
+                    <button class="retry-btn" onclick="location.reload()">Ladda om</button>
                 </div>
             `;
-            return;
         }
-
-        showQuestion();
     }, 50);
 }
 
-function generateQuizQuestions() {
+
+function generateQuizQuestions(lessonId: string | null) {
     const allExamples: ExampleItem[] = [];
-    lessonsData.forEach(lesson => {
-        lesson.sections.forEach(section => {
-            allExamples.push(...section.examples);
+
+    // Filter source lessons
+    if (lessonId === 'review') {
+        // Review Mode: Filter examples that are in mistakesIds
+        lessonsData.forEach(lesson => {
+            lesson.sections.forEach(section => {
+                section.examples.forEach(ex => {
+                    // Valid check: must have both swe and arb
+                    if (!ex.swe || !ex.arb || !ex.swe.trim() || !ex.arb.trim()) return;
+
+                    const id = getStableId(ex.swe);
+                    if (mistakesIds.has(id)) {
+                        allExamples.push(ex);
+                    }
+                });
+            });
         });
-    });
+    } else {
+        const sourceLessons = lessonId
+            ? lessonsData.filter(l => l.id === lessonId)
+            : lessonsData;
 
-    // Shuffle and pick 10
-    const shuffled = [...allExamples].sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, 10);
+        sourceLessons.forEach(lesson => {
+            lesson.sections.forEach(section => {
+                section.examples.forEach(ex => {
+                    // Valid check
+                    if (ex.swe && ex.arb && ex.swe.trim() && ex.arb.trim()) {
+                        allExamples.push(ex);
+                    }
+                });
+            });
+        });
+    }
 
-    return selected.map(ex => {
-        const isSweToArb = Math.random() > 0.5;
+    if (allExamples.length < 4 && lessonId !== 'review') {
+        // Try to fetch more valid distractors globaly if needed
+        if (lessonId && allExamples.length > 0) {
+            // We have some valid examples, proceed.
+            // Distractors will be fetched from global valid pool.
+        } else {
+            return [];
+        }
+    }
 
-        // Generate options
-        const otherExamples = allExamples.filter(e => e.swe !== ex.swe);
+    // Shuffle and select a subset for the quiz
+    const shuffledExamples = [...allExamples].sort(() => Math.random() - 0.5);
+    const selectedExamples = shuffledExamples.slice(0, Math.min(shuffledExamples.length, 10)); // Max 10 questions
+
+    // Prepare global pool of valid distractors once
+    const globalDistractors: ExampleItem[] = [];
+    lessonsData.forEach(l => l.sections.forEach(s => {
+        s.examples.forEach(e => {
+            if (e.swe && e.arb && e.swe.trim() && e.arb.trim()) {
+                globalDistractors.push(e);
+            }
+        });
+    }));
+
+    // Generate quiz questions with options and correct answer
+    const quizQuestions = selectedExamples.map(ex => {
+        const questionType = Math.random() < 0.5 ? 'swe-to-arb' : 'arb-to-swe';
+        const isSweToArb = questionType === 'swe-to-arb';
+
+        const questionText = isSweToArb ? ex.swe : ex.arb;
+        const answerText = isSweToArb ? ex.arb : ex.swe;
+
+        // Generate distractors from VALID global pool
+        const otherExamples = globalDistractors.filter(e => e.swe !== ex.swe);
+
         const distractors = [...otherExamples]
             .sort(() => Math.random() - 0.5)
             .slice(0, 3)
             .map(e => isSweToArb ? e.arb : e.swe);
 
-        const options = [...distractors, isSweToArb ? ex.arb : ex.swe].sort(() => Math.random() - 0.5);
+        // Ensure unique options
+        const uniqueOptions = Array.from(new Set([...distractors, answerText]));
+
+        // Ensure 4 options
+        while (uniqueOptions.length < 4 && otherExamples.length > uniqueOptions.length) {
+            const randomEx = otherExamples[Math.floor(Math.random() * otherExamples.length)];
+            const opt = isSweToArb ? randomEx.arb : randomEx.swe;
+            if (!uniqueOptions.includes(opt)) {
+                uniqueOptions.push(opt);
+            }
+        }
+
+        const finalOptions = [...uniqueOptions].sort(() => Math.random() - 0.5);
 
         return {
-            question: isSweToArb ? ex.swe : ex.arb,
-            answer: isSweToArb ? ex.arb : ex.swe,
-            options: options,
-            type: isSweToArb ? 'swe-to-arb' : 'arb-to-swe',
+            question: questionText,
+            answer: answerText,
+            options: [...uniqueOptions].sort(() => Math.random() - 0.5),
+            type: questionType,
             example: ex
         };
     });
+    return quizQuestions;
 }
+
+
+let quizStreak = 0; // New state
 
 function showQuestion() {
     const container = document.getElementById('quizContent');
@@ -316,27 +456,38 @@ function showQuestion() {
             <div class="quiz-progress-bar">
                 <div class="quiz-progress-fill" style="width: ${progress}%"></div>
             </div>
-            <div class="quiz-stats">
-                <span>Fråga ${currentQuestionIndex + 1}/${quizQuestions.length}</span>
-                <span>Poäng: ${quizScore}</span>
+            <div class="quiz-stats-row">
+                <div class="quiz-stat-item">
+                    <span>📝</span>
+                    <span>${currentQuestionIndex + 1}/${quizQuestions.length}</span>
+                </div>
+                <div class="quiz-stat-item">
+                    <span>🏆</span>
+                    <span>${quizScore}</span>
+                </div>
+                <div class="quiz-stat-item streak-container ${quizStreak > 2 ? 'active' : ''}">
+                    <span>🔥</span>
+                    <span id="streakCounter">${quizStreak}</span>
+                </div>
             </div>
         </div>
 
         <div class="question-card">
-
             <div class="question-text ${q.type === 'arb-to-swe' ? 'ar-text' : 'sv-text'}" dir="${q.type === 'arb-to-swe' ? 'rtl' : 'ltr'}">
                 ${q.question}
             </div>
         </div>
 
         <div class="options-grid">
-            ${q.options.map((opt: string) => `
+            ${q.options.map((opt: string) => {
+        return `
                 <button class="option-btn ${q.type === 'swe-to-arb' ? 'ar-text' : 'sv-text'}" 
-                        onclick="checkAnswer('${opt.replace(/'/g, "\\'")}')" 
+                        onclick="checkAnswer(this.textContent.trim())" 
                         dir="${q.type === 'swe-to-arb' ? 'rtl' : 'ltr'}">
                     ${opt}
                 </button>
-            `).join('')}
+                `;
+    }).join('')}
         </div>
     `;
 
@@ -350,19 +501,68 @@ function checkAnswer(selected: string) {
     const q = quizQuestions[currentQuestionIndex];
     const options = document.querySelectorAll('.option-btn');
 
+    let isCorrect = (selected === q.answer);
+
     options.forEach(btn => {
         const btnText = (btn as HTMLElement).textContent?.trim();
         if (btnText === q.answer) {
             btn.classList.add('correct');
-        } else if (btnText === selected && selected !== q.answer) {
+            if (isCorrect) {
+                // Animate correct button
+                btn.animate([
+                    { transform: 'scale(1)' },
+                    { transform: 'scale(1.05)' },
+                    { transform: 'scale(1)' }
+                ], { duration: 300 });
+            }
+        } else if (btnText === selected && !isCorrect) {
             btn.classList.add('wrong');
+            // Shake animation for wrong answer
+            btn.animate([
+                { transform: 'translateX(0)' },
+                { transform: 'translateX(-5px)' },
+                { transform: 'translateX(5px)' },
+                { transform: 'translateX(-5px)' },
+                { transform: 'translateX(0)' }
+            ], { duration: 400 });
         }
         (btn as HTMLButtonElement).disabled = true;
     });
 
-    if (selected === q.answer) {
+    if (isCorrect) {
         quizScore++;
-        addXP(5);
+        quizStreak++;
+
+        // Clear mistake if mastered (optional rule: instant clear or need multiple?) 
+        // For simple "review", instant clear is encouraging.
+        // We need the word ID. Ideally passed in arguments or stored in question object.
+        // Current 'q' object has 'example' which has text but ID computation is complex?
+        // Let's use getWordId helper or re-compute stable ID.
+        const wordId = getStableId(q.example.swe);
+        clearMistake(wordId);
+
+        // Base XP
+        let earnedXP = 5;
+
+        // ... (Streak Bonus code) ...
+        if (quizStreak >= 3) {
+            earnedXP += 2;
+            const streakCounter = document.getElementById('streakCounter');
+            if (streakCounter) {
+                streakCounter.parentElement?.animate([
+                    { transform: 'scale(1)' },
+                    { transform: 'scale(1.5)' },
+                    { transform: 'scale(1)' }
+                ], { duration: 300, easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' });
+            }
+        }
+
+        addXP(earnedXP);
+    } else {
+        quizStreak = 0; // Reset streak
+        // Track mistake
+        const wordId = getStableId(q.example.swe);
+        trackMistake(wordId);
     }
 
     setTimeout(() => {
@@ -929,6 +1129,10 @@ function renderLessonContent(lesson: Lesson): string {
             `).join('')}
 
             <div class="lesson-actions">
+                <button class="quiz-lesson-btn" onclick="startLessonQuiz('${lesson.id}')">
+                    🧠 <span class="sv-text">Testa dig själv</span><span class="ar-text">اختبر نفسك</span>
+                </button>
+                <div class="spacer" style="width: 12px;"></div>
                 <button class="complete-lesson-btn" onclick="completeLesson('${lesson.id}')">
                     ✅ <span class="sv-text">Markera som klar</span><span class="ar-text">اكتمل</span>
                 </button>
@@ -1107,12 +1311,54 @@ function setPathFilter(filterLevel: string): void {
 // Open review session
 function openReviewSession(): void {
     console.log('[LearnUI] Opening review session...');
-    // For now, open a random quiz
-    openRandomQuiz();
+
+    // Check if we have mistakes
+    if (mistakesIds.size === 0) {
+        // Show celebration or fallback
+        // Since we don't have a toast system ready in this snippet, 
+        // we can fallback to random quiz OR show a "You are perfect!" alert.
+        // For now, let's open random but maybe log it.
+        // Or better: Use initQuiz('review') anyway, which will show "Empty State".
+        // But the empty state text currently says "Inga frågor för detta urval". 
+        // We should customize emptiness.
+    }
+
+    closeLessonModal();
+    switchMode('quiz');
+    currentQuizLessonId = 'review';
 }
+
+// Start quiz for specific lesson
+function startLessonQuiz(lessonId: string) {
+    closeLessonModal();
+    switchMode('quiz');
+    // We need to pass the ID to initQuiz. 
+    // Since switchMode trigger 'onActivate' which calls initQuiz() without args,
+    // we might need to override behavior or store state.
+    // Simpler: Just call initQuiz(lessonId) directly AFTER switchMode, 
+    // but switchMode's onActivate might race or double init.
+
+    // Hack: Set a global flag or modify initQuiz to check a 'pendingQuizLessonId'
+    // Better: Allow onActivate to accept params? No, viewManager is simple.
+
+    // Let's manually init quiz after a tiny delay to overwrite the default onActivate one,
+    // OR update viewManager onActivate handler?
+
+    // Simplest approach: Just call initQuiz(lessonId). 
+    // The onActivate will run initQuiz() (random), then we overwrite it. 
+    // Ensure we clear/cancel previous timeouts if any. 
+    // But since initQuiz has a 50ms timeout, we can set a flag `currentQuizLesson` before switching.
+
+    // Let's refactor `currentQuizLesson` state.
+    currentQuizLessonId = lessonId;
+    // switchMode will call initQuiz(), which we will update to use the state.
+}
+
+let currentQuizLessonId: string | null = null;
 
 // Export to window
 function exportToWindow(): void {
+    (window as any).startLessonQuiz = startLessonQuiz;
     (window as any).openLesson = openLesson;
     (window as any).closeLessonModal = closeLessonModal;
     (window as any).completeLesson = completeLesson;
@@ -1239,6 +1485,10 @@ export function initLearnUI(): void {
     initScrollObserver();
     renderLessons();
     // updateStatsUI(); // Removed
+    setupSearch();
+    initScrollObserver();
+    renderLessons();
+    updateReviewButton(); // Check specifically for review button
     initWordOfDay();
 
     // Check URL params for mode
@@ -1276,6 +1526,34 @@ function initScrollObserver() {
         rootMargin: '300px', // Load before reaching bottom
         threshold: 0.1
     });
+}
+
+// Update Review Button visibility
+function updateReviewButton() {
+    // Try to find filters container
+    const filtersContainer = document.querySelector('.filters-scroll');
+    if (!filtersContainer) return;
+
+    let btn = document.getElementById('btn-review-mistakes');
+    const count = mistakesIds.size;
+
+    if (count > 0) {
+        if (!btn) {
+            btn = document.createElement('button');
+            btn.id = 'btn-review-mistakes';
+            btn.className = 'filter-chip';
+            btn.style.background = 'rgba(239, 68, 68, 0.2)'; // Red tint
+            btn.style.borderColor = 'rgba(239, 68, 68, 0.5)';
+            btn.style.color = '#fca5a5';
+            btn.onclick = openReviewSession;
+            // Insert as first item for visibility
+            filtersContainer.insertBefore(btn, filtersContainer.firstChild);
+        }
+        btn.innerHTML = `🧠 Review (${count})`;
+        btn.style.display = 'inline-flex';
+    } else {
+        if (btn) btn.style.display = 'none';
+    }
 }
 
 // Add CSS for lesson cards
@@ -1332,6 +1610,33 @@ style.textContent = `
         background: linear-gradient(145deg, rgba(34, 197, 94, 0.05), rgba(30, 41, 59, 0.7));
     }
 
+
+    .quiz-lesson-btn {
+        flex: 1;
+        background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+        color: white;
+        border: none;
+        padding: 1rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 6px -1px rgba(109, 40, 217, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .quiz-lesson-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(109, 40, 217, 0.4);
+    }
+
+    .quiz-lesson-btn:active {
+        transform: translateY(0);
+    }
+    
     /* Mastery Stars */
     .mastery-stars {
         display: flex;
@@ -1400,6 +1705,49 @@ style.textContent = `
 
     .lesson-title.search-result-title {
         font-size: 1.3rem; 
+        font-weight: 700;
+        color: #f8fafc;
+        margin: 0;
+        line-height: 1.2;
+        width: 100%;
+        white-space: nowrap;       /* Keep text on one line */
+        overflow: hidden;          /* Hide overflow */
+        text-overflow: ellipsis;   /* Add ... if too long */
+        text-align: left;          /* Force left alignment */
+    }
+
+    .quiz-stats-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 0.5rem;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: #94a3b8;
+    }
+
+    .quiz-stat-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(15, 23, 42, 0.4);
+        padding: 6px 12px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .streak-container {
+        color: #64748b;
+        transition: color 0.3s, transform 0.3s;
+    }
+
+    .streak-container.active {
+        color: #f59e0b; /* Amber 500 */
+        border-color: rgba(245, 158, 11, 0.2);
+        background: rgba(245, 158, 11, 0.1);
+        font-weight: bold;
+        box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+    }
         font-weight: 700;
         color: #f8fafc;
         margin: 0;
