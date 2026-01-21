@@ -1,27 +1,29 @@
 /**
  * ============================================================
  * PREMIUM SETTINGS PAGE STYLES
- * Version: 1.1 - Dark Mode Optimized
+ * Version: 2.0 - Soft UI Evolution + Teal Theme
  * ============================================================
  */
 
 /* ============================================================
-   CSS VARIABLES - Muted Dark Mode Palette
+   CSS VARIABLES - Teal Language Learning Palette
    ============================================================ */
 :root {
-    --settings-primary: #3b82f6;
-    --settings-primary-light: #60a5fa;
-    --settings-secondary: #2563eb;
-    --settings-success: #2a8a52;
-    --settings-warning: #c27f1a;
-    --settings-danger: #c44040;
-    --settings-bg: #0d1117;
-    --settings-surface: rgba(22, 27, 34, 0.85);
-    --settings-card: rgba(22, 27, 34, 0.7);
-    --settings-border: rgba(255, 255, 255, 0.06);
-    --settings-text: #e6edf3;
-    --settings-text-secondary: #7d8590;
-    --settings-glass-blur: blur(16px);
+    --settings-primary: #0D9488;
+    --settings-primary-light: #2DD4BF;
+    --settings-secondary: #0F766E;
+    --settings-accent: #EA580C;
+    --settings-success: #10B981;
+    --settings-warning: #F59E0B;
+    --settings-danger: #EF4444;
+    --settings-bg: #0a0f14;
+    --settings-surface: rgba(15, 23, 32, 0.9);
+    --settings-card: rgba(15, 23, 32, 0.75);
+    --settings-border: rgba(45, 212, 191, 0.08);
+    --settings-text: #F0FDFA;
+    --settings-text-secondary: #99A1AD;
+    --settings-glass-blur: blur(20px);
+    --settings-glow: rgba(13, 148, 136, 0.4);
 }
 
 /* ============================================================
@@ -49,40 +51,68 @@
     overflow: hidden;
 }
 
+/* Aurora Mesh Gradient Background */
+.settings-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(13, 148, 136, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 90%, rgba(45, 212, 191, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 40% 60% at 50% 50%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
+    animation: auroraShift 20s ease-in-out infinite;
+}
+
 .settings-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.25;
-    animation: orbFloat 25s ease-in-out infinite;
+    filter: blur(120px);
+    opacity: 0.2;
+    animation: orbFloat 30s ease-in-out infinite;
 }
 
 .settings-orb-1 {
-    width: 350px;
-    height: 350px;
-    background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
-    top: -100px;
+    width: 400px;
+    height: 400px;
+    background: linear-gradient(135deg, #0D9488, #0F766E);
+    top: -150px;
     left: -100px;
     animation-delay: 0s;
 }
 
 .settings-orb-2 {
-    width: 280px;
-    height: 280px;
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-    bottom: -50px;
-    right: -50px;
-    animation-delay: -8s;
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, #2DD4BF, #14B8A6);
+    bottom: -80px;
+    right: -80px;
+    animation-delay: -10s;
 }
 
 .settings-orb-3 {
-    width: 220px;
-    height: 220px;
-    background: linear-gradient(135deg, #3b82f6, #60a5fa);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation-delay: -16s;
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #10B981, #34D399);
+    top: 40%;
+    left: 60%;
+    animation-delay: -20s;
+}
+
+@keyframes auroraShift {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.02);
+    }
 }
 
 @keyframes orbFloat {
@@ -92,16 +122,12 @@
         transform: translate(0, 0) scale(1);
     }
 
-    25% {
-        transform: translate(30px, -30px) scale(1.05);
+    33% {
+        transform: translate(20px, -20px) scale(1.03);
     }
 
-    50% {
-        transform: translate(-20px, 20px) scale(0.95);
-    }
-
-    75% {
-        transform: translate(-30px, -20px) scale(1.02);
+    66% {
+        transform: translate(-15px, 15px) scale(0.97);
     }
 }
 
@@ -204,7 +230,7 @@
 }
 
 /* ============================================================
-   GLASS CARD
+   GLASS CARD - Soft UI Evolution
    ============================================================ */
 .glass-card {
     background: var(--settings-card);
@@ -213,6 +239,18 @@
     border: 1px solid var(--settings-border);
     border-radius: 20px;
     overflow: hidden;
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.25),
+        0 1px 2px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 /* ============================================================
@@ -222,7 +260,8 @@
     padding: 24px;
     margin-bottom: 16px;
     text-align: center;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(30, 58, 138, 0.1));
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.15), rgba(15, 118, 110, 0.08));
+    border: 1px solid rgba(45, 212, 191, 0.12);
 }
 
 .profile-avatar-wrapper {
@@ -232,15 +271,17 @@
 }
 
 .profile-avatar {
-    width: 80px;
-    height: 80px;
+    width: 88px;
+    height: 88px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--settings-primary), var(--settings-secondary));
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 2.5rem;
-    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.4);
+    box-shadow:
+        0 8px 32px var(--settings-glow),
+        0 0 0 3px rgba(45, 212, 191, 0.15);
     position: relative;
     overflow: hidden;
 }
@@ -532,23 +573,23 @@
 
 
 .gradient-blue {
-    background: linear-gradient(135deg, #3570b8, #2a6a9a);
+    background: linear-gradient(135deg, #0D9488, #0F766E);
 }
 
 .gradient-green {
-    background: linear-gradient(135deg, #2a7a52, #1f6a42);
+    background: linear-gradient(135deg, #10B981, #059669);
 }
 
 .gradient-amber {
-    background: linear-gradient(135deg, #a87a2a, #8a6520);
+    background: linear-gradient(135deg, #F59E0B, #D97706);
 }
 
 .gradient-cyan {
-    background: linear-gradient(135deg, #2a8a9a, #1f7a8a);
+    background: linear-gradient(135deg, #14B8A6, #0D9488);
 }
 
 .gradient-rose {
-    background: linear-gradient(135deg, #1e3a8a, #172554);
+    background: linear-gradient(135deg, #EA580C, #DC2626);
 }
 
 .section-title-wrapper {
@@ -691,12 +732,12 @@ body.lang-both .section-title .ar-text {
 }
 
 /* ============================================================
-   TOGGLE SWITCH
+   TOGGLE SWITCH - Premium iOS Style
    ============================================================ */
 .toggle-switch {
     position: relative;
-    width: 52px;
-    height: 28px;
+    width: 54px;
+    height: 30px;
 }
 
 .toggle-switch input {
@@ -712,30 +753,41 @@ body.lang-both .section-title .ar-text {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 28px;
-    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 30px;
+    transition: background 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .toggle-slider::before {
     content: '';
     position: absolute;
-    height: 22px;
-    width: 22px;
+    height: 24px;
+    width: 24px;
     left: 3px;
     bottom: 3px;
-    background: white;
+    background: linear-gradient(180deg, #fff 0%, #f0f0f0 100%);
     border-radius: 50%;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.25),
+        0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .toggle-switch input:checked+.toggle-slider {
     background: linear-gradient(135deg, var(--settings-primary), var(--settings-secondary));
+    box-shadow:
+        inset 0 1px 3px rgba(0, 0, 0, 0.15),
+        0 0 12px var(--settings-glow);
 }
 
 .toggle-switch input:checked+.toggle-slider::before {
     transform: translateX(24px);
+}
+
+.toggle-switch input:focus+.toggle-slider {
+    outline: 2px solid var(--settings-primary-light);
+    outline-offset: 2px;
 }
 
 /* ============================================================
@@ -2429,4 +2481,525 @@ body:not(.dark-mode) .toast-notification {
 
 .w-completion-60 {
     width: 60%;
+}/* ============================================================
+   REDUCED MOTION SUPPORT
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .settings-bg::before,
+    .settings-orb,
+    .profile-avatar::after {
+        animation: none;
+    }
+    
+    .toggle-slider::before {
+        transition: transform 0.1s ease;
+    }
+    
+    .glass-card,
+    .settings-item.clickable,
+    .quick-link-card,
+    .test-btn {
+        transition: none;
+    }
+}
+
+/* ============================================================
+   FULL-SCREEN SETTINGS MODAL
+   ============================================================ */
+.settings-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.settings-modal.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.settings-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+.settings-modal-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--settings-bg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .settings-modal-container {
+        margin: 24px auto;
+        height: calc(100% - 48px);
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* Modal Header */
+.settings-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--settings-card);
+    border-bottom: 1px solid var(--settings-border);
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.settings-modal-close {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--settings-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--settings-text);
+}
+
+.settings-modal-close:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: scale(1.05);
+}
+
+.settings-modal-close svg {
+    width: 20px;
+    height: 20px;
+}
+
+.settings-modal-title {
+    flex: 1;
+    text-align: center;
+}
+
+.settings-modal-title h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--settings-text);
+}
+
+/* Modal Content */
+.settings-modal-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Override settings.html styles for modal context */
+.settings-modal .glass-card {
+    margin-bottom: 0;
+}
+
+.settings-modal .settings-profile-card {
+    margin-bottom: 0;
+}
+
+.settings-modal .settings-section {
+    margin-bottom: 0;
+}
+
+/* Motivation Card in Footer */
+.settings-modal .motivation-card {
+    padding: 16px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.1), rgba(45, 212, 191, 0.05));
+    border: 1px solid rgba(45, 212, 191, 0.15);
+}
+
+.settings-modal .motivation-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.settings-modal .motivation-text {
+    font-size: 0.9rem;
+    color: var(--settings-text-secondary);
+    margin: 0;
+}
+
+/* Copyright Info */
+.settings-modal .copyright-info {
+    text-align: center;
+    padding: 16px;
+    color: var(--settings-text-secondary);
+    font-size: 0.85rem;
+}
+
+.settings-modal .copyright-info p {
+    margin: 4px 0;
+}
+
+/* Quick Links Grid */
+.settings-modal .quick-links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.settings-modal .quick-link-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--settings-border);
+    border-radius: 16px;
+    text-decoration: none;
+    color: var(--settings-text);
+    transition: all 0.2s ease;
+    gap: 8px;
+}
+
+.settings-modal .quick-link-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+    border-color: var(--settings-primary-light);
+}
+
+.settings-modal .quick-link-icon {
+    font-size: 2rem;
+}
+
+.settings-modal .quick-link-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Version Badge */
+.settings-modal .version-badge {
+    background: linear-gradient(135deg, var(--settings-primary), var(--settings-secondary));
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Slider Control */
+.settings-modal .slider-item .slider-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.settings-modal .slider-control input[type="range"] {
+    width: 100px;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.settings-modal .slider-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--settings-primary), var(--settings-secondary));
+    cursor: pointer;
+    box-shadow: 0 2px 6px var(--settings-glow);
+}
+
+.settings-modal .slider-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--settings-primary-light);
+    min-width: 40px;
+    text-align: right;
+}
+
+/* Voice Selector */
+.settings-modal .voice-selector {
+    display: flex;
+    gap: 8px;
+}
+
+.settings-modal .voice-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--settings-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.settings-modal .voice-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.settings-modal .voice-btn.active {
+    background: linear-gradient(135deg, var(--settings-primary), var(--settings-secondary));
+    border-color: transparent;
+    box-shadow: 0 0 12px var(--settings-glow);
+}
+
+/* Goal Selector */
+.settings-modal .goal-selector {
+    display: flex;
+    gap: 8px;
+}
+
+.settings-modal .goal-btn {
+    width: 40px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--settings-border);
+    color: var(--settings-text);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.settings-modal .goal-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.settings-modal .goal-btn.active {
+    background: linear-gradient(135deg, var(--settings-primary), var(--settings-secondary));
+    border-color: transparent;
+}
+
+/* Font Size Control */
+.settings-modal .font-size-control {
+    display: flex;
+    gap: 6px;
+}
+
+.settings-modal .font-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--settings-border);
+    color: var(--settings-text);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.settings-modal .font-btn:first-child { font-size: 0.75rem; }
+.settings-modal .font-btn:nth-child(2) { font-size: 0.9rem; }
+.settings-modal .font-btn:last-child { font-size: 1.1rem; }
+
+.settings-modal .font-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.settings-modal .font-btn.active {
+    background: linear-gradient(135deg, var(--settings-primary), var(--settings-secondary));
+    border-color: transparent;
+}
+
+/* Center Item (Test Button) */
+.settings-modal .center-item {
+    justify-content: center;
+}
+
+.settings-modal .test-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--settings-primary), var(--settings-secondary));
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.settings-modal .test-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px var(--settings-glow);
+}
+
+/* ============================================================
+   FIX: Settings Modal Text Visibility
+   ============================================================ */
+.settings-modal .section-title,
+.settings-modal .section-title-wrapper h3 {
+    color: var(--settings-text, #f0f0f0) !important;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.settings-modal .item-name,
+.settings-modal .item-label,
+.settings-modal .settings-item .item-info span {
+    color: var(--settings-text, #f0f0f0) !important;
+}
+
+.settings-modal .section-header {
+    color: var(--settings-text, #f0f0f0);
+}
+
+.settings-modal .profile-name {
+    color: var(--settings-text, #f0f0f0) !important;
+}
+
+.settings-modal .profile-level,
+.settings-modal .xp-text {
+    color: var(--settings-text-secondary, #a0a0a0) !important;
+}
+
+.settings-modal .stat-label,
+.settings-modal .profile-stat .stat-label {
+    color: var(--settings-text-secondary, #a0a0a0) !important;
+}
+
+.settings-modal .stat-value,
+.settings-modal .profile-stat .stat-value {
+    color: var(--settings-text, #f0f0f0) !important;
+}
+
+.settings-modal .settings-item {
+    color: var(--settings-text, #f0f0f0);
+}
+
+.settings-modal .item-left {
+    color: var(--settings-text, #f0f0f0);
+}
+
+.settings-modal .quick-link-label {
+    color: var(--settings-text, #f0f0f0) !important;
+}
+
+.settings-modal .lang-name-large {
+    color: var(--settings-text, #f0f0f0) !important;
+}
+
+/* Ensure all text is visible */
+.settings-modal * {
+    color: inherit;
+}
+
+.settings-modal .settings-section,
+.settings-modal .glass-card {
+    color: var(--settings-text, #f0f0f0);
+}
+
+/* ============================================================
+   STRONGER FIX: Settings Modal Content Visibility
+   ============================================================ */
+#settingsModal .settings-modal-container,
+#settingsModal .settings-modal-content,
+#settingsModal .glass-card,
+#settingsModal .settings-section,
+#settingsModal .section-header,
+#settingsModal .section-content,
+#settingsModal .settings-item,
+#settingsModal .item-left,
+#settingsModal .item-info,
+#settingsModal h3,
+#settingsModal span,
+#settingsModal p,
+#settingsModal .section-title,
+#settingsModal .item-name,
+#settingsModal .lang-name-large,
+#settingsModal .quick-link-label {
+    color: #F0FDFA !important;
+}
+
+#settingsModal .profile-level,
+#settingsModal .xp-text,
+#settingsModal .stat-label,
+#settingsModal .version-badge,
+#settingsModal .info-badge {
+    color: #94A3B8 !important;
+}
+
+/* Make sections expandable by default */
+#settingsModal .section-content {
+    display: block !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    overflow: visible !important;
+    padding: 16px !important;
+}
+
+#settingsModal .settings-section:not(.expanded) .section-content {
+    display: none !important;
+}
+
+/* Fix language cards */
+#settingsModal .language-grid-premium {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+#settingsModal .lang-card-premium {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+#settingsModal .lang-card-premium.active {
+    background: linear-gradient(135deg, #0D9488, #0F766E);
+    border-color: #14B8A6;
+}
+
+#settingsModal .lang-flag-large {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+/* Settings items layout */
+#settingsModal .settings-item {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#settingsModal .item-left {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+}
+
+#settingsModal .item-icon {
+    font-size: 1.25rem;
 }

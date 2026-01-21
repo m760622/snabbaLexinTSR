@@ -357,6 +357,17 @@ export const TypeColorSystem = {
 
 
         // ============================================
+        // STEP 0: EXPLICIT GENDER CHECK (HIGHEST PRIORITY)
+        // If explicit gender is provided, it should override all other detection
+        // ============================================
+        if (genderLower === 'ett') {
+            return { type: 'ett', color: TypeColors.ett, gender: 'ett', specializedLabel };
+        }
+        if (genderLower === 'en') {
+            return { type: 'en', color: TypeColors.en, gender: 'en', specializedLabel };
+        }
+
+        // ============================================
         // STEP 0.1: USER FORCED VERBS (Manual Overrides)
         // Words strictly identified by user as verbs despite dictionary type
         // ============================================
@@ -558,14 +569,8 @@ export const TypeColorSystem = {
         }
 
         // ============================================
-        // STEP 1: USE EXPLICIT GENDER IF PROVIDED (from column 13)
+        // STEP 1: (MOVED TO STEP 0 - EXPLICIT GENDER CHECK)
         // ============================================
-        if (genderLower === 'ett') {
-            return { type: 'ett', color: TypeColors.ett, gender: 'ett', specializedLabel };
-        }
-        if (genderLower === 'en') {
-            return { type: 'en', color: TypeColors.en, gender: 'en', specializedLabel };
-        }
 
         // ============================================
         // STEP 1.5: SMART MORPHOLOGICAL ANALYSIS (The "Intelligence" Layer)
@@ -587,15 +592,8 @@ export const TypeColorSystem = {
 
 
         // ============================================
-        // STEP 2: USE EXPLICIT GENDER IF PROVIDED (from column 13)
-        // This is more reliable than inference from forms
+        // STEP 2: (MOVED TO STEP 0 - EXPLICIT GENDER CHECK)
         // ============================================
-        if (genderLower === 'ett') {
-            return { type: 'ett', color: TypeColors.ett, gender: 'ett', specializedLabel };
-        }
-        if (genderLower === 'en') {
-            return { type: 'en', color: TypeColors.en, gender: 'en', specializedLabel };
-        }
 
         // ============================================
         // STEP 3: NOUN GENDER DETECTION BY FORMS (fallback)

@@ -3,13 +3,13 @@
  * Extracted from index.html
  */
 import { TextSizeManager } from './utils';
-import { initSettingsMenuLazy } from './settings-menu';
+import { initSettingsModal } from './settings-modal';
 
 export function initMainUI() {
     console.log("Initializing Main UI...");
 
     iniThemeSelection();
-    initSettingsMenuLazy(); // Use lazy-loaded settings menu
+    initSettingsModal(); // Use full-screen settings modal
     initMobileView();
     initProgressBadge();
     initQuickActions();
