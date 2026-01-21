@@ -231,6 +231,38 @@ export function generateSettingsMenuHTML(): string {
             <span>🃏 <span class="sv-text">Flashcards</span><span class="ar-text">بطاقات</span></span>
         </button>
 
+        <!-- Section: Smart Training -->
+        <div class="settings-section-header">🧠 <span class="sv-text">Smart Träning</span><span class="ar-text">التدريب الذكي</span></div>
+
+        <div class="menu-item toggle-item">
+            <span class="icon-box">🔄</span>
+            <span><span class="sv-text">Auto-lägg till</span><span class="ar-text">إضافة تلقائية</span></span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="autoTrainingToggle" checked title="Auto-träning / التدريب التلقائي">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="menu-item toggle-item">
+            <span class="icon-box">📝</span>
+            <span><span class="sv-text">Visa kontext</span><span class="ar-text">عرض السياق</span></span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="showContextToggle" checked title="Visa kontext / عرض السياق">
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+
+        <div class="menu-item info-item">
+            <span class="icon-box">📊</span>
+            <span><span class="sv-text">Ord i träning</span><span class="ar-text">كلمات في التدريب</span></span>
+            <span class="info-badge" id="trainingWordsCountMenu">0</span>
+        </div>
+
+        <button id="clearTrainingBtn" class="menu-item danger-item" aria-label="Rensa träningslistan / مسح قائمة التدريب">
+            <span class="icon-box">🗑️</span>
+            <span>🗑️ <span class="sv-text">Rensa träning</span><span class="ar-text">مسح التدريب</span></span>
+        </button>
+
         <!-- Section: Navigation -->
         <div class="settings-section-header">🧭 <span class="sv-text">Navigation</span><span class="ar-text">التنقل</span></div>
 
@@ -642,5 +674,86 @@ function initSettingsMenuHandlers(): void {
             localStorage.setItem('eyeCareMode', String(checked));
             updateUserSettings('eyeCare', checked);
         });
+    }
+
+    // ===================================
+    // SMART TRAINING HANDLERS
+    // ===================================
+
+    // Auto Training Toggle
+    const autoTrainingToggle = document.getElementById('autoTrainingToggle') as HTMLInputElement;
+    if (autoTrainingToggle) {
+        try {
+            const savedJSON = JSON.parse(localStorage.getItem('userSettings') || '{}');
+            // Default true
+            autoTrainingToggle.checked = savedJSON.autoTraining !== false;
+        } catch (e) { }
+
+        autoTrainingToggle.addEventListener('change', () => {
+            const checked = autoTrainingToggle.checked;
+            localStorage.setItem('autoTraining', String(checked));
+            updateUserSettings('autoTraining', checked);
+        });
+    }
+
+    // Show Context Toggle
+    const showContextToggle = document.getElementById('showContextToggle') as HTMLInputElement;
+    if (showContextToggle) {
+        try {
+            const savedJSON = JSON.parse(localStorage.getItem('userSettings') || '{}');
+            // Default true
+            showContextToggle.checked = savedJSON.showContextInCards !== false;
+        } catch (e) { }
+
+        showContextToggle.addEventListener('change', () => {
+            const checked = showContextToggle.checked;
+            localStorage.setItem('showContextInCards', String(checked));
+            updateUserSettings('showContextInCards', checked);
+        });
+    }
+
+    // Training Words Count
+    loadTrainingWordsCount();
+
+    // Clear Training Button
+    const clearTrainingBtn = document.getElementById('clearTrainingBtn');
+    if (clearTrainingBtn) {
+        clearTrainingBtn.addEventListener('click', async () => {
+            if (!confirm('Vill du rensa träningslistan? / هل تريد مسح قائمة التدريب؟')) return;
+
+            try {
+                const { DictionaryDB } = await import('./db');
+                await DictionaryDB.init();
+                const trainingWords = await DictionaryDB.getTrainingWords();
+
+                for (const word of trainingWords) {
+                    const id = Array.isArray(word) ? word[0] : word.id;
+                    await DictionaryDB.updateTrainingStatus(id, false);
+                }
+
+                const countEl = document.getElementById('trainingWordsCountMenu');
+                if (countEl) countEl.textContent = '0';
+
+                // Show toast if available
+                if ((window as any).ToastManager) {
+                    (window as any).ToastManager.show('✅ Träningslistan är rensad / تم المسح', { type: 'success' });
+                }
+            } catch (e) {
+                console.error('Failed to clear training words:', e);
+            }
+        });
+    }
+}
+
+// Load training words count asynchronously
+async function loadTrainingWordsCount(): Promise<void> {
+    try {
+        const { DictionaryDB } = await import('./db');
+        await DictionaryDB.init();
+        const trainingWords = await DictionaryDB.getTrainingWords();
+        const countEl = document.getElementById('trainingWordsCountMenu');
+        if (countEl) countEl.textContent = String(trainingWords.length);
+    } catch (e) {
+        console.error('Failed to load training words count:', e);
     }
 }

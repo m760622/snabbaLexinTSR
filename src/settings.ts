@@ -28,6 +28,9 @@ interface UserSettings {
     eyeCare: boolean;
     avatar: string;
     ttsVoicePreference: 'natural' | 'male' | 'female';
+    // Smart Training settings
+    autoTraining: boolean;
+    showContextInCards: boolean;
 }
 
 interface UserProgress {
@@ -65,7 +68,10 @@ const SettingsManager: {
         focusMode: false,
         eyeCare: false,
         avatar: '👤',
-        ttsVoicePreference: 'natural'
+        ttsVoicePreference: 'natural',
+        // Smart Training defaults
+        autoTraining: true,
+        showContextInCards: true
     } as UserSettings,
 
     updateCompletionProgress: () => { },
@@ -207,6 +213,16 @@ const UIController = {
         voiceBtns.forEach(btn => {
             btn.classList.toggle('active', btn.getAttribute('data-voice') === settings.ttsVoicePreference);
         });
+
+        // Smart Training settings
+        const autoTrainingToggle = document.getElementById('autoTrainingToggle') as HTMLInputElement;
+        if (autoTrainingToggle) autoTrainingToggle.checked = settings.autoTraining;
+
+        const showContextToggle = document.getElementById('showContextToggle') as HTMLInputElement;
+        if (showContextToggle) showContextToggle.checked = settings.showContextInCards;
+
+        // Load training words count
+        this.updateTrainingWordsCount();
 
         // Update completion progress
         this.updateCompletionProgress();
@@ -444,6 +460,22 @@ const UIController = {
             showToast(checked ? '👁️ ' + t('settings.eyeCareOn') : '👁️ ' + t('settings.eyeCareOff'));
         });
 
+        // Smart Training: Auto Training Toggle
+        document.getElementById('autoTrainingToggle')?.addEventListener('change', (e) => {
+            const checked = (e.target as HTMLInputElement).checked;
+            SettingsManager.update('autoTraining', checked);
+            localStorage.setItem('autoTraining', String(checked));
+            showToast(checked ? '🔄 Auto-träning är på / إضافة تلقائية مفعّلة' : '🔄 Auto-träning är av / إضافة تلقائية موقفة');
+        });
+
+        // Smart Training: Show Context Toggle
+        document.getElementById('showContextToggle')?.addEventListener('change', (e) => {
+            const checked = (e.target as HTMLInputElement).checked;
+            SettingsManager.update('showContextInCards', checked);
+            localStorage.setItem('showContextInCards', String(checked));
+            showToast(checked ? '📝 Kontext visas / سيتم عرض السياق' : '📝 Kontext dold / السياق مخفي');
+        });
+
         // Change Avatar
         document.getElementById('changeAvatarBtn')?.addEventListener('click', () => {
             const modal = document.getElementById('avatarModal');
@@ -656,6 +688,18 @@ const UIController = {
 
         if (completionPercent) completionPercent.textContent = `${percentage}%`;
         if (completionProgress) completionProgress.style.width = `${percentage}%`;
+    },
+
+    async updateTrainingWordsCount(): Promise<void> {
+        try {
+            const { DictionaryDB } = await import('./db');
+            await DictionaryDB.init();
+            const trainingWords = await DictionaryDB.getTrainingWords();
+            const countEl = document.getElementById('trainingWordsCount');
+            if (countEl) countEl.textContent = String(trainingWords.length);
+        } catch (e) {
+            console.error('[Settings] Failed to get training words count:', e);
+        }
     }
 };
 
@@ -742,6 +786,36 @@ function clearAllData(): void {
     );
 }
 
+async function clearTrainingWords(): Promise<void> {
+    showConfirmModal(
+        '🗑️',
+        'Rensa träningslistan / مسح قائمة التدريب',
+        'Vill du ta bort alla ord från träningslistan? / هل تريد حذف جميع الكلمات من قائمة التدريب؟',
+        async () => {
+            try {
+                const { DictionaryDB } = await import('./db');
+                await DictionaryDB.init();
+                const trainingWords = await DictionaryDB.getTrainingWords();
+
+                // Remove each word from training
+                for (const word of trainingWords) {
+                    const id = Array.isArray(word) ? word[0] : word.id;
+                    await DictionaryDB.updateTrainingStatus(id, false);
+                }
+
+                // Update count display
+                const countEl = document.getElementById('trainingWordsCount');
+                if (countEl) countEl.textContent = '0';
+
+                showToast('✅ Träningslistan är rensad / تم مسح قائمة التدريب');
+            } catch (e) {
+                console.error('[Settings] Failed to clear training words:', e);
+                showToast('❌ Fel vid rensning / خطأ في المسح', 'error');
+            }
+        }
+    );
+}
+
 // Expose functions globally
 (window as any).toggleSection = (id: string) => {
     const section = document.querySelector(`[data-section="${id}"]`);
@@ -752,6 +826,7 @@ function clearAllData(): void {
 (window as any).exportData = exportData;
 (window as any).clearFavorites = clearFavorites;
 (window as any).clearAllData = clearAllData;
+(window as any).clearTrainingWords = clearTrainingWords;
 
 // ============================================================
 // INITIALIZATION
