@@ -84,6 +84,25 @@ body.lang-sv .subtitle-ar {
 
 ---
 
+## 🚨 Rule #2: Code Verification & Syntax Integrity (التحقق من الكود وسلامة الأقواس)
+
+> **الأهمية:** 🔴 يمنع حدوث كارثة (Critical)
+> **Trigger:** All Code Edits
+
+### القاعدة (The Rule)
+
+**يجب عليك (YOU MUST) التحقق من الكود وخلوه من الأخطاء قبل أي تعديل.**
+تأكد من عدم فقدان أو نقصان أحد الأقواس كما يحدث طوال الوقت معك فهذا شيء سيء جدا وغير احترافي ومعيب ومهين.
+
+### Checklist Before Applying Updates
+
+1. **Count Brackets:** Ensure every `{`, `(`, `[` has a matching closing counterpart.
+2. **HTML Structure:** Ensure no closing tags like `</div>` or `</button>` are lost or duplicated.
+3. **Context Check:** When using `replace_file_content`, ensure the `TargetContent` is unique and the `ReplacementContent` seamlessly fits.
+4. **No Assumptions:** Do not assume the code is correct; verify it.
+
+---
+
 ## 📝 القواعد القادمة
 
 > أضف هنا أي دروس مستفادة جديدة...

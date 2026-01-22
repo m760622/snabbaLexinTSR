@@ -62,10 +62,21 @@ export const DictionaryDB = {
                     console.log('[DB] Notes store created');
                 }
 
-                // Create training store
+                // Create training store with index
                 if (!db.objectStoreNames.contains(this.TRAINING_STORE)) {
-                    db.createObjectStore(this.TRAINING_STORE, { keyPath: 'id' });
-                    console.log('[DB] Training store created');
+                    const trainingStore = db.createObjectStore(this.TRAINING_STORE, { keyPath: 'id' });
+                    trainingStore.createIndex('addedAt', 'addedAt', { unique: false });
+                    console.log('[DB] Training store created with addedAt index');
+                } else {
+                    // Add index to existing store if missing (migration)
+                    const tx = event.target.transaction;
+                    if (tx) {
+                        const trainingStore = tx.objectStore(this.TRAINING_STORE);
+                        if (!trainingStore.indexNames.contains('addedAt')) {
+                            trainingStore.createIndex('addedAt', 'addedAt', { unique: false });
+                            console.log('[DB] Added addedAt index to existing training store');
+                        }
+                    }
                 }
             };
         });
@@ -474,7 +485,7 @@ export const DictionaryDB = {
             const trainingStore = tx.objectStore(this.TRAINING_STORE);
             const wordsStore = tx.objectStore(this.STORE_NAME);
 
-            const trainingRequest = trainingStore.getAll();
+            const trainingRequest = trainingStore.index('addedAt').getAll();
 
             trainingRequest.onsuccess = async () => {
                 const trainingEntries = trainingRequest.result;

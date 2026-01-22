@@ -2,6 +2,8 @@
  * TTSManager - Text-to-Speech management with multi-provider fallback
  */
 
+import { AudioManager } from './utils/audio-manager';
+
 export interface TTSOptions {
     volume?: number;
     speed?: number;
@@ -308,7 +310,7 @@ export const TTSManager = {
             };
 
             const voiceLang = langMap[lang] || 'sv-se';
-            this.audio = new Audio();
+            this.audio = AudioManager.createAudio();
             const url = `https://api.voicerss.org/?key=${API_KEY}&hl=${voiceLang}&src=${encodeURIComponent(text)}&c=MP3&f=44khz_16bit_stereo`;
 
             this.audio.src = url;
@@ -348,7 +350,7 @@ export const TTSManager = {
                 this.timeoutId = null;
             }
 
-            this.audio = new Audio();
+            this.audio = AudioManager.createAudio();
             const langCode = lang.substring(0, 2);
             const url1 = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${langCode}&client=tw-ob&q=${encodeURIComponent(text)}`;
             const url2 = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${langCode}&client=gtx&q=${encodeURIComponent(text)}`;
@@ -582,6 +584,7 @@ export const TTSManager = {
 
     stop() {
         if (this.audio) { try { this.audio.pause(); this.audio.currentTime = 0; } catch (e) { } }
+        AudioManager.cleanup();
         if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch (e) { } }
         if (this.timeoutId) { clearTimeout(this.timeoutId); this.timeoutId = null; }
         this.isPlaying = false;

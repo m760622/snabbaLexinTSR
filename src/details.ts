@@ -9,6 +9,7 @@ import { t, tLang, LanguageManager } from './i18n';
 import { AudioVisualizer, PronunciationRecorder, HapticFeedback, Celebrations, MasteryBadges } from './ui-enhancements';
 import { PronunciationHelper } from './pronunciation-data';
 import { TypeColorSystem } from './type-color-system';
+import { StorageSync } from './utils/storage-sync';
 
 // ... (Previous imports)
 
@@ -186,6 +187,16 @@ class PronunciationLab {
                 if (speedVal) speedVal.textContent = `${val}x`;
                 if (speedValAr) speedValAr.textContent = `${val}x`;
             });
+
+            // Listen for settings changes from other contexts (React settings page)
+            window.addEventListener('settings-changed', ((e: CustomEvent) => {
+                if (e.detail.key === 'ttsSpeed') {
+                    const newSpeed = parseFloat(e.detail.value || '0.85');
+                    speedSlider.value = newSpeed.toString();
+                    if (speedVal) speedVal.textContent = `${newSpeed}x`;
+                    if (speedValAr) speedValAr.textContent = `${newSpeed}x`;
+                }
+            }) as EventListener);
         }
 
         normalBtn?.addEventListener('click', () => {

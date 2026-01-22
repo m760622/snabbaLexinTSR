@@ -276,7 +276,7 @@ function checkWordWheel(): void {
     if (wheelCurrentWord.toUpperCase() === wheelTarget.word) {
         if (typeof soundManager !== 'undefined' && soundManager?.playSuccess) soundManager.playSuccess();
 
-        feedbackEl.innerHTML = `✅ ${t('games.feedbackSuccess')}`;
+        feedbackEl.textContent = `✅ ${t('games.feedbackSuccess')}`;
         feedbackEl.className = 'game-feedback success';
         wheelScore++;
         wheelWordsSolved++;
@@ -307,7 +307,7 @@ function checkWordWheel(): void {
         answerBox.classList.add('shake-error');
         setTimeout(() => answerBox.classList.remove('shake-error'), 500);
 
-        feedbackEl.innerHTML = `❌ ${t('games.feedbackError')}`;
+        feedbackEl.textContent = `❌ ${t('games.feedbackError')}`;
         feedbackEl.className = 'game-feedback error';
 
         if (navigator.vibrate) navigator.vibrate(200);
@@ -369,7 +369,7 @@ export function showWordWheelAnswer(): void {
 
     if (typeof soundManager !== 'undefined' && soundManager?.playSuccess) soundManager.playSuccess();
 
-    feedbackEl.innerHTML = `✅ ${t('games.solved')}`;
+    feedbackEl.textContent = `✅ ${t('games.solved')}`;
     feedbackEl.className = 'game-feedback success';
 
     if (wheelTarget.example) {

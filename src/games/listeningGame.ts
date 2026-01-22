@@ -173,7 +173,7 @@ function showResult(): void {
 
   if (resultEmoji) resultEmoji.textContent = percent >= 80 ? '🏆' : percent >= 50 ? '👍' : '📚';
   if (resultText) resultText.textContent = `${percent}% rätt!`;
-  if (resultStats) resultStats.innerHTML = `✅ ${score} / ${TOTAL_QUESTIONS}`;
+  if (resultStats) resultStats.textContent = `✅ ${score} / ${TOTAL_QUESTIONS}`;
 
   overlay?.classList.add('visible');
 

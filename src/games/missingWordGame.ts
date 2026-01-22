@@ -144,7 +144,7 @@ export function checkMissingWordAnswer(selected: string, correct: string, btnEl:
     if (selected === correct) {
         btnEl.classList.add('correct');
         if (feedbackEl) {
-            feedbackEl.innerHTML = '✅ Rätt! / صحيح!';
+            feedbackEl.textContent = '✅ Rätt! / صحيح!';
             feedbackEl.className = 'game-feedback success';
         }
         missingWordScore++;
@@ -162,7 +162,7 @@ export function checkMissingWordAnswer(selected: string, correct: string, btnEl:
     } else {
         btnEl.classList.add('wrong');
         if (feedbackEl) {
-            feedbackEl.innerHTML = `❌ Fel! Rätt svar: <strong>${correct}</strong>`;
+            feedbackEl.textContent = `❌ Fel! Rätt svar: ${correct}`;
             feedbackEl.className = 'game-feedback error';
         }
 

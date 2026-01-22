@@ -12,7 +12,7 @@ export const AppConfig = {
 
     // Database settings
     DB_NAME: 'snabba-lexin-db',
-    DB_VERSION: 4,
+    DB_VERSION: 5,
 
     // Data paths
     DATA_PATH: {

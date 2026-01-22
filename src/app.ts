@@ -461,7 +461,23 @@ export class App {
                 FavoritesManager.updateButtonIcon(favBtn, nowFav);
             };
         }
+
+        const trainBtn = document.getElementById('wodTrainBtn');
+        if (trainBtn) {
+            const wordId = word[0].toString();
+            const isTraining = this.trainingIds.has(wordId);
+
+            // Set initial state
+            trainBtn.classList.toggle('active', isTraining);
+            trainBtn.textContent = isTraining ? '🧠' : '💪';
+            trainBtn.title = isTraining ? 'Ta bort från träning' : 'Lägg till i träning';
+
+            trainBtn.onclick = (e) => {
+                (window as any).toggleTraining(wordId, trainBtn, e);
+            };
+        }
     }
+
 
     private initQuickActions() {
         const quickWodBtn = document.getElementById('quickWodBtn');
