@@ -547,6 +547,130 @@ export const DictionaryDB = {
             };
             request.onerror = () => resolve(false);
         });
+    },
+
+    /**
+     * Update review data for SM-2 spaced repetition
+     */
+    async updateReviewData(wordId: string, reviewData: {
+        nextReview: number;
+        interval: number;
+        easeFactor: number;
+        repetitions: number;
+        lastReview?: number;
+    }): Promise<void> {
+        if (!wordId) return;
+        if (!this.db) await this.init();
+        if (!this.db) return;
+
+        return new Promise((resolve, reject) => {
+            const tx = this.db!.transaction([this.TRAINING_STORE], 'readwrite');
+            const store = tx.objectStore(this.TRAINING_STORE);
+
+            const getRequest = store.get(wordId);
+            getRequest.onsuccess = () => {
+                const existing = getRequest.result || { id: wordId, addedAt: Date.now() };
+                const updated = { ...existing, ...reviewData };
+                store.put(updated);
+            };
+
+            tx.oncomplete = () => {
+                console.log(`[DB] Review data updated for ${wordId}`);
+                resolve();
+            };
+            tx.onerror = (e) => reject(e);
+        });
+    },
+
+    /**
+     * Get training words that are due for review (for SM-2)
+     */
+    async getTrainingWordsDue(): Promise<any[]> {
+        const allTrainingWords = await this.getTrainingWords();
+        const now = Date.now();
+
+        // Get training entries with review data
+        if (!this.db) await this.init();
+        if (!this.db) return allTrainingWords;
+
+        return new Promise((resolve) => {
+            const tx = this.db!.transaction([this.TRAINING_STORE], 'readonly');
+            const store = tx.objectStore(this.TRAINING_STORE);
+            const request = store.getAll();
+
+            request.onsuccess = () => {
+                const entries = request.result;
+                const reviewMap = new Map(entries.map((e: any) => [e.id, e]));
+
+                // Filter and sort by priority
+                const dueWords = allTrainingWords.filter((word: any) => {
+                    const wordId = Array.isArray(word) ? word[0] : word.id;
+                    const entry = reviewMap.get(wordId);
+
+                    // New cards or due cards
+                    if (!entry?.nextReview) return true;
+                    return entry.nextReview <= now;
+                });
+
+                // Sort: new cards first, then by most overdue
+                dueWords.sort((a: any, b: any) => {
+                    const aId = Array.isArray(a) ? a[0] : a.id;
+                    const bId = Array.isArray(b) ? b[0] : b.id;
+                    const aEntry = reviewMap.get(aId);
+                    const bEntry = reviewMap.get(bId);
+
+                    if (!aEntry?.nextReview) return -1;
+                    if (!bEntry?.nextReview) return 1;
+                    return aEntry.nextReview - bEntry.nextReview;
+                });
+
+                console.log(`[DB] Found ${dueWords.length} words due for review`);
+                resolve(dueWords);
+            };
+            request.onerror = () => resolve(allTrainingWords);
+        });
+    },
+
+    /**
+     * Get review data for a specific word
+     */
+    async getReviewData(wordId: string): Promise<any | null> {
+        if (!this.db) await this.init();
+        if (!this.db) return null;
+
+        return new Promise((resolve) => {
+            const tx = this.db!.transaction([this.TRAINING_STORE], 'readonly');
+            const store = tx.objectStore(this.TRAINING_STORE);
+            const request = store.get(wordId);
+
+            request.onsuccess = () => resolve(request.result || null);
+            request.onerror = () => resolve(null);
+        });
+    },
+
+    /**
+     * Save training session stats
+     */
+    async saveTrainingSession(session: {
+        date: string;
+        wordsReviewed: number;
+        correctCount: number;
+        timeSpentMs: number;
+    }): Promise<void> {
+        const key = 'training_sessions';
+        const existing = JSON.parse(localStorage.getItem(key) || '[]');
+        existing.push(session);
+        // Keep last 30 days
+        const recent = existing.slice(-30);
+        localStorage.setItem(key, JSON.stringify(recent));
+    },
+
+    /**
+     * Get training sessions for stats
+     */
+    getTrainingSessions(): any[] {
+        const key = 'training_sessions';
+        return JSON.parse(localStorage.getItem(key) || '[]');
     }
 };
 
