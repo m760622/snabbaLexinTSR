@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Träning - SnabbaLexin | التدريب</title>
+    <meta name="description"
+        content="Träna på dina sparade ord med flashcards. تدرب على كلماتك المحفوظة بالبطاقات التعليمية.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Tajawal:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css?v=99">
+    <link rel="stylesheet" href="assets/css/training.css?v=99">
+    <link rel="icon" type="image/svg+xml" href="assets/images/icon.svg">
+    <link rel="apple-touch-icon" href="assets/images/icon.png">
+</head>
+
+<body>
+    <div id="toast" class="toast-notification"></div>
+
+    <div class="container training-page-container">
+        <!-- React Mount Point -->
+        <div id="training-root">
+            <div class="training-loading">
+                <div class="loading-spinner"></div>
+                <p class="sv-text">Laddar träning...</p>
+                <p class="ar-text">جاري تحميل التدريب...</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./src/training-app.ts"></script>
+    <script type="module" src="/src/pwa.ts"></script>
+</body>
+
+</html>
