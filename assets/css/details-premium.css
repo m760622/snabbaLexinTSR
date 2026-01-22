@@ -8279,3 +8279,263 @@ body .quiz-options {
     --hero-bg: radial-gradient(circle at top right, rgba(22, 163, 74, 0.15), transparent 70%),
         radial-gradient(circle at bottom left, rgba(22, 163, 74, 0.1), transparent 70%);
 }
+
+/* ===============================================
+   BREATHING ANIMATIONS & ENHANCED UX (2026 Update)
+   =============================================== */
+
+/* Audio Button Breathing Pulse */
+.listen-card,
+#pronounceNormalBtn {
+    animation: audio-breathe 3s ease-in-out infinite;
+}
+
+@keyframes audio-breathe {
+
+    0%,
+    100% {
+        box-shadow: 0 2px 8px rgba(45, 212, 191, 0.15);
+        transform: scale(1);
+    }
+
+    50% {
+        box-shadow: 0 4px 20px rgba(45, 212, 191, 0.35);
+        transform: scale(1.02);
+    }
+}
+
+/* Recording Active - Stronger pulse */
+.listen-card:active,
+#pronounceNormalBtn:active {
+    animation: none;
+    transform: scale(0.98);
+}
+
+/* Record Button - Red pulse when active */
+#recordBtn.active,
+.record-card.active {
+    animation: record-pulse 1s ease-in-out infinite;
+    background: rgba(220, 38, 38, 0.2) !important;
+    border-color: rgba(220, 38, 38, 0.5) !important;
+}
+
+@keyframes record-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+    }
+}
+
+/* Enhanced Glassmorphism for Tabs */
+.details-tabs {
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+        0 4px 30px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Tab Button Hover - Floating Effect */
+.details-tab-btn {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.details-tab-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.details-tab-btn:hover::before {
+    opacity: 1;
+}
+
+.details-tab-btn.active {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Tab Content - Smoother Transition */
+.tab-content {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    display: none;
+}
+
+.tab-content.active {
+    opacity: 1;
+    transform: translateY(0);
+    display: block;
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Smart Training Button in Header */
+#headerTrainingBtn {
+    transition: all 0.3s ease;
+}
+
+#headerTrainingBtn.active {
+    background: linear-gradient(135deg, rgba(45, 212, 191, 0.25), rgba(45, 212, 191, 0.1));
+    border: 1px solid rgba(45, 212, 191, 0.4);
+    box-shadow: 0 0 15px rgba(45, 212, 191, 0.25);
+}
+
+#headerTrainingBtn.active .train-icon {
+    animation: brain-glow 2s ease-in-out infinite;
+}
+
+@keyframes brain-glow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 2px rgba(45, 212, 191, 0.5));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 8px rgba(45, 212, 191, 0.8));
+    }
+}
+
+/* Notes Textarea - Subtle interaction */
+#wordNotes {
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#wordNotes:focus {
+    border-color: rgba(45, 212, 191, 0.4);
+    box-shadow: 0 0 20px rgba(45, 212, 191, 0.1);
+    background: rgba(30, 41, 59, 0.8);
+}
+
+/* Related Words - Interactive hover */
+.related-words-grid a,
+.related-words-grid .related-word-card {
+    transition: all 0.3s ease;
+}
+
+.related-words-grid a:hover,
+.related-words-grid .related-word-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-color: rgba(45, 212, 191, 0.3);
+}
+
+/* Karaoke Word Hit Effect */
+.karaoke-word.active {
+    animation: word-hit 0.4s ease-out;
+    color: var(--aurora-1, #2dd4bf);
+}
+
+@keyframes word-hit {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Syllable Chip Active - Softer highlight */
+.syllable-chip.active {
+    background: rgba(45, 212, 191, 0.25);
+    border-color: rgba(45, 212, 191, 0.5);
+    color: #2dd4bf;
+    animation: syllable-pop 0.3s ease-out;
+}
+
+@keyframes syllable-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Quiz Options - Better feedback */
+.quiz-option {
+    transition: all 0.2s ease;
+}
+
+.quiz-option:hover {
+    transform: translateX(5px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.quiz-option.correct {
+    animation: correct-flash 0.5s ease;
+    background: rgba(34, 197, 94, 0.2);
+    border-color: rgba(34, 197, 94, 0.5);
+}
+
+.quiz-option.wrong {
+    animation: wrong-shake 0.4s ease;
+    background: rgba(220, 38, 38, 0.15);
+    border-color: rgba(220, 38, 38, 0.4);
+}
+
+@keyframes correct-flash {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+    }
+}
+
+@keyframes wrong-shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
