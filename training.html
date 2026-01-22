@@ -12,10 +12,29 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Tajawal:wght@300;400;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?v=99">
-    <link rel="stylesheet" href="assets/css/training.css?v=99">
+    <link rel="stylesheet" href="assets/css/style.css?v=108">
+    <link rel="stylesheet" href="assets/css/training.css?v=109">
     <link rel="icon" type="image/svg+xml" href="assets/images/icon.svg">
     <link rel="apple-touch-icon" href="assets/images/icon.png">
+
+    <!-- NUCLEAR OPTION: Force visibility to solve 'display: none' mystery -->
+    <style>
+        html body .training-card .card-back .card-arabic,
+        html body .training-card .card-back .card-example {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            color: #3b82f6 !important;
+            /* Ensure color is visible against dark bg */
+        }
+
+        /* Ensure the back face itself is visible when flipped - NO ROTATE to prevent mirroring */
+        html body .training-card.flipped .card-face.card-back {
+            display: flex !important;
+            visibility: visible !important;
+            transform: none !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -32,8 +51,9 @@
         </div>
     </div>
 
-    <script type="module" src="./src/training-app.ts"></script>
-    <script type="module" src="/src/pwa.ts"></script>
+
+    <script type="module" src="./src/training-app-new.ts"></script>
+    <script type="module" src="/src/pwa.ts?v=106"></script>
 </body>
 
 </html>

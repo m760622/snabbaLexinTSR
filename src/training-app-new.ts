@@ -5,13 +5,15 @@
 import './config';
 import { createRoot } from 'react-dom/client';
 import React from 'react';
-import TrainingView from './components/TrainingView';
+import TrainingView from './training/TrainingView';
 import { ThemeManager } from './utils';
 import { LanguageManager } from './i18n';
 
 // Initialize theme and language first (before DOM ready for flash prevention)
 ThemeManager.init();
 LanguageManager.init();
+
+
 
 // Initialize React Training System
 document.addEventListener('DOMContentLoaded', async () => {

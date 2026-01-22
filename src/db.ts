@@ -570,9 +570,24 @@ export const DataLoader = {
             if (onStatusChange) onStatusChange('Laddar ordbok... / جاري تحميل القاموس...');
             console.log('[DataLoader] Loading fresh data from data.js');
 
-            const dictionaryData = (window as any).dictionaryData;
+            let dictionaryData = (window as any).dictionaryData;
+
+            // Fallback: Fetch from JSON if not in global scope
             if (typeof dictionaryData === 'undefined' || !dictionaryData.length) {
-                throw new Error('dictionaryData not loaded from data.js');
+                if (onStatusChange) onStatusChange('Laddar datafil... / جاري تحميل ملف البيانات...');
+                console.log('[DataLoader] Global data missing, fetching from', AppConfig.DATA_PATH.root);
+
+                try {
+                    const response = await fetch(AppConfig.DATA_PATH.root);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    dictionaryData = await response.json();
+
+                    // Optional: expose to window to prevent re-fetching in same session
+                    (window as any).dictionaryData = dictionaryData;
+                } catch (fetchError) {
+                    console.error('[DataLoader] Fetch failed:', fetchError);
+                    throw new Error('dictionaryData could not be loaded');
+                }
             }
 
             if (onStatusChange) onStatusChange('Sparar i cache... / جاري الحفظ...');
