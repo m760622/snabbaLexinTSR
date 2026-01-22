@@ -1,12 +1,5 @@
-import { initProfileUI } from './profile-ui';
+// Profile App Entry Point - React Dashboard
+import './profile-react';
 
-// Initialize Profile UI
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('[ProfileApp] DOMContentLoaded');
-    initProfileUI();
-});
-
-// Also listen for load event as fallback
-window.addEventListener('load', () => {
-    console.log('[ProfileApp] Window loaded');
-});
+// The React entry point handles all initialization
+console.log('[ProfileApp] React profile loaded');

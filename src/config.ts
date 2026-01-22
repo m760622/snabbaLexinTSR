@@ -78,3 +78,58 @@ if (typeof window !== 'undefined') {
     (window as any).AppConfig = AppConfig;
     (window as any).Logger = Logger;
 }
+
+/**
+ * Smart Training System - Settings Helper
+ * Allows Vanilla TS parts to read/write Smart Training setting
+ */
+export const SmartTraining = {
+    /**
+     * Check if Smart Training is enabled
+     * @returns true if enabled (default), false if disabled
+     */
+    isEnabled(): boolean {
+        try {
+            const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+            return settings.smartTraining !== false; // Default: enabled
+        } catch {
+            return true; // Default: enabled
+        }
+    },
+
+    /**
+     * Enable or disable Smart Training
+     */
+    setEnabled(enabled: boolean): void {
+        try {
+            const saved = localStorage.getItem('userSettings');
+            const settings = saved ? JSON.parse(saved) : {};
+            settings.smartTraining = enabled;
+            localStorage.setItem('userSettings', JSON.stringify(settings));
+
+            // Dispatch event for listeners
+            window.dispatchEvent(new CustomEvent('smartTrainingChanged', { detail: { enabled } }));
+        } catch (e) {
+            console.error('Failed to save Smart Training setting:', e);
+        }
+    },
+
+    /**
+     * Subscribe to Smart Training changes
+     * @param callback Function to call when setting changes
+     * @returns Unsubscribe function
+     */
+    onChange(callback: (enabled: boolean) => void): () => void {
+        const handler = (e: Event) => {
+            const customEvent = e as CustomEvent<{ enabled: boolean }>;
+            callback(customEvent.detail.enabled);
+        };
+        window.addEventListener('smartTrainingChanged', handler);
+        return () => window.removeEventListener('smartTrainingChanged', handler);
+    }
+};
+
+// Make Smart Training available globally
+if (typeof window !== 'undefined') {
+    (window as any).SmartTraining = SmartTraining;
+}
