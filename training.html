@@ -17,22 +17,14 @@
     <link rel="icon" type="image/svg+xml" href="assets/images/icon.svg">
     <link rel="apple-touch-icon" href="assets/images/icon.png">
 
-    <!-- NUCLEAR OPTION: Force visibility to solve 'display: none' mystery -->
+    <!-- React Training Page - Ensure Arabic text is always visible -->
     <style>
-        html body .training-card .card-back .card-arabic,
-        html body .training-card .card-back .card-example {
+        /* Arabic text visibility */
+        .card-back .card-arabic,
+        .card-back .card-example {
             display: block !important;
             visibility: visible !important;
             opacity: 1 !important;
-            color: #3b82f6 !important;
-            /* Ensure color is visible against dark bg */
-        }
-
-        /* Ensure the back face itself is visible when flipped - NO ROTATE to prevent mirroring */
-        html body .training-card.flipped .card-face.card-back {
-            display: flex !important;
-            visibility: visible !important;
-            transform: none !important;
         }
     </style>
 </head>
