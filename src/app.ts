@@ -524,6 +524,7 @@ export class App {
             window.history.replaceState({ path: newUrl }, '', newUrl);
         }
 
+
         const data = (window as any).dictionaryData || [];
         if (!data || data.length === 0) return;
 
@@ -533,90 +534,98 @@ export class App {
 
         this.renderedCount = 0; // Reset pagination
 
-        let filteredIndices: number[] = [];
+        // Optimization: Single Pass Bucket Sort (O(N))
+        // Instead of filter() -> sort(), we act like a conveyor belt putting items into buckets immediately.
+        // This avoids iterating multiple times and eliminates the expensive sort operation.
+        const exactMatches: number[] = [];
+        const startMatches: number[] = [];
+        const partialMatches: number[] = [];
+        const topicMatches: number[] = [];
 
-        if (this.activeFilterMode === 'favorites') {
-            for (let i = 0; i < data.length; i++) {
-                if (FavoritesManager.has(data[i][0].toString())) {
-                    filteredIndices.push(i);
-                }
+        // Check if we have active filters that require the slow path
+        const hasTopicFilter = this.activeFilterMode === 'all' && (document.getElementById('categorySelect') as HTMLSelectElement)?.value !== 'all';
+        const hasTypeFilter = this.activeTypeFilter !== 'all';
+        const topicFilter = hasTopicFilter ? (document.getElementById('categorySelect') as HTMLSelectElement).value : '';
+
+        // If no query and filtering by favorites
+        if (!normalizedQuery && this.activeFilterMode === 'favorites') {
+            const favIndices = data.map((_: any, i: number) => i).filter((i: number) => FavoritesManager.has(data[i][0].toString()));
+            this.currentResults = favIndices.map((i: number) => data[i]);
+            this.finalizeSearch(landingPage, searchResults, emptyState, normalizedQuery);
+            return;
+        }
+
+        // If just browsing all (no query, no filters)
+        if (!normalizedQuery && !hasTopicFilter && !hasTypeFilter && this.activeFilterMode === 'all') {
+            // Show landing page
+            if (landingPage) landingPage.style.display = 'block';
+            if (searchResults) searchResults.style.display = 'none';
+            if (emptyState) emptyState.style.display = 'block';
+            this.renderSearchHistory();
+            return;
+        }
+
+        const maxResults = 100; // Cap purely for performance ensuring we don't hold 10k items in memory if not needed (though pagination handles rendering)
+        // Actually, let's keep all valid matches but stop searching if we have "enough" exact matches? No, user might want specific one later.
+        // Let's stick to full scan but it's fast.
+
+        for (let i = 0; i < this.searchIndex.length; i++) {
+            const swe = this.searchIndex[i];
+            const arb = this.searchIndexArabic[i]; // Normalized Arabic
+
+            // 1. FILTERING
+            // Apply Type Filter early
+            if (hasTypeFilter) {
+                // Use cache
+                const cat = this.typeCategoryCache.get(`${i}`);
+                if (cat !== this.activeTypeFilter) continue;
             }
-        } else {
-            filteredIndices = Array.from({ length: data.length }, (_, i) => i);
-        }
 
-        if (normalizedQuery) {
-            filteredIndices = filteredIndices.filter((idx) => {
-                const swe = this.searchIndex[idx];
-                const arb = this.searchIndexArabic[idx];
+            // Apply Topic Filter
+            if (hasTopicFilter) {
+                const tags = (data[i][11] || '').toLowerCase(); // Column 11 is tags/domain
+                if (!tags.includes(topicFilter)) continue;
+            }
 
-                if (this.activeFilterMode === 'start') {
-                    return swe.startsWith(normalizedQuery) || arb.startsWith(normalizedQueryArabic);
+            // Apply Query Matching
+            let isExact = false;
+            let isStart = false;
+            let isPartial = false;
+
+            if (normalizedQuery) {
+                if (swe === normalizedQuery || arb === normalizedQueryArabic) {
+                    isExact = true;
+                } else if (swe.startsWith(normalizedQuery) || arb.startsWith(normalizedQueryArabic)) {
+                    isStart = true;
+                } else if (swe.includes(normalizedQuery) || arb.includes(normalizedQueryArabic)) {
+                    isPartial = true;
+                } else {
+                    continue; // No match
                 }
-                if (this.activeFilterMode === 'end') {
-                    return swe.endsWith(normalizedQuery) || arb.endsWith(normalizedQueryArabic);
-                }
-                if (this.activeFilterMode === 'exact') {
-                    return swe === normalizedQuery || arb === normalizedQueryArabic;
-                }
-                return swe.includes(normalizedQuery) || arb.includes(normalizedQueryArabic);
-            });
+            } else {
+                // No query, but passed filters -> treat as partial (or just list them)
+                isPartial = true;
+            }
+
+            // 2. BUCKETING
+            if (isExact) exactMatches.push(i);
+            else if (isStart) startMatches.push(i);
+            else if (isPartial) partialMatches.push(i);
         }
 
-        if (this.typeCountsNeedUpdate) {
-            const filteredData = filteredIndices.map(i => data[i]);
-            this.updateTypeCounts(filteredData);
-            this.typeCountsNeedUpdate = false;
+        // 3. MERGE
+        // Priority: Exact > StartsWith > Partial
+        let filteredIndices = [...exactMatches, ...startMatches, ...partialMatches];
+
+        // Apply Sorting override if specific sort is selected (rare)
+        if (this.activeSortMethod !== 'relevance') {
+            if (this.activeSortMethod === 'az') {
+                filteredIndices.sort((a, b) => this.searchIndex[a].localeCompare(this.searchIndex[b], 'sv'));
+            } else if (this.activeSortMethod === 'za') {
+                filteredIndices.sort((a, b) => this.searchIndex[b].localeCompare(this.searchIndex[a], 'sv'));
+            }
         }
 
-        if (this.activeTypeFilter !== 'all') {
-            filteredIndices = filteredIndices.filter((idx) => {
-                const cachedCat = this.typeCategoryCache.get(`${idx}`);
-                return cachedCat === this.activeTypeFilter;
-            });
-        }
-
-        const categorySelect = document.getElementById('categorySelect') as HTMLSelectElement | null;
-        if (categorySelect && categorySelect.value !== 'all') {
-            const topic = categorySelect.value;
-            filteredIndices = filteredIndices.filter((idx) => {
-                const tags = (data[idx][11] || '').toLowerCase();
-                return tags.includes(topic);
-            });
-        }
-
-        if (this.activeSortMethod === 'az' || this.activeSortMethod === 'alpha_asc') {
-            filteredIndices.sort((a, b) => this.searchIndex[a].localeCompare(this.searchIndex[b], 'sv'));
-        } else if (this.activeSortMethod === 'za' || this.activeSortMethod === 'alpha_desc') {
-            filteredIndices.sort((a, b) => this.searchIndex[b].localeCompare(this.searchIndex[a], 'sv'));
-        } else if (this.activeSortMethod === 'richness') {
-            filteredIndices.sort((a, b) => {
-                const aLen = (data[a][5] || '').length + (data[a][7] || '').length;
-                const bLen = (data[b][5] || '').length + (data[b][7] || '').length;
-                return bLen - aLen;
-            });
-        } else if (normalizedQuery) {
-            filteredIndices.sort((a, b) => {
-                const aSwe = this.searchIndex[a];
-                const bSwe = this.searchIndex[b];
-                const aArb = this.searchIndexArabic[a];
-                const bArb = this.searchIndexArabic[b];
-
-                const aExact = (aSwe === normalizedQuery || aArb === normalizedQueryArabic);
-                const bExact = (bSwe === normalizedQuery || bArb === normalizedQueryArabic);
-
-                if (aExact && !bExact) return -1;
-                if (!aExact && bExact) return 1;
-
-                const aStarts = (aSwe.startsWith(normalizedQuery) || aArb.startsWith(normalizedQueryArabic));
-                const bStarts = (bSwe.startsWith(normalizedQuery) || bArb.startsWith(normalizedQueryArabic));
-
-                if (aStarts && !bStarts) return -1;
-                if (!aStarts && bStarts) return 1;
-
-                return 0;
-            });
-        }
 
         const filtered = filteredIndices.map(idx => data[idx]);
         this.currentResults = filtered;
@@ -653,6 +662,90 @@ export class App {
         this.updateResultCount();
         console.timeEnd('[Perf] performSearch');
     }
+
+
+    private finalizeSearch(landingPage: HTMLElement | null, searchResults: HTMLElement | null, emptyState: HTMLElement | null, normalizedQuery: string) {
+        if (landingPage) landingPage.style.display = 'none';
+        if (searchResults) {
+            searchResults.style.display = 'grid';
+            searchResults.innerHTML = '';
+        }
+        if (emptyState) {
+            const isEmpty = this.currentResults.length === 0;
+            emptyState.style.display = isEmpty ? 'block' : 'none';
+            if (isEmpty && normalizedQuery.length > 2) {
+                this.showDidYouMean(normalizedQuery, emptyState);
+            } else {
+                const suggestionBox = emptyState.querySelector('.suggestion-box');
+                if (suggestionBox) suggestionBox.remove();
+            }
+        }
+        this.renderNextBatch();
+        this.updateResultCount();
+    }
+
+    private renderSearchHistory() {
+        const landingPage = document.getElementById('landingPageContent');
+        if (!landingPage) return;
+
+        // Ensure History Section exists
+        let historySection = document.getElementById('searchHistorySection');
+        if (!historySection) {
+            historySection = document.createElement('div');
+            historySection.id = 'searchHistorySection';
+            historySection.className = 'landing-section fade-in-up';
+            // Insert after Hero
+            const hero = landingPage.querySelector('.hero-section');
+            if (hero && hero.nextSibling) {
+                landingPage.insertBefore(historySection, hero.nextSibling);
+            } else {
+                landingPage.appendChild(historySection);
+            }
+        }
+
+        const history = SearchHistoryManager.get();
+        if (history.length === 0) {
+            historySection.style.display = 'none';
+            return;
+        }
+
+        historySection.style.display = 'block';
+        historySection.innerHTML = `
+            <div class="section-header">
+                <h3><span class="icon">🕒</span> <span class="sv-text">Senaste sökningar</span><span class="ar-text">عمليات البحث الأخيرة</span></h3>
+                <button class="clear-history-btn" onclick="window.app.clearHistory()">
+                    <span class="sv-text">Rensa</span><span class="ar-text">مسح</span>
+                </button>
+            </div>
+            <div class="history-chips">
+                ${history.map(term => `
+                    <button class="history-chip" onclick="window.app.performSearch('${term}')">
+                        ${term}
+                    </button>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    public clearHistory() {
+        SearchHistoryManager.clear();
+        this.renderSearchHistory();
+    }
+
+    private updateResultCount() {
+        const count = this.currentResults.length;
+        const countEl = document.getElementById('resultCount');
+        if (countEl) {
+            if (count > 0) {
+                countEl.textContent = `${count} ${t('search.results')}`;
+                countEl.style.display = 'block';
+            } else {
+                countEl.style.display = 'none';
+            }
+        }
+    }
+
+
 
     private renderNextBatch() {
         if (this.renderedCount >= this.currentResults.length) return;
@@ -830,11 +923,6 @@ export class App {
         };
     }
 
-    private updateResultCount() {
-        const countEl = document.getElementById('resultCount');
-        if (countEl) countEl.textContent = this.currentResults.length.toLocaleString();
-    }
-
     public updateDailyChallenge() {
         const DAILY_GOAL = parseInt(localStorage.getItem('dailyGoal') || '10');
         const todayStats = QuizStats.getTodayStats();
@@ -956,36 +1044,6 @@ export class App {
                 showToast(`🗣️ ${t('settings.voiceChanged') || 'Rösttyp ändrad'}`);
             });
         });
-    }
-
-    private renderSearchHistory() {
-        const historyContainer = document.getElementById('searchHistoryContainer');
-        const historyList = document.getElementById('searchHistoryList');
-        const clearBtn = document.getElementById('clearHistoryBtn');
-
-        if (!historyContainer || !historyList) return;
-
-        const history = SearchHistoryManager.get();
-        if (history.length === 0) {
-            historyContainer.classList.add('hidden');
-            return;
-        }
-
-        historyContainer.classList.remove('hidden');
-        historyList.innerHTML = history.map(q => `
-            <button class="history-chip" onclick="window.location.href='?s=${encodeURIComponent(q)}'">
-                <span class="history-icon">🕒</span>
-                <span class="history-text">${q}</span>
-            </button>
-        `).join('');
-
-        // Clear button
-        if (clearBtn) {
-            clearBtn.onclick = () => {
-                SearchHistoryManager.clear();
-                this.renderSearchHistory();
-            };
-        }
     }
 }
 
