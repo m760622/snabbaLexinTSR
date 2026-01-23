@@ -109,10 +109,9 @@
 
         <div class="nav-right">
 
-            <!-- Progress Stats Badge - Click to open Progress Modal -->
+            <!-- Progress Stats Badge - Click to open Profile -->
             <div class="progress-stats-badge cursor-pointer" id="progressBadge" role="button" tabindex="0"
-                aria-label="اضغط لعرض التقدم / Klicka för framsteg"
-                onclick="var m=document.getElementById('progressModal'); if(m) { m.classList.remove('hidden'); m.style.display='flex'; }">
+                aria-label="Min Profil / ملفك الشخصي" onclick="window.location.href='profile.html'">
                 <span class="progress-stat" title="الكلمات اليوم / Ord idag">
                     <span class="stat-icon">📖</span>
                     <span id="dailyWordsCount">0</span>
@@ -347,6 +346,9 @@
             aria-label="Quiz / اختبار">
             <span class="quick-icon">⚡</span>
         </button>
+        <a href="profile.html" class="quick-action-btn" data-tooltip="Profil / الملف" aria-label="Profil / الملف">
+            <span class="quick-icon">👤</span>
+        </a>
     </div>
 
     <!-- Landing Page Content - Everything that shows when NOT searching -->
