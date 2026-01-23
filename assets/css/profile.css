@@ -28,7 +28,7 @@ body {
     background: var(--bg-color);
     color: var(--text-color);
     min-height: 100vh;
-    padding-bottom: 80px;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
 }
 
 html.iphone-mode {
@@ -70,7 +70,10 @@ header {
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     position: sticky;
-    top: 0;
+    top: env(safe-area-inset-top);
+    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
     z-index: 100;
     gap: 1rem;
 }
@@ -81,7 +84,18 @@ header {
     color: white;
     padding: 0.5rem;
     border-radius: 50%;
+    border-radius: 50%;
     cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.back-btn:active {
+    transform: scale(0.95);
 }
 
 header h1 {
@@ -97,7 +111,11 @@ header h1 {
 .container {
     max-width: 414px;
     margin: 0 auto;
+    max-width: 414px;
+    margin: 0 auto;
     padding: 1rem;
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
 }
 
 /* Profile Hero */
@@ -324,16 +342,28 @@ body.iphone-view .bottom-nav {
     margin: 0 auto;
     left: 50%;
     transform: translateX(-50%);
+    padding-bottom: 20px;
 }
 
 .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     text-decoration: none;
     color: var(--text-muted);
     font-size: 0.7rem;
     gap: 0.25rem;
+    min-width: 44px;
+    /* Minimum touch width */
+    min-height: 44px;
+    /* Minimum touch height */
+    padding: 4px;
+    transition: transform 0.2s ease;
+}
+
+.nav-item:active {
+    transform: scale(0.9);
 }
 
 .nav-item.active {
@@ -688,6 +718,7 @@ body.iphone-view .bottom-nav {
     margin-top: 0.5rem;
     text-align: center;
 }
+
 /* Badges Section */
 .badges-section {
     margin-top: 30px;
@@ -763,4 +794,34 @@ body.iphone-view .bottom-nav {
     padding-top: 8px;
     color: #60a5fa;
     font-weight: 600;
+}
+
+/* Mobile Responsive Adjustments (iPhone 16 Pro) */
+@media (max-width: 430px) {
+    .profile-hero {
+        padding: 1.25rem;
+    }
+
+    .profile-name {
+        font-size: 1.35rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        /* Tighter gap on small screens */
+    }
+
+    .stat-card {
+        padding: 0.75rem;
+    }
+
+    .stat-value {
+        font-size: 1.25rem;
+    }
+
+    .achievements-grid {
+        grid-template-columns: repeat(3, 1fr);
+        /* 3 cols instead of 4 */
+    }
 }
