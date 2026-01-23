@@ -670,7 +670,7 @@ export function initFlashcards() {
 
         // Filter out mastered words
         const availableExamples = allExamples.filter(ex => {
-            const id = ex.id || (ex.swe ? ex.swe.toLowerCase().replace(/\s+/g, '_') : '');
+            const id = (ex.swe ? ex.swe.toLowerCase().replace(/\s+/g, '_') : '');
             return !masteredIds.has(id);
         });
 

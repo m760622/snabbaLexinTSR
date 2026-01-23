@@ -1,0 +1,7 @@
+# Netlify configurations
+/training  /training.html  200
+/profile   /profile.html   200
+/settings  /settings.html  200
+/learn     /learn/learn.html 200
+/games     /games/games.html 200
+/ramadan   /ramadan/index.html 200

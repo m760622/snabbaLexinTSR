@@ -1,28 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv" dir="ltr">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ramadan 2026 Countdown</title>
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;700;900&family=El+Messiri:wght@400;700&family=Katibeh&family=Kufam:wght@400;700&family=Rakkas&family=Reem+Kufi:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Ramadan | SnabbaLexin</title>
 
+    <!-- CSS -->
 
-
-
-  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-
-  <script type="module" crossorigin src="./assets/index-jBrxz3_f.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-DCR51bPk.css">
+    <!-- Fonts (Reusing existing) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Reem+Kufi:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+  <script type="module" crossorigin src="/assets/ramadan-BtwARw2w.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="stylesheet" crossorigin href="/assets/ramadan-BSXA8ced.css">
+  <link rel="stylesheet" crossorigin href="/assets/games-OfFVpGjl.css">
 </head>
 
-<body>
-  <div id="root"></div>
+<body class="ramadan-theme">
+
+    <!-- Background Elements -->
+    <div class="ramadan-bg">
+        <div class="stars-layer"></div>
+        <div class="lanterns-container">
+            <div class="lantern l1"></div>
+            <div class="lantern l2"></div>
+            <div class="lantern l3"></div>
+        </div>
+    </div>
+
+    <!-- Header / Navbar -->
+    <nav class="glass-nav">
+        <a href="../index.html" class="back-btn">
+            <span class="icon">➜</span>
+        </a>
+        <h1 class="page-title">Ramadan Kareem</h1>
+    </nav>
+
+    <main class="ramadan-content">
+        <!-- Hero Section: Countdown -->
+        <section class="glass-card hero-card">
+            <h2 class="section-title">Countdown to Iftar</h2>
+            <div id="countdown" class="countdown-display">
+                <div class="time-unit">
+                    <span id="hours">00</span>
+                    <label>Hours</label>
+                </div>
+                <div class="time-unit">
+                    <span id="minutes">00</span>
+                    <label>Min</label>
+                </div>
+                <div class="time-unit">
+                    <span id="seconds">00</span>
+                    <label>Sec</label>
+                </div>
+            </div>
+            <div class="location-badge">
+                📍 Stockholm, SE
+            </div>
+        </section>
+
+        <!-- Daily Dua Slider -->
+        <section class="glass-card dua-card">
+            <div class="card-header">
+                <h3>Daily Dua</h3>
+                <span class="day-badge">Ramadan Day 1</span>
+            </div>
+            <div class="dua-content">
+                <p class="dua-arabic">اللَّهُمَّ اجْعَلْ صِيَامِي فِيهِ صِيَامَ الصَّائِمِينَ</p>
+                <p class="dua-trans">O Allah, let my fasting in this month be the fasting of those who fast sincerely.
+                </p>
+            </div>
+        </section>
+
+        <!-- Simple Tracker -->
+        <section class="glass-card tracker-card">
+            <h3>Daily Tracker</h3>
+            <div class="tracker-items">
+                <label class="tracker-item">
+                    <input type="checkbox" id="track-fasting">
+                    <div class="custom-checkbox"></div>
+                    <span>Fasting</span>
+                </label>
+                <label class="tracker-item">
+                    <input type="checkbox" id="track-quran">
+                    <div class="custom-checkbox"></div>
+                    <span>Quran Reading</span>
+                </label>
+                <label class="tracker-item">
+                    <input type="checkbox" id="track-taraweeh">
+                    <div class="custom-checkbox"></div>
+                    <span>Taraweeh</span>
+                </label>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
 </body>
 
 </html>

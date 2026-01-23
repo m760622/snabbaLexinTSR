@@ -13,10 +13,11 @@
     <link rel="manifest" href="/assets/manifest-mLlvNCWw.json">
     <link rel="icon" type="image/svg+xml" href="/assets/icon-IoVpuwm3.svg">
     <link rel="apple-touch-icon" href="/assets/icon-CFBBOZJI.png">
-  <script type="module" crossorigin src="/assets/profile-iA1Mo8bG.js"></script>
+  <script type="module" crossorigin src="/assets/profile-B84jsZ3F.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="modulepreload" crossorigin href="/assets/client-Chk-tuEE.js">
   <link rel="modulepreload" crossorigin href="/assets/pwa-Bn3RWWLO.js">
-  <link rel="stylesheet" crossorigin href="/assets/profile-Bf02lVeZ.css">
+  <link rel="stylesheet" crossorigin href="/assets/profile-D7KsrZFL.css">
 </head>
 
 <body>
@@ -33,64 +34,11 @@
     </header>
 
     <div class="container">
-        <!-- Profile Hero -->
-        <div class="profile-hero">
-            <div class="avatar">🎓</div>
-            <h2 id="userName"><span class="sv-text">Inlärare</span><span class="ar-text">المتعلم</span></h2>
-            <div class="level-badge" id="userLevel">🌟 <span class="sv-text">Nivå 1 - Nybörjare</span><span
-                    class="ar-text">المستوى 1 - مبتدئ</span></div>
-        </div>
-
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value" id="streakValue">0</div>
-                <div class="stat-label">🔥 <span class="sv-text">Dagar</span><span class="ar-text">أيام</span></div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="wordsValue">0</div>
-                <div class="stat-label">📖 <span class="sv-text">Ord</span><span class="ar-text">كلمات</span></div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="xpValue">0</div>
-                <div class="stat-label">⭐ XP</div>
-            </div>
-        </div>
-
-        <!-- Weekly Activity Chart -->
-        <div class="section-card">
-            <h3 class="section-title">📈 <span class="sv-text">Veckoaktivitet</span><span class="ar-text">نشاط
-                    الأسبوع</span></h3>
-            <div class="weekly-chart" id="weeklyChart">
-                <!-- Bars injected by JS -->
-            </div>
-            <div class="chart-labels">
-                <span><span class="sv-text">Mån</span><span class="ar-text">اثن</span></span>
-                <span><span class="sv-text">Tis</span><span class="ar-text">ثلا</span></span>
-                <span><span class="sv-text">Ons</span><span class="ar-text">أرب</span></span>
-                <span><span class="sv-text">Tor</span><span class="ar-text">خمي</span></span>
-                <span><span class="sv-text">Fre</span><span class="ar-text">جمع</span></span>
-                <span><span class="sv-text">Lör</span><span class="ar-text">سبت</span></span>
-                <span><span class="sv-text">Sön</span><span class="ar-text">أحد</span></span>
-            </div>
-        </div>
-
-        <!-- Leaderboard -->
-        <div class="section-card">
-            <h3 class="section-title">🏆 <span class="sv-text">Topplista</span><span class="ar-text">قائمة
-                    المتصدرين</span></h3>
-            <div id="leaderboard">
-                <!-- Items injected by JS -->
-            </div>
-        </div>
-
-        <!-- Achievements -->
-        <div class="section-card">
-            <h3 class="section-title">🏅 <span class="sv-text">Prestationer</span><span class="ar-text">الإنجازات</span>
-                <span id="achievementCount" class="achievement-count">(0/12)</span>
-            </h3>
-            <div class="achievements-grid" id="achievementsGrid">
-                <!-- Items injected by JS -->
+        <!-- React Profile Dashboard Mount Point -->
+        <div id="profile-root">
+            <!-- Loading state while React loads -->
+            <div class="profile-loading">
+                <div class="loading-spinner"></div>
             </div>
         </div>
     </div>

@@ -39,7 +39,10 @@ export default defineConfig({
         'games-memory': './games/memory.html',
         'learn-quran': './learn/quran.html',
         'games-word-search': './games/word_search.html',
-        'games-hangman': './games/hangman.html'
+        'games-hangman': './games/hangman.html',
+        settings: './settings.html',
+        training: './training.html',
+        ramadan: './ramadan/index.html'
       }
     }
   },

@@ -14,28 +14,27 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;700&family=Scheherazade+New:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/settings-modal.css?v=1">
 
     <link rel="manifest" href="/assets/manifest-mLlvNCWw.json">
     <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#1f2937" media="(prefers-color-scheme: dark)">
     <link rel="icon" type="image/svg+xml" href="/assets/icon-IoVpuwm3.svg">
     <link rel="apple-touch-icon" href="/assets/icon-CFBBOZJI.png">
-  <script type="module" crossorigin src="/assets/main-DVHrfaF-.js"></script>
+  <script type="module" crossorigin src="/assets/main-CojLJU0j.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
-  <link rel="modulepreload" crossorigin href="/assets/type-color-system-BQ9Wia7u.js">
+  <link rel="modulepreload" crossorigin href="/assets/type-color-system-DXTL0M2t.js">
   <link rel="modulepreload" crossorigin href="/assets/preload-helper-D7HrI6pR.js">
-  <link rel="modulepreload" crossorigin href="/assets/config-BpQc0ceR.js">
-  <link rel="modulepreload" crossorigin href="/assets/db-C5HhRm-y.js">
-  <link rel="modulepreload" crossorigin href="/assets/loader-aeyOlNIl.js">
+  <link rel="modulepreload" crossorigin href="/assets/config-8gd_ljfe.js">
+  <link rel="modulepreload" crossorigin href="/assets/db-D9nATt-F.js">
+  <link rel="modulepreload" crossorigin href="/assets/loader-DOLU1NFP.js">
   <link rel="modulepreload" crossorigin href="/assets/toast-manager-DdtDDR9Z.js">
   <link rel="modulepreload" crossorigin href="/assets/utils-5O7zxelZ.js">
-  <link rel="modulepreload" crossorigin href="/assets/tts-CfZZetlp.js">
+  <link rel="modulepreload" crossorigin href="/assets/tts-D1JXvOqA.js">
   <link rel="modulepreload" crossorigin href="/assets/quiz-stats-CpWuYj6M.js">
   <link rel="modulepreload" crossorigin href="/assets/i18n-BpwFYk4h.js">
   <link rel="modulepreload" crossorigin href="/assets/performance-utils-PTy-sCWq.js">
   <link rel="modulepreload" crossorigin href="/assets/pwa-Bn3RWWLO.js">
-  <link rel="stylesheet" crossorigin href="/assets/type-color-system-D_MqMMUg.css">
+  <link rel="stylesheet" crossorigin href="/assets/type-color-system-Dnd7phIt.css">
   <link rel="stylesheet" crossorigin href="/assets/main-Dr4uU3sZ.css">
 </head>
 
@@ -122,10 +121,9 @@
 
         <div class="nav-right">
 
-            <!-- Progress Stats Badge - Click to open Progress Modal -->
+            <!-- Progress Stats Badge - Click to open Profile -->
             <div class="progress-stats-badge cursor-pointer" id="progressBadge" role="button" tabindex="0"
-                aria-label="اضغط لعرض التقدم / Klicka för framsteg"
-                onclick="var m=document.getElementById('progressModal'); if(m) { m.classList.remove('hidden'); m.style.display='flex'; }">
+                aria-label="Min Profil / ملفك الشخصي" onclick="window.location.href='profile.html'">
                 <span class="progress-stat" title="الكلمات اليوم / Ord idag">
                     <span class="stat-icon">📖</span>
                     <span id="dailyWordsCount">0</span>
@@ -353,14 +351,16 @@
             aria-label="Favoriter / مفضلة">
             <span class="quick-icon">⭐</span>
         </button>
-        <a href="learn/learn.html?mode=training" class="quick-action-btn" data-tooltip="Träning / تدريب"
-            aria-label="Träning / تدريب">
+        <a href="training.html" class="quick-action-btn" data-tooltip="Träning / تدريب" aria-label="Träning / تدريب">
             <span class="quick-icon">💪</span>
         </a>
         <button type="button" class="quick-action-btn" id="quickQuizBtn" data-tooltip="Quiz / اختبار"
             aria-label="Quiz / اختبار">
             <span class="quick-icon">⚡</span>
         </button>
+        <a href="profile.html" class="quick-action-btn" data-tooltip="Profil / الملف" aria-label="Profil / الملف">
+            <span class="quick-icon">👤</span>
+        </a>
     </div>
 
     <!-- Landing Page Content - Everything that shows when NOT searching -->
@@ -523,6 +523,10 @@
                                 <path
                                     d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
                             </svg>
+                        </button>
+                        <button type="button" id="wodTrainBtn" class="wod-action-btn"
+                            aria-label="Lägg till i träning / أضف للتدريب">
+                            💪
                         </button>
                         <button type="button" id="wodFavBtn" class="wod-action-btn" aria-label="Spara / حفظ">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"

@@ -427,7 +427,7 @@ export const DictionaryDB = {
         if (!this.db) await this.init();
         if (!this.db) return;
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const tx = this.db!.transaction([this.TRAINING_STORE], 'readwrite');
             const store = tx.objectStore(this.TRAINING_STORE);
 
