@@ -160,5 +160,5 @@ export const QUALITY_BUTTONS = [
     { quality: Quality.Again, label: 'Igen / مرة أخرى', color: '#ef4444', icon: '🔄' },
     { quality: Quality.Hard, label: 'Svårt / صعب', color: '#f97316', icon: '😓' },
     { quality: Quality.Good, label: 'Bra / جيد', color: '#22c55e', icon: '👍' },
-    { quality: Quality.Easy, label: 'Lätt / سهل', color: '#3b82f6', icon: '🚀' }
+    { quality: Quality.Easy, label: 'Klar / تم', color: '#3b82f6', icon: '🗑️' }
 ];

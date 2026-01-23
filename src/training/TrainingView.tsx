@@ -125,7 +125,12 @@ const TrainingView: React.FC = () => {
         const { newData, wasCorrect } = calculateNextReview(quality, currentData);
 
         // Save to DB
-        await DictionaryDB.updateReviewData(currentWord.id, newData);
+        // If Quality is Easy (5), mark as mastered (remove from training)
+        if (quality === Quality.Easy) {
+            await DictionaryDB.updateTrainingStatus(currentWord.id, false);
+        } else {
+            await DictionaryDB.updateReviewData(currentWord.id, newData);
+        }
 
         // Update stats
         setStats(prev => ({
@@ -268,11 +273,6 @@ const TrainingView: React.FC = () => {
                             <div className="card-type">{currentWord.type}</div>
                         )}
                         <h2 className="card-word">{currentWord.swe}</h2>
-                        <div className="swipe-hint">
-                            <span>👆 Tryck för att vända</span>
-                            <span className="swipe-hint-dot">•</span>
-                            <span dir="rtl">اضغط للقلب</span>
-                        </div>
                     </div>
 
                     {/* Back Face: Arabic & Details */}
@@ -292,6 +292,23 @@ const TrainingView: React.FC = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Swipe Hint (Always Outside Card) */}
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                marginTop: '1rem',
+                marginBottom: '1.5rem',
+                width: '100%',
+                whiteSpace: 'nowrap',
+                color: 'rgba(255, 255, 255, 0.7)',
+                fontSize: '0.9rem',
+                padding: '0 1rem'
+            }}>
+                👆 Tryck för att vända • اضغط للقلب
             </div>
 
             {/* SM-2 Rating Buttons */}

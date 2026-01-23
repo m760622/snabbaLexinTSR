@@ -70,8 +70,9 @@ body.dark-mode .bg-spotlight,
     flex-direction: column;
     min-height: 100vh;
     padding-bottom: 2rem;
-    justify-content: center;
-    /* Center vertically like the game */
+    padding-top: 2rem;
+    justify-content: flex-start;
+    /* Clean layout starting from top */
 }
 
 /* Header */
@@ -115,7 +116,7 @@ body.dark-mode .bg-spotlight,
 
 /* Flashcard Container - 3D Flip Setup */
 .training-card {
-    height: 360px;
+    height: 460px;
     width: 100%;
     margin-bottom: 2rem;
     cursor: pointer;
