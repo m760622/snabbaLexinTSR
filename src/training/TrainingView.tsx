@@ -106,6 +106,10 @@ const TrainingView: React.FC = () => {
     const playAudio = () => {
         if (!currentWord) return;
         TTSManager.speak(currentWord.swe);
+
+        // Track usage for "Speech Champion" badge
+        const currentUsage = parseInt(localStorage.getItem('ttsUsage') || '0', 10);
+        localStorage.setItem('ttsUsage', (currentUsage + 1).toString());
     };
 
     const handleFlip = () => {
@@ -128,6 +132,15 @@ const TrainingView: React.FC = () => {
         // If Quality is Easy (5), mark as mastered (remove from training)
         if (quality === Quality.Easy) {
             await DictionaryDB.updateTrainingStatus(currentWord.id, false);
+
+            // Update profile stats (localStorage) for "Mastered Words" badge/counter
+            const assessments = JSON.parse(localStorage.getItem('wordAssessments') || '{}');
+            assessments[currentWord.id] = {
+                id: currentWord.id,
+                level: 5, // 4+ counts as mastered in UserProfile
+                timestamp: Date.now()
+            };
+            localStorage.setItem('wordAssessments', JSON.stringify(assessments));
         } else {
             await DictionaryDB.updateReviewData(currentWord.id, newData);
         }

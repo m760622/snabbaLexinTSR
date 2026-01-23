@@ -3,6 +3,7 @@ import CircularProgress from './CircularProgress';
 import StreakCounter from './StreakCounter';
 import DailyGoalBar from './DailyGoalBar';
 import { useProfileData } from '../hooks/useProfileData';
+import { BadgesSection } from './BadgesSection';
 
 /**
  * UserProfile - Main Profile Dashboard Component
@@ -126,6 +127,15 @@ const UserProfile: React.FC = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Gamification Badges */}
+            <BadgesSection
+                stats={{
+                    wordsMastered: masteredWords,
+                    currentStreak: streak,
+                    speechCount: parseInt(localStorage.getItem('ttsUsage') || '0', 10)
+                }}
+            />
         </div>
     );
 };
