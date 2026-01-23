@@ -18,7 +18,10 @@ const badgeDefinitions: Badge[] = [
 export const BadgesSection: React.FC<{ stats: any }> = ({ stats }) => {
     return (
         <div className="badges-section">
-            <h3 className="badges-title">أوسمة الإنجاز 🏆</h3>
+            <h3 className="badges-title">
+                <span className="sv-text">Utmärkelser</span>
+                <span className="ar-text">أوسمة الإنجاز</span> 🏆
+            </h3>
             <div className="badges-grid">
                 {badgeDefinitions.map(badge => {
                     const isUnlocked = badge.requirement(stats);

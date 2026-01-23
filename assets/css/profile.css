@@ -29,6 +29,18 @@ body {
     color: var(--text-color);
     min-height: 100vh;
     padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    /* Override global padding from style.css to fix alignment */
+    padding: 0 !important;
+
+    /* Strict Mobile Width Constraint */
+    max-width: 414px;
+    margin: 0 auto;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    /* Ensure fixed children relate to this if possible, otherwise they need max-width too */
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    /* Nice shadow on desktop */
 }
 
 html.iphone-mode {
@@ -76,6 +88,23 @@ header {
     padding-right: max(1rem, env(safe-area-inset-right));
     z-index: 100;
     gap: 1rem;
+    width: 100%;
+    /* Inherits 414px width from body */
+}
+
+.back-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 50%;
+    border-radius: 50%;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    max-width: 414px;
 }
 
 .back-btn {
@@ -92,6 +121,9 @@ header {
     align-items: center;
     justify-content: center;
     transition: transform 0.2s ease;
+    z-index: 10;
+    /* Ensure clickable above title */
+    position: relative;
 }
 
 .back-btn:active {
@@ -99,19 +131,40 @@ header {
 }
 
 header h1 {
-    flex: 1;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: center !important;
+    /* Force center override */
     font-size: 1.1rem;
-    text-align: center;
+    pointer-events: none;
+    z-index: 1;
+    color: #fff !important;
+    /* Ensure white text */
+}
+
+/* Bilingual Separator - Global */
+body:not(.lang-sv):not(.lang-ar) .sv-text+.ar-text::before,
+body.lang-both .sv-text+.ar-text::before {
+    content: " / ";
+    padding: 0 4px;
+    opacity: 0.7;
+}
+
+/* Ensure inline display for this logic to work nicely */
+.sv-text,
+.ar-text {
+    display: inline;
 }
 
 .header-spacer {
-    width: 40px;
+    display: none;
+    /* No longer needed */
 }
 
 .container {
-    max-width: 414px;
-    margin: 0 auto;
-    max-width: 414px;
+    max-width: 100%;
+    /* Let body handle constraint */
     margin: 0 auto;
     padding: 1rem;
     padding-left: max(1rem, env(safe-area-inset-left));
@@ -334,7 +387,15 @@ header h1 {
     padding: 0.75rem 0;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    /* Robust Fixed Centering */
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 414px;
 }
 
 body.iphone-view .bottom-nav {
