@@ -27,6 +27,7 @@ const translations: Record<string, TranslationEntry> = {
     'search.placeholder': { sv: 'Sök ord...', ar: 'ابحث عن كلمة...' },
     'search.noResults': { sv: 'Inga resultat hittades', ar: 'لا توجد نتائج' },
     'search.loading': { sv: 'Laddar...', ar: 'جاري التحميل...' },
+    'search.results': { sv: 'resultat', ar: 'نتيجة' },
 
     // Common buttons
     'btn.save': { sv: 'Spara', ar: 'حفظ' },
