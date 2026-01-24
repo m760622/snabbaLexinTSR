@@ -50,6 +50,7 @@ const TrainingView: React.FC = () => {
     const [generatedStory, setGeneratedStory] = useState<{ text: string; translation: string } | null>(null);
 
     const [hasTrainingWords, setHasTrainingWords] = useState(false);
+    const [totalSessionWords, setTotalSessionWords] = useState(0);
 
     // Touch handling for swipe
     const touchStartX = useRef(0);
@@ -106,6 +107,9 @@ const TrainingView: React.FC = () => {
 
             const validWords = mappedWords.filter(w => w.swe && w.arb);
             setWords(validWords);
+            if (totalSessionWords === 0) {
+                setTotalSessionWords(validWords.length);
+            }
         } catch (error) {
             console.error('Failed to load training words', error);
         } finally {
@@ -219,7 +223,7 @@ const TrainingView: React.FC = () => {
             if (Math.abs(diffX) > Math.abs(diffY)) {
                 // Horizontal Swipe
                 if (diffX > threshold) {
-                    handleRating(Quality.Good); // Right = Good
+                    handleRating(Quality.Easy); // Right = Easy (Mastered)
                 } else if (diffX < -threshold) {
                     handleRating(Quality.Again); // Left = Again
                 }
@@ -391,24 +395,32 @@ const TrainingView: React.FC = () => {
                 </div>
             )}
             <div className={`training-container transition-opacity duration-700 ${showGlass ? 'opacity-100' : 'opacity-0'}`}>
-
-                {/* Header / Progress */}
-                <div className="training-header">
+                {/* Unified Premium Header */}
+                <header className="training-header">
                     <button
                         className="training-back-btn"
                         onClick={() => window.location.href = '/'}
                         aria-label="Tillbaka / رجوع"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <line x1="19" y1="12" x2="5" y2="12"></line>
                             <polyline points="12 19 5 12 12 5"></polyline>
                         </svg>
                     </button>
 
-                    <div className="training-counter">
-                        <span>Kvar:</span>
-                        <span className="counter-label">{words.length}</span>
+                    <div className="training-progress-container">
+                        <div className="progress-stats">
+                            <span>{masteredWordsInSession.length} / {totalSessionWords}</span>
+                            <span dir="rtl">المتبقي: {totalSessionWords - masteredWordsInSession.length}</span>
+                        </div>
+                        <div className="progress-track">
+                            <div
+                                className="progress-fill"
+                                style={{ width: `${Math.min(100, (masteredWordsInSession.length / totalSessionWords) * 100)}%` }}
+                            ></div>
+                        </div>
                     </div>
+
                     <div className="training-counter mastered-counter">
                         <span>📊</span>
                         <span className="counter-label mastered-val">
@@ -417,7 +429,7 @@ const TrainingView: React.FC = () => {
                                 : '0%'}
                         </span>
                     </div>
-                </div>
+                </header>
 
                 {/* Flashcard Component */}
                 <div
