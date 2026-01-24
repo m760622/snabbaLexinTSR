@@ -543,9 +543,10 @@ export class App {
         const topicMatches: number[] = [];
 
         // Check if we have active filters that require the slow path
-        const hasTopicFilter = this.activeFilterMode === 'all' && (document.getElementById('categorySelect') as HTMLSelectElement)?.value !== 'all';
+        const categorySelect = document.getElementById('categorySelect') as HTMLSelectElement | null;
+        const hasTopicFilter = this.activeFilterMode === 'all' && categorySelect && categorySelect.value !== 'all';
         const hasTypeFilter = this.activeTypeFilter !== 'all';
-        const topicFilter = hasTopicFilter ? (document.getElementById('categorySelect') as HTMLSelectElement).value : '';
+        const topicFilter = hasTopicFilter && categorySelect ? categorySelect.value : '';
 
         // If no query and filtering by favorites
         if (!normalizedQuery && this.activeFilterMode === 'favorites') {
