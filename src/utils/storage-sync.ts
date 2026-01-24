@@ -18,7 +18,8 @@ const WATCHED_KEYS = [
     'arabicFont',
     'showArabic',
     'soundEnabled',
-    'geminiApiKey'
+    'geminiApiKey',
+    'deepseekApiKey'
 ];
 
 export const StorageSync = {
@@ -107,6 +108,10 @@ export const StorageSync = {
 
     getGeminiApiKey(): string {
         return localStorage.getItem('geminiApiKey') || '';
+    },
+
+    getDeepSeekApiKey(): string {
+        return localStorage.getItem('deepseekApiKey') || '';
     },
 
     /** @private */

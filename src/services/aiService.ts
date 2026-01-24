@@ -27,45 +27,49 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
           "story_ar": "الترجمة العربية"
         }`;
 
-        const envKey = import.meta.env.VITE_GEMINI_API_KEY;
-        const storageKey = StorageSync.getGeminiApiKey();
+        const envKey = import.meta.env.VITE_DEEPSEEK_API_KEY;
+        const storageKey = StorageSync.getDeepSeekApiKey();
         const apiKey = envKey || storageKey;
 
         if (!apiKey) {
-            throw new Error('Missing API Key');
+            throw new Error('Missing DeepSeek API Key');
         }
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        const response = await fetch('https://api.deepseek.com/chat/completions', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: prompt }]
-                }]
+                model: 'deepseek-chat',
+                messages: [
+                    { role: 'system', content: 'You are a Swedish language teacher.' },
+                    { role: 'user', content: prompt }
+                ],
+                response_format: { type: 'json_object' }
             })
         });
 
         const data = await response.json();
         if (!response.ok) {
-            console.error("Gemini API Error Detail:", data);
+            console.error("DeepSeek API Error Detail:", data);
             throw new Error(data.error?.message || `API Error ${response.status}`);
         }
 
-        const responseText = data.candidates[0].content.parts[0].text;
+        const responseText = data.choices[0].message.content;
 
         // Extract JSON from response
         const jsonMatch = responseText.match(/\{[\s\S]*\}/);
         if (!jsonMatch) {
-            throw new Error('Could not find JSON in Gemini response');
+            throw new Error('Could not find JSON in DeepSeek response');
         }
 
         return JSON.parse(jsonMatch[0]);
     } catch (error: any) {
         console.error("AI Story Error:", error);
-        const msg = error.message === 'Missing API Key'
-            ? "تنبيه: مفتاح الـ API غير موجود. يرجى إعداده في الإعدادات أو كمتغير بيئة (VITE_GEMINI_API_KEY)"
+        const msg = error.message === 'Missing DeepSeek API Key'
+            ? "تنبيه: مفتاح DeepSeek API غير موجود. يرجى إعداده (VITE_DEEPSEEK_API_KEY)"
             : `تنبيه: فشل جلب القصة (${error.message})`;
         alert(msg);
         return null;
