@@ -10,6 +10,7 @@ import { calculateNextReview, Quality, QUALITY_BUTTONS, DEFAULT_REVIEW_DATA } fr
 import { AIService } from '../services/aiService';
 import { StorageSync } from '../utils/storage-sync';
 import { Confetti } from '../confetti';
+import StoryModal from '../components/StoryModal';
 
 interface Word {
     id: string;
@@ -46,7 +47,7 @@ const TrainingView: React.FC = () => {
     const [masteredWordsInSession, setMasteredWordsInSession] = useState<Word[]>([]);
     const [isGeneratingStory, setIsGeneratingStory] = useState(false);
     const [showStoryModal, setShowStoryModal] = useState(false);
-    const [generatedStory, setGeneratedStory] = useState<string>('');
+    const [generatedStory, setGeneratedStory] = useState<{ text: string; translation: string } | null>(null);
 
     const [hasTrainingWords, setHasTrainingWords] = useState(false);
 
@@ -133,6 +134,13 @@ const TrainingView: React.FC = () => {
         };
         checkCount();
     }, [words.length]);
+
+    // Automatic Story Trigger
+    useEffect(() => {
+        if (masteredWordsInSession.length === 3 && !isGeneratingStory) {
+            triggerStoryGeneration();
+        }
+    }, [masteredWordsInSession.length]);
 
     const currentWord = words[currentIndex];
 
@@ -318,8 +326,11 @@ const TrainingView: React.FC = () => {
         try {
             // Extract Swedish words from mastered words objects
             const swedishWords = masteredWordsInSession.map(word => word.swe);
-            const story = await AIService.generateStoryFromWords(swedishWords);
-            setGeneratedStory(story.story_sv);
+            const storyData = await AIService.generateStoryFromWords(swedishWords);
+            setGeneratedStory({
+                text: storyData.story_sv,
+                translation: storyData.story_ar
+            });
             setShowStoryModal(true);
 
             // Celebrate with confetti
@@ -467,6 +478,19 @@ const TrainingView: React.FC = () => {
                     ))}
                 </div>
             </div>
+
+            {showStoryModal && generatedStory && (
+                <StoryModal
+                    story={generatedStory}
+                    swedishWords={masteredWordsInSession.map(w => ({
+                        id: w.id,
+                        swedish: w.swe,
+                        arabic: w.arb
+                    }))}
+                    isVisible={showStoryModal}
+                    onClose={handleStoryClose}
+                />
+            )}
         </>
     );
 };

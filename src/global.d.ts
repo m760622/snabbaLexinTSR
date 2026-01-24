@@ -63,3 +63,13 @@ declare var webkitSpeechRecognition: {
 interface DeviceMotionEvent {
   requestPermission?: () => Promise<'granted' | 'denied' | 'default'>;
 }
+
+// Vite Environment Variables
+interface ImportMetaEnv {
+  readonly VITE_GEMINI_API_KEY: string;
+  // add other variables here
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
