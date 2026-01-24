@@ -13,6 +13,7 @@ An interactive, gamified language learning application for Swedish and Arabic sp
   * **Fill in the Blanks:** Complete sentences.
   * **Sentence Builder:** Arrange words to form correct sentences.
 * **Quranic Learning:** dedicated sections for Quranic vocabulary and *Asma Ul Husna*.
+* **WordDNA (Ordets DNA):** A standalone "Word Story" portal exploration of etymology, morphology, and semantic relationships with a storytelling approach.
 * **Gamification:** XP system, levels, streaks, and achievements.
 * **Premium Design:** Glassmorphism UI, themes (Dark/Light), and smooth animations.
 
@@ -84,6 +85,16 @@ The dictionary search interface uses a highly optimized compact card layout (`12
 * **Sorting:**
   * **Relevance First:** Exact matches (e.g., "Hus") always appear at the top, followed by starts-with matches.
 
+### WordDNA (Standalone Portal)
+
+WordDNA provides an immersive, full-screen exploration of a single word's "genetic code":
+
+* **Etymology:** Discover the historical roots and origins of words.
+* **Morphology Lab:** Interactive table showing different forms (plural, definite, etc.).
+* **Semantic Mapping:** Visual "bubble" maps showing synonyms and antonyms.
+* **Interactive Quiz:** Reinforce learning with a quick multiple-choice quiz featuring real-time visual feedback.
+* **Audio Pronunciation:** High-quality TTS integration for perfect pronunciation.
+
 ## 📦 Setup & Run
 
 1. **Install Dependencies:**
@@ -114,6 +125,7 @@ The dictionary search interface uses a highly optimized compact card layout (`12
 ├── games/              # HTML entry points for individual games
 ├── learn/              # Learning modules (Cognates, Lists)
 ├── src/                # TypeScript Source Code
+│   ├── features/       # Modular features (WordDNA, etc.)
 │   ├── games/          # Game logic implementations
 │   ├── utils/          # Helper functions (XP, Sound, Text)
 │   ├── data/           # Dictionary and word data
