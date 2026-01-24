@@ -299,8 +299,20 @@ const TrainingView: React.FC = () => {
         );
     }
 
+    const handleRestart = () => {
+        setStats({
+            wordsReviewed: 0,
+            correctCount: 0,
+            startTime: Date.now()
+        });
+        setCurrentIndex(0);
+        setIsFlipped(false);
+        setSwipeDirection(null);
+        loadTrainingWords();
+    };
+
     if (words.length === 0) {
-        return <MissionAccomplished stats={stats} />;
+        return <MissionAccomplished stats={stats} onRestart={handleRestart} />;
     }
 
     return (
@@ -396,7 +408,7 @@ const TrainingView: React.FC = () => {
 };
 
 // Subcomponent: Empty State
-const MissionAccomplished: React.FC<{ stats: SessionStats }> = ({ stats }) => {
+const MissionAccomplished: React.FC<{ stats: SessionStats; onRestart: () => void }> = ({ stats, onRestart }) => {
     // Scenario A: User entered training but had NO words due (0 reviews)
     if (stats.wordsReviewed === 0) {
         return (
@@ -408,6 +420,9 @@ const MissionAccomplished: React.FC<{ stats: SessionStats }> = ({ stats }) => {
                     <p className="text-sm opacity-70 mt-2">Du är helt i fas med din plan.</p>
 
                     <div className="complete-actions">
+                        <button onClick={onRestart} className="training-btn" style={{ width: 'auto', flex: 'none', height: '50px', padding: '0 1.5rem' }}>
+                            🔄 Uppdatera
+                        </button>
                         <a href="/" className="training-btn primary">
                             Tillbaka Hem
                         </a>
@@ -444,6 +459,9 @@ const MissionAccomplished: React.FC<{ stats: SessionStats }> = ({ stats }) => {
                 </div>
 
                 <div className="complete-actions">
+                    <button onClick={onRestart} className="training-btn" style={{ width: 'auto', flex: 'none', height: '50px', padding: '0 1.5rem' }}>
+                        🔄 Träna Igen
+                    </button>
                     <a href="/" className="training-btn primary">
                         Tillbaka Hem
                     </a>
