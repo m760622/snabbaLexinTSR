@@ -400,16 +400,18 @@ const MissionAccomplished: React.FC<{ stats: SessionStats }> = ({ stats }) => {
     // Scenario A: User entered training but had NO words due (0 reviews)
     if (stats.wordsReviewed === 0) {
         return (
-            <div className="training-state complete">
-                <div className="state-emoji">☕️</div>
-                <h2 className="text-white">Allt är klart!</h2>
-                <p>Du har inga ord att repetera just nu. Kom tillbaka senare!</p>
-                <p className="text-sm opacity-70 mt-2">Du är helt i fas med din plan.</p>
+            <div className="training-container">
+                <div className="training-state complete">
+                    <div className="state-emoji">☕️</div>
+                    <h2 className="text-white">Allt är klart!</h2>
+                    <p>Du har inga ord att repetera just nu. Kom tillbaka senare!</p>
+                    <p className="text-sm opacity-70 mt-2">Du är helt i fas med din plan.</p>
 
-                <div className="complete-actions">
-                    <a href="/" className="training-btn primary">
-                        Tillbaka Hem
-                    </a>
+                    <div className="complete-actions">
+                        <a href="/" className="training-btn primary">
+                            Tillbaka Hem
+                        </a>
+                    </div>
                 </div>
             </div>
         );
@@ -420,30 +422,32 @@ const MissionAccomplished: React.FC<{ stats: SessionStats }> = ({ stats }) => {
     const timeSpent = Math.max(1, Math.round((Date.now() - stats.startTime) / 60000)); // Ensure at least 1m if nonzero
 
     return (
-        <div className="training-state complete">
-            <div className="state-emoji">🎉</div>
-            <h2 className="text-white">Träning Klar!</h2>
-            <p>Grymt jobbat! Du har repeterat alla ord som behövdes idag.</p>
+        <div className="training-container">
+            <div className="training-state complete">
+                <div className="state-emoji">🎉</div>
+                <h2 className="text-white">Träning Klar!</h2>
+                <p>Grymt jobbat! Du har repeterat alla ord som behövdes idag.</p>
 
-            <div className="stats-grid">
-                <div className="stat-item">
-                    <span className="stat-value">{stats.wordsReviewed}</span>
-                    <span className="stat-label">Ord repeterade</span>
+                <div className="stats-grid">
+                    <div className="stat-item">
+                        <span className="stat-value">{stats.wordsReviewed}</span>
+                        <span className="stat-label">Ord repeterade</span>
+                    </div>
+                    <div className="stat-item">
+                        <span className="stat-value">{accuracy}%</span>
+                        <span className="stat-label">Precision</span>
+                    </div>
+                    <div className="stat-item">
+                        <span className="stat-value">{timeSpent}m</span>
+                        <span className="stat-label">Tid</span>
+                    </div>
                 </div>
-                <div className="stat-item">
-                    <span className="stat-value">{accuracy}%</span>
-                    <span className="stat-label">Precision</span>
-                </div>
-                <div className="stat-item">
-                    <span className="stat-value">{timeSpent}m</span>
-                    <span className="stat-label">Tid</span>
-                </div>
-            </div>
 
-            <div className="complete-actions">
-                <a href="/" className="training-btn primary">
-                    Tillbaka Hem
-                </a>
+                <div className="complete-actions">
+                    <a href="/" className="training-btn primary">
+                        Tillbaka Hem
+                    </a>
+                </div>
             </div>
         </div>
     );
