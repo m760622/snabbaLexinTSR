@@ -738,7 +738,7 @@ export class App {
         const countEl = document.getElementById('resultCount');
         if (countEl) {
             if (count > 0) {
-                countEl.textContent = `${count} ${t('search.results')}`;
+                countEl.textContent = `${count}`;
                 countEl.style.display = 'block';
             } else {
                 countEl.style.display = 'none';
