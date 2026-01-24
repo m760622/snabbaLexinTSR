@@ -585,6 +585,38 @@
                 </div>
             </section>
 
+            <!-- API Integration Section -->
+            <section class="settings-section glass-card" data-section="api">
+                <div class="section-header" onclick="toggleSection('api')">
+                    <div class="section-icon gradient-purple">🔑</div>
+                    <div class="section-title-wrapper">
+                        <h3 class="section-title"><span class="sv-text">Gemini API</span><span class="ar-text">مفتاح
+                                Gemini API</span></h3>
+                    </div>
+                    <svg class="section-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="section-content" id="api-content">
+                    <!-- Gemini API Key -->
+                    <div class="settings-item">
+                        <div class="item-left">
+                            <span class="item-icon">🔐</span>
+                            <div class="item-info">
+                                <span class="item-name"><span class="sv-text">Gemini API-nyckel</span><span
+                                        class="ar-text">مفتاح Gemini API</span></span>
+                                <span class="item-description"><span class="sv-text">Används för AI-funktioner i
+                                        träningen</span><span class="ar-text">يُستخدم للوظائف الذكية في
+                                        التدريب</span></span>
+                            </div>
+                        </div>
+                        <input type="password" id="geminiApiKey" class="settings-input password-input"
+                            placeholder="Skriv din API-nyckel här / اكتب مفتاح API هنا" maxlength="100"
+                            spellcheck="false">
+                    </div>
+                </div>
+            </section>
+
             <!-- Data & Privacy Section -->
             <section class="settings-section glass-card" data-section="data">
                 <div class="section-header" onclick="toggleSection('data')">

@@ -7,6 +7,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { DictionaryDB, DataLoader } from '../db';
 import { TTSManager } from '../tts';
 import { calculateNextReview, Quality, QUALITY_BUTTONS, DEFAULT_REVIEW_DATA } from './spaced-repetition';
+import { AIService } from '../services/aiService';
+import { StorageSync } from '../utils/storage-sync';
+import { Confetti } from '../confetti';
 
 interface Word {
     id: string;
@@ -38,6 +41,12 @@ const TrainingView: React.FC = () => {
         correctCount: 0,
         startTime: Date.now()
     });
+
+    // Story AI Integration
+    const [masteredWordsInSession, setMasteredWordsInSession] = useState<Word[]>([]);
+    const [isGeneratingStory, setIsGeneratingStory] = useState(false);
+    const [showStoryModal, setShowStoryModal] = useState(false);
+    const [generatedStory, setGeneratedStory] = useState<string>('');
 
     const [hasTrainingWords, setHasTrainingWords] = useState(false);
 
@@ -257,6 +266,9 @@ const TrainingView: React.FC = () => {
                 timestamp: Date.now()
             };
             localStorage.setItem('wordAssessments', JSON.stringify(assessments));
+
+            // Track mastered words for AI story generation
+            setMasteredWordsInSession(prev => [...prev, currentWord]);
         } else {
             await DictionaryDB.updateReviewData(currentWord.id, newData);
         }
@@ -300,6 +312,34 @@ const TrainingView: React.FC = () => {
         }, 300);
     };
 
+    // Generate AI story from mastered words
+    const triggerStoryGeneration = async () => {
+        setIsGeneratingStory(true);
+        try {
+            // Extract Swedish words from mastered words objects
+            const swedishWords = masteredWordsInSession.map(word => word.swe);
+            const story = await AIService.generateStoryFromWords(swedishWords);
+            setGeneratedStory(story.story_sv);
+            setShowStoryModal(true);
+
+            // Celebrate with confetti
+            Confetti.burst();
+            setTimeout(() => Confetti.stop(), 3000);
+        } catch (error) {
+            console.error('فشل توليد القصة:', error);
+            alert('حدث خطأ أثناء توليد القصة. تأكد من صحة مفتاح API.');
+        } finally {
+            setIsGeneratingStory(false);
+        }
+    };
+
+    // Reset mastered words counter after story is closed
+    const handleStoryClose = () => {
+        setShowStoryModal(false);
+        setMasteredWordsInSession([]);
+        Confetti.stop();
+    };
+
     // Save session on unmount
     useEffect(() => {
         return () => {
@@ -330,94 +370,104 @@ const TrainingView: React.FC = () => {
     }
 
     return (
-        <div className={`training-container transition-opacity duration-700 ${showGlass ? 'opacity-100' : 'opacity-0'}`}>
-
-            {/* Header / Progress */}
-            <div className="training-header">
-                <button
-                    className="training-back-btn"
-                    onClick={() => window.location.href = '/'}
-                    aria-label="Tillbaka / رجوع"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                </button>
-
-                <div className="training-counter">
-                    <span>Kvar:</span>
-                    <span className="counter-label">{words.length}</span>
-                </div>
-                <div className="training-counter mastered-counter">
-                    <span>📊</span>
-                    <span className="counter-label mastered-val">
-                        {stats.wordsReviewed > 0
-                            ? `${Math.round((stats.correctCount / stats.wordsReviewed) * 100)}%`
-                            : '0%'}
-                    </span>
-                </div>
-            </div>
-
-            {/* Flashcard Component */}
-            <div
-                className={`training-card ${isFlipped ? 'flipped' : ''} ${swipeDirection ? `swipe-${swipeDirection}` : ''}`}
-                onClick={handleFlip}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-            >
-                <div className="card-inner" ref={cardRef}>
-                    {/* Front Face: Swedish */}
-                    <div className="card-face card-front">
-                        {currentWord.type && (
-                            <div className="card-type">{currentWord.type}</div>
-                        )}
-                        <h2 className="card-word">{currentWord.swe}</h2>
+        <>
+            {isGeneratingStory && (
+                <div className="story-generation-overlay">
+                    <div className="story-loading">
+                        <div className="loading-spinner"></div>
+                        <p className="text-loading">Skapar berättelse...</p>
                     </div>
+                </div>
+            )}
+            <div className={`training-container transition-opacity duration-700 ${showGlass ? 'opacity-100' : 'opacity-0'}`}>
 
-                    {/* Back Face: Arabic & Details */}
-                    <div className="card-face card-back">
-                        <h2 className="card-arabic" dir="rtl">{currentWord.arb}</h2>
-                        <div className="divider"></div>
-                        <div className="card-section">
-                            {currentWord.sweDef && (
-                                <div className="card-definition">{currentWord.sweDef}</div>
+                {/* Header / Progress */}
+                <div className="training-header">
+                    <button
+                        className="training-back-btn"
+                        onClick={() => window.location.href = '/'}
+                        aria-label="Tillbaka / رجوع"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+
+                    <div className="training-counter">
+                        <span>Kvar:</span>
+                        <span className="counter-label">{words.length}</span>
+                    </div>
+                    <div className="training-counter mastered-counter">
+                        <span>📊</span>
+                        <span className="counter-label mastered-val">
+                            {stats.wordsReviewed > 0
+                                ? `${Math.round((stats.correctCount / stats.wordsReviewed) * 100)}%`
+                                : '0%'}
+                        </span>
+                    </div>
+                </div>
+
+                {/* Flashcard Component */}
+                <div
+                    className={`training-card ${isFlipped ? 'flipped' : ''} ${swipeDirection ? `swipe-${swipeDirection}` : ''}`}
+                    onClick={handleFlip}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                >
+                    <div className="card-inner" ref={cardRef}>
+                        {/* Front Face: Swedish */}
+                        <div className="card-face card-front">
+                            {currentWord.type && (
+                                <div className="card-type">{currentWord.type}</div>
                             )}
-                            {currentWord.sweEx && (
-                                <div className="card-example-container">
-                                    <p className="card-example-swe">"{currentWord.sweEx}"</p>
-                                    {currentWord.arbEx && <p className="card-example" dir="rtl">{currentWord.arbEx}</p>}
-                                </div>
-                            )}
+                            <h2 className="card-word">{currentWord.swe}</h2>
+                        </div>
+
+                        {/* Back Face: Arabic & Details */}
+                        <div className="card-face card-back">
+                            <h2 className="card-arabic" dir="rtl">{currentWord.arb}</h2>
+                            <div className="divider"></div>
+                            <div className="card-section">
+                                {currentWord.sweDef && (
+                                    <div className="card-definition">{currentWord.sweDef}</div>
+                                )}
+                                {currentWord.sweEx && (
+                                    <div className="card-example-container">
+                                        <p className="card-example-swe">"{currentWord.sweEx}"</p>
+                                        {currentWord.arbEx && <p className="card-example" dir="rtl">{currentWord.arbEx}</p>}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Swipe Hint (Always Outside Card) */}
-            <div className="swipe-hint-container">
-                👆 Tryck för att vända • اضغط للقلب
-            </div>
+                {/* Swipe Hint (Always Outside Card) */}
+                <div className="swipe-hint-container">
+                    👆 Tryck för att vända • اضغط للقلب
+                </div>
 
-            {/* SM-2 Rating Buttons */}
-            <div className="training-controls sm2-controls">
-                {QUALITY_BUTTONS.map((btn) => (
-                    <button
-                        key={btn.quality}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleRating(btn.quality);
-                        }}
-                        className={`training-btn sm2-btn quality-${btn.quality}`}
-                        style={{ '--btn-color': btn.color } as React.CSSProperties}
-                    >
-                        <span className="btn-icon">{btn.icon}</span>
-                        <span className="btn-label">{btn.label.split(' / ')[0]}</span>
-                    </button>
-                ))}
+                {/* SM-2 Rating Buttons */}
+                <div className="training-controls sm2-controls">
+                    {QUALITY_BUTTONS.map((btn) => (
+                        <button
+                            key={btn.quality}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleRating(btn.quality);
+                            }}
+                            className={`training-btn sm2-btn quality-${btn.quality}`}
+                            style={{ '--btn-color': btn.color } as React.CSSProperties}
+                        >
+                            <span className="btn-icon">{btn.icon}</span>
+                            <span className="btn-label">{btn.label.split(' / ')[0]}</span>
+                        </button>
+                    ))}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

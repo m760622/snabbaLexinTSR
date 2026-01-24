@@ -15,13 +15,13 @@
     <meta name="theme-color" content="#6366f1">
     <link rel="icon" type="image/svg+xml" href="/assets/icon-IoVpuwm3.svg">
     <link rel="apple-touch-icon" href="/assets/icon-CFBBOZJI.png">
-  <script type="module" crossorigin src="/assets/settings-1A4z9gU7.js"></script>
+  <script type="module" crossorigin src="/assets/settings-D6_5ta7p.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/preload-helper-D7HrI6pR.js">
   <link rel="modulepreload" crossorigin href="/assets/toast-manager-DdtDDR9Z.js">
-  <link rel="modulepreload" crossorigin href="/assets/i18n-BpwFYk4h.js">
+  <link rel="modulepreload" crossorigin href="/assets/i18n-Dq4jSOyT.js">
   <link rel="stylesheet" crossorigin href="/assets/settings-BWKP5C_B.css">
-  <link rel="stylesheet" crossorigin href="/assets/games-OfFVpGjl.css">
+  <link rel="stylesheet" crossorigin href="/assets/details-CsYcwgf7.css">
 </head>
 
 <body class="settings-page">
@@ -586,6 +586,38 @@
                             <span class="quick-link-label"><span class="sv-text">Lägg till</span><span
                                     class="ar-text">إضافة</span></span>
                         </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- API Integration Section -->
+            <section class="settings-section glass-card" data-section="api">
+                <div class="section-header" onclick="toggleSection('api')">
+                    <div class="section-icon gradient-purple">🔑</div>
+                    <div class="section-title-wrapper">
+                        <h3 class="section-title"><span class="sv-text">Gemini API</span><span class="ar-text">مفتاح
+                                Gemini API</span></h3>
+                    </div>
+                    <svg class="section-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="section-content" id="api-content">
+                    <!-- Gemini API Key -->
+                    <div class="settings-item">
+                        <div class="item-left">
+                            <span class="item-icon">🔐</span>
+                            <div class="item-info">
+                                <span class="item-name"><span class="sv-text">Gemini API-nyckel</span><span
+                                        class="ar-text">مفتاح Gemini API</span></span>
+                                <span class="item-description"><span class="sv-text">Används för AI-funktioner i
+                                        träningen</span><span class="ar-text">يُستخدم للوظائف الذكية في
+                                        التدريب</span></span>
+                            </div>
+                        </div>
+                        <input type="password" id="geminiApiKey" class="settings-input password-input"
+                            placeholder="Skriv din API-nyckel här / اكتب مفتاح API هنا" maxlength="100"
+                            spellcheck="false">
                     </div>
                 </div>
             </section>

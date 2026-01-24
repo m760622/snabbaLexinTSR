@@ -25,7 +25,11 @@ interface UseTrainingWordsResult {
     remainingCount: number;
     totalCount: number;
     masteredCount: number;
+    masteredWords: TrainingWord[];
+    sessionMasteredCount: number;
+    sessionMasteredWords: TrainingWord[];
     markAsMastered: (wordId: string) => Promise<void>;
+    resetSessionMastered: () => void;
     nextWord: () => void;
     prevWord: () => void;
     refresh: () => Promise<void>;
@@ -37,6 +41,9 @@ export function useTrainingWords(): UseTrainingWordsResult {
     const [error, setError] = useState<string | null>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [masteredCount, setMasteredCount] = useState(0);
+    const [masteredWords, setMasteredWords] = useState<TrainingWord[]>([]);
+    const [sessionMasteredCount, setSessionMasteredCount] = useState(0);
+    const [sessionMasteredWords, setSessionMasteredWords] = useState<TrainingWord[]>([]);
 
     // Transform raw word data to TrainingWord interface
     const transformWord = (raw: any): TrainingWord => {
@@ -88,6 +95,10 @@ export function useTrainingWords(): UseTrainingWordsResult {
         try {
             await DictionaryDB.updateTrainingStatus(wordId, false);
 
+            // Find the word to be marked as mastered
+            const wordToMaster = words.find(w => w.id === wordId);
+            if (!wordToMaster) return;
+
             // Optimistic UI update
             setWords(prev => {
                 const newWords = prev.filter(w => w.id !== wordId);
@@ -98,11 +109,15 @@ export function useTrainingWords(): UseTrainingWordsResult {
                 return newWords;
             });
 
+            // Update mastered counts and lists
             setMasteredCount(prev => prev + 1);
+            setMasteredWords(prev => [...prev, wordToMaster]);
+            setSessionMasteredCount(prev => prev + 1);
+            setSessionMasteredWords(prev => [...prev, wordToMaster]);
         } catch (err) {
             console.error('[useTrainingWords] Error marking as mastered:', err);
         }
-    }, [currentIndex]);
+    }, [currentIndex, words]);
 
     // Navigation
     const nextWord = useCallback(() => {
@@ -114,6 +129,12 @@ export function useTrainingWords(): UseTrainingWordsResult {
         if (words.length === 0) return;
         setCurrentIndex(prev => (prev - 1 + words.length) % words.length);
     }, [words.length]);
+
+    // Reset session mastered counters
+    const resetSessionMastered = useCallback(() => {
+        setSessionMasteredCount(0);
+        setSessionMasteredWords([]);
+    }, []);
 
     // Initial fetch
     useEffect(() => {
@@ -129,7 +150,11 @@ export function useTrainingWords(): UseTrainingWordsResult {
         remainingCount: words.length,
         totalCount: words.length + masteredCount,
         masteredCount,
+        masteredWords,
+        sessionMasteredCount,
+        sessionMasteredWords,
         markAsMastered,
+        resetSessionMastered,
         nextWord,
         prevWord,
         refresh: fetchWords

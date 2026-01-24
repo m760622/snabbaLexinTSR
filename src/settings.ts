@@ -7,6 +7,7 @@
 
 import { ToastManager } from './toast-manager';
 import { LanguageManager, t, Language } from './i18n';
+import { StorageSync } from './utils/storage-sync';
 
 // ============================================================
 // TYPES
@@ -31,6 +32,8 @@ interface UserSettings {
     // Smart Training settings
     autoTraining: boolean;
     showContextInCards: boolean;
+    // AI Settings
+    geminiApiKey: string;
 }
 
 interface UserProgress {
@@ -71,7 +74,9 @@ const SettingsManager: {
         ttsVoicePreference: 'natural',
         // Smart Training defaults
         autoTraining: true,
-        showContextInCards: true
+        showContextInCards: true,
+        // AI Settings defaults
+        geminiApiKey: ''
     } as UserSettings,
 
     updateCompletionProgress: () => { },
@@ -220,6 +225,13 @@ const UIController = {
 
         const showContextToggle = document.getElementById('showContextToggle') as HTMLInputElement;
         if (showContextToggle) showContextToggle.checked = settings.showContextInCards;
+
+        // Gemini API Key
+        const geminiApiKeyInput = document.getElementById('geminiApiKey') as HTMLInputElement;
+        if (geminiApiKeyInput) {
+            geminiApiKeyInput.type = 'password';
+            geminiApiKeyInput.value = settings.geminiApiKey || '';
+        }
 
         // Load training words count
         this.updateTrainingWordsCount();
@@ -474,6 +486,17 @@ const UIController = {
             SettingsManager.update('showContextInCards', checked);
             localStorage.setItem('showContextInCards', String(checked));
             showToast(checked ? '📝 Kontext visas / سيتم عرض السياق' : '📝 Kontext dold / السياق مخفي');
+        });
+
+        // Gemini API Key
+        document.getElementById('geminiApiKey')?.addEventListener('input', (e) => {
+            const value = (e.target as HTMLInputElement).value;
+            SettingsManager.update('geminiApiKey', value);
+            // Save immediately to StorageSync for real-time access
+            StorageSync.set('geminiApiKey', value);
+            if (value.trim().length > 0) {
+                showToast('🔑 ' + t('settings.geminiApiSaved'));
+            }
         });
 
         // Change Avatar

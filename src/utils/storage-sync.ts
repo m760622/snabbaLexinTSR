@@ -17,7 +17,8 @@ const WATCHED_KEYS = [
     'fontSize',
     'arabicFont',
     'showArabic',
-    'soundEnabled'
+    'soundEnabled',
+    'geminiApiKey'
 ];
 
 export const StorageSync = {
@@ -102,6 +103,10 @@ export const StorageSync = {
 
     isSoundEnabled(): boolean {
         return localStorage.getItem('soundEnabled') !== 'false';
+    },
+
+    getGeminiApiKey(): string {
+        return localStorage.getItem('geminiApiKey') || '';
     },
 
     /** @private */
