@@ -2849,7 +2849,7 @@ header {
   align-items: center;
   justify-content: center;
   /* Center search bar and filter button */
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.25rem;
 }
 
 .search-wrapper {
@@ -3078,24 +3078,41 @@ header {
   }
 }
 
-/* Filter Chips Container */
+/* Filter Chips Container - Now styled as a contained bar */
 .filter-chips-container {
   display: flex;
   flex-wrap: nowrap;
-  /* Force single line */
   align-items: center;
-  /* Vertically align */
   justify-content: center;
-  /* Center the buttons */
   gap: 0.5rem;
   overflow-x: auto;
-  padding: 0.25rem 0.25rem 1rem 0.25rem;
+
+  /* Container styling */
+  background: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50px;
+  padding: 0.5rem 0.75rem;
+
+  /* Positioning and width */
+  width: fit-content;
+  max-width: calc(100% - 2rem);
+  margin: -0.65rem auto 1.25rem auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+
   scrollbar-width: none;
   -ms-overflow-style: none;
-  margin-top: -0.25rem;
+
   /* Appear animation */
   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   transform-origin: top center;
+}
+
+[data-theme="dark"] .filter-chips-container {
+  background: rgba(18, 18, 18, 0.85);
+  border-color: rgba(56, 189, 248, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .filter-chips-container.closing {
@@ -3245,8 +3262,8 @@ header {
 
 /* Dark Mode Filter Chips - Sky Blue Accent */
 [data-theme="dark"] .select-chip-wrapper {
-  background: rgba(56, 189, 248, 0.1);
-  border-color: rgba(56, 189, 248, 0.3);
+  background: rgba(56, 191, 248, 0.19);
+  border-color: rgba(56, 191, 248, 0.766);
 }
 
 [data-theme="dark"] .select-chip-wrapper:hover {
