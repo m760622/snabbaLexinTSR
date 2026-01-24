@@ -112,7 +112,99 @@ const TrainingView: React.FC = () => {
         localStorage.setItem('ttsUsage', (currentUsage + 1).toString());
     };
 
+    // Touch handlers for swipe
+    const touchStartY = useRef(0);
+    const touchEndY = useRef(0);
+    const isDragging = useRef(false);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX;
+        touchStartY.current = e.touches[0].clientY;
+        isDragging.current = false;
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        touchEndX.current = e.touches[0].clientX;
+        touchEndY.current = e.touches[0].clientY;
+
+        const diffX = touchEndX.current - touchStartX.current;
+        const diffY = touchEndY.current - touchStartY.current;
+
+        // Mark as dragging if moved significantly
+        if (Math.abs(diffX) > 5 || Math.abs(diffY) > 5) {
+            isDragging.current = true;
+        }
+
+        // Determine dominant axis
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+            // Horizontal swipe (Rating)
+            if (Math.abs(diffX) > 10 && cardRef.current) {
+                // Prevent scrolling when swiping horizontally
+                if (e.cancelable) e.preventDefault();
+
+                // Add resistance/rotation
+                const rotation = diffX * 0.05; // 5% rotation
+                const baseRotate = isFlipped ? 180 : 0;
+                cardRef.current.style.transform = `translateX(${diffX}px) rotateY(${baseRotate}deg) rotateZ(${rotation}deg)`;
+            }
+        } else {
+            // Vertical swipe (Audio)
+            if (diffY < -10 && cardRef.current) {
+                const baseRotate = isFlipped ? 180 : 0;
+                // Slight lift effect
+                cardRef.current.style.transform = `translateY(${diffY * 0.3}px) rotateY(${baseRotate}deg)`;
+            }
+        }
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        const diffX = touchEndX.current - touchStartX.current;
+        const diffY = touchEndY.current - touchStartY.current;
+        const threshold = 60; // Lowered from 80
+        const verticalThreshold = 40; // Lowered from 50
+
+        // If we dragged, define it as handled to prevent click
+        if (isDragging.current) {
+            if (e.cancelable) e.preventDefault();
+        }
+
+        if (cardRef.current) {
+            // Reset style
+            cardRef.current.style.transform = '';
+        }
+
+        // Detect Gestures only if dragging occurred
+        if (isDragging.current) {
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                // Horizontal Swipe
+                if (diffX > threshold) {
+                    handleRating(Quality.Good); // Right = Good
+                } else if (diffX < -threshold) {
+                    handleRating(Quality.Again); // Left = Again
+                }
+            } else {
+                // Vertical Swipe
+                if (diffY < -verticalThreshold) {
+                    // Swipe Up = Play Audio
+                    playAudio();
+                    if ('vibrate' in navigator) navigator.vibrate(20);
+                }
+            }
+        }
+
+        // Reset refs
+        touchStartX.current = 0;
+        touchEndX.current = 0;
+        touchStartY.current = 0;
+        touchEndY.current = 0;
+        // Keep isDragging true briefly to block the immediate click, then reset
+        setTimeout(() => {
+            isDragging.current = false;
+        }, 200);
+    };
+
     const handleFlip = () => {
+        if (isDragging.current) return;
         setIsFlipped(!isFlipped);
         playAudio();
     };
@@ -182,36 +274,6 @@ const TrainingView: React.FC = () => {
                 }
             }
         }, 300);
-    };
-
-    // Touch handlers for swipe
-    const handleTouchStart = (e: React.TouchEvent) => {
-        touchStartX.current = e.touches[0].clientX;
-    };
-
-    const handleTouchMove = (e: React.TouchEvent) => {
-        touchEndX.current = e.touches[0].clientX;
-        if (cardRef.current && isFlipped) {
-            const diff = touchEndX.current - touchStartX.current;
-            cardRef.current.style.transform = `translateX(${diff * 0.3}px) rotateY(180deg)`;
-        }
-    };
-
-    const handleTouchEnd = () => {
-        if (!isFlipped) return;
-
-        const diff = touchEndX.current - touchStartX.current;
-        const threshold = 80;
-
-        if (cardRef.current) {
-            cardRef.current.style.transform = '';
-        }
-
-        if (diff > threshold) {
-            handleRating(Quality.Good); // Swipe right = Good
-        } else if (diff < -threshold) {
-            handleRating(Quality.Again); // Swipe left = Again
-        }
     };
 
     // Save session on unmount
@@ -308,19 +370,7 @@ const TrainingView: React.FC = () => {
             </div>
 
             {/* Swipe Hint (Always Outside Card) */}
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                marginTop: '1rem',
-                marginBottom: '1.5rem',
-                width: '100%',
-                whiteSpace: 'nowrap',
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontSize: '0.9rem',
-                padding: '0 1rem'
-            }}>
+            <div className="swipe-hint-container">
                 👆 Tryck för att vända • اضغط للقلب
             </div>
 
