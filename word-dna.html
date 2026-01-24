@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordets DNA | قصة الكلمة - SnabbaLexin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="assets/images/icon.svg">
+    <link rel="apple-touch-icon" href="assets/images/icon.png">
+    <link rel="stylesheet" href="assets/css/style.css?v=i18n">
+</head>
+
+<body>
+    <header
+        style="display: flex; align-items: center; padding: 10px 20px; background: rgba(0,0,0,0.2); backdrop-filter: blur(10px);">
+        <button class="back-btn" onclick="window.history.back()" aria-label="Tillbaka / رجوع" title="Tillbaka / رجوع"
+            style="background: none; border: none; color: white; cursor: pointer; padding: 10px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
+        <h1 style="flex: 1; text-align: center; margin: 0; font-size: 1.2rem; font-family: 'Tajawal', sans-serif;">
+            <span class="sv-text">Ordets DNA</span> / <span class="ar-text">قصة الكلمة</span>
+        </h1>
+        <div style="width: 44px;"></div>
+    </header>
+
+    <main id="word-dna-root" style="min-height: calc(100vh - 60px);">
+        <!-- React component will mount here -->
+        <div style="display: flex; justify-content: center; align-items: center; height: 300px;">
+            <div class="loading-spinner"></div>
+        </div>
+    </main>
+
+    <script type="module" src="/src/word-dna-entry.tsx"></script>
+    <script type="module" src="/src/pwa.ts"></script>
+</body>
+
+</html>

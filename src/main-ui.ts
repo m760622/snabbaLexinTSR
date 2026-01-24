@@ -68,15 +68,17 @@ function initProgressBadge() {
 function initQuickActions() {
     // Quick actions like WOD, Fav, Quiz
     const quickWodBtn = document.getElementById('quickWodBtn');
+    const storyRingTrigger = document.getElementById('storyRingTrigger');
+
+    const triggerWordDNA = () => {
+        window.location.href = 'word-dna.html';
+    };
+
     if (quickWodBtn) {
-        quickWodBtn.addEventListener('click', () => {
-            const wodCard = document.getElementById('wordOfTheDay');
-            if (wodCard) {
-                wodCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                wodCard.classList.add('pulse-animation');
-                setTimeout(() => wodCard.classList.remove('pulse-animation'), 500);
-            }
-        });
+        quickWodBtn.addEventListener('click', triggerWordDNA);
+    }
+    if (storyRingTrigger) {
+        storyRingTrigger.addEventListener('click', triggerWordDNA);
     }
 
     const quickFavBtn = document.getElementById('quickFavBtn');

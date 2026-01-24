@@ -480,17 +480,8 @@ export class App {
 
 
     private initQuickActions() {
-        const quickWodBtn = document.getElementById('quickWodBtn');
-        if (quickWodBtn) {
-            quickWodBtn.addEventListener('click', () => {
-                const wodCard = document.getElementById('wordOfTheDay');
-                if (wodCard) {
-                    wodCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    wodCard.classList.add('pulse-animation');
-                    setTimeout(() => wodCard.classList.remove('pulse-animation'), 500);
-                }
-            });
-        }
+        // Redundant quick action listeners removed. 
+        // Handled by initMainUI and specific feature modules for better separation.
     }
 
     private handleSearch(e: Event) {
