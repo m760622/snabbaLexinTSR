@@ -397,10 +397,27 @@ const TrainingView: React.FC = () => {
 
 // Subcomponent: Empty State
 const MissionAccomplished: React.FC<{ stats: SessionStats }> = ({ stats }) => {
-    const accuracy = stats.wordsReviewed > 0
-        ? Math.round((stats.correctCount / stats.wordsReviewed) * 100)
-        : 0;
-    const timeSpent = Math.round((Date.now() - stats.startTime) / 60000);
+    // Scenario A: User entered training but had NO words due (0 reviews)
+    if (stats.wordsReviewed === 0) {
+        return (
+            <div className="training-state complete">
+                <div className="state-emoji">☕️</div>
+                <h2 className="text-white">Allt är klart!</h2>
+                <p>Du har inga ord att repetera just nu. Kom tillbaka senare!</p>
+                <p className="text-sm opacity-70 mt-2">Du är helt i fas med din plan.</p>
+
+                <div className="complete-actions">
+                    <a href="/" className="training-btn primary">
+                        Tillbaka Hem
+                    </a>
+                </div>
+            </div>
+        );
+    }
+
+    // Scenario B: User actually finished a session
+    const accuracy = Math.round((stats.correctCount / stats.wordsReviewed) * 100);
+    const timeSpent = Math.max(1, Math.round((Date.now() - stats.startTime) / 60000)); // Ensure at least 1m if nonzero
 
     return (
         <div className="training-state complete">
