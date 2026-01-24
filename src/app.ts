@@ -31,6 +31,8 @@ export class App {
     private typeCategoryCache: Map<string, string> = new Map();
     // Performance: Debounced search handler
     private debouncedSearch: (query: string) => void;
+    // Search highlighting
+    private currentQuery: string = '';
     // Performance: Flag to track if type counts need update
     private typeCountsNeedUpdate = true;
 
@@ -507,6 +509,7 @@ export class App {
         console.time('[Perf] performSearch');
         const normalizedQuery = query.toLowerCase().trim();
         const normalizedQueryArabic = normalizeArabic(normalizedQuery);
+        this.currentQuery = normalizedQuery;
 
         if (window.history.replaceState) {
             const newUrl = normalizedQuery
@@ -746,7 +749,7 @@ export class App {
         if (!searchResults) return;
 
         const nextBatch = this.currentResults.slice(this.renderedCount, this.renderedCount + this.BATCH_SIZE);
-        const html = nextBatch.map(row => this.createCard(row)).join('');
+        const html = nextBatch.map(row => this.createCard(row, this.currentQuery)).join('');
 
         searchResults.insertAdjacentHTML('beforeend', html);
         this.renderedCount += nextBatch.length;
@@ -754,13 +757,16 @@ export class App {
         TextSizeManager.autoApply();
     }
 
-    private createCard(row: any[]): string {
+    private createCard(row: any[], searchQuery: string = ''): string {
         const id = row[0];
         const swe = row[2];
         const arb = row[3];
         const type = row[1];
         const forms = row[6] || '';
         const gender = row[13] || '';
+
+        const highlightedSwe = searchQuery ? this.highlightText(swe, searchQuery.toLowerCase()) : swe;
+        const highlightedArb = searchQuery ? this.highlightText(arb, searchQuery.toLowerCase()) : arb;
 
         const grammarBadge = TypeColorSystem.generateBadge(type, swe, forms, gender, arb);
         const dataType = TypeColorSystem.getDataType(type, swe, forms, gender, arb);
@@ -802,13 +808,83 @@ export class App {
                     </div>
                 </div>
                 <div class="card-main-content">
-                    <h2 class="word-swe" dir="ltr" data-auto-size data-max-lines="1">${swe}</h2>
+                    <h2 class="word-swe" dir="ltr" data-auto-size data-max-lines="1">${highlightedSwe}</h2>
                     ${formsHtml}
-                    <p class="word-arb" dir="rtl" data-auto-size data-max-lines="1">${arb}</p>
+                    <p class="word-arb" dir="rtl" data-auto-size data-max-lines="1">${highlightedArb}</p>
                 </div>
                 <!-- <div class="mastery-bar-container"><div class="mastery-fill" style="width: ${mockMastery}%"></div></div> -->
             </div>
         `;
+    }
+
+    private highlightText(text: string, query: string): string {
+        if (!query || !text) return text;
+
+        // Remove Arabic diacritics for matching but preserve them in highlighting
+        const textWithoutDiacritics = text.replace(/[\u064B-\u065F]/g, '');
+        const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedQuery})`, 'gi');
+
+        // Find matches in text without diacritics
+        const matches: Array<{ original: string, withoutDiacritics: string }> = [];
+        let match;
+
+        while ((match = regex.exec(textWithoutDiacritics)) !== null) {
+            const matchedTextWithoutDiacritics = match[1];
+            const matchIndex = match.index;
+
+            // Map position from text without diacritics to original text
+            let originalIndex = 0;
+            let withoutDiacriticsCount = 0;
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                // Skip diacritics when counting position
+                if (!/[\u064B-\u065F]/.test(char)) {
+                    if (withoutDiacriticsCount === matchIndex) {
+                        // Found the start position - extract original text
+                        const originalMatch = this.extractOriginalMatch(text, i, matchedTextWithoutDiacritics);
+                        matches.push({
+                            original: originalMatch,
+                            withoutDiacritics: matchedTextWithoutDiacritics
+                        });
+                        break;
+                    }
+                    withoutDiacriticsCount++;
+                }
+                originalIndex++;
+            }
+        }
+
+        // Replace matches in original text preserving diacritics
+        if (matches.length === 0) return text;
+
+        let result = text;
+        for (const match of matches) {
+            result = result.replace(match.original, `<span class="search-highlight">${match.original}</span>`);
+        }
+
+        return result;
+    }
+
+    private extractOriginalMatch(text: string, startPos: number, matchText: string): string {
+        let result = '';
+        let matchCount = 0;
+        let currentPos = startPos;
+
+        // Extract original text that corresponds to the match (including diacritics)
+        while (matchCount < matchText.length && currentPos < text.length) {
+            const char = text[currentPos];
+            result += char;
+
+            // Only count non-diacritic characters towards the match length
+            if (!/[\u064B-\u065F]/.test(char)) {
+                matchCount++;
+            }
+            currentPos++;
+        }
+
+        return result;
     }
 
     private showDidYouMean(query: string, container: HTMLElement) {
