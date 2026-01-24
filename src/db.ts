@@ -671,6 +671,23 @@ export const DictionaryDB = {
     getTrainingSessions(): any[] {
         const key = 'training_sessions';
         return JSON.parse(localStorage.getItem(key) || '[]');
+    },
+
+    /**
+     * Get total number of words in training
+     */
+    async getTrainingCount(): Promise<number> {
+        if (!this.db) await this.init();
+        if (!this.db) return 0;
+
+        return new Promise((resolve) => {
+            const tx = this.db!.transaction([this.TRAINING_STORE], 'readonly');
+            const store = tx.objectStore(this.TRAINING_STORE);
+            const request = store.count();
+
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => resolve(0);
+        });
     }
 };
 

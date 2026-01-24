@@ -3,7 +3,7 @@
  * Professional Edition - High Performance Caching
  */
 
-const CACHE_NAME = 'snabba-lexin-v4';
+const CACHE_NAME = 'snabba-lexin-v5';
 const STATIC_ASSETS = [
     './',
     './index.html',

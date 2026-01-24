@@ -39,6 +39,8 @@ const TrainingView: React.FC = () => {
         startTime: Date.now()
     });
 
+    const [hasTrainingWords, setHasTrainingWords] = useState(false);
+
     // Touch handling for swipe
     const touchStartX = useRef(0);
     const touchEndX = useRef(0);
@@ -100,6 +102,28 @@ const TrainingView: React.FC = () => {
             setIsLoading(false);
         }
     };
+
+    const handleRestart = () => {
+        setStats({
+            wordsReviewed: 0,
+            correctCount: 0,
+            startTime: Date.now()
+        });
+        setCurrentIndex(0);
+        setIsFlipped(false);
+        setSwipeDirection(null);
+        loadTrainingWords();
+    };
+
+    useEffect(() => {
+        const checkCount = async () => {
+            if (words.length === 0) {
+                const count = await DictionaryDB.getTrainingCount();
+                setHasTrainingWords(count > 0);
+            }
+        };
+        checkCount();
+    }, [words.length]);
 
     const currentWord = words[currentIndex];
 
@@ -299,20 +323,10 @@ const TrainingView: React.FC = () => {
         );
     }
 
-    const handleRestart = () => {
-        setStats({
-            wordsReviewed: 0,
-            correctCount: 0,
-            startTime: Date.now()
-        });
-        setCurrentIndex(0);
-        setIsFlipped(false);
-        setSwipeDirection(null);
-        loadTrainingWords();
-    };
+
 
     if (words.length === 0) {
-        return <MissionAccomplished stats={stats} onRestart={handleRestart} />;
+        return <MissionAccomplished stats={stats} hasMore={hasTrainingWords} onRestart={handleRestart} />;
     }
 
     return (
@@ -408,7 +422,7 @@ const TrainingView: React.FC = () => {
 };
 
 // Subcomponent: Empty State
-const MissionAccomplished: React.FC<{ stats: SessionStats; onRestart: () => void }> = ({ stats, onRestart }) => {
+const MissionAccomplished: React.FC<{ stats: SessionStats; hasMore: boolean; onRestart: () => void }> = ({ stats, hasMore, onRestart }) => {
     // Scenario A: User entered training but had NO words due (0 reviews)
     if (stats.wordsReviewed === 0) {
         return (
@@ -456,9 +470,11 @@ const MissionAccomplished: React.FC<{ stats: SessionStats; onRestart: () => void
                 </div>
 
                 <div className="complete-actions">
-                    <button onClick={onRestart} className="training-btn" style={{ width: 'auto', flex: 'none', height: '50px', padding: '0 1.5rem' }}>
-                        🔄 Träna Igen
-                    </button>
+                    {hasMore && (
+                        <button onClick={onRestart} className="training-btn" style={{ width: 'auto', flex: 'none', height: '50px', padding: '0 1.5rem' }}>
+                            🔄 Träna Igen
+                        </button>
+                    )}
                     <a href="/" className="training-btn primary">
                         Tillbaka Hem
                     </a>
