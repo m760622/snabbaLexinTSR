@@ -1,4 +1,5 @@
 # Netlify configurations
+/* /index.html 200
 /training  /training.html  200
 /profile   /profile.html   200
 /settings  /settings.html  200

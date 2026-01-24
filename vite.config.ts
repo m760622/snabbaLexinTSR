@@ -42,7 +42,8 @@ export default defineConfig({
         'games-hangman': './games/hangman.html',
         settings: './settings.html',
         training: './training.html',
-        ramadan: './ramadan/index.html'
+        ramadan: './ramadan/index.html',
+        'word-dna': './word-dna.html'
       }
     }
   },
