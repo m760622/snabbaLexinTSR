@@ -420,9 +420,6 @@ const MissionAccomplished: React.FC<{ stats: SessionStats; onRestart: () => void
                     <p className="text-sm opacity-70 mt-2">Du är helt i fas med din plan.</p>
 
                     <div className="complete-actions">
-                        <button onClick={onRestart} className="training-btn" style={{ width: 'auto', flex: 'none', height: '50px', padding: '0 1.5rem' }}>
-                            🔄 Uppdatera
-                        </button>
                         <a href="/" className="training-btn primary">
                             Tillbaka Hem
                         </a>
