@@ -27,8 +27,15 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
           "story_ar": "الترجمة العربية"
         }`;
 
-        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        const envKey = import.meta.env.VITE_GEMINI_API_KEY;
+        const storageKey = StorageSync.getGeminiApiKey();
+        const apiKey = envKey || storageKey;
+
+        if (!apiKey) {
+            throw new Error('Missing API Key');
+        }
+
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -41,7 +48,10 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
         });
 
         const data = await response.json();
-        if (!response.ok) throw new Error(data.error?.message || 'API Error');
+        if (!response.ok) {
+            console.error("Gemini API Error Detail:", data);
+            throw new Error(data.error?.message || `API Error ${response.status}`);
+        }
 
         const responseText = data.candidates[0].content.parts[0].text;
 
@@ -52,9 +62,12 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
         }
 
         return JSON.parse(jsonMatch[0]);
-    } catch (error) {
+    } catch (error: any) {
         console.error("AI Story Error:", error);
-        alert("تنبيه: لم نتمكن من جلب القصة، تأكد من إعداد API Key (VITE_GEMINI_API_KEY) في إعدادات البيئة");
+        const msg = error.message === 'Missing API Key'
+            ? "تنبيه: مفتاح الـ API غير موجود. يرجى إعداده في الإعدادات أو كمتغير بيئة (VITE_GEMINI_API_KEY)"
+            : `تنبيه: فشل جلب القصة (${error.message})`;
+        alert(msg);
         return null;
     }
 };
