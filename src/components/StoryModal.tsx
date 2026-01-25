@@ -111,15 +111,21 @@ const TypewriterSentence: React.FC<{
             className={`narrative-row story-sentence-pair ${isPlaying ? 'playing' : ''}`}
             onClick={() => playAudio(sentence.sv, idx, arabicText)}
         >
-            {/* Swedish Container */}
-            <div className="sv-line">
-                <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
-                <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
-            </div>
+            {/* Swedish Container - Independent Rendering */}
+            {sentence.sv && (
+                <div className="sv-line sw-box">
+                    <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
+                    <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
+                </div>
+            )}
 
-            {/* Arabic Container (Divider included in CSS) */}
+            {/* Arabic Container - Independent Rendering & Fixed Lang */}
             {(showAllTranslations || isPlaying) && (
-                <div className="ar-line" dir="rtl">
+                <div
+                    className="ar-line ar-box"
+                    dir="rtl"
+                    data-lang="ar-fixed"
+                >
                     <p className="ar-text">{arabicText || '(الترجمة غير متوفرة)'}</p>
                 </div>
             )}
