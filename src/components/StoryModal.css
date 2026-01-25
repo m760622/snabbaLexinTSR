@@ -170,16 +170,10 @@
 
 .ar-line {
     padding-left: 28px;
-    opacity: 0;
-    transform: translateY(-5px);
-    animation: slideIn 0.3s forwards;
-}
-
-@keyframes slideIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    margin-top: 4px;
+    border-top: 1px dashed rgba(59, 130, 246, 0.1);
+    padding-top: 8px;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .ar-text {
@@ -198,7 +192,7 @@
     border-radius: 4px;
     font-weight: 700;
     border-bottom: 2px solid #3b82f6;
-    cursor: help;
+    cursor: pointer;
     transition: all 0.2s ease;
 }
 
@@ -207,71 +201,83 @@
     transform: scale(1.05);
 }
 
+/* Header Actions */
 .header-actions {
     display: flex;
-    gap: 8px;
+    gap: 12px;
     align-items: center;
 }
 
 .toggle-all-btn {
-    background: none;
+    background: rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(59, 130, 246, 0.2);
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    border-radius: 8px;
+    padding: 4px 8px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
+    color: #475569;
 }
 
 .toggle-all-btn.active {
-    background: rgba(59, 130, 246, 0.1);
-    border-color: #3b82f6;
+    background: #3b82f6;
+    color: white;
+    border-color: #2563eb;
 }
 
 /* Word Tags Styles */
 .word-tags-section {
     margin-bottom: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .word-tags-section h4 {
     margin: 0 0 12px 0;
-    font-size: 1em;
-    color: #4a5568;
+    font-size: 0.9em;
+    color: #64748b;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .word-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
 }
 
 .word-badge {
-    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-    /* Blue Theme Only */
-    color: white;
-    padding: 8px 16px;
-    border-radius: 12px;
-    font-size: 0.9em;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-size: 0.85em;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 4px;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 8px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    transition: all 0.2s ease;
+}
+
+.word-badge:hover {
+    background: #e2e8f0;
+    border-color: rgba(59, 130, 246, 0.3);
 }
 
 .swedish-word {
-    font-weight: 600;
+    font-weight: 700;
+    color: #1e293b;
 }
 
 .arabic-meaning {
-    font-size: 0.8em;
-    opacity: 0.9;
+    font-size: 0.9em;
+    opacity: 0.8;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    padding-right: 8px;
 }
 
 /* Actions Styles */
@@ -279,24 +285,23 @@
     display: flex;
     gap: 12px;
     justify-content: center;
+    margin-top: 8px;
 }
 
 .action-btn {
     flex: 1;
-    background: linear-gradient(135deg, #4a90e2, #357abd);
     border: none;
     border-radius: 12px;
     padding: 12px 16px;
     color: white;
     font-size: 0.95em;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
 }
 
 .action-btn:hover {
@@ -305,26 +310,46 @@
 }
 
 .action-btn:active {
-    transform: translateY(0);
+    transform: scale(0.98);
 }
 
 .audio-btn {
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    background: #64748b;
+    /* Softer Blue-Slate */
+    box-shadow: 0 4px 12px rgba(100, 116, 139, 0.1);
 }
 
 .audio-btn:hover {
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 6px 16px rgba(100, 116, 139, 0.25);
+}
+
+.audio-btn.playing {
+    background: #3b82f6;
+    animation: pulseGlow 2s infinite;
 }
 
 .copy-btn {
-    background: linear-gradient(135deg, #94a3b8, #64748b);
-    /* Muted Slate-Blue for secondary action */
-    box-shadow: 0 4px 12px rgba(100, 116, 139, 0.15);
+    background: #94a3b8;
+    /* Muted Slate */
+    box-shadow: 0 4px 12px rgba(148, 163, 184, 0.1);
 }
 
 .copy-btn:hover {
     box-shadow: 0 6px 16px rgba(100, 116, 139, 0.25);
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
 }
 
 /* Animations */
