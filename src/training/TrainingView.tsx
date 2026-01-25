@@ -50,7 +50,7 @@ const TrainingView: React.FC = () => {
     const [generatedStory, setGeneratedStory] = useState<{
         title_sv: string;
         title_ar: string;
-        sentences: { sv: string; ar: string }[]
+        sentences: { swedish_sentence: string; arabic_translation: string }[]
     } | null>(null);
 
     const [hasTrainingWords, setHasTrainingWords] = useState(false);
