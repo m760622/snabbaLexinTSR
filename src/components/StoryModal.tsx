@@ -104,25 +104,24 @@ const TypewriterSentence: React.FC<{
 
     return (
         <div
-            className={`story-sentence-pair-container narrative-row ${isPlaying ? 'playing' : ''}`}
+            className={`narrative-row ${isPlaying ? 'playing' : ''}`}
             onClick={() => playAudio(sentence.swedish_sentence, idx, arabicText)}
             key={idx}
         >
-            {/* Swedish Section - Always Visible */}
-            {sentence.swedish_sentence && (
-                <div className="swedish-sentence-box sv-line">
-                    <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
-                    <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
-                </div>
-            )}
+            {/* BILINGUAL BLOCK: Structurally inseparable */}
 
-            {/* Arabic Section - Always Visible (Nuclear Visibility) */}
+            {/* Swedish Part */}
+            <div className="sw-box sv-line" dir="ltr">
+                <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
+                <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
+            </div>
+
+            {/* Arabic Part - Always Rendered */}
             <div
-                className="arabic-translation-box ar-line"
+                className="ar-box ar-line"
                 dir="rtl"
                 lang="ar"
                 data-lang="ar-fixed"
-                style={{ display: 'block', visibility: 'visible', opacity: 1 }}
             >
                 <p className="ar-text">{arabicText}</p>
             </div>

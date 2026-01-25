@@ -483,18 +483,57 @@
     }
 }
 
-/* NUCLEAR OPTION: Force text visibility overriding any global language filters */
+/* ENFORCED VISIBILITY: Override global language filters safely */
 .story-modal-container [lang='ar'],
 .story-modal-container [dir='rtl'],
 .story-sentence-pair * {
-    display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
 }
 
-/* Force absolute visibility for all StoryModal content */
-.story-modal-container * {
-    display: initial !important;
+/* Ensure Narrative Rows keep their flex structure */
+.narrative-row {
+    display: flex !important;
+    visibility: visible !important;
+}
+
+/* Specific overrides for text boxes */
+.ar-box,
+.sw-box,
+.ar-line,
+.sv-line {
+    display: block !important;
+    /* Text containers are block-level */
     visibility: visible !important;
     opacity: 1 !important;
+}
+
+.ar-text,
+.sv-text {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: inherit;
+    /* Allow parent color unless specified */
+}
+
+/* Ensure Arabic text specific color override persists */
+.ar-text {
+    color: #475569 !important;
+}
+
+/* Ensure Swedish text specific color override persists */
+.sv-text {
+    color: #1e3a8a !important;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .ar-text {
+        color: #94a3b8 !important;
+    }
+
+    .sv-text {
+        color: #e2e8f0 !important;
+    }
 }
