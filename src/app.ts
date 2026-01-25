@@ -582,24 +582,58 @@ export class App {
                 if (!tags.includes(topicFilter)) continue;
             }
 
-            // Apply Query Matching
+            // Apply Favorites Filter (User Request)
+            if (this.activeFilterMode === 'favorites') {
+                if (!FavoritesManager.has(data[i][0].toString())) continue;
+            }
+
+            // Match Flags
             let isExact = false;
             let isStart = false;
             let isPartial = false;
 
-            if (normalizedQuery) {
-                if (swe === normalizedQuery || arb === normalizedQueryArabic) {
-                    isExact = true;
-                } else if (swe.startsWith(normalizedQuery) || arb.startsWith(normalizedQueryArabic)) {
-                    isStart = true;
-                } else if (swe.includes(normalizedQuery) || arb.includes(normalizedQueryArabic)) {
-                    isPartial = true;
-                } else {
-                    continue; // No match
-                }
-            } else {
-                // No query, but passed filters -> treat as partial (or just list them)
+            // Apply Special Query Matching based on Mode
+            if (this.activeFilterMode === 'start') {
+                if (!swe.startsWith(normalizedQuery) && !arb.startsWith(normalizedQueryArabic)) continue;
+                isStart = true;
+            } else if (this.activeFilterMode === 'end') {
+                if (!swe.endsWith(normalizedQuery) && !arb.endsWith(normalizedQueryArabic)) continue;
                 isPartial = true;
+            } else if (this.activeFilterMode === 'exact') {
+                if (swe !== normalizedQuery && arb !== normalizedQueryArabic) continue;
+                isExact = true;
+            } else if (this.activeFilterMode === 'synonym') {
+                // Check definitions (col 5) or synonyms (col 4 if any)
+                const def = (data[i][5] || '').toLowerCase();
+                if (!def.includes(normalizedQuery)) continue;
+                isPartial = true;
+            } else if (this.activeFilterMode === 'learning') {
+                // Check if in training
+                if (!this.trainingIds.has(data[i][0].toString())) continue;
+                // Proceed to query matching
+            } else if (this.activeFilterMode === 'known') {
+                // Implementation for 'known' / mastered words if available
+                // For now, let's assume it checks a mastered set if we had one.
+                // Or maybe invert training?
+                // Let's rely on standard search if no specific known logic exists yet.
+            }
+
+            // Standard Query Matching (if not handled by special modes above)
+            if (this.activeFilterMode === 'all' || this.activeFilterMode === 'favorites' || this.activeFilterMode === 'learning' || this.activeFilterMode === 'known' || this.activeFilterMode === 'review') {
+                if (normalizedQuery) {
+                    if (swe === normalizedQuery || arb === normalizedQueryArabic) {
+                        isExact = true;
+                    } else if (swe.startsWith(normalizedQuery) || arb.startsWith(normalizedQueryArabic)) {
+                        isStart = true;
+                    } else if (swe.includes(normalizedQuery) || arb.includes(normalizedQueryArabic)) {
+                        isPartial = true;
+                    } else {
+                        continue; // No match
+                    }
+                } else {
+                    // No query, but passed filters -> treat as partial
+                    isPartial = true;
+                }
             }
 
             // 2. BUCKETING

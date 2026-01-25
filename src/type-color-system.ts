@@ -992,6 +992,17 @@ export const TypeColorSystem = {
             'numeral': 'num',
             'phrasal': 'fras',
             'verb': 'verb',
+
+            // Specialized Types Mappings (Internal -> Dropdown Value)
+            'medical': 'medicin',
+            'legal': 'juridik',
+            'tech': 'it',
+            'politics': 'politik',
+            'religion': 'religion',
+            'economy': 'ekonomi',
+            'science': 'natur',
+            'construction': 'bygg',
+            'military': 'militär'
         };
 
         // Always return grammatical type, ignore specialized labels for filtering
