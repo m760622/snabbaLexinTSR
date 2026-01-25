@@ -2,8 +2,8 @@
 import { StorageSync } from '../utils/storage-sync';
 
 export interface StorySentence {
-    sv: string;
-    ar: string;
+    swedish_sentence: string;
+    arabic_translation: string;
 }
 
 export interface StoryResponse {
@@ -24,14 +24,14 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
         const prompt = `Create a short, connected narrative story (3-5 sentences) in Swedish for a language learner using these words: ${words.join(', ')}. 
         The story should be a single coherent piece of fiction, not separate examples.
         
-        CRITICAL: For every single sentence in the story, you MUST provide both the Swedish text ('sv') and its direct Arabic translation ('ar').
+        CRITICAL: For every single sentence in the story, you MUST provide both the Swedish text ('swedish_sentence') and its direct Arabic translation ('arabic_translation').
         
         The story must be returned as a JSON object with the following structure:
         {
           "title_sv": "Swedish Title",
           "title_ar": "Arabic Title",
           "sentences": [
-            { "sv": "Swedish sentence...", "ar": "الترجمة العربية..." },
+            { "swedish_sentence": "Swedish sentence...", "arabic_translation": "الترجمة العربية..." },
             ...
           ]
         }`;
@@ -79,14 +79,14 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
         // Normalize and Sanitize Data
         let sentences: StorySentence[] = Array.isArray(rawStory.sentences)
             ? rawStory.sentences.map((s: any) => ({
-                sv: s.sv || s.swedish || s.sentence || "",
-                ar: s.ar || s.arabic || s.translation || ""
+                swedish_sentence: s.sv || s.swedish || s.sentence || "",
+                arabic_translation: s.ar || s.arabic || s.translation || ""
             }))
             : [];
 
         // FALLBACK: If Arabic is missing in sentences but exists as a global block
         const globalArabic = rawStory.arabic_translation || rawStory.translation || rawStory.ar || "";
-        const needsFallback = sentences.some((s: StorySentence) => !s.ar || s.ar.trim() === "");
+        const needsFallback = sentences.some((s: StorySentence) => !s.arabic_translation || s.arabic_translation.trim() === "");
 
         if (needsFallback && globalArabic && globalArabic.length > 10) {
             // Smart split of global Arabic text
@@ -111,13 +111,13 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
             // Assign to sentences
             sentences = sentences.map((s: StorySentence, i: number) => ({
                 ...s,
-                ar: s.ar || arSentences[i] || "الترجمة غير متوفرة"
+                arabic_translation: s.arabic_translation || arSentences[i] || "الترجمة غير متوفرة"
             }));
         } else {
             // Default fill
             sentences = sentences.map((s: StorySentence) => ({
                 ...s,
-                ar: s.ar || "الترجمة غير متوفرة"
+                arabic_translation: s.arabic_translation || "الترجمة غير متوفرة"
             }));
         }
 

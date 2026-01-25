@@ -60,16 +60,13 @@ const TypewriterSentence: React.FC<{
     showAllTranslations: boolean,
     swedishWords: Word[]
 }> = ({ sentence, idx, isPlaying, playAudio, showAllTranslations, swedishWords }) => {
-    // Only animate once per unique sentence text to avoid flicker
-    // Logic: If 'sentence.sv' changes, it re-runs. 
-    // Stable component = Stable state.
-    const typeWrittenText = useTypewriter(sentence.sv, 20);
+    const typeWrittenText = useTypewriter(sentence.swedish_sentence, 20);
 
-    const arabicText = sentence.ar && sentence.ar.trim().length > 0
-        ? sentence.ar
+    const arabicText = sentence.arabic_translation && sentence.arabic_translation.trim().length > 0
+        ? sentence.arabic_translation
         : "⚠️ لم يتم استلام الترجمة";
 
-    // Helper for highlights (moved inside or passed down)
+    // Helper for highlights
     const renderWithHighlights = (text: string) => {
         const allWords: string[] = [];
         swedishWords.forEach(w => {
@@ -108,27 +105,25 @@ const TypewriterSentence: React.FC<{
 
     return (
         <div
-            className={`narrative-row story-sentence-pair ${isPlaying ? 'playing' : ''}`}
-            onClick={() => playAudio(sentence.sv, idx, arabicText)}
+            className={`story-sentence-pair-container ${isPlaying ? 'playing' : ''}`}
+            onClick={() => playAudio(sentence.swedish_sentence, idx, arabicText)}
+            key={idx}
         >
-            {/* Swedish Container - Independent Rendering */}
-            {sentence.sv && (
-                <div className="sv-line sw-box">
-                    <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
-                    <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
-                </div>
-            )}
+            {/* Swedish Section - Always Visible */}
+            <div className="swedish-sentence-box sv-line">
+                <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
+                <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
+            </div>
 
-            {/* Arabic Container - Independent Rendering & Fixed Lang */}
-            {(showAllTranslations || isPlaying) && (
-                <div
-                    className="ar-line ar-box"
-                    dir="rtl"
-                    data-lang="ar-fixed"
-                >
-                    <p className="ar-text">{arabicText || '(الترجمة غير متوفرة)'}</p>
-                </div>
-            )}
+            {/* Arabic Section - Always Visible (Nuclear Visibility) */}
+            <div
+                className="arabic-translation-box ar-line"
+                dir="rtl"
+                lang="ar"
+                style={{ display: 'block', visibility: 'visible', opacity: 1 }}
+            >
+                <p className="ar-text">{arabicText}</p>
+            </div>
         </div>
     );
 };
@@ -190,14 +185,14 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
     };
 
     const handlePlayFullStory = () => {
-        const fullText = story.sentences.map(s => s.sv).join(' ');
+        const fullText = story.sentences.map(s => s.swedish_sentence).join(' ');
         playAudio(fullText, 'all');
     };
 
     const handleCopyText = async () => {
         try {
-            const svText = story.sentences.map(s => s.sv).join('\n');
-            const arText = story.sentences.map(s => (s as any).ar || (s as any).translation || (s as any).arabic).join('\n');
+            const svText = story.sentences.map(s => s.swedish_sentence).join('\n');
+            const arText = story.sentences.map(s => s.arabic_translation).join('\n');
             await navigator.clipboard.writeText(`${story.title_sv}\n${svText}\n\n${story.title_ar}\n${arText}`);
             if ((window as any).showToast) (window as any).showToast('📋 تم نسخ القصة!');
         } catch (error) {
