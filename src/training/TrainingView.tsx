@@ -47,7 +47,11 @@ const TrainingView: React.FC = () => {
     const [masteredWordsInSession, setMasteredWordsInSession] = useState<Word[]>([]);
     const [isGeneratingStory, setIsGeneratingStory] = useState(false);
     const [showStoryModal, setShowStoryModal] = useState(false);
-    const [generatedStory, setGeneratedStory] = useState<{ text: string; translation: string } | null>(null);
+    const [generatedStory, setGeneratedStory] = useState<{
+        title_sv: string;
+        title_ar: string;
+        sentences: { sv: string; ar: string }[]
+    } | null>(null);
 
     const [hasTrainingWords, setHasTrainingWords] = useState(false);
     const [totalSessionWords, setTotalSessionWords] = useState(0);
@@ -331,10 +335,7 @@ const TrainingView: React.FC = () => {
             // Extract Swedish words from mastered words objects
             const swedishWords = masteredWordsInSession.map(word => word.swe);
             const storyData = await AIService.generateStoryFromWords(swedishWords);
-            setGeneratedStory({
-                text: storyData.story_sv,
-                translation: storyData.story_ar
-            });
+            setGeneratedStory(storyData);
             setShowStoryModal(true);
 
             // Celebrate with confetti

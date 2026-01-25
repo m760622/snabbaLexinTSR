@@ -2,8 +2,12 @@
 import { StorageSync } from '../utils/storage-sync';
 
 export interface StoryResponse {
-    story_sv: string;
-    story_ar: string;
+    title_sv: string;
+    title_ar: string;
+    sentences: {
+        sv: string;
+        ar: string;
+    }[];
 }
 
 /**
@@ -15,16 +19,16 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
     if (words.length < 3) return null;
 
     try {
-        const prompt = `أنت معلم سويدي متخصص في تعليم اللغة للمبتدئين. مهمتك هي إنشاء قصة قصيرة جداً (أقل من 40 كلمة) باستخدام هذه الكلمات: ${words.join(', ')}. 
+        const prompt = `Create a short, engaging story (3-5 sentences) in Swedish for a language learner using these words: ${words.join(', ')}.
         
-        المتطلبات:
-        - استخدم الكلمات المقدمة بشكل طبيعي
-        - المستوى اللغوي: سويدية بسيطة (A1-A2)
-        - القصة إيجابية ومتعلقة بالحياة اليومية في السويد
-        - الإرجاع بتنسيق JSON فقط بدون أي نص إضافي بالتنسيق التالي:
+        The story must be returned as a JSON object with the following structure:
         {
-          "story_sv": "النص السويدي",
-          "story_ar": "الترجمة العربية"
+          "title_sv": "Swedish Title",
+          "title_ar": "Arabic Title",
+          "sentences": [
+            { "sv": "Swedish sentence...", "ar": "الترجمة العربية..." },
+            ...
+          ]
         }`;
 
         const envKey = import.meta.env.VITE_DEEPSEEK_API_KEY;
@@ -86,10 +90,10 @@ export class AIService {
     }
 
     static hasApiKey(): boolean {
-        return !!import.meta.env.VITE_GEMINI_API_KEY || !!StorageSync.getGeminiApiKey();
+        return !!import.meta.env.VITE_DEEPSEEK_API_KEY || !!StorageSync.getDeepSeekApiKey();
     }
 
     static validateApiKey(apiKey: string): boolean {
-        return apiKey.length > 0 && apiKey.startsWith('AI');
+        return apiKey.length > 0 && apiKey.startsWith('sk-');
     }
 }
