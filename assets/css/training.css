@@ -1024,7 +1024,9 @@ body {
     /* Existing backdrop blur etc */
 }
 
+
 /* Force Arabic Visibility in Hybrid Mode */
+
 .lang-both .arabic-text,
 .lang-both .ar-text,
 .force-lang-both .arabic-text,

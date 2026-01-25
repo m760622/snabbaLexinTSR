@@ -149,7 +149,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
             const timer = setTimeout(() => setIsAnimating(false), 300);
             return () => {
                 clearTimeout(timer);
-                document.body.classList.remove('lang-both');
+               document.body.classList.remove('lang-both');
                 document.body.classList.remove('force-lang-both');
             };
         }
