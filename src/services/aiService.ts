@@ -1,13 +1,15 @@
 // AI Service for Gemini API integration
 import { StorageSync } from '../utils/storage-sync';
 
+export interface StorySentence {
+    sv: string;
+    ar: string;
+}
+
 export interface StoryResponse {
     title_sv: string;
     title_ar: string;
-    sentences: {
-        sv: string;
-        ar: string;
-    }[];
+    sentences: StorySentence[];
 }
 
 /**
@@ -75,8 +77,7 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
         const rawStory = JSON.parse(jsonMatch[0]);
 
         // Normalize and Sanitize Data
-        // Normalize and Sanitize Data
-        let sentences = Array.isArray(rawStory.sentences)
+        let sentences: StorySentence[] = Array.isArray(rawStory.sentences)
             ? rawStory.sentences.map((s: any) => ({
                 sv: s.sv || s.swedish || s.sentence || "",
                 ar: s.ar || s.arabic || s.translation || ""
@@ -85,18 +86,18 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
 
         // FALLBACK: If Arabic is missing in sentences but exists as a global block
         const globalArabic = rawStory.arabic_translation || rawStory.translation || rawStory.ar || "";
-        const needsFallback = sentences.some(s => !s.ar || s.ar.trim() === "");
+        const needsFallback = sentences.some((s: StorySentence) => !s.ar || s.ar.trim() === "");
 
         if (needsFallback && globalArabic && globalArabic.length > 10) {
             // Smart split of global Arabic text
             // Split by period, exclamation, or question mark, but keep delimiters
-            const parts = globalArabic.split(/([.!?،؟]+)/).filter(p => p.trim().length > 0);
+            const parts = globalArabic.split(/([.!?،؟]+)/).filter((p: string) => p.trim().length > 0);
 
             // Re-assemble pieces into roughly sentence-sized chunks matching the count
             let arSentences: string[] = [];
             let current = "";
 
-            parts.forEach(p => {
+            parts.forEach((p: string) => {
                 if (p.match(/[.!?،؟]+/)) {
                     current += p;
                     arSentences.push(current.trim());
@@ -108,13 +109,13 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
             if (current.trim()) arSentences.push(current.trim());
 
             // Assign to sentences
-            sentences = sentences.map((s, i) => ({
+            sentences = sentences.map((s: StorySentence, i: number) => ({
                 ...s,
                 ar: s.ar || arSentences[i] || "الترجمة غير متوفرة"
             }));
         } else {
             // Default fill
-            sentences = sentences.map(s => ({
+            sentences = sentences.map((s: StorySentence) => ({
                 ...s,
                 ar: s.ar || "الترجمة غير متوفرة"
             }));
