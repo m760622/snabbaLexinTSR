@@ -117,29 +117,31 @@
 .sentence-pair {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding-left: 12px;
-    border-left: 3px solid #4ade80;
-    background: rgba(74, 222, 128, 0.03);
-    padding: 12px;
-    border-radius: 8px;
+    gap: 8px;
+    padding: 16px;
+    border-right: 4px solid #10b981;
+    /* Changed to Emerald and Right for Arabic-friendly flow */
+    background: rgba(16, 185, 129, 0.05);
+    border-radius: 12px;
+    border-left: none;
 }
 
 .sv-sentence {
-    font-size: 1.15rem;
-    line-height: 1.5;
-    color: #334155;
-    font-weight: 500;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #0f172a;
+    /* High contrast dark */
+    font-weight: 600;
     margin: 0;
 }
 
 .ar-sentence {
-    font-size: 1.05rem;
-    line-height: 1.6;
-    color: #64748b;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #334155;
+    /* High contrast gray */
     font-family: 'Tajawal', sans-serif;
     margin: 0;
-    font-style: italic;
 }
 
 /* Word Tags Styles */
@@ -161,16 +163,18 @@
 }
 
 .word-badge {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+    /* Emerald to Blue - NO PURPLE */
     color: white;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.85em;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 0.9em;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    gap: 4px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .swedish-word {
@@ -298,37 +302,44 @@
     }
 }
 
-/* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
     .glass-card.story-container {
-        background: rgba(30, 30, 30, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #e2e8f0;
+        background: rgba(15, 23, 42, 0.98);
+        /* Solid dark slate */
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #f8fafc;
     }
 
-    .story-title h3 {
-        color: #e2e8f0;
+    .sv-title {
+        color: #f8fafc;
     }
 
-    .swedish-text {
-        color: #e2e8f0;
+    .ar-title {
+        color: #94a3b8;
     }
 
-    .arabic-translation {
-        color: #cbd5e0;
+    .sentence-pair {
+        background: rgba(16, 185, 129, 0.1);
+        border-right-color: #34d399;
+    }
+
+    .sv-sentence {
+        color: #f1f5f9;
+    }
+
+    .ar-sentence {
+        color: #e2e8f0;
+        /* Significant contrast improvement for Arabic */
+        font-weight: 500;
     }
 
     .word-tags-section h4 {
-        color: #cbd5e0;
+        color: #94a3b8;
     }
 
     .close-btn {
-        background: rgba(255, 255, 255, 0.1);
-        color: #e2e8f0;
-    }
-
-    .close-btn:hover {
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.08);
+        color: #f1f5f9;
     }
 }
 

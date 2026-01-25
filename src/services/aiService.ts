@@ -21,6 +21,8 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
     try {
         const prompt = `Create a short, engaging story (3-5 sentences) in Swedish for a language learner using these words: ${words.join(', ')}.
         
+        CRITICAL: For every single sentence in the story, you MUST provide both the Swedish text ('sv') and its direct Arabic translation ('ar').
+        
         The story must be returned as a JSON object with the following structure:
         {
           "title_sv": "Swedish Title",

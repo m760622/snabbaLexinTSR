@@ -110,7 +110,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                     {story.sentences.map((sentence, idx) => (
                         <div key={idx} className="sentence-pair">
                             <p className="sv-sentence">{sentence.sv}</p>
-                            <p className="ar-sentence" dir="rtl">{sentence.ar}</p>
+                            <p className="ar-sentence" dir="rtl">{sentence.ar || '(الترجمة قيد المعالجة...)'}</p>
                         </div>
                     ))}
                 </div>
