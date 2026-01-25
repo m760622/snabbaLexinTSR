@@ -498,3 +498,17 @@
     visibility: visible !important;
     opacity: 1 !important;
 }
+/* Force Arabic Text visibility in Story Modal specifically */
+body.lang-sv .story-modal-container .ar-fixed,
+.ar-fixed {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(59, 130, 246, 0.2);
+    font-size: 1.2rem;
+    color: #475569;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 600;
+}

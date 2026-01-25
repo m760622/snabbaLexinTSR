@@ -1,5 +1,19 @@
-// AI Service for Gemini API integration
+// AI Service for Gemini/DeepSeek API integration
 import { StorageSync } from '../utils/storage-sync';
+
+// Define strict types for the external API response structure
+interface DeepSeekChoice {
+    message: {
+        content: string;
+    };
+}
+
+interface DeepSeekResponse {
+    choices: DeepSeekChoice[];
+    error?: {
+        message: string;
+    };
+}
 
 export interface StorySentence {
     swedish_sentence: string;
@@ -14,7 +28,7 @@ export interface StoryResponse {
 
 /**
  * Generates a short story in Swedish using the provided words.
- * Uses Gemini 1.5 Flash API via environment variables.
+ * Uses Gemini/DeepSeek API via environment variables.
  * @param words Array of words to include in the story
  */
 export const generateStory = async (words: string[]): Promise<StoryResponse | null> => {
@@ -60,8 +74,8 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
             })
         });
 
-        const data = await response.json();
-        if (!response.ok) {
+        const data = await response.json() as DeepSeekResponse; // Type assertion
+        if (!response.ok || data.error) {
             console.error("DeepSeek API Error Detail:", data);
             throw new Error(data.error?.message || `API Error ${response.status}`);
         }

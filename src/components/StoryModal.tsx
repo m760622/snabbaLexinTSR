@@ -105,7 +105,7 @@ const TypewriterSentence: React.FC<{
     return (
         <div
             className={`story-sentence-pair-container ${isPlaying ? 'playing' : ''}`}
-            onClick={() => playAudio(sentence.swedish_sentence, idx, arabicText)}
+            onClick={() => playAudio(sentence.swedish_sentence, idx, sentence.arabic_translation)}
             key={idx}
         >
             {/* Swedish Section - Always Visible */}
@@ -114,15 +114,12 @@ const TypewriterSentence: React.FC<{
                 <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
             </div>
 
-            {/* Arabic Section - Always Visible (Nuclear Visibility) */}
-            <div
-                className="arabic-translation-box ar-line"
-                dir="rtl"
-                lang="ar"
-                style={{ display: 'block', visibility: 'visible', opacity: 1 }}
-            >
-                <p className="ar-text">{arabicText}</p>
-            </div>
+            {/* Arabic Section - Forced Visible with ar-fixed */}
+            {sentence.arabic_translation && (
+                <p className="ar-fixed" dir="rtl" lang="ar">
+                    {sentence.arabic_translation}
+                </p>
+            )}
         </div>
     );
 };
@@ -134,29 +131,14 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
     const [pageType, setPageType] = useState('story'); // Default for this modal is story context
 
     // Check language settings for hybrid mode
-    useEffect(() => {
-        const saved = localStorage.getItem('preferredLanguage');
-        if (saved === 'both' || pageType === 'story') {
-            // Force hybrid mode visually on BODY as requested
-            document.body.classList.add('lang-both');
-            document.body.classList.add('force-lang-both');
-        }
-        return () => {
-            document.body.classList.remove('lang-both');
-            document.body.classList.remove('force-lang-both');
-        };
-    }, []);
-
-    // Play Success Sound on Mount
+    // Play Success Sound on Mount & Handle Classes
     useEffect(() => {
         if (isVisible) {
             setIsAnimating(true);
 
-            // Re-enforce for visibility
-            const saved = localStorage.getItem('preferredLanguage');
-            if (saved === 'both' || pageType === 'story') {
-                // Logic handled by class injection
-            }
+            // Force hybrid mode visually on BODY
+            document.body.classList.add('lang-both');
+            document.body.classList.add('force-lang-both');
 
             // Play Ta-da sound!
             // @ts-ignore - AudioManager is global
@@ -165,7 +147,11 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
             }
 
             const timer = setTimeout(() => setIsAnimating(false), 300);
-            return () => clearTimeout(timer);
+            return () => {
+                clearTimeout(timer);
+                document.body.classList.remove('lang-both');
+                document.body.classList.remove('force-lang-both');
+            };
         }
     }, [isVisible]);
 

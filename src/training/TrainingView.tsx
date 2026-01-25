@@ -309,7 +309,12 @@ const TrainingView: React.FC = () => {
         // Animate card out
         setSwipeDirection(wasCorrect ? 'right' : 'left');
 
-        // ... (rest of handleRating) ...
+        // Wait for animation then advance
+        setTimeout(() => {
+            setSwipeDirection(null);
+            setIsFlipped(false);
+            setCurrentIndex(prev => prev + 1);
+        }, 300);
     };
 
     // Generate AI story from mastered words
@@ -384,7 +389,8 @@ const TrainingView: React.FC = () => {
     }
 
     // Unified Render Logic
-    const isSessionComplete = words.length === 0;
+
+    const isSessionComplete = words.length === 0 || currentIndex >= words.length;
 
     return (
         <>
