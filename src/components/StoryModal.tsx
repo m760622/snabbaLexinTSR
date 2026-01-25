@@ -132,7 +132,6 @@ const TypewriterSentence: React.FC<{
 const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, isVisible }) => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
-    const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
 
     // Play Success Sound on Mount
     useEffect(() => {
