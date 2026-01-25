@@ -1,0 +1,20 @@
+/* Mobile Responsive Adjustments (iPhone 16 Pro / Mobile) */
+@media (max-width: 430px) {
+    .training-card {
+        height: 420px;
+        /* Slightly smaller on mobile */
+    }
+
+    .card-word {
+        font-size: 2rem;
+    }
+
+    .card-arabic {
+        font-size: 1.8rem;
+    }
+
+    .training-btn {
+        height: 60px;
+        /* Compact height but still tappable */
+    }
+}

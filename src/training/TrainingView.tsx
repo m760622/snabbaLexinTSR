@@ -489,6 +489,26 @@ const TrainingView: React.FC = () => {
                         </button>
                     ))}
                 </div>
+
+                {/* Story Generation Loading Overlay */}
+                {isGeneratingStory && (
+                    <div className="story-loading-overlay">
+                        <div className="loading-magic-icon">
+                            <span>📖</span>
+                            <div className="magic-ring"></div>
+                            <div className="magic-pulse"></div>
+                        </div>
+                        <div className="loading-text-container">
+                            <h2 className="loading-title-ar">الذكاء الاصطناعي يكتب قصتك الآن...</h2>
+                            <p className="loading-subtitle-sv">AI skriver din berättelse nu...</p>
+                            <div className="loading-dots">
+                                <div className="dot dot-1"></div>
+                                <div className="dot dot-2"></div>
+                                <div className="dot dot-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {showStoryModal && generatedStory && (
