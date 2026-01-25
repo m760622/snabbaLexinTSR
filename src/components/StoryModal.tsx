@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './StoryModal.css';
 import { TTSManager } from '../tts';
-import { AIService } from '../services/aiService';
+import { StoryResponse, StorySentence } from '../services/aiService';
 
 interface Word {
     id: string;
@@ -9,15 +9,13 @@ interface Word {
     arabic: string;
 }
 
-interface Sentence {
-    sv: string;
-    ar: string;
-}
+// Sentence interface from aiService
+// interface Sentence { sv: string; ar: string; } 
 
 interface Story {
     title_sv: string;
     title_ar: string;
-    sentences: Sentence[];
+    sentences: StorySentence[];
 }
 
 interface StoryModalProps {
@@ -55,7 +53,7 @@ const useTypewriter = (text: string, speed: number = 20, isEnabled: boolean = tr
 
 // Extracted Component to prevent re-renders
 const TypewriterSentence: React.FC<{
-    sentence: Sentence,
+    sentence: StorySentence,
     idx: number,
     isPlaying: boolean,
     playAudio: Function,
