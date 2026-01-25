@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "⏪ Undoing all local changes (Restoring to last commit)..."
+git checkout -- .
+echo "✅ Restore Complete. (Code is back to normal)"

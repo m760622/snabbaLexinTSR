@@ -44,8 +44,8 @@ for file in $files; do
         percent_lost=$(( (diff * 100) / lines_before ))
 
         if [ "$diff" -gt "$THRESHOLD_LINES" ] && [ "$percent_lost" -gt "$THRESHOLD_PERCENT" ]; then
-            echo -e "${RED}⚠️  تنبيه أمني: تم اكتشاف حذف كبير في الأكواد!${NC}"
-            echo -e "${RED}⚠️  SECURITY ALERT: Massive code deletion detected in '$file'${NC}"
+            echo -e "${RED}⚠️  تنبيه أمني: تم اكتشاف حذف كبير! إذا كان هذا الخطأ من الذكاء الاصطناعي، اكتب uf لاستعادة كودك فوراً.${NC}"
+            echo -e "${RED}⚠️  SECURITY ALERT: Massive deletion! Type 'uf' to undo immediately if this was AI error.${NC}"
             echo -e "   - Before: $lines_before lines"
             echo -e "   - After:  $lines_after lines"
             echo -e "   - Lost:   $diff lines ($percent_lost%)"
