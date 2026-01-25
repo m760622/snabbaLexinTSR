@@ -147,15 +147,16 @@ const TypewriterSentence: React.FC<{
                     className="stealth-content"
                     style={{
                         display: 'block',
-                        fontSize: '1.15rem',
-                        color: '#334155', /* Dark Slate for visibility on glass */
+                        fontSize: '1.25rem', /* Slightly larger for readability */
+                        color: '#f8fafc', /* Bright Slate 50 for max contrast on dark */
                         textAlign: 'right',
                         direction: 'rtl',
                         margin: 0,
                         fontWeight: 600,
                         fontFamily: 'Tahoma, Arial, sans-serif', /* System fonts only */
                         visibility: 'visible',
-                        opacity: 1
+                        opacity: 1,
+                        textShadow: '0 1px 2px rgba(0,0,0,0.3)' /* Subtle shadow for lift */
                     }}
                 >
                     {stealthArabic} {/* Rendering Modified Text */}
