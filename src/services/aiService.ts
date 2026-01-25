@@ -72,7 +72,21 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
             throw new Error('Could not find JSON in DeepSeek response');
         }
 
-        return JSON.parse(jsonMatch[0]);
+        const rawStory = JSON.parse(jsonMatch[0]);
+
+        // Normalize and Sanitize Data
+        const normalizedStory: StoryResponse = {
+            title_sv: rawStory.title_sv || "Berättelse",
+            title_ar: rawStory.title_ar || "قصة",
+            sentences: Array.isArray(rawStory.sentences)
+                ? rawStory.sentences.map((s: any) => ({
+                    sv: s.sv || s.swedish || s.sentence || "",
+                    ar: s.ar || s.arabic || s.translation || "الترجمة غير متوفرة"
+                }))
+                : []
+        };
+
+        return normalizedStory;
     } catch (error: any) {
         console.error("AI Story Error:", error);
         const msg = error.message === 'Missing DeepSeek API Key'

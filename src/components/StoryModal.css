@@ -115,7 +115,7 @@
     background: rgba(255, 255, 255, 0.5);
     border-radius: 16px;
     border: 1px solid rgba(59, 130, 246, 0.1);
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .narrative-row {
@@ -173,13 +173,22 @@
     margin-top: 4px;
     border-top: 1px dashed rgba(59, 130, 246, 0.1);
     padding-top: 8px;
-    animation: fadeIn 0.3s ease-out;
+    /* animation: fadeIn 0.3s ease-out; */
+    min-height: 1.5em;
+    /* Ensure it takes space */
+
+    /* Chrome Fixes */
+    display: block !important;
+    width: 100%;
+    transform: translateZ(0);
+    opacity: 1 !important;
 }
 
 .ar-text {
     font-size: 1rem;
     line-height: 1.6;
     color: #475569;
+    /* Reverted to original slate */
     font-family: 'Tajawal', sans-serif;
     margin: 0;
     font-weight: 600;

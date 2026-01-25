@@ -30,7 +30,8 @@ interface StoryModalProps {
 const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, isVisible }) => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
-    const [showAllTranslations, setShowAllTranslations] = useState(false);
+    // FORCE TRUE BY DEFAULT to avoid confusion
+    const [showAllTranslations, setShowAllTranslations] = useState(true);
 
     useEffect(() => {
         if (isVisible) {
@@ -128,7 +129,11 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
 
     if (!isVisible) return null;
 
-    console.log('[StoryModal] Rendering story:', story);
+    console.log('[StoryModal] Rendering story with translations status:', {
+        showAllTranslations,
+        sentencesCount: story.sentences?.length,
+        hasArabic: story.sentences?.some(s => s.ar)
+    });
 
     return (
         <div className={`story-modal-overlay ${isAnimating ? 'animating' : ''}`}>
@@ -154,8 +159,12 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                 </header>
 
                 <div className="story-narrative-block">
-                    {story.sentences && story.sentences.map((sentence: any, idx) => {
-                        const arabicText = sentence.ar || sentence.translation || sentence.arabic;
+                    {story.sentences && story.sentences.map((sentence, idx) => {
+                        // Data is now sanitized in aiService, so 'ar' should exist.
+                        // Fallback to empty string if something goes wrong.
+                        const arabicText = sentence.ar && sentence.ar.trim().length > 0
+                            ? sentence.ar
+                            : "⚠️ لم يتم استلام الترجمة";
                         return (
                             <div
                                 key={idx}
