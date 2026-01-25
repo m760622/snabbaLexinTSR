@@ -57,7 +57,6 @@ const TypewriterSentence: React.FC<{
     idx: number,
     isPlaying: boolean,
     playAudio: Function,
-    playAudio: Function,
     swedishWords: Word[]
 }> = ({ sentence, idx, isPlaying, playAudio, swedishWords }) => {
     const typeWrittenText = useTypewriter(sentence.swedish_sentence, 20);
