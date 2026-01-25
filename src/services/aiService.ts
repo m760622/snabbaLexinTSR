@@ -79,8 +79,8 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
         // Normalize and Sanitize Data
         let sentences: StorySentence[] = Array.isArray(rawStory.sentences)
             ? rawStory.sentences.map((s: any) => ({
-                swedish_sentence: s.sv || s.swedish || s.sentence || "",
-                arabic_translation: s.ar || s.arabic || s.translation || ""
+                swedish_sentence: s.swedish_sentence || s.sv || s.swedish || s.sentence || "",
+                arabic_translation: s.arabic_translation || s.ar || s.arabic || s.translation || ""
             }))
             : [];
 
