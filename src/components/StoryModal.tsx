@@ -132,12 +132,23 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
 
                 {/* Story Content - Unified Narrative Flow */}
                 <div className="story-content narrative-flow">
-                    {story.sentences.map((sentence, idx) => (
-                        <div key={idx} className="sentence-block">
-                            <p className="sv-sentence">{renderWithHighlights(sentence.sv)}</p>
-                            <p className="ar-sentence" dir="rtl">{sentence.ar || '(الترجمة قيد المعالجة...)'}</p>
-                        </div>
-                    ))}
+                    {story.sentences && story.sentences.length > 0 ? (
+                        story.sentences.map((sentence: any, idx) => {
+                            // Robust key checking for translation (ar, translation, or arabic)
+                            const arabicText = sentence.ar || sentence.translation || sentence.arabic;
+
+                            return (
+                                <div key={idx} className="sentence-block">
+                                    <p className="sv-sentence">{renderWithHighlights(sentence.sv)}</p>
+                                    <p className="ar-sentence" dir="rtl">
+                                        {arabicText || <span className="translation-missing">(الترجمة غير متوفرة لهذه الجملة)</span>}
+                                    </p>
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <p className="error-text">عذراً، لم يتم العثور على محتوى للقصة.</p>
+                    )}
                 </div>
 
                 {/* Word Tags */}
