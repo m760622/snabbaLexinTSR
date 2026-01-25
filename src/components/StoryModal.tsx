@@ -109,10 +109,12 @@ const TypewriterSentence: React.FC<{
             key={idx}
         >
             {/* Swedish Section - Always Visible */}
-            <div className="swedish-sentence-box sv-line">
-                <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
-                <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
-            </div>
+            {sentence.swedish_sentence && (
+                <div className="swedish-sentence-box sv-line">
+                    <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
+                    <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
+                </div>
+            )}
 
             {/* Arabic Section - Always Visible (Nuclear Visibility) */}
             <div
