@@ -792,21 +792,36 @@ body {
    Story Generation Loading Overlay
    ======================================== */
 
+/* ========================================
+   Story Generation Loading Overlay (Updated)
+   ======================================== */
+
 .story-loading-overlay {
     position: fixed;
     inset: 0;
     z-index: 9999;
-    /* Max z-index for full immersion */
     background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%) !important;
-    /* Removed transparency to make it fully opaque/full-screen */
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
+    /* Ensure opacity to cover underlying content */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 2rem;
     animation: fadeIn 0.5s ease-out;
+}
+
+/* Glass Card Content Wrapper */
+.loading-card-content {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    min-width: 320px;
+    background: rgba(30, 41, 59, 0.4) !important;
+    /* Specific overlay tint */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
 .loading-magic-icon {
@@ -852,18 +867,21 @@ body {
     font-weight: 800;
     font-family: "Tajawal", sans-serif;
     margin: 0;
-    background: linear-gradient(135deg, #4ade80, #3b82f6);
+    /* Gold Gradient for Luxury/Premium Feel */
+    background: linear-gradient(135deg, #fff 0%, #fbbf24 50%, #f59e0b 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 2px 10px rgba(251, 191, 36, 0.2);
 }
 
 .loading-subtitle-sv {
-    font-size: 1rem;
-    color: #94a3b8;
+    font-size: 1.1rem;
+    color: #f8fafc;
+    /* White/Off-white */
     font-style: italic;
     margin: 0;
     letter-spacing: 0.5px;
+    opacity: 0.9;
 }
 
 .loading-dots {
@@ -1005,6 +1023,7 @@ body {
 .story-loading-overlay {
     /* Existing backdrop blur etc */
 }
+
 /* Force Arabic Visibility in Hybrid Mode */
 .lang-both .arabic-text,
 .lang-both .ar-text,

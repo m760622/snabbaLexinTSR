@@ -395,170 +395,177 @@ const TrainingView: React.FC = () => {
     return (
         <>
             {isGeneratingStory && (
-                <div className="story-generation-overlay">
-                    <div className="loading-magic-icon">
-                        {/* Progress Ring */}
-                        <svg className="progress-ring" width="120" height="120">
-                            <circle
-                                className="progress-ring__circle-bg"
-                                stroke="rgba(255, 255, 255, 0.1)"
-                                strokeWidth="8"
-                                fill="transparent"
-                                r="52"
-                                cx="60"
-                                cy="60"
-                            />
-                            <circle
-                                className="progress-ring__circle"
-                                stroke="#4ade80"
-                                strokeWidth="8"
-                                fill="transparent"
-                                r="52"
-                                cx="60"
-                                cy="60"
-                                style={{
-                                    strokeDasharray: '326.72', // 2 * PI * 52
-                                    strokeDashoffset: (326.72 - (generationProgress / 100) * 326.72).toString()
-                                }}
-                            />
-                        </svg>
+                <div className="story-loading-overlay lang-both">
+                    <div className="glass-card loading-card-content">
+                        <div className="loading-magic-icon">
+                            {/* Progress Ring */}
+                            <svg className="progress-ring" width="120" height="120">
+                                <circle
+                                    className="progress-ring__circle-bg"
+                                    stroke="rgba(255, 255, 255, 0.1)"
+                                    strokeWidth="8"
+                                    fill="transparent"
+                                    r="52"
+                                    cx="60"
+                                    cy="60"
+                                />
+                                <circle
+                                    className="progress-ring__circle"
+                                    stroke="#4ade80"
+                                    strokeWidth="8"
+                                    fill="transparent"
+                                    r="52"
+                                    cx="60"
+                                    cy="60"
+                                    style={{
+                                        strokeDasharray: '326.72', // 2 * PI * 52
+                                        strokeDashoffset: (326.72 - (generationProgress / 100) * 326.72).toString()
+                                    }}
+                                />
+                            </svg>
 
-                        {/* Centered Icon/Text */}
-                        <div className="progress-text-center">
-                            <span className="progress-percent">{generationProgress}%</span>
+                            {/* Centered Icon/Text */}
+                            <div className="progress-text-center">
+                                <span className="progress-percent">{generationProgress}%</span>
+                            </div>
+
+                            {/* Magic Elements */}
+                            <div className="magic-pulse"></div>
                         </div>
 
-                        {/* Magic Elements */}
-                        <div className="magic-pulse"></div>
-                    </div>
-
-                    <div className="loading-text-container">
-                        <h2 className="loading-title-ar">الذكاء الاصطناعي يكتب قصتك الآن...</h2>
-                        <p className="loading-subtitle-sv">AI skriver din berättelse nu...</p>
-                        <div className="loading-dots">
-                            <div className="dot dot-1"></div>
-                            <div className="dot dot-2"></div>
-                            <div className="dot dot-3"></div>
+                        <div className="loading-text-container">
+                            <h2 className="loading-title-ar">الذكاء الاصطناعي يكتب قصتك الآن...</h2>
+                            <p className="loading-subtitle-sv">AI skriver din berättelse nu...</p>
+                            <div className="loading-dots">
+                                <div className="dot dot-1"></div>
+                                <div className="dot dot-2"></div>
+                                <div className="dot dot-3"></div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             )}
 
-            {!isSessionComplete ? (
-                // ... (Existing Training UI Block) ...
-                <div className={`training-container lang-both transition-opacity duration-700 ${showGlass ? 'opacity-100' : 'opacity-0'}`}>
-                    {/* Unified Premium Header */}
-                    <header className="training-header">
-                        {/* ... */}
-                        <button
-                            className="training-back-btn"
-                            onClick={() => window.location.href = '/'}
-                            aria-label="Tillbaka / رجوع"
+            {
+                !isSessionComplete ? (
+                    // ... (Existing Training UI Block) ...
+                    <div className={`training-container lang-both transition-opacity duration-700 ${showGlass ? 'opacity-100' : 'opacity-0'}`}>
+                        {/* Unified Premium Header */}
+                        <header className="training-header">
+                            {/* ... */}
+                            <button
+                                className="training-back-btn"
+                                onClick={() => window.location.href = '/'}
+                                aria-label="Tillbaka / رجوع"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                                    <polyline points="12 19 5 12 12 5"></polyline>
+                                </svg>
+                            </button>
+
+                            <div className="training-progress-container">
+                                <div className="progress-stats">
+                                    <span>{masteredWordsInSession.length} / {totalSessionWords}</span>
+                                    <span dir="rtl">المتبقي: {totalSessionWords - masteredWordsInSession.length}</span>
+                                </div>
+                                <div className="progress-track">
+                                    <div
+                                        className="progress-fill"
+                                        style={{ width: `${Math.min(100, (masteredWordsInSession.length / totalSessionWords) * 100)}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div className="training-counter mastered-counter">
+                                <span>📊</span>
+                                <span className="counter-label mastered-val">
+                                    {stats.wordsReviewed > 0
+                                        ? `${Math.round((stats.correctCount / stats.wordsReviewed) * 100)}%`
+                                        : '0%'}
+                                </span>
+                            </div>
+                        </header>
+
+                        {/* Flashcard Component */}
+                        <div
+                            className={`training-card ${isFlipped ? 'flipped' : ''} ${swipeDirection ? `swipe-${swipeDirection}` : ''}`}
+                            onClick={handleFlip}
+                            onTouchStart={handleTouchStart}
+                            onTouchMove={handleTouchMove}
+                            onTouchEnd={handleTouchEnd}
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="19" y1="12" x2="5" y2="12"></line>
-                                <polyline points="12 19 5 12 12 5"></polyline>
-                            </svg>
-                        </button>
-
-                        <div className="training-progress-container">
-                            <div className="progress-stats">
-                                <span>{masteredWordsInSession.length} / {totalSessionWords}</span>
-                                <span dir="rtl">المتبقي: {totalSessionWords - masteredWordsInSession.length}</span>
-                            </div>
-                            <div className="progress-track">
-                                <div
-                                    className="progress-fill"
-                                    style={{ width: `${Math.min(100, (masteredWordsInSession.length / totalSessionWords) * 100)}%` }}
-                                ></div>
-                            </div>
-                        </div>
-
-                        <div className="training-counter mastered-counter">
-                            <span>📊</span>
-                            <span className="counter-label mastered-val">
-                                {stats.wordsReviewed > 0
-                                    ? `${Math.round((stats.correctCount / stats.wordsReviewed) * 100)}%`
-                                    : '0%'}
-                            </span>
-                        </div>
-                    </header>
-
-                    {/* Flashcard Component */}
-                    <div
-                        className={`training-card ${isFlipped ? 'flipped' : ''} ${swipeDirection ? `swipe-${swipeDirection}` : ''}`}
-                        onClick={handleFlip}
-                        onTouchStart={handleTouchStart}
-                        onTouchMove={handleTouchMove}
-                        onTouchEnd={handleTouchEnd}
-                    >
-                        <div className="card-inner" ref={cardRef}>
-                            {/* Front Face: Swedish */}
-                            <div className="card-face card-front">
-                                {currentWord.type && (
-                                    <div className="card-type">{currentWord.type}</div>
-                                )}
-                                <h2 className="card-word">{currentWord.swe}</h2>
-                            </div>
-
-                            {/* Back Face: Arabic & Details */}
-                            <div className="card-face card-back">
-                                <h2 className="card-arabic" dir="rtl">{currentWord.arb}</h2>
-                                <div className="divider"></div>
-                                <div className="card-section">
-                                    {currentWord.sweDef && (
-                                        <div className="card-definition">{currentWord.sweDef}</div>
+                            <div className="card-inner" ref={cardRef}>
+                                {/* Front Face: Swedish */}
+                                <div className="card-face card-front">
+                                    {currentWord.type && (
+                                        <div className="card-type">{currentWord.type}</div>
                                     )}
-                                    {currentWord.sweEx && (
-                                        <div className="card-example-container">
-                                            <p className="card-example-swe">"{currentWord.sweEx}"</p>
-                                            {currentWord.arbEx && <p className="card-example" dir="rtl">{currentWord.arbEx}</p>}
-                                        </div>
-                                    )}
+                                    <h2 className="card-word">{currentWord.swe}</h2>
+                                </div>
+
+                                {/* Back Face: Arabic & Details */}
+                                <div className="card-face card-back">
+                                    <h2 className="card-arabic" dir="rtl">{currentWord.arb}</h2>
+                                    <div className="divider"></div>
+                                    <div className="card-section">
+                                        {currentWord.sweDef && (
+                                            <div className="card-definition">{currentWord.sweDef}</div>
+                                        )}
+                                        {currentWord.sweEx && (
+                                            <div className="card-example-container">
+                                                <p className="card-example-swe">"{currentWord.sweEx}"</p>
+                                                {currentWord.arbEx && <p className="card-example" dir="rtl">{currentWord.arbEx}</p>}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Swipe Hint */}
-                    <div className="swipe-hint-container">
-                        👆 Tryck för att vända • اضغط للقلب
-                    </div>
+                        {/* Swipe Hint */}
+                        <div className="swipe-hint-container">
+                            👆 Tryck för att vända • اضغط للقلب
+                        </div>
 
-                    {/* SM-2 Rating Buttons */}
-                    <div className="training-controls sm2-controls">
-                        {QUALITY_BUTTONS.map((btn) => (
-                            <button
-                                key={btn.quality}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleRating(btn.quality);
-                                }}
-                                className={`training-btn sm2-btn quality-${btn.quality}`}
-                                style={{ '--btn-color': btn.color } as React.CSSProperties}
-                            >
-                                <span className="btn-icon">{btn.icon}</span>
-                                <span className="btn-label">{btn.label.split(' / ')[0]}</span>
-                            </button>
-                        ))}
+                        {/* SM-2 Rating Buttons */}
+                        <div className="training-controls sm2-controls">
+                            {QUALITY_BUTTONS.map((btn) => (
+                                <button
+                                    key={btn.quality}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleRating(btn.quality);
+                                    }}
+                                    className={`training-btn sm2-btn quality-${btn.quality}`}
+                                    style={{ '--btn-color': btn.color } as React.CSSProperties}
+                                >
+                                    <span className="btn-icon">{btn.icon}</span>
+                                    <span className="btn-label">{btn.label.split(' / ')[0]}</span>
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            ) : (
-                (isGeneratingStory || showStoryModal) ? null : <MissionAccomplished stats={stats} hasMore={hasTrainingWords} onRestart={handleRestart} />
-            )}
+                ) : (
+                    (isGeneratingStory || showStoryModal) ? null : <MissionAccomplished stats={stats} hasMore={hasTrainingWords} onRestart={handleRestart} />
+                )
+            }
 
-            {showStoryModal && generatedStory && (
-                <StoryModal
-                    story={generatedStory}
-                    swedishWords={masteredWordsInSession.map(w => ({
-                        id: w.id,
-                        swedish: w.swe,
-                        arabic: w.arb
-                    }))}
-                    isVisible={showStoryModal}
-                    onClose={handleStoryClose}
-                />
-            )}
+            {
+                showStoryModal && generatedStory && (
+                    <StoryModal
+                        story={generatedStory}
+                        swedishWords={masteredWordsInSession.map(w => ({
+                            id: w.id,
+                            swedish: w.swe,
+                            arabic: w.arb
+                        }))}
+                        isVisible={showStoryModal}
+                        onClose={handleStoryClose}
+                    />
+                )
+            }
         </>
     );
 };

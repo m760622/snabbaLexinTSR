@@ -62,6 +62,7 @@ export class App {
         this.setupKeyboardShortcuts();
         this.updateDailyChallenge(); // Initial update
         this.updateDailyProgressBar(); // Update daily progress bar
+        this.updateTrainingBadge(); // Initial badge update
 
         // Initial search from URL parameter 's'
         const params = new URLSearchParams(window.location.search);
@@ -774,6 +775,29 @@ export class App {
         }
     }
 
+    public async updateTrainingBadge() {
+        try {
+            const { DictionaryDB } = await import('./db');
+            const count = await DictionaryDB.getTrainingCount();
+            const badge = document.getElementById('trainingBadge');
+
+            if (badge) {
+                if (count > 0) {
+                    badge.textContent = count > 99 ? '99+' : count.toString();
+                    badge.classList.remove('hidden');
+                    // Add pop animation reset
+                    badge.style.animation = 'none';
+                    badge.offsetHeight; /* trigger reflow */
+                    badge.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        } catch (e) {
+            console.error('[App] Failed to update training badge:', e);
+        }
+    }
+
 
 
     private renderNextBatch() {
@@ -1152,4 +1176,58 @@ export class App {
 // Instantiate app if in browser
 if (typeof window !== 'undefined') {
     (window as any).app = new App();
+
+    // Global training toggler (exposed for inline HTML calls)
+    (window as any).toggleTraining = async function (id: string, btn: HTMLElement, event: Event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        try {
+            const { DictionaryDB } = await import('./db');
+            const { showToast } = await import('./utils');
+            const { SoundManager } = await import('./utils/SoundManager');
+
+            const isCurrentlyTraining = await DictionaryDB.isWordMarkedForTraining(id);
+            const newState = !isCurrentlyTraining;
+
+            await DictionaryDB.updateTrainingStatus(id, newState);
+
+            // Update App State
+            if ((window as any).app) {
+                if (newState) {
+                    (window as any).app.trainingIds.add(id);
+                } else {
+                    (window as any).app.trainingIds.delete(id);
+                }
+                (window as any).app.updateTrainingBadge();
+            }
+
+            // Update Button UI
+            if (btn) {
+                btn.classList.toggle('active', newState);
+                btn.textContent = newState ? '🧠' : '💪';
+                btn.title = newState ? 'Ta bort från träning' : 'Lägg till i träning';
+
+                // Animate
+                btn.animate([
+                    { transform: 'scale(1)' },
+                    { transform: 'scale(1.2)' },
+                    { transform: 'scale(1)' }
+                ], { duration: 300 });
+            }
+
+            // Feedback
+            if (newState) {
+                showToast('Tillagd i träning! / تمت الإضافة للتدريب 💪');
+                SoundManager.getInstance().play('correct');
+            } else {
+                showToast('Borttagen från träning / تمت الإزالة 🗑️');
+            }
+
+        } catch (e) {
+            console.error('Toggle training error:', e);
+        }
+    };
 }
