@@ -104,7 +104,7 @@ const TypewriterSentence: React.FC<{
 
     return (
         <div
-            className={`story-sentence-pair-container ${isPlaying ? 'playing' : ''}`}
+            className={`story-sentence-pair-container narrative-row ${isPlaying ? 'playing' : ''}`}
             onClick={() => playAudio(sentence.swedish_sentence, idx, arabicText)}
             key={idx}
         >
@@ -121,6 +121,7 @@ const TypewriterSentence: React.FC<{
                 className="arabic-translation-box ar-line"
                 dir="rtl"
                 lang="ar"
+                data-lang="ar-fixed"
                 style={{ display: 'block', visibility: 'visible', opacity: 1 }}
             >
                 <p className="ar-text">{arabicText}</p>
