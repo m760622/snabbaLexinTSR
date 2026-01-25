@@ -102,65 +102,26 @@ const TypewriterSentence: React.FC<{
         );
     };
 
-    // STEALTH MODE: Replace common Arabic letters with visually identical Unicode variants
-    // to bypass regex filters targeting standard Arabic ranges (0600-06FF).
-    const toStealthText = (text: string) => {
-        if (!text) return "";
-        return text
-            .replace(/ي/g, 'ی') // Persian Ye
-            .replace(/ك/g, 'ک') // Persian Keheh
-            .replace(/ه/g, 'ھ') // Urdu He
-            .replace(/ى/g, 'ی') // Persian Ye (imperfect but works)
-            .replace(/ة/g, 'ه') // He instead of Teh Marbuta (visual approx)
-            .replace(/و/g, 'ﻭ'); // Separate Waw
-    };
-
-    const stealthArabic = toStealthText(arabicText);
-
     return (
         <div
-            className={`narrative-row ${isPlaying ? 'playing' : ''}`}
+            className={`story-sentence-pair-container ${isPlaying ? 'playing' : ''}`}
             onClick={() => playAudio(sentence.swedish_sentence, idx, arabicText)}
             key={idx}
         >
-            {/* BILINGUAL BLOCK: Structurally inseparable */}
-
-            {/* Swedish Part */}
-            <div className="sw-box sv-line" dir="ltr">
+            {/* Swedish Section - Always Visible */}
+            <div className="swedish-sentence-box sv-line">
                 <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
                 <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
             </div>
 
-            {/* Arabic Part - STEALTH MODE ACTIVATED */}
+            {/* Arabic Section - Always Visible (Nuclear Visibility) */}
             <div
-                className="stealth-partition"
-                style={{
-                    display: 'block',
-                    marginTop: '16px',
-                    paddingTop: '12px',
-                    borderTop: '1px solid rgba(0,0,0,0.1)',
-                    width: '100%',
-                    minHeight: '20px'
-                }}
+                className="arabic-translation-box ar-line"
+                dir="rtl"
+                lang="ar"
+                style={{ display: 'block', visibility: 'visible', opacity: 1 }}
             >
-                <div
-                    className="stealth-content"
-                    style={{
-                        display: 'block',
-                        fontSize: '1.25rem', /* Slightly larger for readability */
-                        color: '#f8fafc', /* Bright Slate 50 for max contrast on dark */
-                        textAlign: 'right',
-                        direction: 'rtl',
-                        margin: 0,
-                        fontWeight: 600,
-                        fontFamily: 'Tahoma, Arial, sans-serif', /* System fonts only */
-                        visibility: 'visible',
-                        opacity: 1,
-                        textShadow: '0 1px 2px rgba(0,0,0,0.3)' /* Subtle shadow for lift */
-                    }}
-                >
-                    {stealthArabic} {/* Rendering Modified Text */}
-                </div>
+                <p className="ar-text">{arabicText}</p>
             </div>
         </div>
     );
@@ -169,6 +130,7 @@ const TypewriterSentence: React.FC<{
 const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, isVisible }) => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
+    const [showAllTranslations, setShowAllTranslations] = useState(true);
 
     // Play Success Sound on Mount
     useEffect(() => {
@@ -251,6 +213,13 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                         </div>
                     </div>
                     <div className="header-actions">
+                        <button
+                            className={`toggle-all-btn ${showAllTranslations ? 'active' : ''}`}
+                            onClick={() => setShowAllTranslations(!showAllTranslations)}
+                            title={showAllTranslations ? 'إخفاء الترجمة' : 'عرض الترجمة'}
+                        >
+                            {showAllTranslations ? '👁️ إخفاء' : '👁️‍🗨️ عرض'}
+                        </button>
                         <button className="close-btn" onClick={onClose}>✕</button>
                     </div>
                 </header>
