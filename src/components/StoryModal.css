@@ -482,3 +482,19 @@
         flex-direction: column;
     }
 }
+
+/* NUCLEAR OPTION: Force text visibility overriding any global language filters */
+.story-modal-container [lang='ar'],
+.story-modal-container [dir='rtl'],
+.story-sentence-pair * {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Force absolute visibility for all StoryModal content */
+.story-modal-container * {
+    display: initial !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
