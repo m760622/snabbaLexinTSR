@@ -75,15 +75,55 @@ export const generateStory = async (words: string[]): Promise<StoryResponse | nu
         const rawStory = JSON.parse(jsonMatch[0]);
 
         // Normalize and Sanitize Data
+        // Normalize and Sanitize Data
+        let sentences = Array.isArray(rawStory.sentences)
+            ? rawStory.sentences.map((s: any) => ({
+                sv: s.sv || s.swedish || s.sentence || "",
+                ar: s.ar || s.arabic || s.translation || ""
+            }))
+            : [];
+
+        // FALLBACK: If Arabic is missing in sentences but exists as a global block
+        const globalArabic = rawStory.arabic_translation || rawStory.translation || rawStory.ar || "";
+        const needsFallback = sentences.some(s => !s.ar || s.ar.trim() === "");
+
+        if (needsFallback && globalArabic && globalArabic.length > 10) {
+            // Smart split of global Arabic text
+            // Split by period, exclamation, or question mark, but keep delimiters
+            const parts = globalArabic.split(/([.!?،؟]+)/).filter(p => p.trim().length > 0);
+
+            // Re-assemble pieces into roughly sentence-sized chunks matching the count
+            let arSentences: string[] = [];
+            let current = "";
+
+            parts.forEach(p => {
+                if (p.match(/[.!?،؟]+/)) {
+                    current += p;
+                    arSentences.push(current.trim());
+                    current = "";
+                } else {
+                    current += p;
+                }
+            });
+            if (current.trim()) arSentences.push(current.trim());
+
+            // Assign to sentences
+            sentences = sentences.map((s, i) => ({
+                ...s,
+                ar: s.ar || arSentences[i] || "الترجمة غير متوفرة"
+            }));
+        } else {
+            // Default fill
+            sentences = sentences.map(s => ({
+                ...s,
+                ar: s.ar || "الترجمة غير متوفرة"
+            }));
+        }
+
         const normalizedStory: StoryResponse = {
             title_sv: rawStory.title_sv || "Berättelse",
             title_ar: rawStory.title_ar || "قصة",
-            sentences: Array.isArray(rawStory.sentences)
-                ? rawStory.sentences.map((s: any) => ({
-                    sv: s.sv || s.swedish || s.sentence || "",
-                    ar: s.ar || s.arabic || s.translation || "الترجمة غير متوفرة"
-                }))
-                : []
+            sentences: sentences
         };
 
         return normalizedStory;
