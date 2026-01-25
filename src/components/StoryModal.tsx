@@ -132,7 +132,7 @@ const TypewriterSentence: React.FC<{
 const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, isVisible }) => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
-    const [showAllTranslations, setShowAllTranslations] = useState(true);
+    const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
 
     // Play Success Sound on Mount
     useEffect(() => {
@@ -215,13 +215,6 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                         </div>
                     </div>
                     <div className="header-actions">
-                        <button
-                            className={`toggle-all-btn ${showAllTranslations ? 'active' : ''}`}
-                            onClick={() => setShowAllTranslations(!showAllTranslations)}
-                            title={showAllTranslations ? 'إخفاء الترجمة' : 'عرض الترجمة'}
-                        >
-                            {showAllTranslations ? '👁️ إخفاء' : '👁️‍🗨️ عرض'}
-                        </button>
                         <button className="close-btn" onClick={onClose}>✕</button>
                     </div>
                 </header>
