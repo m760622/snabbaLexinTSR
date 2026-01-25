@@ -88,7 +88,32 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
         }
     };
 
+    // Helper function to highlight used words in text
+    const renderWithHighlights = (text: string) => {
+        if (!swedishWords || swedishWords.length === 0) return text;
+
+        // Sort words by length descending to avoid partial matches (e.g., matching 'word' in 'words')
+        const sortedWords = [...swedishWords].sort((a, b) => b.swedish.length - a.swedish.length);
+
+        // Escape words for regex and join with OR
+        const pattern = sortedWords.map(w => w.swedish.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|');
+        if (!pattern) return text;
+
+        const regex = new RegExp(`(${pattern})`, 'gi');
+        const parts = text.split(regex);
+
+        return parts.map((part, i) => {
+            const isMatch = sortedWords.some(w => w.swedish.toLowerCase() === part.toLowerCase());
+            if (isMatch) {
+                return <span key={i} className="story-highlight">{part}</span>;
+            }
+            return part;
+        });
+    };
+
     if (!isVisible) return null;
+
+    console.log('[StoryModal] Rendering story:', story);
 
     return (
         <div className={`story-modal-overlay ${isAnimating ? 'animating' : ''}`}>
@@ -102,14 +127,14 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                             <h4 className="ar-title">{story.title_ar}</h4>
                         </div>
                     </div>
-                    <button className="close-btn" onClick={onClose}>✕</button>
+                    <button className="close-btn" onClick={onClose} title="إغلاق">✕</button>
                 </header>
 
-                {/* Story Content - Bilingual Rows */}
-                <div className="story-content bilingual-flow">
+                {/* Story Content - Unified Narrative Flow */}
+                <div className="story-content narrative-flow">
                     {story.sentences.map((sentence, idx) => (
-                        <div key={idx} className="sentence-pair">
-                            <p className="sv-sentence">{sentence.sv}</p>
+                        <div key={idx} className="sentence-block">
+                            <p className="sv-sentence">{renderWithHighlights(sentence.sv)}</p>
                             <p className="ar-sentence" dir="rtl">{sentence.ar || '(الترجمة قيد المعالجة...)'}</p>
                         </div>
                     ))}
@@ -117,7 +142,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
 
                 {/* Word Tags */}
                 <div className="word-tags-section">
-                    <h4>الكلمات المشمولة:</h4>
+                    <h4>الكلمات المشمولة في القصة:</h4>
                     <div className="word-tags">
                         {swedishWords.map((word) => (
                             <span key={word.id} className="word-badge">
