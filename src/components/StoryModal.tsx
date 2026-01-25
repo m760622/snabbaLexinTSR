@@ -155,7 +155,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
         setCurrentlyPlaying(null);
     };
 
-    const playAudio = (text: string, id: number | 'all', translation?: string) => {
+    const playAudio = (text: string, id: number | 'all') => {
         if (currentlyPlaying !== null) {
             stopAudio();
             if (currentlyPlaying === id) return;
@@ -172,10 +172,8 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
 
             utterance.onstart = () => {
                 setCurrentlyPlaying(id);
-                // Show translation in toast if it's a sentence
-                if (translation && (window as any).showToast) {
-                    (window as any).showToast(translation);
-                }
+                // Toast removed: Translation is now visible in the UI
+
             };
             utterance.onend = () => setCurrentlyPlaying(null);
             utterance.onerror = () => setCurrentlyPlaying(null);
