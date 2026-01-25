@@ -29,7 +29,8 @@ interface StoryModalProps {
 
 const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, isVisible }) => {
     const [isAnimating, setIsAnimating] = useState(false);
-    const [currentlyPlaying, setCurrentlyPlaying] = useState(false);
+    const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
+    const [showAllTranslations, setShowAllTranslations] = useState(false);
 
     useEffect(() => {
         if (isVisible) {
@@ -39,73 +40,74 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
         }
     }, [isVisible]);
 
-    const handlePlayAudio = async () => {
-        if (currentlyPlaying) {
-            speechSynthesis.cancel();
-            setCurrentlyPlaying(false);
-            return;
+    const stopAudio = () => {
+        speechSynthesis.cancel();
+        setCurrentlyPlaying(null);
+    };
+
+    const playAudio = (text: string, id: number | 'all') => {
+        if (currentlyPlaying !== null) {
+            stopAudio();
+            if (currentlyPlaying === id) return;
         }
 
         try {
-            const fullText = story.sentences.map(s => s.sv).join(' ');
-            const utterance = new SpeechSynthesisUtterance(fullText);
-
-            // البحث عن أفضل صوت سويدي متاح
+            const utterance = new SpeechSynthesisUtterance(text);
             const voices = speechSynthesis.getVoices();
-            const swedishVoice = voices.find(v => v.lang.startsWith('sv')) ||
-                voices.find(v => v.lang === 'sv-SE');
+            const swedishVoice = voices.find(v => v.lang.startsWith('sv')) || voices.find(v => v.lang === 'sv-SE');
 
-            if (swedishVoice) {
-                utterance.voice = swedishVoice;
-            }
-
+            if (swedishVoice) utterance.voice = swedishVoice;
             utterance.lang = 'sv-SE';
-            utterance.rate = 0.8; // أبطأ قليلاً للوضوح
-            utterance.pitch = 1.0;
+            utterance.rate = 0.8;
 
-            utterance.onstart = () => setCurrentlyPlaying(true);
-            utterance.onend = () => setCurrentlyPlaying(false);
-            utterance.onerror = () => setCurrentlyPlaying(false);
+            utterance.onstart = () => setCurrentlyPlaying(id);
+            utterance.onend = () => setCurrentlyPlaying(null);
+            utterance.onerror = () => setCurrentlyPlaying(null);
 
             speechSynthesis.speak(utterance);
         } catch (error) {
             console.error('Error playing audio:', error);
-            setCurrentlyPlaying(false);
+            setCurrentlyPlaying(null);
         }
+    };
+
+    const handlePlayFullStory = () => {
+        const fullText = story.sentences.map(s => s.sv).join(' ');
+        playAudio(fullText, 'all');
     };
 
     const handleCopyText = async () => {
         try {
             const svText = story.sentences.map(s => s.sv).join('\n');
-            const arText = story.sentences.map(s => s.ar).join('\n');
+            const arText = story.sentences.map(s => (s as any).ar || (s as any).translation || (s as any).arabic).join('\n');
             await navigator.clipboard.writeText(`${story.title_sv}\n${svText}\n\n${story.title_ar}\n${arText}`);
-
-            if ((window as any).showToast) {
-                (window as any).showToast('📋 تم نسخ القصة بنجاح!');
-            }
+            if ((window as any).showToast) (window as any).showToast('📋 تم نسخ القصة!');
         } catch (error) {
             console.error('Error copying text:', error);
         }
     };
 
-    // Helper function to highlight used words in text
     const renderWithHighlights = (text: string) => {
-        if (!swedishWords || swedishWords.length === 0) return text;
-
-        // Sort words by length descending to avoid partial matches (e.g., matching 'word' in 'words')
         const sortedWords = [...swedishWords].sort((a, b) => b.swedish.length - a.swedish.length);
-
-        // Escape words for regex and join with OR
         const pattern = sortedWords.map(w => w.swedish.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|');
         if (!pattern) return text;
 
         const regex = new RegExp(`(${pattern})`, 'gi');
-        const parts = text.split(regex);
-
-        return parts.map((part, i) => {
+        return text.split(regex).map((part, i) => {
             const isMatch = sortedWords.some(w => w.swedish.toLowerCase() === part.toLowerCase());
             if (isMatch) {
-                return <span key={i} className="story-highlight">{part}</span>;
+                return (
+                    <span
+                        key={i}
+                        className="story-highlight"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            playAudio(part, -1);
+                        }}
+                    >
+                        {part}
+                    </span>
+                );
             }
             return part;
         });
@@ -118,37 +120,47 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
     return (
         <div className={`story-modal-overlay ${isAnimating ? 'animating' : ''}`}>
             <div className={`glass-card story-container ${isAnimating ? 'scale-up' : ''}`}>
-                {/* Header */}
                 <header className="story-header">
                     <div className="story-title">
-                        <span className="emoji">📝</span>
+                        <span className="emoji">📖</span>
                         <div className="title-group">
                             <h3 className="sv-title">{story.title_sv}</h3>
                             <h4 className="ar-title">{story.title_ar}</h4>
                         </div>
                     </div>
-                    <button className="close-btn" onClick={onClose} title="إغلاق">✕</button>
+                    <div className="header-actions">
+                        <button
+                            className={`toggle-all-btn ${showAllTranslations ? 'active' : ''}`}
+                            onClick={() => setShowAllTranslations(!showAllTranslations)}
+                            title={showAllTranslations ? 'إخفاء الترجمة' : 'عرض الترجمة'}
+                        >
+                            {showAllTranslations ? '👁️' : '👁️‍🗨️'}
+                        </button>
+                        <button className="close-btn" onClick={onClose}>✕</button>
+                    </div>
                 </header>
 
-                {/* Story Content - Unified Narrative Flow */}
-                <div className="story-content narrative-flow">
-                    {story.sentences && story.sentences.length > 0 ? (
-                        story.sentences.map((sentence: any, idx) => {
-                            // Robust key checking for translation (ar, translation, or arabic)
-                            const arabicText = sentence.ar || sentence.translation || sentence.arabic;
-
-                            return (
-                                <div key={idx} className="sentence-block">
-                                    <p className="sv-sentence">{renderWithHighlights(sentence.sv)}</p>
-                                    <p className="ar-sentence" dir="rtl">
-                                        {arabicText || <span className="translation-missing">(الترجمة غير متوفرة لهذه الجملة)</span>}
-                                    </p>
+                <div className="story-narrative-block">
+                    {story.sentences && story.sentences.map((sentence: any, idx) => {
+                        const arabicText = sentence.ar || sentence.translation || sentence.arabic;
+                        return (
+                            <div
+                                key={idx}
+                                className={`narrative-row ${currentlyPlaying === idx ? 'playing' : ''}`}
+                                onClick={() => playAudio(sentence.sv, idx)}
+                            >
+                                <div className="sv-line">
+                                    <span className="play-icon">{currentlyPlaying === idx ? '🔊' : '▶️'}</span>
+                                    <p className="sv-text">{renderWithHighlights(sentence.sv)}</p>
                                 </div>
-                            );
-                        })
-                    ) : (
-                        <p className="error-text">عذراً، لم يتم العثور على محتوى للقصة.</p>
-                    )}
+                                {(showAllTranslations || currentlyPlaying === idx) && (
+                                    <div className="ar-line" dir="rtl">
+                                        <p className="ar-text">{arabicText || '(الترجمة غير متوفرة)'}</p>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
 
                 {/* Word Tags */}
@@ -167,11 +179,11 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                 {/* Actions */}
                 <div className="modal-actions">
                     <button
-                        className={`action-btn audio-btn ${currentlyPlaying ? 'playing' : ''}`}
-                        onClick={handlePlayAudio}
+                        className={`action-btn audio-btn ${currentlyPlaying === 'all' ? 'playing' : ''}`}
+                        onClick={handlePlayFullStory}
                     >
-                        <span className="emoji">{currentlyPlaying ? '⏹️' : '🔊'}</span>
-                        {currentlyPlaying ? 'إيقاف' : 'استمع للقصة'}
+                        <span className="emoji">{currentlyPlaying === 'all' ? '⏹️' : '🔊'}</span>
+                        {currentlyPlaying === 'all' ? 'إيقاف' : 'استمع للقصة كاملة'}
                     </button>
 
                     <button className="action-btn copy-btn" onClick={handleCopyText}>

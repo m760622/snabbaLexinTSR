@@ -107,51 +107,129 @@
 }
 
 /* Story Content Styles - Unified Narrative Flow */
-.story-content.narrative-flow {
+.story-narrative-block {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
-    /* Slighly tighter flow */
+    gap: 0;
     margin-bottom: 24px;
-    background: rgba(59, 130, 246, 0.03);
-    /* Muted Blue tint instead of green */
-    padding: 1.25rem;
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
     border: 1px solid rgba(59, 130, 246, 0.1);
+    overflow: hidden;
 }
 
-.sentence-block {
+.narrative-row {
+    padding: 16px 20px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.05);
     display: flex;
     flex-direction: column;
     gap: 8px;
+    position: relative;
 }
 
-.sv-sentence {
-    font-size: 1.25rem;
+.narrative-row:last-child {
+    border-bottom: none;
+}
+
+.narrative-row:hover {
+    background: rgba(59, 130, 246, 0.04);
+}
+
+.narrative-row.playing {
+    background: rgba(59, 130, 246, 0.08);
+    border-left: 4px solid #3b82f6;
+}
+
+.sv-line {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.play-icon {
+    font-size: 0.9rem;
+    margin-top: 4px;
+    opacity: 0.4;
+    transition: opacity 0.2s ease;
+}
+
+.narrative-row:hover .play-icon {
+    opacity: 0.8;
+}
+
+.sv-text {
+    font-size: 1.15rem;
     line-height: 1.6;
     color: #1e293b;
     font-weight: 500;
     margin: 0;
+    flex: 1;
 }
 
-.ar-sentence {
-    font-size: 1.15rem;
+.ar-line {
+    padding-left: 28px;
+    opacity: 0;
+    transform: translateY(-5px);
+    animation: slideIn 0.3s forwards;
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ar-text {
+    font-size: 1rem;
     line-height: 1.6;
-    color: #3b82f6;
-    /* Soft Muted Blue for light mode */
+    color: #475569;
     font-family: 'Tajawal', sans-serif;
     margin: 0;
     font-weight: 600;
 }
 
 .story-highlight {
-    background: rgba(96, 165, 250, 0.12);
-    /* Soft Blue Highlight */
     color: #2563eb;
-    padding: 2px 6px;
+    background: rgba(96, 165, 250, 0.1);
+    padding: 1px 4px;
     border-radius: 4px;
     font-weight: 700;
-    border-bottom: 2px solid #60a5fa;
+    border-bottom: 2px solid #3b82f6;
+    cursor: help;
+    transition: all 0.2s ease;
+}
+
+.story-highlight:hover {
+    background: rgba(96, 165, 250, 0.2);
+    transform: scale(1.05);
+}
+
+.header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.toggle-all-btn {
+    background: none;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1.1rem;
+}
+
+.toggle-all-btn.active {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
 }
 
 /* Word Tags Styles */
@@ -291,11 +369,11 @@
         font-size: 1rem;
     }
 
-    .sv-sentence {
+    .sv-text {
         font-size: 1rem;
     }
 
-    .ar-sentence {
+    .ar-text {
         font-size: 0.95rem;
     }
 
@@ -329,29 +407,37 @@
         color: #94a3b8;
     }
 
-    .sentence-block {
-        background: rgba(59, 130, 246, 0.05);
-        /* Softer Dark Blue box */
-        padding: 14px;
-        border-radius: 10px;
-        border: 1px solid rgba(59, 130, 246, 0.1);
+    .story-narrative-block {
+        background: rgba(15, 23, 42, 0.3);
+        border-color: rgba(59, 130, 246, 0.2);
     }
 
-    .sv-sentence {
+    .narrative-row {
+        border-bottom-color: rgba(59, 130, 246, 0.1);
+    }
+
+    .narrative-row:hover {
+        background: rgba(59, 130, 246, 0.08);
+    }
+
+    .narrative-row.playing {
+        background: rgba(59, 130, 246, 0.15);
+    }
+
+    .sv-text {
         color: #f1f5f9;
         font-weight: 600;
     }
 
-    .ar-sentence {
-        color: #60a5fa;
-        /* CALM BLUE FOR ARABIC (Muted but visible) */
-        font-weight: 700;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    .ar-text {
+        color: #93c5fd;
+        /* Soft Azure for Arabic consistency */
+        font-weight: 600;
     }
 
     .story-highlight {
         background: rgba(59, 130, 246, 0.2);
-        color: #93c5fd;
+        color: #bfdbfe;
         border-bottom-color: #3b82f6;
     }
 
@@ -362,6 +448,15 @@
     .close-btn {
         background: rgba(255, 255, 255, 0.08);
         color: #f1f5f9;
+    }
+
+    .toggle-all-btn {
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #f1f5f9;
+    }
+
+    .toggle-all-btn.active {
+        background: rgba(59, 130, 246, 0.2);
     }
 
     .translation-missing {
