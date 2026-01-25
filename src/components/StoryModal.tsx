@@ -131,11 +131,32 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
     const [isAnimating, setIsAnimating] = useState(false);
     const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
     const [showAllTranslations, setShowAllTranslations] = useState(true);
+    const [pageType, setPageType] = useState('story'); // Default for this modal is story context
+
+    // Check language settings for hybrid mode
+    useEffect(() => {
+        const saved = localStorage.getItem('preferredLanguage');
+        if (saved === 'both' || pageType === 'story') {
+            // Force hybrid mode visually on BODY as requested
+            document.body.classList.add('lang-both');
+            document.body.classList.add('force-lang-both');
+        }
+        return () => {
+            document.body.classList.remove('lang-both');
+            document.body.classList.remove('force-lang-both');
+        };
+    }, []);
 
     // Play Success Sound on Mount
     useEffect(() => {
         if (isVisible) {
             setIsAnimating(true);
+
+            // Re-enforce for visibility
+            const saved = localStorage.getItem('preferredLanguage');
+            if (saved === 'both' || pageType === 'story') {
+                // Logic handled by class injection
+            }
 
             // Play Ta-da sound!
             // @ts-ignore - AudioManager is global
@@ -202,7 +223,8 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
     if (!isVisible) return null;
 
     return (
-        <div className={`story-modal-overlay ${isAnimating ? 'animating' : ''}`}>
+        <div className={`story-modal-overlay ${isAnimating ? 'animating' : ''} lang-both`}>
+            {/* Added lang-both explicitly to modal overlay */}
             <div className={`glass-card story-container ${isAnimating ? 'scale-up' : ''}`}>
                 <header className="story-header">
                     <div className="story-title">

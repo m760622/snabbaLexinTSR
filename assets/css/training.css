@@ -1005,3 +1005,12 @@ body {
 .story-loading-overlay {
     /* Existing backdrop blur etc */
 }
+/* Force Arabic Visibility in Hybrid Mode */
+.lang-both .arabic-text,
+.lang-both .ar-text,
+.force-lang-both .arabic-text,
+.force-lang-both .ar-text {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}

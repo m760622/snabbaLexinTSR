@@ -440,7 +440,7 @@ const TrainingView: React.FC = () => {
 
             {!isSessionComplete ? (
                 // ... (Existing Training UI Block) ...
-                <div className={`training-container transition-opacity duration-700 ${showGlass ? 'opacity-100' : 'opacity-0'}`}>
+                <div className={`training-container lang-both transition-opacity duration-700 ${showGlass ? 'opacity-100' : 'opacity-0'}`}>
                     {/* Unified Premium Header */}
                     <header className="training-header">
                         {/* ... */}
