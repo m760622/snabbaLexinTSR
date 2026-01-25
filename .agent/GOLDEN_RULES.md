@@ -70,6 +70,8 @@ body.lang-sv .subtitle-ar {
 | `.quiz-option` | ✅ مستثنى |
 | `.cognate-card *` | ✅ مستثنى |
 | `.flashcard-wrapper *` | ✅ مستثنى (تمت إضافته 2026-01-21) |
+| `.story-modal-container *` | ✅ مستثنى (تمت إضافته 2026-01-25) |
+| `.story-sentence-pair *` | ✅ مستثنى (حل مشكلة الترجمة العربية) |
 
 ### كيف تختبر؟
 

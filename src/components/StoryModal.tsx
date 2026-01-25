@@ -108,7 +108,7 @@ const TypewriterSentence: React.FC<{
 
     return (
         <div
-            className={`narrative-row ${isPlaying ? 'playing' : ''}`}
+            className={`narrative-row story-sentence-pair ${isPlaying ? 'playing' : ''}`}
             onClick={() => playAudio(sentence.sv, idx, arabicText)}
         >
             {/* Swedish Container */}
