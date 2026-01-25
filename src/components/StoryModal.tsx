@@ -137,9 +137,6 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
             setIsAnimating(true);
 
             // Force hybrid mode visually on BODY
-            document.body.classList.add('lang-both');
-            document.body.classList.add('force-lang-both');
-
             // Play Ta-da sound!
             // @ts-ignore - AudioManager is global
             if (typeof window !== 'undefined' && (window as any).AudioManager) {
@@ -149,8 +146,6 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
             const timer = setTimeout(() => setIsAnimating(false), 300);
             return () => {
                 clearTimeout(timer);
-               document.body.classList.remove('lang-both');
-                document.body.classList.remove('force-lang-both');
             };
         }
     }, [isVisible]);
