@@ -116,14 +116,31 @@ const TypewriterSentence: React.FC<{
                 <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
             </div>
 
-            {/* Arabic Part - Always Rendered */}
+            {/* Secondary Segment (Arabic) - Stealth Mode */}
             <div
-                className="ar-box ar-line"
-                dir="rtl"
-                lang="ar"
-                data-lang="ar-fixed"
+                className="secondary-segment segment-divider"
+                style={{
+                    display: 'block',
+                    marginTop: '16px',
+                    paddingTop: '12px',
+                    borderTop: '2px solid rgba(59, 130, 246, 0.2)',
+                    width: '100%'
+                }}
             >
-                <p className="ar-text">{arabicText}</p>
+                <p
+                    className="ar-text"
+                    dir="rtl"
+                    lang="ar"
+                    style={{
+                        display: 'block',
+                        fontSize: '1.1rem',
+                        color: '#475569',
+                        textAlign: 'right',
+                        margin: 0
+                    }}
+                >
+                    {arabicText}
+                </p>
             </div>
         </div>
     );
