@@ -45,7 +45,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
         setCurrentlyPlaying(null);
     };
 
-    const playAudio = (text: string, id: number | 'all') => {
+    const playAudio = (text: string, id: number | 'all', translation?: string) => {
         if (currentlyPlaying !== null) {
             stopAudio();
             if (currentlyPlaying === id) return;
@@ -60,7 +60,13 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
             utterance.lang = 'sv-SE';
             utterance.rate = 0.8;
 
-            utterance.onstart = () => setCurrentlyPlaying(id);
+            utterance.onstart = () => {
+                setCurrentlyPlaying(id);
+                // Show translation in toast if it's a sentence
+                if (translation && (window as any).showToast) {
+                    (window as any).showToast(translation);
+                }
+            };
             utterance.onend = () => setCurrentlyPlaying(null);
             utterance.onerror = () => setCurrentlyPlaying(null);
 
@@ -88,13 +94,20 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
     };
 
     const renderWithHighlights = (text: string) => {
-        const sortedWords = [...swedishWords].sort((a, b) => b.swedish.length - a.swedish.length);
-        const pattern = sortedWords.map(w => w.swedish.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|');
+        // Flatten and split words by comma to handle cases like "Elakartad, malign, tumör"
+        const allWords: string[] = [];
+        swedishWords.forEach(w => {
+            const parts = w.swedish.split(',').map(p => p.trim());
+            allWords.push(...parts);
+        });
+
+        const sortedWords = allWords.filter(w => w.length > 0).sort((a, b) => b.length - a.length);
+        const pattern = sortedWords.map(w => w.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|');
         if (!pattern) return text;
 
-        const regex = new RegExp(`(${pattern})`, 'gi');
+        const regex = new RegExp(`\\b(${pattern})\\b`, 'gi'); // Use word boundaries
         return text.split(regex).map((part, i) => {
-            const isMatch = sortedWords.some(w => w.swedish.toLowerCase() === part.toLowerCase());
+            const isMatch = sortedWords.some(w => w.toLowerCase() === part.toLowerCase());
             if (isMatch) {
                 return (
                     <span
@@ -102,7 +115,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                         className="story-highlight"
                         onClick={(e) => {
                             e.stopPropagation();
-                            playAudio(part, -1);
+                            playAudio(part, -99); // Special ID for single words
                         }}
                     >
                         {part}
@@ -134,7 +147,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                             onClick={() => setShowAllTranslations(!showAllTranslations)}
                             title={showAllTranslations ? 'إخفاء الترجمة' : 'عرض الترجمة'}
                         >
-                            {showAllTranslations ? '👁️' : '👁️‍🗨️'}
+                            {showAllTranslations ? '👁️ إخفاء' : '👁️‍🗨️ عرض'}
                         </button>
                         <button className="close-btn" onClick={onClose}>✕</button>
                     </div>
@@ -147,7 +160,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                             <div
                                 key={idx}
                                 className={`narrative-row ${currentlyPlaying === idx ? 'playing' : ''}`}
-                                onClick={() => playAudio(sentence.sv, idx)}
+                                onClick={() => playAudio(sentence.sv, idx, arabicText)}
                             >
                                 <div className="sv-line">
                                     <span className="play-icon">{currentlyPlaying === idx ? '🔊' : '▶️'}</span>
@@ -168,7 +181,12 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                     <h4>الكلمات المشمولة في القصة:</h4>
                     <div className="word-tags">
                         {swedishWords.map((word) => (
-                            <span key={word.id} className="word-badge">
+                            <span
+                                key={word.id}
+                                className="word-badge"
+                                onClick={() => playAudio(word.swedish.includes(',') ? word.swedish.split(',')[0] : word.swedish, -88)}
+                                title="اسمع الكلمة"
+                            >
                                 <span className="swedish-word">{word.swedish}</span>
                                 <span className="arabic-meaning">{word.arabic}</span>
                             </span>
