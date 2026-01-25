@@ -151,74 +151,55 @@
     margin-bottom: 32px;
 }
 
+/* Unified Narrative Flow - Enhanced Layout */
+
 .narrative-row {
-    padding: 16px 20px;
+    padding: 20px 24px;
     transition: all 0.3s ease;
     cursor: pointer;
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.3);
-    /* Subtle background for each row */
-    border: 1px solid transparent;
-}
-
-.narrative-row:hover {
-    background: rgba(255, 255, 255, 0.6);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-}
-
-.narrative-row.playing {
-    background: rgba(59, 130, 246, 0.1);
-    border-color: rgba(59, 130, 246, 0.3);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-}
-
-.sv-line {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     display: flex;
-    gap: 16px;
-    align-items: baseline;
-}
-
-.play-icon {
-    font-size: 1rem;
-    opacity: 0.3;
-    transition: all 0.3s ease;
-}
-
-.narrative-row:hover .play-icon {
-    opacity: 1;
-    transform: scale(1.1);
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
 }
 
 .sv-text {
-    font-size: 1.25rem;
-    /* Larger for readability */
+    font-size: 1.3rem;
     line-height: 1.5;
-    color: #1e293b;
-    font-weight: 700;
-    /* Bold Swedish */
+    color: #1e3a8a;
+    /* Dark Blue */
+    font-weight: 800;
+    /* Extra Bold */
     margin: 0;
     flex: 1;
+    font-family: 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.01em;
 }
 
 .ar-line {
-    padding-left: 32px;
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px dashed rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
+    /* Requested spacing */
+    padding-top: 16px;
+    border-top: 2px solid rgba(59, 130, 246, 0.2);
+    /* Visible Divider */
     display: block !important;
     opacity: 1 !important;
     width: 100%;
 }
 
 .ar-text {
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: 1.1rem;
+    line-height: 1.7;
     color: #475569;
-    /* Lighter text for translation */
     font-family: 'Tajawal', sans-serif;
     margin: 0;
-    font-weight: 500;
+    font-weight: 600;
+    text-align: right;
+    /* RTL alignment */
 }
 
 .story-highlight {
