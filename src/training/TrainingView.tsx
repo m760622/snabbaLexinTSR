@@ -228,8 +228,12 @@ const TrainingView: React.FC = () => {
                 // Horizontal Swipe
                 if (diffX > threshold) {
                     handleRating(Quality.Easy); // Right = Easy (Mastered)
+                    // @ts-ignore
+                    if (window.AudioManager) window.AudioManager.playClickSound();
                 } else if (diffX < -threshold) {
                     handleRating(Quality.Again); // Left = Again
+                    // @ts-ignore
+                    if (window.AudioManager) window.AudioManager.playClickSound();
                 }
             } else {
                 // Vertical Swipe

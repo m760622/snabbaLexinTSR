@@ -19,7 +19,7 @@ const CONFIG = {
         iceBorder: '#ffffff',
         rock: '#555566',
         ghost: 'rgba(255, 255, 255, 0.2)',
-        particles: ['#00f3ff', '#bc13fe', '#ffffff']
+        particles: ['#00f3ff', '#00ced1', '#ffffff']
     },
     storageKeys: {
         highScore: 'neonBlocks_highScore',

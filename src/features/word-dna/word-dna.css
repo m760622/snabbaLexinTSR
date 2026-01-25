@@ -1,7 +1,8 @@
 :root {
     --story-cyan: #22d3ee;
     --story-lime: #a3e635;
-    --story-rose: #fb7185;
+    --story-rose: #22d3ee;
+    /* Replaced rose with cyan to prevent purple mixing */
 }
 
 .wod-overlay {
@@ -365,8 +366,9 @@
 }
 
 .quiz-option.wrong {
-    background: var(--story-rose);
-    border-color: var(--story-rose);
+    background: #ef4444;
+    /* Pure Red */
+    border-color: #ef4444;
 }
 
 /* Reward Overlay */
@@ -497,8 +499,9 @@
 }
 
 .bubble-item.antonym {
-    background: rgba(244, 63, 94, 0.1);
-    border-color: rgba(244, 63, 94, 0.2);
+    background: rgba(239, 68, 68, 0.1);
+    /* Red-500 */
+    border-color: rgba(239, 68, 68, 0.2);
 }
 
 .bubble-type {

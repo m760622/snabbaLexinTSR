@@ -27,15 +27,121 @@ interface StoryModalProps {
     isVisible: boolean;
 }
 
+const useTypewriter = (text: string, speed: number = 20, isEnabled: boolean = true) => {
+    const [displayedText, setDisplayedText] = useState('');
+
+    useEffect(() => {
+        if (!isEnabled || !text) {
+            setDisplayedText(text || '');
+            return;
+        }
+
+        setDisplayedText(''); // Reset on new text
+        let i = 0;
+        const timer = setInterval(() => {
+            if (i < text.length) {
+                setDisplayedText(prev => prev + text.charAt(i));
+                i++;
+            } else {
+                clearInterval(timer);
+            }
+        }, speed);
+
+        return () => clearInterval(timer);
+    }, [text, speed, isEnabled]);
+
+    return displayedText;
+};
+
+// Extracted Component to prevent re-renders
+const TypewriterSentence: React.FC<{
+    sentence: Sentence,
+    idx: number,
+    isPlaying: boolean,
+    playAudio: Function,
+    showAllTranslations: boolean,
+    swedishWords: Word[]
+}> = ({ sentence, idx, isPlaying, playAudio, showAllTranslations, swedishWords }) => {
+    // Only animate once per unique sentence text to avoid flicker
+    // Logic: If 'sentence.sv' changes, it re-runs. 
+    // Stable component = Stable state.
+    const typeWrittenText = useTypewriter(sentence.sv, 20);
+
+    const arabicText = sentence.ar && sentence.ar.trim().length > 0
+        ? sentence.ar
+        : "⚠️ لم يتم استلام الترجمة";
+
+    // Helper for highlights (moved inside or passed down)
+    const renderWithHighlights = (text: string) => {
+        const allWords: string[] = [];
+        swedishWords.forEach(w => {
+            const parts = w.swedish.split(',').map(p => p.trim());
+            allWords.push(...parts);
+        });
+
+        const sortedWords = allWords.filter(w => w.length > 0).sort((a, b) => b.length - a.length);
+        const pattern = sortedWords.map(w => w.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|');
+        if (!pattern) return <>{text}</>;
+
+        const regex = new RegExp(`\\b(${pattern})\\b`, 'gi');
+        return (
+            <>
+                {text.split(regex).map((part, i) => {
+                    const isMatch = sortedWords.some(w => w.toLowerCase() === part.toLowerCase());
+                    if (isMatch) {
+                        return (
+                            <span
+                                key={i}
+                                className="story-highlight"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    playAudio(part, -99);
+                                }}
+                            >
+                                {part}
+                            </span>
+                        );
+                    }
+                    return part;
+                })}
+            </>
+        );
+    };
+
+    return (
+        <div
+            className={`narrative-row ${isPlaying ? 'playing' : ''}`}
+            onClick={() => playAudio(sentence.sv, idx, arabicText)}
+        >
+            <div className="sv-line">
+                <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
+                <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
+            </div>
+            {(showAllTranslations || isPlaying) && (
+                <div className="ar-line" dir="rtl">
+                    <p className="ar-text">{arabicText || '(الترجمة غير متوفرة)'}</p>
+                </div>
+            )}
+        </div>
+    );
+};
+
 const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, isVisible }) => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
-    // FORCE TRUE BY DEFAULT to avoid confusion
     const [showAllTranslations, setShowAllTranslations] = useState(true);
 
+    // Play Success Sound on Mount
     useEffect(() => {
         if (isVisible) {
             setIsAnimating(true);
+
+            // Play Ta-da sound!
+            // @ts-ignore - AudioManager is global
+            if (typeof window !== 'undefined' && (window as any).AudioManager) {
+                (window as any).AudioManager.playSuccessSound();
+            }
+
             const timer = setTimeout(() => setIsAnimating(false), 300);
             return () => clearTimeout(timer);
         }
@@ -94,46 +200,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
         }
     };
 
-    const renderWithHighlights = (text: string) => {
-        // Flatten and split words by comma to handle cases like "Elakartad, malign, tumör"
-        const allWords: string[] = [];
-        swedishWords.forEach(w => {
-            const parts = w.swedish.split(',').map(p => p.trim());
-            allWords.push(...parts);
-        });
-
-        const sortedWords = allWords.filter(w => w.length > 0).sort((a, b) => b.length - a.length);
-        const pattern = sortedWords.map(w => w.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|');
-        if (!pattern) return text;
-
-        const regex = new RegExp(`\\b(${pattern})\\b`, 'gi'); // Use word boundaries
-        return text.split(regex).map((part, i) => {
-            const isMatch = sortedWords.some(w => w.toLowerCase() === part.toLowerCase());
-            if (isMatch) {
-                return (
-                    <span
-                        key={i}
-                        className="story-highlight"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            playAudio(part, -99); // Special ID for single words
-                        }}
-                    >
-                        {part}
-                    </span>
-                );
-            }
-            return part;
-        });
-    };
-
     if (!isVisible) return null;
-
-    console.log('[StoryModal] Rendering story with translations status:', {
-        showAllTranslations,
-        sentencesCount: story.sentences?.length,
-        hasArabic: story.sentences?.some(s => s.ar)
-    });
 
     return (
         <div className={`story-modal-overlay ${isAnimating ? 'animating' : ''}`}>
@@ -159,30 +226,17 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                 </header>
 
                 <div className="story-narrative-block">
-                    {story.sentences && story.sentences.map((sentence, idx) => {
-                        // Data is now sanitized in aiService, so 'ar' should exist.
-                        // Fallback to empty string if something goes wrong.
-                        const arabicText = sentence.ar && sentence.ar.trim().length > 0
-                            ? sentence.ar
-                            : "⚠️ لم يتم استلام الترجمة";
-                        return (
-                            <div
-                                key={idx}
-                                className={`narrative-row ${currentlyPlaying === idx ? 'playing' : ''}`}
-                                onClick={() => playAudio(sentence.sv, idx, arabicText)}
-                            >
-                                <div className="sv-line">
-                                    <span className="play-icon">{currentlyPlaying === idx ? '🔊' : '▶️'}</span>
-                                    <p className="sv-text">{renderWithHighlights(sentence.sv)}</p>
-                                </div>
-                                {(showAllTranslations || currentlyPlaying === idx) && (
-                                    <div className="ar-line" dir="rtl">
-                                        <p className="ar-text">{arabicText || '(الترجمة غير متوفرة)'}</p>
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
+                    {story.sentences && story.sentences.map((sentence, idx) => (
+                        <TypewriterSentence
+                            key={idx}
+                            sentence={sentence}
+                            idx={idx}
+                            isPlaying={currentlyPlaying === idx}
+                            playAudio={playAudio}
+                            showAllTranslations={showAllTranslations}
+                            swedishWords={swedishWords}
+                        />
+                    ))}
                 </div>
 
                 {/* Word Tags */}
