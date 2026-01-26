@@ -6785,7 +6785,7 @@ button:active,
     flex-direction: column;
     justify-content: flex-start;
     /* Stack from top */
-    min-height: 480px;
+    min-height: 414px;
     /* Taller for options */
     padding: 1.5rem;
     gap: 1.5rem;

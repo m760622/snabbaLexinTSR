@@ -2286,7 +2286,7 @@ style.textContent = `
     /* --- Flashcard Styles --- */
     .flashcard-container {
         padding: 1rem;
-        max-width: 500px;
+        max-width: 414px;
         margin: 0 auto;
     }
     .flashcard-header { 

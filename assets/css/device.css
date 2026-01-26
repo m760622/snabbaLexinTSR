@@ -41,7 +41,7 @@ body {
 .bg-animation::before {
     content: '';
     position: absolute;
-    width: 500px;
+    width: 414px;
     height: 500px;
     background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
     top: -200px;
