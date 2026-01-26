@@ -55,9 +55,8 @@ const TypewriterSentence: React.FC<{
     idx: number,
     isPlaying: boolean,
     playAudio: Function,
-    swedishWords: Word[],
-    currentLang: Language
-}> = ({ sentence, idx, isPlaying, playAudio, swedishWords, currentLang }) => {
+    swedishWords: Word[]
+}> = ({ sentence, idx, isPlaying, playAudio, swedishWords }) => {
     const typeWrittenText = useTypewriter(sentence.swedish_sentence, 20);
 
     const arabicText = sentence.arabic_translation && sentence.arabic_translation.trim().length > 0
@@ -243,7 +242,6 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                             isPlaying={currentlyPlaying === idx}
                             playAudio={playAudio}
                             swedishWords={swedishWords}
-                            currentLang={currentLang}
                         />
 
                     ))}
