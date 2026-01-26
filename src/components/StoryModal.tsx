@@ -56,18 +56,18 @@ const TypewriterSentence: React.FC<{
     isPlaying: boolean,
     playAudio: Function,
     swedishWords: Word[],
-    currentLang: Language,
-    forceShowTranslation: boolean
-}> = ({ sentence, idx, isPlaying, playAudio, swedishWords, currentLang, forceShowTranslation }) => {
+    currentLang: Language
+}> = ({ sentence, idx, isPlaying, playAudio, swedishWords, currentLang }) => {
     const typeWrittenText = useTypewriter(sentence.swedish_sentence, 20);
 
     const arabicText = sentence.arabic_translation && sentence.arabic_translation.trim().length > 0
         ? sentence.arabic_translation
         : "⚠️ لم يتم استلام الترجمة";
 
-    // Visibility Logic
-    const showSv = true; // Always show Swedish (Target Language)
-    const showAr = currentLang === 'ar' || currentLang === 'both' || forceShowTranslation;
+    // Visibility Logic - ALWAYS VISIBLE
+    // Content is King. UI Language should not hide learning content.
+    const showSv = true;
+    const showAr = true;
 
     // Helper for highlights
     const renderWithHighlights = (text: string) => {
@@ -121,9 +121,7 @@ const TypewriterSentence: React.FC<{
             )}
 
             {/* Arabic Section */}
-            {/* Arabic Section - Always Rendered for CSS Control */}
-            {/* Arabic Section - Controlled by local toggle */}
-            {(showAr || forceShowTranslation) && (
+            {showAr && (
                 <p className="story-content-ar ar-fixed" dir="rtl" lang="ar">
                     {arabicText}
                 </p>
@@ -135,7 +133,6 @@ const TypewriterSentence: React.FC<{
 const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, isVisible }) => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
-    const [showAllTranslations, setShowAllTranslations] = useState(true);
     const [pageType, setPageType] = useState('story');
 
     // Language State
@@ -150,10 +147,6 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
         setCurrentLang(LanguageManager.getLanguage());
 
         return () => {
-            // No unsubscribe method in LanguageManager based on interface, 
-            // but for a modal that unmounts mostly on app refresh it's okay, 
-            // or we can add removal logic if available.
-            // Assuming no memory leak for now as per minimal architecture.
         };
     }, []);
 
@@ -223,7 +216,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
     if (!isVisible) return null;
 
     const showSvTitle = true; // Always show Swedish title (Target Language)
-    const showArTitle = currentLang === 'ar' || currentLang === 'both' || showAllTranslations;
+    const showArTitle = true; // Always show Arabic title (Context)
 
     return (
         <div className={`story-modal-overlay ${isAnimating ? 'animating' : ''}`}>
@@ -237,13 +230,6 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                         </div>
                     </div>
                     <div className="header-actions">
-                        <button
-                            className={`toggle-all-btn ${showAllTranslations ? 'active' : ''}`}
-                            onClick={() => setShowAllTranslations(!showAllTranslations)}
-                            title={showAllTranslations ? 'إخفاء الترجمة' : 'عرض الترجمة'}
-                        >
-                            {showAllTranslations ? '👁️ إخفاء' : '👁️‍🗨️ عرض'}
-                        </button>
                         <button className="close-btn" onClick={onClose}>✕</button>
                     </div>
                 </header>
@@ -258,8 +244,8 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                             playAudio={playAudio}
                             swedishWords={swedishWords}
                             currentLang={currentLang}
-                            forceShowTranslation={showAllTranslations}
                         />
+
                     ))}
                 </div>
 
