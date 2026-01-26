@@ -40,6 +40,9 @@
 /* ============================================================
    ANIMATED BACKGROUND - Subtle & Calming
    ============================================================ */
+/* ============================================================
+   ANIMATED BACKGROUND - Optimized
+   ============================================================ */
 .settings-bg {
     position: fixed;
     top: 0;
@@ -49,57 +52,46 @@
     pointer-events: none;
     z-index: 0;
     overflow: hidden;
+    /* Static background for better performance by default */
+    background: radial-gradient(ellipse at top, #111827, #000);
 }
 
-/* Aurora Mesh Gradient Background */
-.settings-bg::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background:
-        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(13, 148, 136, 0.2) 0%, transparent 50%),
-        radial-gradient(ellipse 60% 40% at 80% 90%, rgba(45, 212, 191, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse 40% 60% at 50% 50%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
-    animation: auroraShift 20s ease-in-out infinite;
+/* Aurora Mesh Gradient - Only for devices that can handle it */
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+    .settings-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+            radial-gradient(ellipse 80% 50% at 20% 10%, rgba(13, 148, 136, 0.15) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 40% at 80% 90%, rgba(45, 212, 191, 0.1) 0%, transparent 50%);
+        animation: auroraShift 20s ease-in-out infinite;
+        will-change: transform, opacity;
+    }
 }
 
+/* Orbs - Hide on mobile for performance */
 .settings-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.2;
-    animation: orbFloat 30s ease-in-out infinite;
+    display: none;
 }
 
-.settings-orb-1 {
-    width: 400px;
-    height: 400px;
-    background: linear-gradient(135deg, #0D9488, #0F766E);
-    top: -150px;
-    left: -100px;
-    animation-delay: 0s;
+@media (min-width: 768px) {
+    .settings-orb {
+        display: block;
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        /* Reduced blur radius for perf */
+        opacity: 0.15;
+        animation: orbFloat 30s ease-in-out infinite;
+        will-change: transform;
+    }
 }
 
-.settings-orb-2 {
-    width: 300px;
-    height: 300px;
-    background: linear-gradient(135deg, #2DD4BF, #14B8A6);
-    bottom: -80px;
-    right: -80px;
-    animation-delay: -10s;
-}
-
-.settings-orb-3 {
-    width: 200px;
-    height: 200px;
-    background: linear-gradient(135deg, #10B981, #34D399);
-    top: 40%;
-    left: 60%;
-    animation-delay: -20s;
-}
+/* ... Keyframes unchanged ... */
 
 @keyframes auroraShift {
 
@@ -137,10 +129,11 @@
 .settings-container {
     position: relative;
     z-index: 1;
-    max-width: 414px;
-    ;
+    max-width: 600px;
+    /* Increased slightly for tablet, keeps mobile width naturally */
     margin: 0 auto;
-    padding: 0 16px 40px;
+    padding: 0 16px 80px;
+    /* Added bottom padding for scroll space */
 }
 
 /* ============================================================
@@ -150,32 +143,41 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 20px 0;
+    padding: 16px 0;
     position: sticky;
     top: 0;
     z-index: 100;
-    background: linear-gradient(to bottom, var(--settings-bg) 0%, transparent 100%);
+    /* Optimized gradient */
+    background: linear-gradient(to bottom, var(--settings-bg) 80%, transparent 100%);
+    /* Removed backdrop-filter from header container to reduce repaint area */
 }
 
 .settings-back-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
-    background: var(--settings-surface);
-    -webkit-backdrop-filter: var(--settings-glass-blur);
-    backdrop-filter: var(--settings-glass-blur);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(15, 23, 32, 0.8);
+    /* Solid fallback */
     border: 1px solid var(--settings-border);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--settings-text);
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.settings-back-btn:hover {
-    background: var(--settings-primary);
-    transform: translateX(-4px);
+/* Only apply backdrop filter if supported and simple */
+@supports (backdrop-filter: blur(10px)) {
+    .settings-back-btn {
+        background: rgba(15, 23, 32, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+}
+
+.settings-back-btn:active {
+    transform: scale(0.95);
 }
 
 .settings-header-title {
@@ -183,17 +185,14 @@
 }
 
 .settings-header-title h1 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
     margin: 0;
-    background: linear-gradient(135deg, #fff, #94a3b8);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--settings-text);
 }
 
 .settings-header-title p {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: var(--settings-text-secondary);
     margin: 0;
 }
@@ -204,19 +203,17 @@
 }
 
 .settings-reset-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
-    background: var(--settings-surface);
-    -webkit-backdrop-filter: var(--settings-glass-blur);
-    backdrop-filter: var(--settings-glass-blur);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(15, 23, 32, 0.8);
     border: 1px solid var(--settings-border);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--settings-text-secondary);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .settings-reset-btn svg {
@@ -224,34 +221,34 @@
     height: 20px;
 }
 
-.settings-reset-btn:hover {
-    color: var(--settings-warning);
-    border-color: var(--settings-warning);
+.settings-reset-btn:active {
+    transform: scale(0.95);
 }
 
 /* ============================================================
-   GLASS CARD - Soft UI Evolution
+   GLASS CARD - Optimized for Scroll Performance
    ============================================================ */
 .glass-card {
     background: var(--settings-card);
-    -webkit-backdrop-filter: var(--settings-glass-blur);
-    backdrop-filter: var(--settings-glass-blur);
+    /* REMOVED backdrop-filter for main content cards to fix scroll lag */
+    /* backdrop-filter: var(--settings-glass-blur); */
     border: 1px solid var(--settings-border);
-    border-radius: 20px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow:
-        0 4px 24px rgba(0, 0, 0, 0.25),
-        0 1px 2px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    /* Create stacking context */
+    /* Hardware acceleration hint */
+    transform: translateZ(0);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.glass-card:hover {
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        0 2px 4px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+/* Only hover effect on desktop */
+@media (hover: hover) {
+    .glass-card:hover {
+        border-color: rgba(45, 212, 191, 0.2);
+    }
 }
+
 
 /* ============================================================
    PROFILE CARD
@@ -545,6 +542,10 @@
 
 .settings-section {
     overflow: hidden;
+    /* PERFORMANCE: Skip rendering off-screen sections */
+    content-visibility: auto;
+    contain-intrinsic-size: 100px 500px;
+    /* Estimate size to prevent jumpy scrollbar */
 }
 
 .section-header {
