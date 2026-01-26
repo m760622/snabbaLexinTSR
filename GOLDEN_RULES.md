@@ -10,3 +10,9 @@
   - Background Blur: `15px`.
   - Border Radius: `20px`.
   - NO blue overlays on red backgrounds.
+
+## ⚠️ BEWARE OF SCOLDING (VERIFICATION FIRST)
+
+- **NEVER ASSUME** conditional rendering matches CSS rules.
+- **ALWAYS CHECK** if an element exists in the DOM before trying to style it.
+- **DOUBLE-CHECK** implementation details to avoid frustration and "bahdala".

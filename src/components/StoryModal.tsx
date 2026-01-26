@@ -122,11 +122,10 @@ const TypewriterSentence: React.FC<{
 
             {/* Arabic Section */}
             {/* Arabic Section - Always Rendered for CSS Control */}
-            {sentence.arabic_translation && (
-                <p className="story-ar-text ar-fixed arabic-text" dir="rtl" lang="ar">
-                    {sentence.arabic_translation}
-                </p>
-            )}
+            {/* Arabic Section - Always Rendered for CSS Control */}
+            <p className="story-ar-text ar-fixed arabic-text" dir="rtl" lang="ar">
+                {arabicText}
+            </p>
         </div>
     );
 };

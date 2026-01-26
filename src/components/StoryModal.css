@@ -517,9 +517,16 @@ body.lang-sv .story-modal-container .ar-fixed,
 
 
 /* Force Arabic Visibility when dictatorial mode is on */
-.force-lang-both .arabic-text,
-.force-lang-both .story-ar-text {
+/* Extremely High Specificity to override global style.css rules (body.lang-sv .ar-text) */
+html body.force-lang-both .story-container .arabic-text,
+html body.force-lang-both .story-container .story-ar-text,
+html body.force-lang-both .story-container [lang="ar"],
+html body.force-lang-both .story-container .ar-fixed {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
+    height: auto !important;
+    width: auto !important;
+    color: #94a3b8 !important;
+    /* Ensure visible color */
 }
