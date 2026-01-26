@@ -31,8 +31,9 @@ const TypewriterSentence: React.FC<{
     idx: number,
     isPlaying: boolean,
     playAudio: Function,
-    swedishWords: Word[]
-}> = ({ sentence, idx, isPlaying, playAudio, swedishWords }) => {
+    swedishWords: Word[],
+    highlightIndex: number | null
+}> = ({ sentence, idx, isPlaying, playAudio, swedishWords, highlightIndex }) => {
     // Direct rendering to prevent typewriter glitches
     const displayedText = sentence.swedish_sentence;
 
@@ -55,18 +56,32 @@ const TypewriterSentence: React.FC<{
 
         const sortedWords = allWords.filter(w => w.length > 0).sort((a, b) => b.length - a.length);
         const pattern = sortedWords.map(w => w.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|');
-        if (!pattern) return <>{text}</>;
 
-        const regex = new RegExp(`\\b(${pattern})\\b`, 'gi');
+        // If no keywords, treating the whole text as plain text but splitable for karaoke
+        const regex = pattern ? new RegExp(`\\b(${pattern})\\b`, 'gi') : null;
+
+        const parts = regex ? text.split(regex) : [text];
+        let globalCharIndex = 0;
+
         return (
             <>
-                {text.split(regex).map((part, i) => {
-                    const isMatch = sortedWords.some(w => w.toLowerCase() === part.toLowerCase());
-                    if (isMatch) {
+                {parts.map((part, i) => {
+                    const currentStartIndex = globalCharIndex;
+                    globalCharIndex += part.length;
+
+                    // Check if this part is a Keyword
+                    const isKeyword = regex && sortedWords.some(w => w.toLowerCase() === part.toLowerCase());
+
+                    if (isKeyword) {
+                        // For keywords, we highlight the whole block if the playing index falls inside it
+                        const isActive = isPlaying && highlightIndex !== null &&
+                            highlightIndex >= currentStartIndex &&
+                            highlightIndex < (currentStartIndex + part.length);
+
                         return (
                             <span
                                 key={i}
-                                className="story-highlight"
+                                className={`story-highlight ${isActive ? 'karaoke-word' : ''}`}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     playAudio(part, -99);
@@ -75,11 +90,112 @@ const TypewriterSentence: React.FC<{
                                 {part}
                             </span>
                         );
+                    } else {
+                        // Plain text - Split by spaces to allow word-level highlighting
+                        // We use a regex that captures delimiters so we don't lose them
+                        return part.split(/(\s+)/).map((subPart, j) => {
+                            const subStart = currentStartIndex + part.substring(0, part.indexOf(subPart, 0)).length;
+                            // Wait, logic above is flawed for repeats.
+                            // Better: Calculate exact offset relative to `part` start.
+                        });
                     }
-                    return part;
                 })}
             </>
         );
+    };
+
+    // Correct Iterative Rendering for Karaoke
+    const renderKaraokeText = (text: string) => {
+        const nodes: React.ReactNode[] = [];
+
+        let cursor = 0; // Tracks position in original string
+
+        // 1. Identify Keyword Ranges
+        const keywordRanges: { start: number, end: number, word: string }[] = [];
+        if (swedishWords.length > 0) {
+            const allWords = swedishWords.flatMap(w => w.swedish.split(',').map(p => p.trim())).filter(w => w.length > 0);
+            // Sort by length desc to prioritize longest match
+            const sorted = allWords.sort((a, b) => b.length - a.length);
+            const pattern = sorted.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+            if (pattern) {
+                const regex = new RegExp(`\\b(${pattern})\\b`, 'gi');
+                let match;
+                while ((match = regex.exec(text)) !== null) {
+                    keywordRanges.push({ start: match.index, end: match.index + match[0].length, word: match[0] });
+                }
+            }
+        }
+
+        // 2. Process text linearly
+        // We will jump over keyword ranges.
+        let currentPos = 0;
+
+        // Sort ranges by start position
+        keywordRanges.sort((a, b) => a.start - b.start);
+        // Filter overlaps (basic strategy: first wins)
+        const uniqueRanges: typeof keywordRanges = [];
+        let lastEnd = 0;
+        for (const r of keywordRanges) {
+            if (r.start >= lastEnd) {
+                uniqueRanges.push(r);
+                lastEnd = r.end;
+            }
+        }
+
+        uniqueRanges.forEach((range, idx) => {
+            // A. Render non-keyword text before this keyword
+            if (range.start > currentPos) {
+                const segment = text.substring(currentPos, range.start);
+                nodes.push(...renderPlainSegment(segment, currentPos));
+            }
+
+            // B. Render Keyword
+            const isKaraoke = isPlaying && highlightIndex !== null &&
+                highlightIndex >= range.start && highlightIndex < range.end;
+
+            nodes.push(
+                <span
+                    key={`kw-${range.start}`}
+                    className={`story-highlight ${isKaraoke ? 'karaoke-word' : ''}`}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        playAudio(range.word, -99);
+                    }}
+                >
+                    {range.word}
+                </span>
+            );
+
+            currentPos = range.end;
+        });
+
+        // C. Render remaining text
+        if (currentPos < text.length) {
+            nodes.push(...renderPlainSegment(text.substring(currentPos), currentPos));
+        }
+
+        return <>{nodes}</>;
+    };
+
+    const renderPlainSegment = (segment: string, offset: number) => {
+        // Split by spaces but preserve them
+        const parts = segment.split(/(\s+)/);
+        let localOffset = 0;
+        return parts.map((part, i) => {
+            const start = offset + localOffset;
+            localOffset += part.length;
+
+            if (!part.trim()) return <span key={`s-${start}`}>{part}</span>; // Space/Whitespace
+
+            const isKaraoke = isPlaying && highlightIndex !== null &&
+                highlightIndex >= start && highlightIndex < (start + part.length); // Loose match
+
+            return (
+                <span key={`w-${start}`} className={isKaraoke ? 'karaoke-word' : ''}>
+                    {part}
+                </span>
+            );
+        });
     };
 
     return (
@@ -92,7 +208,7 @@ const TypewriterSentence: React.FC<{
             {showSv && (
                 <div className="swedish-sentence-box sv-line">
                     <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
-                    <p className="story-content-sv">{renderWithHighlights(displayedText)}</p>
+                    <p className="story-content-sv">{renderKaraokeText(displayedText)}</p>
                 </div>
             )}
 
@@ -109,6 +225,7 @@ const TypewriterSentence: React.FC<{
 const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, isVisible }) => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
+    const [highlightIndex, setHighlightIndex] = useState<number | null>(null);
     const [pageType, setPageType] = useState('story');
 
     // Language State
@@ -143,6 +260,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
     const stopAudio = () => {
         speechSynthesis.cancel();
         setCurrentlyPlaying(null);
+        setHighlightIndex(null);
     };
 
     const playAudio = (text: string, id: number | 'all') => {
@@ -163,13 +281,28 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
             utterance.onstart = () => {
                 setCurrentlyPlaying(id);
             };
-            utterance.onend = () => setCurrentlyPlaying(null);
-            utterance.onerror = () => setCurrentlyPlaying(null);
+
+            utterance.onboundary = (event) => {
+                if (event.name === 'word') {
+                    setHighlightIndex(event.charIndex);
+                }
+            };
+
+            utterance.onend = () => {
+                setCurrentlyPlaying(null);
+                setHighlightIndex(null);
+            };
+
+            utterance.onerror = () => {
+                setCurrentlyPlaying(null);
+                setHighlightIndex(null);
+            };
 
             speechSynthesis.speak(utterance);
         } catch (error) {
             console.error('Error playing audio:', error);
             setCurrentlyPlaying(null);
+            setHighlightIndex(null);
         }
     };
 
@@ -219,10 +352,12 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                             isPlaying={currentlyPlaying === idx}
                             playAudio={playAudio}
                             swedishWords={swedishWords}
+                            highlightIndex={currentlyPlaying === idx || currentlyPlaying === 'all' ? highlightIndex : null}
                         />
 
                     ))}
                 </div>
+
 
                 {/* Word Tags */}
                 <div className="word-tags-section">
