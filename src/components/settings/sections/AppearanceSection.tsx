@@ -100,6 +100,31 @@ export const AppearanceSection: React.FC = () => {
                 </div>
             </div>
 
+            {/* Mobile View Toggle */}
+            <div className="settings-item">
+                <div className="item-left">
+                    <span className="item-icon">📱</span>
+                    <div className="item-info">
+                        <span className="item-name">
+                            <span className="sv-text">Mobilvy</span>
+                            <span className="ar-text">وضع الموبايل</span>
+                        </span>
+                        <span className="item-sublabel">
+                            <span className="sv-text">Simulera iPhone-vy</span>
+                            <span className="ar-text">محاكاة شاشة آيفون</span>
+                        </span>
+                    </div>
+                </div>
+                <label className="toggle-switch">
+                    <input
+                        type="checkbox"
+                        checked={settings.mobileView}
+                        onChange={(e) => updateSettings('mobileView', e.target.checked)}
+                    />
+                    <span className="toggle-slider"></span>
+                </label>
+            </div>
+
             {/* Animations */}
             <div className="settings-item">
                 <div className="item-left">

@@ -21,6 +21,7 @@ export interface UserSettings {
     autoTraining: boolean;
     showContextInCards: boolean;
     geminiApiKey: string;
+    mobileView: boolean;
 }
 
 export interface UserProgress {
@@ -50,7 +51,8 @@ const DEFAULT_SETTINGS: UserSettings = {
     ttsVoicePreference: 'natural',
     autoTraining: true,
     showContextInCards: true,
-    geminiApiKey: ''
+    geminiApiKey: '',
+    mobileView: false
 };
 
 const DEFAULT_PROGRESS: UserProgress = {
@@ -134,6 +136,16 @@ export const useSettings = () => {
         if (key === 'animations') {
             document.body.classList.toggle('reduce-motion', !value);
         }
+        if (key === 'mobileView') {
+            document.body.classList.toggle('mobile-view-mode', value);
+            // Also toggle mobile-view for legacy support if needed
+            document.body.classList.toggle('mobile-view', value);
+
+            // Trigger resize event to force layout updates
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+            }, 50);
+        }
     };
 
     const applyAllSideEffects = (s: UserSettings) => {
@@ -143,6 +155,7 @@ export const useSettings = () => {
         applySideEffects('focusMode', s.focusMode);
         applySideEffects('eyeCare', s.eyeCare);
         applySideEffects('animations', s.animations);
+        applySideEffects('mobileView', s.mobileView);
     };
 
     // Initialize side effects on mount
