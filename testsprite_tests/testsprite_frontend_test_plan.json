@@ -1,8 +1,54 @@
 [
   {
     "id": "TC001",
-    "title": "Load all 99 Names in Browse Mode",
-    "description": "Verify that all 99 names are displayed correctly in Browse Mode with their categories, meanings, and audio playback available.",
+    "title": "Browse Mode: Display all 99 Names compactly",
+    "description": "Verify that upon loading Browse Mode, the list of all 99 Names of Allah is displayed as compact bilingual cards with correct initial states.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the application and navigate to Browse Mode."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that exactly 99 name cards are displayed."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify each card shows the Arabic name and Swedish translation in a compact view."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure grammar badges are visible on the cards where applicable."
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Browse Mode: Card expand and details display",
+    "description": "Verify user can expand any name card to view additional details including linguistic roots and Quranic references.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "In Browse Mode, tap on a compact name card."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure the card expands smoothly displaying linguistic roots, Quranic references, and detailed explanations."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that Arabic calligraphy and Swedish text use premium typography."
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Browse Mode: Filter by category",
+    "description": "Verify filtering names by categories (Jalal, Jamal, Kamal) correctly updates displayed cards.",
     "category": "functional",
     "priority": "High",
     "steps": [
@@ -11,493 +57,512 @@
         "description": "Navigate to Browse Mode."
       },
       {
-        "type": "assertion",
-        "description": "Check that the list contains exactly 99 names."
-      },
-      {
-        "type": "assertion",
-        "description": "Verify each name shows its category and meaning summary."
-      },
-      {
-        "type": "assertion",
-        "description": "Ensure the audio playback button is present for each name."
-      }
-    ]
-  },
-  {
-    "id": "TC002",
-    "title": "Toggle Card View between Collapsed and Expanded",
-    "description": "Ensure that clicking or tapping a name card toggles between collapsed and expanded views showing detailed information including Quranic verses and linguistic conjugations.",
-    "category": "functional",
-    "priority": "High",
-    "steps": [
-      {
         "type": "action",
-        "description": "In Browse Mode, locate a name card."
+        "description": "Select 'Jalal' category filter."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the list only shows names categorized under 'Jalal'."
       },
       {
         "type": "action",
-        "description": "Click or tap on the card to expand it."
+        "description": "Select 'Jamal' category filter."
       },
       {
         "type": "assertion",
-        "description": "Check that detailed information including Quranic verses and linguistic conjugations is displayed."
+        "description": "Confirm the list only shows names categorized under 'Jamal'."
       },
       {
         "type": "action",
-        "description": "Click or tap again to collapse the card."
+        "description": "Select 'Kamal' category filter."
       },
       {
         "type": "assertion",
-        "description": "Confirm that the card returns to collapsed summary view."
-      }
-    ]
-  },
-  {
-    "id": "TC003",
-    "title": "Filter Names by Category",
-    "description": "Validate the filtering functionality by categories: Jalal, Jamal, and Kamal, returning only names belonging to the selected category.",
-    "category": "functional",
-    "priority": "High",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Open filter options in Browse Mode."
-      },
-      {
-        "type": "action",
-        "description": "Select category 'Jalal'."
-      },
-      {
-        "type": "assertion",
-        "description": "Verify all displayed names belong to 'Jalal' category."
-      },
-      {
-        "type": "action",
-        "description": "Change filter to 'Jamal'."
-      },
-      {
-        "type": "assertion",
-        "description": "Verify all displayed names belong to 'Jamal' category."
-      },
-      {
-        "type": "action",
-        "description": "Change filter to 'Kamal'."
-      },
-      {
-        "type": "assertion",
-        "description": "Verify all displayed names belong to 'Kamal' category."
+        "description": "Confirm the list only shows names categorized under 'Kamal'."
       }
     ]
   },
   {
     "id": "TC004",
-    "title": "Filter Names by User Status",
-    "description": "Verify filtering works for user status categories: Favorites and Memorized, showing correct subset of names accordingly.",
+    "title": "Browse Mode: Filter by status (Favorites, Memorized)",
+    "description": "Verify filtering by user status flags correctly filters names marked as Favorite or Memorized.",
     "category": "functional",
     "priority": "High",
     "steps": [
       {
         "type": "action",
-        "description": "Mark some names as Favorites and some as Memorized in Browse Mode."
+        "description": "Mark several names as Favorite and several others as Memorized in Browse Mode."
       },
       {
         "type": "action",
-        "description": "Apply filter for 'Favorites'."
+        "description": "Apply 'Favorites' filter."
       },
       {
         "type": "assertion",
-        "description": "All displayed names are marked as Favorites."
+        "description": "Verify only names marked as Favorite are displayed."
       },
       {
         "type": "action",
-        "description": "Apply filter for 'Memorized'."
+        "description": "Apply 'Memorized' filter."
       },
       {
         "type": "assertion",
-        "description": "All displayed names are marked as Memorized."
+        "description": "Verify only names marked as Memorized are displayed."
       }
     ]
   },
   {
     "id": "TC005",
-    "title": "Real-time Search Functionality",
-    "description": "Test real-time search by Arabic text, Swedish text, and sequence number to ensure correct names are retrieved instantly as user types.",
+    "title": "Browse Mode: Real-time search updates list",
+    "description": "Verify that typing in the search bar updates the displayed cards in real time matching the query.",
     "category": "functional",
     "priority": "High",
     "steps": [
       {
         "type": "action",
-        "description": "Focus on the search input."
+        "description": "Navigate to Browse Mode."
       },
       {
         "type": "action",
-        "description": "Type partial Arabic text of a name."
+        "description": "Type a partial Arabic name or Swedish translation into search input."
       },
       {
         "type": "assertion",
-        "description": "Names matching Arabic text are displayed immediately."
+        "description": "Verify the card list updates immediately showing only matching names."
       },
       {
         "type": "action",
-        "description": "Clear search and type partial Swedish meaning."
+        "description": "Clear search input."
       },
       {
         "type": "assertion",
-        "description": "Names matching Swedish text are displayed immediately."
-      },
-      {
-        "type": "action",
-        "description": "Clear search and type a sequence number (e.g. 25)."
-      },
-      {
-        "type": "assertion",
-        "description": "The name corresponding to that sequence number is displayed instantly."
+        "description": "Confirm all 99 names are shown again."
       }
     ]
   },
   {
     "id": "TC006",
-    "title": "Audio Playback of Name Pronunciation",
-    "description": "Verify the audio pronunciation plays correctly and stops when toggled or another audio is played.",
+    "title": "Browse Mode: Audio playback correctness",
+    "description": "Verify the audio pronunciation plays clearly and correctly matches the selected name upon audio control interaction.",
     "category": "functional",
     "priority": "High",
     "steps": [
       {
         "type": "action",
-        "description": "In Browse Mode, click the audio playback button of a name."
-      },
-      {
-        "type": "assertion",
-        "description": "Audio plays with high-quality pronunciation."
+        "description": "In Browse Mode, expand a name card."
       },
       {
         "type": "action",
-        "description": "Click the audio button again to stop playback."
+        "description": "Click the audio playback button on the name card."
       },
       {
         "type": "assertion",
-        "description": "Audio stops playing."
+        "description": "Check that audio plays immediately and the pronunciation matches the selected name."
       },
       {
         "type": "action",
-        "description": "Start playback on a different name while first audio is playing."
+        "description": "Click audio playback on a different name."
       },
       {
         "type": "assertion",
-        "description": "First audio stops and second audio plays."
+        "description": "Confirm audio switches smoothly to new pronunciation without lag or mix."
       }
     ]
   },
   {
     "id": "TC007",
-    "title": "Flashcard Mode - Card Flipping and Recall Logic",
-    "description": "Check that flashcards flip smoothly to reveal meanings and that user responses ('I Know It' vs 'Study Again') adjust deck intelligently.",
+    "title": "Flashcard Mode: Deck management and difficult name prioritization",
+    "description": "Verify that Flashcard Mode prioritizes difficult names based on user input and supports deck management functionality.",
     "category": "functional",
     "priority": "High",
     "steps": [
       {
         "type": "action",
-        "description": "Enter Flashcard Mode."
+        "description": "Switch to Flashcard Mode."
       },
       {
         "type": "action",
-        "description": "View flashcard front with name only."
+        "description": "Mark several names as difficult during flashcard reviews."
       },
       {
         "type": "action",
-        "description": "Flip the card to see the meaning and details."
+        "description": "Restart the flashcard session."
       },
       {
         "type": "assertion",
-        "description": "Flip animation is smooth and correct content is shown."
+        "description": "Verify that flashcards prioritize showing difficult marked names earlier in the deck."
       },
       {
         "type": "action",
-        "description": "Mark the card as 'I Know It'."
+        "description": "Use deck management controls to filter and reorder flashcards."
       },
       {
         "type": "assertion",
-        "description": "Card is deprioritized or removed from active deck based on familiarity logic."
-      },
-      {
-        "type": "action",
-        "description": "Mark another card as 'Study Again'."
-      },
-      {
-        "type": "assertion",
-        "description": "Card remains or is prioritized for further review."
+        "description": "Confirm deck updates accordingly and reflects selections immediately."
       }
     ]
   },
   {
     "id": "TC008",
-    "title": "Quiz Mode - Multiple Choice and Fill-in-the-Blank Questions",
-    "description": "Verify that quiz questions are presented correctly with accurate progress tracking and feedback after each answer.",
+    "title": "Flashcard Mode: Card flip interaction",
+    "description": "Verify that flashcards flip smoothly between front and back with correct content displayed.",
     "category": "functional",
     "priority": "High",
     "steps": [
       {
         "type": "action",
-        "description": "Start Quiz Mode."
-      },
-      {
-        "type": "assertion",
-        "description": "Multiple-choice question is displayed with selectable options."
+        "description": "In Flashcard Mode, display a flashcard."
       },
       {
         "type": "action",
-        "description": "Select an answer in multiple choice."
+        "description": "Trigger flip action (tap or click)."
       },
       {
         "type": "assertion",
-        "description": "Immediate feedback shown indicating correct or incorrect."
+        "description": "Verify the card flips with smooth animation showing the back side with the correct detailed information."
       },
       {
         "type": "action",
-        "description": "Proceed to fill-in-the-blank question."
-      },
-      {
-        "type": "action",
-        "description": "Submit an answer."
+        "description": "Flip the card back to the front."
       },
       {
         "type": "assertion",
-        "description": "Feedback is displayed and progress updates accordingly."
+        "description": "Confirm the original front content is restored with smooth animation."
       }
     ]
   },
   {
     "id": "TC009",
-    "title": "Premium Dark Mode Theme Validation",
-    "description": "Ensure UI displays with deep black backgrounds, gold accents, elegant Arabic calligraphy fonts, and clean Swedish sans-serif fonts as per design standards.",
-    "category": "ui",
+    "title": "Quiz Mode: Multiple choice question generation and answering",
+    "description": "Verify Quiz Mode generates valid multiple-choice questions and provides immediate feedback upon answer selection.",
+    "category": "functional",
     "priority": "High",
     "steps": [
       {
         "type": "action",
-        "description": "Enable dark mode in user settings."
+        "description": "Enter Quiz Mode and select multiple-choice quiz type."
       },
       {
         "type": "assertion",
-        "description": "Background color matches deep black specification."
+        "description": "Verify a question is displayed with the prompt and multiple answer options."
+      },
+      {
+        "type": "action",
+        "description": "Select a correct answer."
       },
       {
         "type": "assertion",
-        "description": "Accent colors use gold as specified."
+        "description": "Check that feedback indicates a correct choice and score is updated."
+      },
+      {
+        "type": "action",
+        "description": "Select an incorrect answer on a new question."
       },
       {
         "type": "assertion",
-        "description": "Arabic text uses the elegant calligraphy font."
-      },
-      {
-        "type": "assertion",
-        "description": "Swedish text uses clean sans-serif font."
+        "description": "Verify feedback shows the answer was incorrect and the correct answer is highlighted."
       }
     ]
   },
   {
     "id": "TC010",
-    "title": "User Preferences Persistence",
-    "description": "Verify font size and theme settings persist correctly across browser sessions using local storage.",
+    "title": "Quiz Mode: Fill-in-the-blank question answering and scoring",
+    "description": "Verify fill-in-the-blank quiz questions accept input, validate answers, provide feedback and update user progress.",
     "category": "functional",
     "priority": "High",
     "steps": [
       {
         "type": "action",
-        "description": "Set font size and dark mode theme in Settings."
-      },
-      {
-        "type": "action",
-        "description": "Close and reopen the browser or reload the page."
+        "description": "Start Quiz Mode and select fill-in-the-blank question type."
       },
       {
         "type": "assertion",
-        "description": "User settings are restored and applied correctly."
+        "description": "Confirm a question with blank input is displayed."
+      },
+      {
+        "type": "action",
+        "description": "Enter a correct name answer in the input field."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify immediate positive feedback and score increment."
+      },
+      {
+        "type": "action",
+        "description": "Enter an incorrect answer."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm feedback showing the answer is wrong with correct solution shown."
       }
     ]
   },
   {
     "id": "TC011",
-    "title": "Filtering and Sorting Performance",
-    "description": "Verify that filtering and sorting by category and user status happen promptly with no noticeable UI lag.",
-    "category": "functional",
-    "priority": "Medium",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Apply multiple filters in quick succession."
-      },
-      {
-        "type": "assertion",
-        "description": "Results update instantly with no lag or delay."
-      },
-      {
-        "type": "action",
-        "description": "Sort the list by sequence number and then by name."
-      },
-      {
-        "type": "assertion",
-        "description": "Sorting occurs smoothly without UI freezing."
-      }
-    ]
-  },
-  {
-    "id": "TC012",
-    "title": "Flashcard Mode Deck Management Edge Cases",
-    "description": "Test deck behavior when all cards are marked 'I Know It' and when no cards are marked as 'I Know It'.",
-    "category": "functional",
-    "priority": "Medium",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Mark all flashcards as 'I Know It'."
-      },
-      {
-        "type": "assertion",
-        "description": "Deck becomes empty or informs user accordingly."
-      },
-      {
-        "type": "action",
-        "description": "Reset deck and mark none as 'I Know It'."
-      },
-      {
-        "type": "assertion",
-        "description": "All cards continue to appear for study."
-      }
-    ]
-  },
-  {
-    "id": "TC013",
-    "title": "Quiz Mode Progress Tracking Accuracy",
-    "description": "Ensure that the quiz progress tracking displays accurate counts and resets properly after quiz completion.",
-    "category": "functional",
-    "priority": "Medium",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Complete a quiz session of multiple questions."
-      },
-      {
-        "type": "assertion",
-        "description": "Progress is accurately reflected during the quiz."
-      },
-      {
-        "type": "action",
-        "description": "Finish the quiz and navigate to start a new quiz."
-      },
-      {
-        "type": "assertion",
-        "description": "Progress counter resets properly to zero or initial state."
-      }
-    ]
-  },
-  {
-    "id": "TC014",
-    "title": "Instant Interface Feedback Animations",
-    "description": "Validate that user interactions such as clicks, toggles, and card flips trigger subtle, instantaneous visual feedback animations.",
-    "category": "ui",
-    "priority": "Medium",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Interact with UI elements: buttons, cards, menu options."
-      },
-      {
-        "type": "assertion",
-        "description": "Each interaction triggers a smooth and subtle animation instantly."
-      }
-    ]
-  },
-  {
-    "id": "TC015",
-    "title": "Accessibility and Responsive Design",
-    "description": "Verify that the application is fully usable on various screen sizes including mobile, tablet, and desktop, and supports keyboard navigation.",
+    "title": "Quiz Mode: Session progress tracking and score persistence",
+    "description": "Verify Quiz Mode correctly tracks number of questions answered, score, and saves progress between sessions.",
     "category": "functional",
     "priority": "High",
     "steps": [
       {
         "type": "action",
-        "description": "Open the application on screens of different sizes."
+        "description": "Take a quiz session answering multiple questions."
       },
       {
         "type": "assertion",
-        "description": "Layout adapts correctly without cutoff or overflow issues."
+        "description": "Verify the progress bar updates reflecting number of questions answered."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the score updates correctly on each answer."
       },
       {
         "type": "action",
-        "description": "Navigate the application using keyboard only."
+        "description": "Close the app and reopen it."
       },
       {
         "type": "assertion",
-        "description": "All interactive controls are reachable and usable."
+        "description": "Check that the quiz progress and score are persisted and restored correctly from LocalStorage."
       }
     ]
   },
   {
-    "id": "TC016",
-    "title": "Handling of Invalid Search Inputs",
-    "description": "Ensure the search handles invalid inputs (e.g., special characters, unsupported scripts) gracefully, without errors or crashes.",
-    "category": "error handling",
+    "id": "TC012",
+    "title": "LocalStorage: Persist favorites, memorized status, and quiz scores",
+    "description": "Verify that user markings for favorites and memorized names and quiz scores are saved to LocalStorage and restored on app reload.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Mark some names as Favorites and Memorized."
+      },
+      {
+        "type": "action",
+        "description": "Complete some quiz questions to generate a score."
+      },
+      {
+        "type": "action",
+        "description": "Close and reopen the app."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that Favorites and Memorized flags persist on the same names."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm quiz scores and progress are restored accurately."
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "UI: Application adheres to premium dark mode theme and typography",
+    "description": "Verify that the application UI uses dark mode theme with golden accents, elegant Arabic calligraphy fonts, and clean Swedish text across all modes.",
+    "category": "ui",
     "priority": "Medium",
     "steps": [
       {
         "type": "action",
-        "description": "Enter special characters or unsupported text into the search field."
+        "description": "Load the app and ensure dark mode is active."
       },
       {
         "type": "assertion",
-        "description": "No errors appear and UI remains responsive."
+        "description": "Check that background, text colors, and accents follow premium golden-dark style guidelines."
       },
       {
         "type": "assertion",
-        "description": "Search returns no results or valid partial matches if any."
+        "description": "Verify Arabic text uses the specified elegant calligraphy fonts."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm Swedish text is rendered in clean readable typography."
+      },
+      {
+        "type": "action",
+        "description": "Navigate through Browse, Flashcard, and Quiz Modes."
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure theme and typography consistency is maintained throughout."
       }
     ]
   },
   {
-    "id": "TC017",
-    "title": "Reset User Preferences Functionality",
-    "description": "Verify that the option to clear user preferences restores default settings and updates the UI accordingly.",
+    "id": "TC014",
+    "title": "UI: Responsive design on different device sizes",
+    "description": "Verify that the application UI adjusts properly and remains usable on different screen sizes including mobile, tablet, and desktop.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the application on desktop browser."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that all interface elements are visible and spaced properly."
+      },
+      {
+        "type": "action",
+        "description": "Resize the browser window to tablet size."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify layout adapts, ensuring no overflow or clipped content."
+      },
+      {
+        "type": "action",
+        "description": "Open the app on a mobile device emulator or device."
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the UI rearranges to a mobile-friendly format with accessible controls and readable text."
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Interactive cards feedback and performance",
+    "description": "Verify interactive cards respond immediately and visually appealing when user interacts with controls such as favorite toggle, memorized marking, audio playback, and expansion.",
     "category": "functional",
     "priority": "Medium",
     "steps": [
       {
         "type": "action",
-        "description": "Change user preferences including font size and theme."
+        "description": "In Browse Mode, interact with the favorite toggle on a card."
+      },
+      {
+        "type": "assertion",
+        "description": "Check visual feedback such as icon color change occurs instantly."
       },
       {
         "type": "action",
-        "description": "Use the settings menu to reset preferences to default."
+        "description": "Mark a card as Memorized."
       },
       {
         "type": "assertion",
-        "description": "Preferences revert to defaults."
+        "description": "Ensure UI reflects this change with appropriate styling without lag."
+      },
+      {
+        "type": "action",
+        "description": "Expand and collapse a card repeatedly."
       },
       {
         "type": "assertion",
-        "description": "UI appearance reflects default settings immediately."
+        "description": "Verify smooth animations occur with no flickering or delays."
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Error handling: Invalid filter states",
+    "description": "Verify application handles invalid or empty filter states gracefully without crashing or displaying incorrect data.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Manually set filters to a combination that results in no matching names."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the UI shows a friendly message indicating no results rather than empty or broken layout."
+      },
+      {
+        "type": "action",
+        "description": "Clear filters."
+      },
+      {
+        "type": "assertion",
+        "description": "Check all names reappear correctly."
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Error handling: Audio playback failure",
+    "description": "Verify the application handles cases where audio playback fails by showing proper error feedback and allowing retry.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Simulate an audio loading or playback failure (e.g., disconnect network or corrupt audio file)."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to play audio for a name."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that a user-visible error message is displayed."
+      },
+      {
+        "type": "action",
+        "description": "Retry audio playback."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that the retry either succeeds or re-displays the error gracefully without crashing the app."
       }
     ]
   },
   {
     "id": "TC018",
-    "title": "Smoothness of UI Animations on Low-spec Devices",
-    "description": "Test that UI animations and transitions remain smooth and do not cause noticeable lag on low performance hardware.",
-    "category": "performance",
-    "priority": "Low",
+    "title": "Localization: Verify Swedish and Arabic text rendering and RTL/LTR handling",
+    "description": "Verify that the application correctly renders Swedish and Arabic text with proper directionality and language settings.",
+    "category": "functional",
+    "priority": "Medium",
     "steps": [
       {
         "type": "action",
-        "description": "Run the app on a low-spec device or simulate low performance environment."
-      },
-      {
-        "type": "action",
-        "description": "Interact with card toggling, flashcard flipping, and menu animations."
+        "description": "Load the app with Swedish language setting."
       },
       {
         "type": "assertion",
-        "description": "Animations remain fluid without freezing or stuttering."
+        "description": "Confirm that Swedish text is shown correctly in LTR direction."
+      },
+      {
+        "type": "action",
+        "description": "Switch to Arabic language setting."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify Arabic text is rendered properly with RTL direction and UI adjusts where needed."
+      },
+      {
+        "type": "assertion",
+        "description": "Check that bilingual cards handle mixed-language content gracefully."
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Settings: Theme and audio preference persistence",
+    "description": "Verify user changes to theme (dark mode) and audio playback preferences in the Settings UI are saved and persist across sessions.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Settings interface."
+      },
+      {
+        "type": "action",
+        "description": "Change theme preferences e.g., enable or disable dark mode."
+      },
+      {
+        "type": "action",
+        "description": "Adjust audio settings such as volume or playback speed."
+      },
+      {
+        "type": "action",
+        "description": "Close and reopen the app."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify changed theme and audio preferences are correctly restored."
       }
     ]
   }

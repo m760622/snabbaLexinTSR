@@ -10,42 +10,54 @@ interface Word {
     arabic: string;
 }
 
-interface Story {
-    title_sv: string;
-    title_ar: string;
-    sentences: StorySentence[];
-}
-
 interface StoryModalProps {
-    story: Story;
+    story: StoryResponse;
     swedishWords: Word[];
     onClose: () => void;
     isVisible: boolean;
 }
 
-
-
-// Extracted Component to prevent re-renders
-const TypewriterSentence: React.FC<{
+// Extracted Component to handle individual sentence logic and karaoke
+const StorySentenceView: React.FC<{
     sentence: StorySentence,
     idx: number,
     isPlaying: boolean,
     playAudio: Function,
     swedishWords: Word[]
 }> = ({ sentence, idx, isPlaying, playAudio, swedishWords }) => {
-    // Direct rendering to prevent typewriter glitches
+    // State to track karaoke highlighting
+    const [activeCharIndex, setActiveCharIndex] = useState(-1);
+
+    useEffect(() => {
+        if (!isPlaying) {
+            setActiveCharIndex(-1);
+            return;
+        }
+
+        const handleBoundary = (e: any) => {
+            const { charIndex, text } = e.detail;
+            // Only update if the text matches the current sentence
+            if (text === sentence.swedish_sentence) {
+                setActiveCharIndex(charIndex);
+            }
+        };
+
+        const handleEnd = () => setActiveCharIndex(-1);
+
+        window.addEventListener('tts-boundary', handleBoundary);
+        window.addEventListener('tts-end', handleEnd);
+        return () => {
+            window.removeEventListener('tts-boundary', handleBoundary);
+            window.removeEventListener('tts-end', handleEnd);
+        };
+    }, [isPlaying, sentence.swedish_sentence]);
+
     const displayedText = sentence.swedish_sentence;
+    const arabicText = (sentence.arabic_translation || '').trim();
 
-    const arabicText = sentence.arabic_translation && sentence.arabic_translation.trim().length > 0
-        ? sentence.arabic_translation
-        : "⚠️ لم يتم استلام الترجمة";
-
-    // Visibility Logic - ALWAYS VISIBLE
-    // Content is King. UI Language should not hide learning content.
     const showSv = true;
-    const showAr = true;
+    const showAr = arabicText.length > 0;
 
-    // Helper for highlights
     const renderWithHighlights = (text: string) => {
         const allWords: string[] = [];
         swedishWords.forEach(w => {
@@ -55,28 +67,43 @@ const TypewriterSentence: React.FC<{
 
         const sortedWords = allWords.filter(w => w.length > 0).sort((a, b) => b.length - a.length);
         const pattern = sortedWords.map(w => w.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|');
-        if (!pattern) return <>{text}</>;
 
-        const regex = new RegExp(`\\b(${pattern})\\b`, 'gi');
+        // Match keywords OR sequences of whitespace OR anything else (word-by-word splitting)
+        const regexPattern = pattern ? `(\\b(?:${pattern})\\b|\\s+|\\S+)` : `(\\s+|\\S+)`;
+        const regex = new RegExp(regexPattern, 'gi');
+
+        let currentCharOffset = 0;
+
         return (
             <>
-                {text.split(regex).map((part, i) => {
-                    const isMatch = sortedWords.some(w => w.toLowerCase() === part.toLowerCase());
-                    if (isMatch) {
+                {text.split(regex).filter(Boolean).map((part, i) => {
+                    const startPos = currentCharOffset;
+                    currentCharOffset += part.length;
+
+                    const isKeyword = sortedWords.some(w => w.toLowerCase() === part.toLowerCase());
+                    // Word is active if the current char index falls within this part
+                    const isBeingSpoken = activeCharIndex >= startPos && activeCharIndex < currentCharOffset;
+
+                    const classes = [
+                        isKeyword ? 'story-highlight' : '',
+                        isBeingSpoken ? 'word-active' : ''
+                    ].filter(Boolean).join(' ');
+
+                    if (isKeyword || isBeingSpoken) {
                         return (
                             <span
                                 key={i}
-                                className="story-highlight"
-                                onClick={(e) => {
+                                className={classes}
+                                onClick={isKeyword ? (e) => {
                                     e.stopPropagation();
                                     playAudio(part, -99);
-                                }}
+                                } : undefined}
                             >
                                 {part}
                             </span>
                         );
                     }
-                    return part;
+                    return <span key={i}>{part}</span>;
                 })}
             </>
         );
@@ -109,7 +136,6 @@ const TypewriterSentence: React.FC<{
 const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, isVisible }) => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
-    const [pageType, setPageType] = useState('story');
 
     // Language State
     const [currentLang, setCurrentLang] = useState<Language>(LanguageManager.getLanguage());
@@ -141,7 +167,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
     }, [isVisible]);
 
     const stopAudio = () => {
-        speechSynthesis.cancel();
+        TTSManager.stop();
         setCurrentlyPlaying(null);
     };
 
@@ -152,21 +178,11 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
         }
 
         try {
-            const utterance = new SpeechSynthesisUtterance(text);
-            const voices = speechSynthesis.getVoices();
-            const swedishVoice = voices.find(v => v.lang.startsWith('sv')) || voices.find(v => v.lang === 'sv-SE');
-
-            if (swedishVoice) utterance.voice = swedishVoice;
-            utterance.lang = 'sv-SE';
-            utterance.rate = 0.8;
-
-            utterance.onstart = () => {
-                setCurrentlyPlaying(id);
-            };
-            utterance.onend = () => setCurrentlyPlaying(null);
-            utterance.onerror = () => setCurrentlyPlaying(null);
-
-            speechSynthesis.speak(utterance);
+            TTSManager.speak(text, 'sv', {
+                onStart: () => setCurrentlyPlaying(id),
+                onEnd: () => setCurrentlyPlaying(null),
+                onError: () => setCurrentlyPlaying(null)
+            });
         } catch (error) {
             console.error('Error playing audio:', error);
             setCurrentlyPlaying(null);
@@ -212,7 +228,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
 
                 <div className="story-narrative-block">
                     {story.sentences && story.sentences.map((sentence, idx) => (
-                        <TypewriterSentence
+                        <StorySentenceView
                             key={idx}
                             sentence={sentence}
                             idx={idx}
@@ -220,7 +236,6 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                             playAudio={playAudio}
                             swedishWords={swedishWords}
                         />
-
                     ))}
                 </div>
 

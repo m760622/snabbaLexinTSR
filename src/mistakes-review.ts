@@ -192,9 +192,11 @@ export function renderMistakesReview(containerId: string): void {
 
 // Global functions
 (window as any).renderMistakesReview = renderMistakesReview;
-(window as any).practiceMistake = (_word: string) => {
-    // TODO: Navigate to flashcard with this word
-    // Removed console.log for production
+(window as any).practiceMistake = (word: string) => {
+    // Navigate to flashcard with this word
+    // For now, redirect to learn/asma_ul_husna.html with the word to practice
+    // This assumes the learning module can handle a specific word start
+    window.location.href = `learn/asma_ul_husna.html?practice=${encodeURIComponent(word)}`;
 };
 (window as any).markLearned = (word: string) => {
     mistakesManager.markAsLearned(word);

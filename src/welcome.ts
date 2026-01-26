@@ -17,9 +17,9 @@ class WelcomeScreen {
         // Start UI animations
         this.startSplashUI();
 
-        // Safety Timeout: 15 seconds normally, 2s if test mode
+        // Safety Timeout: 15 seconds normally, 1s if test mode
         const isTestMode = new URLSearchParams(window.location.search).has('test_mode');
-        const timeoutDuration = isTestMode ? 2000 : 15000;
+        const timeoutDuration = isTestMode ? 1000 : 15000;
 
         setTimeout(() => {
             console.warn(`[Welcome] Timeout reached (${timeoutDuration}ms). Forcing redirect...`);

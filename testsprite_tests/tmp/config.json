@@ -1,16 +1,16 @@
 {
-  "status": "init",
+  "status": "commited",
   "type": "frontend",
   "scope": "codebase",
-  "localEndpoint": "http://localhost:5173/learn/learn.html",
+  "localEndpoint": "http://localhost:5173",
   "executionArgs": {
     "projectName": "snabbaLexinTSR",
     "projectPath": "/Users/mohammedabunada/Documents/Vipe/snabbaLexinTSR",
     "testIds": [],
-    "additionalInstruction": "IMPORTANT: You MUST append '?test_mode=true' to the baseURL or page URL when launching the browser for every single test. This is CRITICAL to bypass the welcome modal and splash screen which blocked previous tests. Example: 'http://localhost:5173/learn/asma_ul_husna.html?test_mode=true'. Focus on verifying the Asma Ul Husna card layout (3-row collapsed, Premium Dark expanded).",
+    "additionalInstruction": "Verify that ?test_mode=true bypasses the welcome modal and that Asma Ul Husna quiz/flashcard logic works.",
     "envs": {
       "API_KEY": "sk-user-WXk1-gAzzCC6Afg4NkTXh4E5AlNDZNXCs8HOE1lWZfWua-veK24cCJvc9VCnxlP7YimlhF50nRqREnTgPEBQrhTEEY0ZVQTw5d6pgX0Os-GgfUMJf9FqmvTnBk8K_mX-pns"
     }
   },
-  "proxy": "http://7a6bc2e6-aaea-4650-a5b0-01e172486cce:VTsUzrU6oq7WgqGYRczCTtF1p3EPgCCM@tun.testsprite.com:8080"
+  "proxy": "http://024d4627-c0ea-4deb-9c15-a3e0e6e9f10a:rDsQDzsbyFlr6VkdTyEzMxIVVsdjR0Nw@tun.testsprite.com:8080"
 }

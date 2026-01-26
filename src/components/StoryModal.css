@@ -535,19 +535,29 @@
     transform: scale(1.02);
 }
 
-/* Highlight specifically the SWEDISH TEXT when playing */
+/* Highlight specifically the SWEDISH TEXT when playing (Subtle Sentence Level) */
 .story-sentence-pair-container.playing .story-content-sv {
-    background: rgba(255, 223, 0, 0.3);
-    /* Stronger Gold Marker */
+    background: rgba(255, 223, 0, 0.15);
+    /* Lighter gold for whole sentence */
     border-radius: 8px;
     padding: 8px 12px;
     margin: -8px -12px;
-    /* Compensate padding */
     width: calc(100% + 24px);
-    color: #000;
-    /* Max contrast */
-    text-shadow: none;
-    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+    transition: background 0.3s ease;
+}
+
+/* Karaoke Word Highlight */
+.word-active {
+    background-color: #ffd700 !important;
+    /* Solid Gold */
+    color: #000 !important;
+    font-weight: 900 !important;
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin: 0 -2px;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+    transition: all 0.1s ease;
+    display: inline-block;
 }
 
 .story-sentence-pair-container.playing .play-icon {

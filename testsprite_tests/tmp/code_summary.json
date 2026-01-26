@@ -4,49 +4,62 @@
         "HTML5",
         "CSS3",
         "Vite",
-        "PWA"
+        "React (Settings/Profile)",
+        "LocalStorage",
+        "Vitest"
     ],
     "features": [
         {
-            "name": "Asma Ul Husna Module",
-            "description": "Learning module for the 99 Names of Allah, featuring browsing, flashcards, quizes, and premium UI.",
+            "name": "Main Dictionary & Search",
+            "description": "Fast lookup between Swedish and Arabic with compact bilingual cards and grammar badges.",
+            "files": [
+                "src/app.ts",
+                "src/search-history.ts",
+                "index.html",
+                "assets/css/style.css"
+            ]
+        },
+        {
+            "name": "Asma Ul Husna Learning",
+            "description": "Interactive module for teaching 99 Names of Allah with browse, quiz, and flashcard modes.",
             "files": [
                 "src/learn/asmaUlHusna.ts",
-                "assets/css/asma_ul_husna.css",
-                "learn/asma_ul_husna.html"
-            ]
-        },
-        {
-            "name": "Learn Manager",
-            "description": "Manages different learning views and navigation.",
-            "files": [
                 "src/learn/LearnViewManager.ts",
-                "src/learn-ui.ts"
+                "src/i18n.ts"
             ]
         },
         {
-            "name": "Settings System",
-            "description": "User preference management including font size, dark mode, and data clearing.",
+            "name": "Games Hub",
+            "description": "Collection of interactive language games like Memory, Hangman, and Word Connect.",
             "files": [
-                "src/settings.ts",
-                "src/settings-menu.ts"
+                "src/games-ui.ts",
+                "src/games-app.ts",
+                "src/games/"
             ]
         },
         {
-            "name": "Core UI",
-            "description": "Core UI components, FAB menu, and Toast notifications.",
+            "name": "User Progress & XP System",
+            "description": "Gamification system tracking XP, levels, streaks, and achievements stored in LocalStorage.",
             "files": [
-                "src/ui-enhancements.ts",
-                "src/fab-menu.ts",
-                "src/toast-manager.ts"
+                "src/progress-system.ts",
+                "src/achievements.ts",
+                "src/utils/xpSystem.ts"
             ]
         },
         {
-            "name": "Database & Storage",
-            "description": "IndexedDB handling and local storage wrappers.",
+            "name": "Advanced Settings",
+            "description": "React-based settings interface for theme customization and audio preferences.",
             "files": [
-                "src/db.ts",
-                "src/utils.ts"
+                "src/components/FullSettings.tsx",
+                "src/settings.ts"
+            ]
+        },
+        {
+            "name": "Localization",
+            "description": "Multi-language support for Swedish and Arabic with RTL/LTR handling.",
+            "files": [
+                "src/i18n.ts",
+                "src/i18n-apply.ts"
             ]
         }
     ]

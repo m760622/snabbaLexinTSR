@@ -57,12 +57,18 @@ export class App {
         this.setupInfiniteScroll();
         this.setupGlobalHandlers();
         this.setupFilters();
-        this.setupVoiceSearch();
-        this.setupVoiceSelection();
-        this.setupKeyboardShortcuts();
-        this.updateDailyChallenge(); // Initial update
-        this.updateDailyProgressBar(); // Update daily progress bar
-        this.updateTrainingBadge(); // Initial badge update
+
+        const isTestMode = new URLSearchParams(window.location.search).has('test_mode');
+        if (isTestMode) {
+            console.log('[App] Test mode active, skipping onboarding...');
+        } else {
+            this.setupVoiceSearch();
+            this.setupVoiceSelection();
+            this.setupKeyboardShortcuts();
+            this.updateDailyChallenge(); // Initial update
+            this.updateDailyProgressBar(); // Update daily progress bar
+            this.updateTrainingBadge(); // Initial badge update
+        }
 
         // Initial search from URL parameter 's'
         const params = new URLSearchParams(window.location.search);

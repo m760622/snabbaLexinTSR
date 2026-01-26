@@ -1117,6 +1117,12 @@ function renderQuizQuestion(): void {
 
     const question = quizQuestions[currentQuestionIndex];
 
+    // Support multiple question types:
+    // 0: Match Arabic Name to Swedish Meaning (Current)
+    // 1: Match Swedish Meaning to Arabic Name
+    // 2: Match Arabic Meaning to Arabic Name
+    const qType = Math.floor(Math.random() * 3);
+
     // Generate options (1 correct + 3 wrong)
     const options = [question];
     while (options.length < 4) {
@@ -1129,17 +1135,45 @@ function renderQuizQuestion(): void {
     // Shuffle options
     const shuffledOptions = options.sort(() => 0.5 - Math.random());
 
+    let questionHtml = '';
+    let optionsHtml = '';
+
+    if (qType === 0) {
+        questionHtml = `
+            <div class="quiz-question">
+                <div class="quiz-question-label">ما معنى هذا الاسم؟ / Vad betyder detta namn?</div>
+                <div class="quiz-question-name">${question.nameAr}</div>
+            </div>`;
+        optionsHtml = shuffledOptions.map(opt => `
+            <button class="quiz-option" data-nr="${opt.nr}" onclick="checkAnswer(${opt.nr}, ${question.nr}, this)">
+                ${opt.meaningSv} <span class="quiz-answer-ar" style="display:none; color: #fbbf24; margin-right: 5px;">(${opt.meaningAr})</span>
+            </button>`).join('');
+    } else if (qType === 1) {
+        questionHtml = `
+            <div class="quiz-question">
+                <div class="quiz-question-label">أي اسم له هذا المعنى؟ / Vilket namn har denna betydelse?</div>
+                <div class="quiz-question-name" style="font-size: 1.8rem;">${question.meaningSv}</div>
+            </div>`;
+        optionsHtml = shuffledOptions.map(opt => `
+            <button class="quiz-option" data-nr="${opt.nr}" onclick="checkAnswer(${opt.nr}, ${question.nr}, this)" style="font-family: 'Amiri', serif; font-size: 2rem;">
+                ${opt.nameAr}
+            </button>`).join('');
+    } else {
+        questionHtml = `
+            <div class="quiz-question">
+                <div class="quiz-question-label">اختر الاسم الصحيح للمعنى العربي / Välj rätt namn för den arabiska betydelsen</div>
+                <div class="quiz-question-name">${question.meaningAr}</div>
+            </div>`;
+        optionsHtml = shuffledOptions.map(opt => `
+            <button class="quiz-option" data-nr="${opt.nr}" onclick="checkAnswer(${opt.nr}, ${question.nr}, this)" style="font-family: 'Amiri', serif; font-size: 2rem;">
+                ${opt.nameAr}
+            </button>`).join('');
+    }
+
     container.innerHTML = `
-        <div class="quiz-question">
-            <div class="quiz-question-label">ما معنى هذا الاسم؟</div>
-            <div class="quiz-question-name">${question.nameAr}</div>
-        </div>
+        ${questionHtml}
         <div class="quiz-options">
-            ${shuffledOptions.map(opt => `
-                <button class="quiz-option" data-nr="${opt.nr}" onclick="checkAnswer(${opt.nr}, ${question.nr}, this)">
-                    ${opt.meaningSv} <span class="quiz-answer-ar" style="display:none; color: #fbbf24; margin-right: 5px;">(${opt.meaningAr})</span>
-                </button>
-            `).join('')}
+            ${optionsHtml}
         </div>
     `;
 
@@ -1307,6 +1341,11 @@ function flashcardKnow(): void {
 }
 
 function flashcardDontKnow(): void {
+    // Re-insert current card later in the queue to study again
+    const name = flashcardQueue[currentFlashcardIndex];
+    // Insert at current index + 3 or end of queue
+    const targetIdx = Math.min(currentFlashcardIndex + 4, flashcardQueue.length);
+    flashcardQueue.splice(targetIdx, 0, name);
     nextFlashcard();
 }
 
@@ -1682,6 +1721,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Mode UI (simulate click on Browse to set indicator)
     switchMode('browse');
+
+    // Check for practice/search parameters
+    const params = new URLSearchParams(window.location.search);
+    const practiceWord = params.get('practice');
+    if (practiceWord) {
+        const found = allNames.find(n => n.nameAr === practiceWord || n.nameSv === practiceWord);
+        if (found) {
+            flashcardQueue = [found];
+            switchMode('flashcard');
+        }
+    }
 
     // Initial Render
     renderCards();
