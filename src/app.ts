@@ -11,7 +11,7 @@ import { LanguageManager, t } from './i18n';
 import './i18n-apply';
 import { TypeColorSystem } from './type-color-system';
 import { debounce } from './performance-utils';
-import { openReactSettingsModal } from './settings-modal-launcher';
+import { openReactSettingsModal, initSettingsLauncher } from './settings-modal-launcher';
 
 /**
  * Main SnabbaLexin Application
@@ -50,6 +50,7 @@ export class App {
         LanguageManager.init();
 
         initMainUI();
+        initSettingsLauncher(); // Preload settings in background
         Loader.checkCacheAndLoad();
         this.initStreaks();
         this.setupSearchListeners();
