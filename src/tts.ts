@@ -268,21 +268,13 @@ export const TTSManager = {
     async _speakWithProviders(text: string, lang: string, options: TTSOptions) {
         const isOnline = navigator.onLine;
 
-        // iOS: Prioritize Local TTS (Google TTS often blocked on Safari)
-        // Slow mode: Also prioritize Local TTS for better rate control
-        const useLocalFirst = this.isIOS || (options as any).slow;
-
-        const providers = useLocalFirst
-            ? [
-                { name: 'Local TTS', fn: () => this._playLocalTTS(text, lang, options) },
-                { name: 'Google TTS', fn: () => this._playGoogleTTS(text, lang, options), requiresOnline: true },
-                { name: 'VoiceRSS', fn: () => this._playVoiceRSS(text, lang, options), requiresOnline: true }
-            ]
-            : [
-                { name: 'Google TTS', fn: () => this._playGoogleTTS(text, lang, options), requiresOnline: true },
-                { name: 'Local TTS', fn: () => this._playLocalTTS(text, lang, options) },
-                { name: 'VoiceRSS', fn: () => this._playVoiceRSS(text, lang, options), requiresOnline: true }
-            ];
+        // Always prioritize Local TTS (Browser Native) for better reliability and 'onboundary' support
+        // Google TTS is used as a fallback if local voices are missing.
+        const providers = [
+            { name: 'Local TTS', fn: () => this._playLocalTTS(text, lang, options) },
+            { name: 'Google TTS', fn: () => this._playGoogleTTS(text, lang, options), requiresOnline: true },
+            { name: 'VoiceRSS', fn: () => this._playVoiceRSS(text, lang, options), requiresOnline: true }
+        ];
 
         for (let i = 0; i < providers.length; i++) {
             const provider = providers[i];
