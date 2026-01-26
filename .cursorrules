@@ -1,0 +1,19 @@
+# 🤖 Antigravity & Self-Improvement Protocol
+
+## 📋 Project Context (snabbaLexinTSR)
+- **Tech Stack:** Vanilla TypeScript, Vite, PM2.
+- **Rules:** RAM < 1.0GB. Use `.cjs` for CommonJS configs.
+- **Environment:** macOS (XFCE Interface).
+
+## 🧠 Self-Improvement Skill (v1.0.2)
+- **Trigger 1 (Error):** If a command fails (e.g., "command not found"), log to `.learnings/ERRORS.md`.
+- **Trigger 2 (Correction):** If the user says "No" or "Wrong", log to `.learnings/LEARNINGS.md`.
+- **Trigger 3 (Insight):** If a better way is found for PM2 or Vite, log as `best_practice`.
+
+## 🛠 Logging Format
+Use the format from SKILL.md:
+- ID: [LRN-YYYYMMDD-XXX]
+- Status: pending | resolved | promoted
+
+## 🔍 Pre-Task Checklist
+Before any task, check `.learnings/` to avoid repeating past mistakes (like the .js vs .cjs module error).
