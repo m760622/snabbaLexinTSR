@@ -74,16 +74,26 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 24px;
-    padding-bottom: 24px;
+    padding: 24px 20px;
+    /* Added padding for gradient */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.3), rgba(15, 23, 42, 0) 90%);
+    border-radius: 20px 20px 0 0;
+    /* Rounded top corners matching modal */
+    margin-top: -32px;
+    /* Pull header up to cover modal padding */
+    margin-left: -32px;
+    margin-right: -32px;
 }
 
 .story-title {
     display: flex;
+
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
+    /* Reduced form 12px */
     text-align: center;
     width: 100%;
 }
@@ -137,8 +147,10 @@
 
 .close-btn {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 16px;
+    /* Breathing room */
+    top: 16px;
+    /* Breathing room */
     background: transparent;
     border: none;
     border-radius: 50%;
