@@ -116,14 +116,14 @@ const TypewriterSentence: React.FC<{
             {showSv && (
                 <div className="swedish-sentence-box sv-line">
                     <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
-                    <p className="story-sv-text">{renderWithHighlights(typeWrittenText)}</p>
+                    <p className="story-content-sv">{renderWithHighlights(typeWrittenText)}</p>
                 </div>
             )}
 
             {/* Arabic Section */}
             {/* Arabic Section - Always Rendered for CSS Control */}
             {/* Arabic Section - Always Rendered for CSS Control */}
-            <p className="story-ar-text ar-fixed arabic-text" dir="rtl" lang="ar">
+            <p className="story-content-ar ar-fixed" dir="rtl" lang="ar">
                 {arabicText}
             </p>
         </div>
@@ -165,16 +165,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
             }
 
             const timer = setTimeout(() => setIsAnimating(false), 300);
-
-            // Force Dual Language Mode (Dictatorship Mode)
-            document.body.classList.add('force-lang-both');
-
-            return () => {
-                clearTimeout(timer);
-                document.body.classList.remove('force-lang-both');
-            };
-        } else {
-            document.body.classList.remove('force-lang-both');
+            return () => clearTimeout(timer);
         }
     }, [isVisible]);
 

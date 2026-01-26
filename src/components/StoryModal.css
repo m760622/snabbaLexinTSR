@@ -167,7 +167,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
 }
 
-.story-sv-text {
+.story-content-sv {
     font-size: 1.3rem;
     line-height: 1.5;
     color: #1e3a8a;
@@ -191,7 +191,7 @@
     width: 100%;
 }
 
-.story-ar-text {
+.story-content-ar {
     font-size: 1.1rem;
     line-height: 1.7;
     color: #475569;
@@ -423,11 +423,11 @@
         background: rgba(255, 255, 255, 0.05);
     }
 
-    .story-sv-text {
+    .story-content-sv {
         color: #e2e8f0;
     }
 
-    .story-ar-text {
+    .story-content-ar {
         color: #94a3b8;
     }
 
@@ -512,21 +512,12 @@ body.lang-sv .story-modal-container .ar-fixed,
     font-size: 1.2rem;
     color: #56e6f0;
     font-family: 'Tajawal', sans-serif;
-    font-weight: 600;
-}
 
-
-/* Force Arabic Visibility when dictatorial mode is on */
-/* Extremely High Specificity to override global style.css rules (body.lang-sv .ar-text) */
-html body.force-lang-both .story-container .arabic-text,
-html body.force-lang-both .story-container .story-ar-text,
-html body.force-lang-both .story-container [lang="ar"],
-html body.force-lang-both .story-container .ar-fixed {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    height: auto !important;
-    width: auto !important;
-    color: #94a3b8 !important;
-    /* Ensure visible color */
+    /* Decoupled Content Visibility - Immune to Global Interface Language */
+    .story-content-sv,
+    .story-content-ar {
+        display: block;
+        visibility: visible;
+        opacity: 1;
+    }
 }
