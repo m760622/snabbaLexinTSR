@@ -66,7 +66,7 @@ const TypewriterSentence: React.FC<{
         : "⚠️ لم يتم استلام الترجمة";
 
     // Visibility Logic
-    const showSv = currentLang === 'sv' || currentLang === 'both';
+    const showSv = true; // Always show Swedish (Target Language)
     const showAr = currentLang === 'ar' || currentLang === 'both' || forceShowTranslation;
 
     // Helper for highlights
@@ -222,8 +222,8 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
 
     if (!isVisible) return null;
 
-    const showSvTitle = currentLang === 'sv' || currentLang === 'both';
-    const showArTitle = currentLang === 'ar' || currentLang === 'both';
+    const showSvTitle = true; // Always show Swedish title (Target Language)
+    const showArTitle = currentLang === 'ar' || currentLang === 'both' || showAllTranslations;
 
     return (
         <div className={`story-modal-overlay ${isAnimating ? 'animating' : ''}`}>
