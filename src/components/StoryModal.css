@@ -73,12 +73,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 24px;
-    padding: 24px 20px;
-    /* Added padding for gradient */
+    margin-bottom: 16px;
+    /* Reduced from 24px */
+    padding: 16px 20px;
+    /* Reduced from 24px */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
-    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.3), rgba(15, 23, 42, 0) 90%);
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0) 90%);
+    /* Slightly darker for contrast */
     border-radius: 20px 20px 0 0;
     /* Rounded top corners matching modal */
     margin-top: -32px;
@@ -92,8 +94,8 @@
 
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    /* Reduced form 12px */
+    gap: 4px;
+    /* Tightened from 8px */
     text-align: center;
     width: 100%;
 }
@@ -135,14 +137,16 @@
 }
 
 .ar-title {
-    margin: 4px 0 0 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #f59e0b;
-    /* Amber 500 - Golden Pop */
+    margin: 2px 0 0 0;
+    font-size: 1.3rem;
+    /* Slightly larger */
+    font-weight: 700;
+    color: #ffd700;
+    /* Gold */
     font-family: 'Tajawal', sans-serif;
     line-height: 1.4;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.4), 0 0 5px rgba(255, 215, 0, 0.6);
+    /* Radiant Glow */
 }
 
 .close-btn {
