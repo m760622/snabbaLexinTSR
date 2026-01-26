@@ -122,10 +122,12 @@ const TypewriterSentence: React.FC<{
 
             {/* Arabic Section */}
             {/* Arabic Section - Always Rendered for CSS Control */}
-            {/* Arabic Section - Always Rendered for CSS Control */}
-            <p className="story-content-ar ar-fixed" dir="rtl" lang="ar">
-                {arabicText}
-            </p>
+            {/* Arabic Section - Controlled by local toggle */}
+            {(showAr || forceShowTranslation) && (
+                <p className="story-content-ar ar-fixed" dir="rtl" lang="ar">
+                    {arabicText}
+                </p>
+            )}
         </div>
     );
 };
