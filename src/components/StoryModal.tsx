@@ -257,8 +257,41 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
         }
     }, [isVisible]);
 
+    // Audio Event Listeners for Karaoke & State
+    useEffect(() => {
+        const handleBoundary = (e: CustomEvent) => {
+            // Check if event has charIndex
+            if (typeof e.detail?.charIndex === 'number') {
+                setHighlightIndex(e.detail.charIndex);
+            }
+        };
+
+        const handleEnd = () => {
+            setCurrentlyPlaying(null);
+            setHighlightIndex(null);
+        };
+
+        const handleError = () => {
+            setCurrentlyPlaying(null);
+            setHighlightIndex(null);
+        };
+
+        // Use window listeners as TTSManager dispatches to window
+        window.addEventListener('tts-boundary', handleBoundary as EventListener);
+        window.addEventListener('tts-end', handleEnd);
+        window.addEventListener('tts-stop', handleEnd);
+        window.addEventListener('tts-error', handleError as EventListener);
+
+        return () => {
+            window.removeEventListener('tts-boundary', handleBoundary as EventListener);
+            window.removeEventListener('tts-end', handleEnd);
+            window.removeEventListener('tts-stop', handleEnd);
+            window.removeEventListener('tts-error', handleError as EventListener);
+        };
+    }, []);
+
     const stopAudio = () => {
-        speechSynthesis.cancel();
+        TTSManager.stop();
         setCurrentlyPlaying(null);
         setHighlightIndex(null);
     };
@@ -269,41 +302,18 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
             if (currentlyPlaying === id) return;
         }
 
-        try {
-            const utterance = new SpeechSynthesisUtterance(text);
-            const voices = speechSynthesis.getVoices();
-            const swedishVoice = voices.find(v => v.lang.startsWith('sv')) || voices.find(v => v.lang === 'sv-SE');
+        // Optimistic state update
+        setCurrentlyPlaying(id);
+        setHighlightIndex(null);
 
-            if (swedishVoice) utterance.voice = swedishVoice;
-            utterance.lang = 'sv-SE';
-            utterance.rate = 0.8;
-
-            utterance.onstart = () => {
-                setCurrentlyPlaying(id);
-            };
-
-            utterance.onboundary = (event) => {
-                if (event.name === 'word') {
-                    setHighlightIndex(event.charIndex);
-                }
-            };
-
-            utterance.onend = () => {
+        // Use robust TTSManager
+        TTSManager.speakSwedish(text, {
+            speed: 0.8, // Slightly slower for stories
+            onError: (err) => {
+                console.error("TTS Error:", err);
                 setCurrentlyPlaying(null);
-                setHighlightIndex(null);
-            };
-
-            utterance.onerror = () => {
-                setCurrentlyPlaying(null);
-                setHighlightIndex(null);
-            };
-
-            speechSynthesis.speak(utterance);
-        } catch (error) {
-            console.error('Error playing audio:', error);
-            setCurrentlyPlaying(null);
-            setHighlightIndex(null);
-        }
+            }
+        });
     };
 
     const handlePlayFullStory = () => {
