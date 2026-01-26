@@ -147,9 +147,10 @@
 
 .close-btn {
     position: absolute;
-    right: 16px;
-    /* Breathing room */
-    top: 16px;
+    inset-inline-end: 20px;
+    /* Adapts to RTL/LTR automatically */
+    top: 24px;
+    /* Align with Book Icon vertically */
     /* Breathing room */
     background: transparent;
     border: none;
