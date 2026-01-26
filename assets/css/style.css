@@ -511,18 +511,7 @@ textarea,
   --text-secondary: #991b1b;
 }
 
-/* ========================================
-   Bilingual Visibility Rules
-   ======================================== */
-/* When language is Arabic (ar), hide Swedish text */
-body.lang-ar .sv-text {
-  display: none !important;
-}
 
-/* When language is Swedish (sv), hide Arabic text */
-body.lang-sv .ar-text {
-  display: none !important;
-}
 
 /* When language is Both (both), show both via flex/block logic handled by parents */
 /* Typically we want them inline or block depending on context */
@@ -12342,7 +12331,7 @@ body.dark-mode .onboarding-container {
    ============================================================ */
 
 /* Swedish Only Mode - Hide all Arabic text */
-body.lang-sv [dir="rtl"]:not(.card *):not(.details-page-container *):not(.quiz-option):not(.flashcard-wrapper *):not(.training-card *),
+body.lang-sv [dir="rtl"]:not(.card *):not(.details-page-container *):not(.quiz-option):not(.flashcard-wrapper *):not(.training-card *):not(.story-container *),
 body.lang-sv .ar-text:not(.training-card .ar-text),
 body.lang-sv .arabic-text:not(.training-card .arabic-text),
 body.lang-sv .text-ar:not(.training-card .text-ar),
@@ -12422,15 +12411,6 @@ body.lang-both .sv-text {
   display: inline;
 }
 
-/* Swedish mode - show Swedish, hide Arabic */
-body.lang-sv .sv-text {
-  display: inline !important;
-}
-
-/* Arabic mode - show Arabic, hide Swedish */
-body.lang-ar .ar-text {
-  display: inline !important;
-}
 
 /* Language selector - Always show all buttons */
 .language-selector,
