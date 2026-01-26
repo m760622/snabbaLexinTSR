@@ -24,7 +24,7 @@
     --glass-shiny: rgba(255, 255, 255, 0.05);
     --glass-blur: blur(12px);
 
-    --card-back-grad: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+    --card-back-grad: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
     --card-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
 
     --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);

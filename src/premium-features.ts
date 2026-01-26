@@ -407,7 +407,7 @@ export const DailyGoals = {
             </div>
             ${this.goals.map(goal => `
                 <div class="daily-goal-item ${goal.completed ? 'completed' : ''}">
-                    <div class="daily-goal-icon" style="background: ${goal.completed ? '#4ade80' : '#6366f1'}20;">
+                    <div class="daily-goal-icon" style="background: ${goal.completed ? '#4ade80' : '#3b82f6'}20;">
                         ${goal.icon}
                     </div>
                     <div class="daily-goal-info">
@@ -852,7 +852,7 @@ export function createProgressRing(container: HTMLElement, progress: number, siz
         <svg class="progress-ring" width="${size}" height="${size}">
             <defs>
                 <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#6366f1"/>
+                    <stop offset="0%" style="stop-color:#3b82f6"/>
                     <stop offset="50%" style="stop-color:#3b82f6"/>
                     <stop offset="100%" style="stop-color:#f59e0b"/>
                 </linearGradient>

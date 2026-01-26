@@ -172,10 +172,10 @@ export const ToastManager = {
             }
 
             .toast-item.info {
-                border-left: 3px solid #6366f1;
+                border-left: 3px solid #3b82f6;
             }
             .toast-item.info .toast-progress {
-                background: linear-gradient(90deg, #6366f1, #818cf8);
+                background: linear-gradient(90deg, #3b82f6, #60a5fa);
             }
 
             .toast-item.warning {

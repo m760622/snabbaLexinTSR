@@ -473,3 +473,40 @@ export function levenshteinDistance(a: string, b: string): number {
 
     return matrix[b.length][a.length];
 }
+
+/**
+ * Copies text to clipboard with fallback for non-secure contexts
+ */
+export async function copyToClipboard(text: string): Promise<boolean> {
+    try {
+        // Try Modern Async API first (works in secure contexts)
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+            return true;
+        }
+        throw new Error('Clipboard API unavailable');
+    } catch (err) {
+        // Fallback: TextArea hack (works in non-secure contexts)
+        try {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+
+            // Ensure it's not visible but part of DOM
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            document.body.appendChild(textArea);
+
+            textArea.focus();
+            textArea.select();
+
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            return successful;
+        } catch (fallbackErr) {
+            console.error('Fallback copy failed:', fallbackErr);
+            return false;
+        }
+    }
+}

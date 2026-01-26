@@ -688,6 +688,26 @@ export const DictionaryDB = {
             request.onsuccess = () => resolve(request.result);
             request.onerror = () => resolve(0);
         });
+    },
+
+    /**
+     * Clear all training words
+     */
+    async clearTrainingWords(): Promise<void> {
+        if (!this.db) await this.init();
+        if (!this.db) return;
+
+        return new Promise((resolve, reject) => {
+            const tx = this.db!.transaction([this.TRAINING_STORE], 'readwrite');
+            const store = tx.objectStore(this.TRAINING_STORE);
+            const request = store.clear();
+
+            tx.oncomplete = () => {
+                console.log('[DB] Training words cleared');
+                resolve();
+            };
+            tx.onerror = (e) => reject(e);
+        });
     }
 };
 

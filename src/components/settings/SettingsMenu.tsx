@@ -13,17 +13,7 @@ import { DataSection } from './sections/DataSection';
 import { AboutSection } from './sections/AboutSection';
 import { ToastManager } from '../../toast-manager'; // Assuming we can use this or need a React wrapper
 
-// Helper to use Toast in React
-const showToast = (msg: string) => {
-    // Dispatch event for existing ToastManager to catch if it listens, 
-    // or we can import the logic. The existing ToastManager is a singleton class.
-    // We'll trust the singleton if initialized, otherwise fallback to alert or nothing.
-    // For now, let's try assuming the global one works or window dispatch.
-    // Actually, let's use a simple React effect/portal if needed, but existing ToastManager works via DOM.
-    // We can just call ToastManager.show() if it exports a static instance or singleton.
-    // In settings.ts it imported { ToastManager } from './toast-manager'.
-    // Let's assume it works.
-};
+
 
 export const SettingsMenu: React.FC = () => {
     const { settings, resetSettings } = useSettings();

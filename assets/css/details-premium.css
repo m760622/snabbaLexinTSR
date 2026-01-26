@@ -587,7 +587,7 @@
         0 8px 30px rgba(0, 0, 0, 0.3),
         0 0 0 0.5px rgba(220, 38, 38, 0.8),
         0 0 10px rgba(220, 38, 38, 0.4);
-    animation: hero-entrance 0.6s ease-out, glow-pulse-indigo 3s ease-in-out infinite;
+    animation: hero-entrance 0.6s ease-out, glow-pulse-blue 3s ease-in-out infinite;
 }
 
 /* Conjunctions - Light Yellow #fde047 - Distinct from Preposition */
@@ -785,7 +785,7 @@
 }
 
 /* Indigo - Pronouns - Deep Pulse */
-@keyframes glow-pulse-indigo {
+@keyframes glow-pulse-blue {
 
     0%,
     100% {
@@ -1436,7 +1436,7 @@
 }
 
 [data-theme="dark"] .gender-badge.gender-ett {
-    background: linear-gradient(135deg, #a78bfa 0%, #1d4ed8 100%);
+    background: linear-gradient(135deg, #22d3ee 0%, #1d4ed8 100%);
 }
 
 /* Audio Button next to Badge */
@@ -6920,10 +6920,10 @@ body .quiz-options {
         0 0 30px rgba(220, 38, 38, 0.4),
         0 0 60px rgba(220, 38, 38, 0.2),
         0 8px 32px rgba(0, 0, 0, 0.3);
-    animation: fc-glow-pulse-indigo 4s ease-in-out infinite;
+    animation: fc-glow-pulse-blue 4s ease-in-out infinite;
 }
 
-@keyframes fc-glow-pulse-indigo {
+@keyframes fc-glow-pulse-blue {
 
     0%,
     100% {

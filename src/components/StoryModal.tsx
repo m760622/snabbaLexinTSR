@@ -3,6 +3,7 @@ import './StoryModal.css';
 import { TTSManager } from '../tts';
 import { StoryResponse, StorySentence } from '../services/aiService';
 import { LanguageManager, Language } from '../i18n';
+import { showToast, copyToClipboard } from '../utils';
 
 interface Word {
     id: string;
@@ -196,12 +197,26 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
 
     const handleCopyText = async () => {
         try {
-            const svText = story.sentences.map(s => s.swedish_sentence).join('\n');
-            const arText = story.sentences.map(s => s.arabic_translation).join('\n');
-            await navigator.clipboard.writeText(`${story.title_sv}\n${svText}\n\n${story.title_ar}\n${arText}`);
-            if ((window as any).showToast) (window as any).showToast('📋 تم نسخ القصة!');
+            const lines: string[] = [];
+            lines.push(`${story.title_sv}`);
+            lines.push(`${story.title_ar}`);
+            lines.push(''); // Empty line after title
+
+            story.sentences.forEach(s => {
+                lines.push(s.swedish_sentence);
+                if (s.arabic_translation) lines.push(s.arabic_translation);
+                lines.push(''); // Empty line between pairs
+            });
+
+            const success = await copyToClipboard(lines.join('\n'));
+            if (success) {
+                showToast('📋 تم نسخ القصة!');
+            } else {
+                throw new Error('Copy failed');
+            }
         } catch (error) {
             console.error('Error copying text:', error);
+            showToast('❌ misslyckades med att kopiera / فشل النسخ');
         }
     };
 

@@ -1410,7 +1410,7 @@ body::after {
 
 [data-theme="dark"] body::before {
   opacity: 0.2;
-  background: #4f46e5;
+  background: #2563eb;
 }
 
 [data-theme="dark"] body::after {
@@ -5259,7 +5259,7 @@ h1 {
 }
 
 .explore-card[data-category="work"] .sub-text {
-  color: #a78bfa;
+  color: #22d3ee;
 }
 
 .explore-card[data-category="family"] .sub-text {
@@ -5963,7 +5963,7 @@ h1 {
 }
 
 .card[data-type="abbr"] {
-  border-left: 4px solid #c4b5fd;
+  border-left: 4px solid #67e8f9;
   /* Pale Lavender for Abbreviations */
 }
 
@@ -6872,7 +6872,7 @@ body.dark-mode .pwa-content p {
 }
 
 .pwa-btn.primary:hover {
-  background: #4f46e5;
+  background: #2563eb;
 }
 
 .pwa-btn.secondary {
@@ -8631,7 +8631,7 @@ html:not([data-theme="dark"]) .close-btn {
 :root:not([data-theme="dark"]) .close-btn:hover,
 html:not([data-theme="dark"]) .close-btn:hover {
   background: rgba(56, 189, 248, 0.2);
-  color: #4f46e5;
+  color: #2563eb;
 }
 
 /* Quiz Favorite Button - Light Mode */
@@ -8675,7 +8675,7 @@ html:not([data-theme="dark"]) #nextQuestion {
 :root:not([data-theme="dark"]) #nextQuestion:hover,
 html:not([data-theme="dark"]) .action-btn.primary:hover,
 html:not([data-theme="dark"]) #nextQuestion:hover {
-  background: linear-gradient(135deg, #4f46e5 0%, #1e3a8a 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1e3a8a 100%);
   box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
 }
 
@@ -8749,7 +8749,7 @@ html:not([data-theme="dark"]) #nextQuestion:hover {
 [data-theme="dark"] .quiz-example {
   color: rgba(255, 255, 255, 0.85);
   background: rgba(56, 189, 248, 0.15);
-  border-left-color: #818cf8;
+  border-left-color: #60a5fa;
 }
 
 /* Quiz Options - Dark Mode Enhanced */
@@ -8763,7 +8763,7 @@ html:not([data-theme="dark"]) #nextQuestion:hover {
 
 [data-theme="dark"] .quiz-option:hover {
   background: rgba(51, 65, 85, 0.95);
-  border-color: #818cf8;
+  border-color: #60a5fa;
   box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3),
     0 0 0 1px rgba(129, 140, 248, 0.2) inset;
 }
@@ -8807,7 +8807,7 @@ html:not([data-theme="dark"]) #nextQuestion:hover {
 }
 
 [data-theme="dark"] .end-score-value {
-  color: #818cf8;
+  color: #60a5fa;
   text-shadow: 0 2px 15px rgba(56, 189, 248, 0.5);
 }
 
@@ -8826,7 +8826,7 @@ html:not([data-theme="dark"]) #nextQuestion:hover {
 
 [data-theme="dark"] .action-btn.primary:hover,
 [data-theme="dark"] #nextQuestion:hover {
-  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+  background: linear-gradient(135deg, #60a5fa 0%, #22d3ee 100%);
   box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
 }
 
@@ -9481,7 +9481,7 @@ html:not([data-theme="dark"]) #nextQuestion:hover {
   color: #f59e0b;
 }
 
-.icon-color-indigo {
+.icon-color-blue {
   color: #3b82f6;
 }
 
@@ -10157,7 +10157,7 @@ body.dark-mode .onboarding-container {
 .challenge-progress span {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #4f46e5;
+  color: #2563eb;
   background: #fff;
   padding: 0.4rem 1.2rem;
   border-radius: 0.8rem;
@@ -10169,7 +10169,7 @@ body.dark-mode .onboarding-container {
 
 [data-theme="dark"] .challenge-progress span {
   background: #334155;
-  color: #818cf8;
+  color: #60a5fa;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 

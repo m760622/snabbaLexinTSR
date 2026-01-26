@@ -2,7 +2,7 @@
 
 :root {
     --primary: #dc2626;
-    --primary-dark: #4f46e5;
+    --primary-dark: #2563eb;
     --bg-color: #0f172a;
     --card-bg: #1e293b;
     --text-color: #f8fafc;
@@ -234,7 +234,7 @@ header {
 
 .level-badge {
     background: rgba(37, 99, 235, 0.2);
-    color: #818cf8;
+    color: #60a5fa;
     padding: 0.25rem 0.75rem;
     border-radius: 999px;
     font-size: 0.75rem;

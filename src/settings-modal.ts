@@ -52,7 +52,7 @@ export function generateSettingsModalHTML(): string {
                     <!-- 2. Language Selection (span-4) -->
                     <div class="bento-card card-language delay-200">
                          <div class="section-header-bento">
-                            <span class="section-icon-bento gradient-indigo">
+                            <span class="section-icon-bento gradient-blue">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                             </span>
                             <span class="section-title-bento"><span class="sv-text">Språk</span><span class="ar-text">اللغة</span></span>
