@@ -12331,11 +12331,9 @@ body.dark-mode .onboarding-container {
    ============================================================ */
 
 /* Swedish Only Mode - Hide all Arabic text */
-body.lang-sv [dir="rtl"]:not(.card *):not(.details-page-container *):not(.quiz-option):not(.flashcard-wrapper *):not(.training-card *):not(.story-container *),
 body.lang-sv .ar-text:not(.training-card .ar-text),
 body.lang-sv .arabic-text:not(.training-card .arabic-text),
 body.lang-sv .text-ar:not(.training-card .text-ar),
-body.lang-sv [lang="ar"]:not(.flashcard-wrapper *):not(.training-card *):not(.story-container *),
 body.lang-sv .bilingual-ar:not(.training-card .bilingual-ar),
 body.lang-sv .word-arb:not(.card .word-arb):not(.details-page-container *):not(.cognate-card *):not(.training-card .word-arb),
 body.lang-sv .subtitle-ar:not(.training-card .subtitle-ar) {
@@ -12347,7 +12345,9 @@ body.lang-sv .subtitle-ar:not(.training-card .subtitle-ar) {
 .details-page-container .word-arb-hero,
 .details-page-container .word-arb-ext,
 .details-page-container .ex-arb-detail,
-.details-page-container .def-text[dir="rtl"] {
+.details-page-container .def-text[dir="rtl"],
+.story-container [dir="rtl"],
+.story-container .story-content-ar {
   display: block !important;
 }
 
@@ -12360,7 +12360,6 @@ body.lang-sv .subtitle-ar:not(.training-card .subtitle-ar) {
 body.lang-ar .sv-text,
 body.lang-ar .swedish-text,
 body.lang-ar .text-sv,
-body.lang-ar [lang="sv"],
 body.lang-ar .bilingual-sv,
 body.lang-ar .word-swe:not(.card .word-swe):not(.details-page-container *),
 body.lang-ar .subtitle-sv {
