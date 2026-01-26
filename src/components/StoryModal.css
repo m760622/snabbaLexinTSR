@@ -530,19 +530,24 @@
 }
 
 .story-sentence-pair-container.playing {
-    background: rgba(255, 215, 0, 0.15);
-    /* Radiant Gold Background */
-    border: 1px solid rgba(255, 215, 0, 0.4);
+    background: transparent;
+    border: 1px solid transparent;
     transform: scale(1.02);
-    /* Gentle Pop */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Make text darker/sharper when playing for readability */
+/* Highlight specifically the SWEDISH TEXT when playing */
 .story-sentence-pair-container.playing .story-content-sv {
-    color: #0f172a;
-    /* Black/Slate-900 */
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    background: rgba(255, 223, 0, 0.3);
+    /* Stronger Gold Marker */
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: -8px -12px;
+    /* Compensate padding */
+    width: calc(100% + 24px);
+    color: #000;
+    /* Max contrast */
+    text-shadow: none;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
 }
 
 .story-sentence-pair-container.playing .play-icon {
