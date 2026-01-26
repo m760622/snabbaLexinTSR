@@ -93,7 +93,7 @@ const TypewriterSentence: React.FC<{
                     } else {
                         // Plain text - Split by spaces to allow word-level highlighting
                         // We use a regex that captures delimiters so we don't lose them
-                        return part.split(/(\s+)/).map((subPart, j) => {
+                        return part.split(/(\s+)/).map((subPart) => {
                             const subStart = currentStartIndex + part.substring(0, part.indexOf(subPart, 0)).length;
                             // Wait, logic above is flawed for repeats.
                             // Better: Calculate exact offset relative to `part` start.
@@ -142,7 +142,7 @@ const TypewriterSentence: React.FC<{
             }
         }
 
-        uniqueRanges.forEach((range, idx) => {
+        uniqueRanges.forEach((range) => {
             // A. Render non-keyword text before this keyword
             if (range.start > currentPos) {
                 const segment = text.substring(currentPos, range.start);
@@ -181,7 +181,7 @@ const TypewriterSentence: React.FC<{
         // Split by spaces but preserve them
         const parts = segment.split(/(\s+)/);
         let localOffset = 0;
-        return parts.map((part, i) => {
+        return parts.map((part) => {
             const start = offset + localOffset;
             localOffset += part.length;
 
