@@ -12346,7 +12346,7 @@ body.lang-sv [dir="rtl"]:not(.card *):not(.details-page-container *):not(.quiz-o
 body.lang-sv .ar-text:not(.training-card .ar-text),
 body.lang-sv .arabic-text:not(.training-card .arabic-text),
 body.lang-sv .text-ar:not(.training-card .text-ar),
-body.lang-sv [lang="ar"]:not(.flashcard-wrapper *):not(.training-card *),
+body.lang-sv [lang="ar"]:not(.flashcard-wrapper *):not(.training-card *):not(.story-container *),
 body.lang-sv .bilingual-ar:not(.training-card .bilingual-ar),
 body.lang-sv .word-arb:not(.card .word-arb):not(.details-page-container *):not(.cognate-card *):not(.training-card .word-arb),
 body.lang-sv .subtitle-ar:not(.training-card .subtitle-ar) {
