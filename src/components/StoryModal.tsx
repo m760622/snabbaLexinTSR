@@ -23,31 +23,7 @@ interface StoryModalProps {
     isVisible: boolean;
 }
 
-const useTypewriter = (text: string, speed: number = 20, isEnabled: boolean = true) => {
-    const [displayedText, setDisplayedText] = useState('');
 
-    useEffect(() => {
-        if (!isEnabled || !text) {
-            setDisplayedText(text || '');
-            return;
-        }
-
-        setDisplayedText(''); // Reset on new text
-        let i = 0;
-        const timer = setInterval(() => {
-            if (i < text.length) {
-                setDisplayedText(prev => prev + text.charAt(i));
-                i++;
-            } else {
-                clearInterval(timer);
-            }
-        }, speed);
-
-        return () => clearInterval(timer);
-    }, [text, speed, isEnabled]);
-
-    return displayedText;
-};
 
 // Extracted Component to prevent re-renders
 const TypewriterSentence: React.FC<{
@@ -57,7 +33,8 @@ const TypewriterSentence: React.FC<{
     playAudio: Function,
     swedishWords: Word[]
 }> = ({ sentence, idx, isPlaying, playAudio, swedishWords }) => {
-    const typeWrittenText = useTypewriter(sentence.swedish_sentence, 20);
+    // Direct rendering to prevent typewriter glitches
+    const displayedText = sentence.swedish_sentence;
 
     const arabicText = sentence.arabic_translation && sentence.arabic_translation.trim().length > 0
         ? sentence.arabic_translation
@@ -115,7 +92,7 @@ const TypewriterSentence: React.FC<{
             {showSv && (
                 <div className="swedish-sentence-box sv-line">
                     <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
-                    <p className="story-content-sv">{renderWithHighlights(typeWrittenText)}</p>
+                    <p className="story-content-sv">{renderWithHighlights(displayedText)}</p>
                 </div>
             )}
 
