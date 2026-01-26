@@ -166,6 +166,7 @@ export const TTSManager = {
                     align-items: center;
                     justify-content: center;
                     z-index: 99999;
+                    -webkit-backdrop-filter: blur(5px);
                     backdrop-filter: blur(5px);
                 ">
                     <div style="

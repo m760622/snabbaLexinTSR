@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './StoryModal.css';
 import { TTSManager } from '../tts';
 import { StoryResponse, StorySentence } from '../services/aiService';
+import { LanguageManager, Language } from '../i18n';
 
 interface Word {
     id: string;
     swedish: string;
     arabic: string;
 }
-
-// Sentence interface from aiService
-// interface Sentence { sv: string; ar: string; } 
 
 interface Story {
     title_sv: string;
@@ -57,13 +55,18 @@ const TypewriterSentence: React.FC<{
     idx: number,
     isPlaying: boolean,
     playAudio: Function,
-    swedishWords: Word[]
-}> = ({ sentence, idx, isPlaying, playAudio, swedishWords }) => {
+    swedishWords: Word[],
+    currentLang: Language
+}> = ({ sentence, idx, isPlaying, playAudio, swedishWords, currentLang }) => {
     const typeWrittenText = useTypewriter(sentence.swedish_sentence, 20);
 
     const arabicText = sentence.arabic_translation && sentence.arabic_translation.trim().length > 0
         ? sentence.arabic_translation
         : "⚠️ لم يتم استلام الترجمة";
+
+    // Visibility Logic
+    const showSv = currentLang === 'sv' || currentLang === 'both';
+    const showAr = currentLang === 'ar' || currentLang === 'both';
 
     // Helper for highlights
     const renderWithHighlights = (text: string) => {
@@ -108,15 +111,17 @@ const TypewriterSentence: React.FC<{
             onClick={() => playAudio(sentence.swedish_sentence, idx, sentence.arabic_translation)}
             key={idx}
         >
-            {/* Swedish Section - Always Visible */}
-            <div className="swedish-sentence-box sv-line">
-                <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
-                <p className="sv-text">{renderWithHighlights(typeWrittenText)}</p>
-            </div>
+            {/* Swedish Section */}
+            {showSv && (
+                <div className="swedish-sentence-box sv-line">
+                    <span className="play-icon">{isPlaying ? '🔊' : '▶️'}</span>
+                    <p className="story-sv-text">{renderWithHighlights(typeWrittenText)}</p>
+                </div>
+            )}
 
-            {/* Arabic Section - Forced Visible with ar-fixed */}
-            {sentence.arabic_translation && (
-                <p className="ar-fixed" dir="rtl" lang="ar">
+            {/* Arabic Section */}
+            {showAr && sentence.arabic_translation && (
+                <p className="story-ar-text ar-fixed" dir="rtl" lang="ar">
                     {sentence.arabic_translation}
                 </p>
             )}
@@ -128,25 +133,38 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
     const [isAnimating, setIsAnimating] = useState(false);
     const [currentlyPlaying, setCurrentlyPlaying] = useState<number | 'all' | null>(null);
     const [showAllTranslations, setShowAllTranslations] = useState(true);
-    const [pageType, setPageType] = useState('story'); // Default for this modal is story context
+    const [pageType, setPageType] = useState('story');
 
-    // Check language settings for hybrid mode
-    // Play Success Sound on Mount & Handle Classes
+    // Language State
+    const [currentLang, setCurrentLang] = useState<Language>(LanguageManager.getLanguage());
+
+    useEffect(() => {
+        // Subscribe to language changes
+        const updateLang = (lang: Language) => setCurrentLang(lang);
+        LanguageManager.onLanguageChange(updateLang);
+
+        // Initial set
+        setCurrentLang(LanguageManager.getLanguage());
+
+        return () => {
+            // No unsubscribe method in LanguageManager based on interface, 
+            // but for a modal that unmounts mostly on app refresh it's okay, 
+            // or we can add removal logic if available.
+            // Assuming no memory leak for now as per minimal architecture.
+        };
+    }, []);
+
     useEffect(() => {
         if (isVisible) {
             setIsAnimating(true);
 
-            // Force hybrid mode visually on BODY
             // Play Ta-da sound!
-            // @ts-ignore - AudioManager is global
             if (typeof window !== 'undefined' && (window as any).AudioManager) {
                 (window as any).AudioManager.playSuccessSound();
             }
 
             const timer = setTimeout(() => setIsAnimating(false), 300);
-            return () => {
-                clearTimeout(timer);
-            };
+            return () => clearTimeout(timer);
         }
     }, [isVisible]);
 
@@ -172,8 +190,6 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
 
             utterance.onstart = () => {
                 setCurrentlyPlaying(id);
-                // Toast removed: Translation is now visible in the UI
-
             };
             utterance.onend = () => setCurrentlyPlaying(null);
             utterance.onerror = () => setCurrentlyPlaying(null);
@@ -203,16 +219,18 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
 
     if (!isVisible) return null;
 
+    const showSvTitle = currentLang === 'sv' || currentLang === 'both';
+    const showArTitle = currentLang === 'ar' || currentLang === 'both';
+
     return (
-        <div className={`story-modal-overlay ${isAnimating ? 'animating' : ''} lang-both`}>
-            {/* Added lang-both explicitly to modal overlay */}
+        <div className={`story-modal-overlay ${isAnimating ? 'animating' : ''}`}>
             <div className={`glass-card story-container ${isAnimating ? 'scale-up' : ''}`}>
                 <header className="story-header">
                     <div className="story-title">
                         <span className="emoji">📖</span>
                         <div className="title-group">
-                            <h3 className="sv-title">{story.title_sv}</h3>
-                            <h4 className="ar-title">{story.title_ar}</h4>
+                            {showSvTitle && <h3 className="sv-title">{story.title_sv}</h3>}
+                            {showArTitle && <h4 className="ar-title">{story.title_ar}</h4>}
                         </div>
                     </div>
                     <div className="header-actions">
@@ -236,6 +254,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                             isPlaying={currentlyPlaying === idx}
                             playAudio={playAudio}
                             swedishWords={swedishWords}
+                            currentLang={currentLang}
                         />
                     ))}
                 </div>

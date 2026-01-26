@@ -167,7 +167,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
 }
 
-.sv-text {
+.story-sv-text {
     font-size: 1.3rem;
     line-height: 1.5;
     color: #1e3a8a;
@@ -191,7 +191,7 @@
     width: 100%;
 }
 
-.ar-text {
+.story-ar-text {
     font-size: 1.1rem;
     line-height: 1.7;
     color: #475569;
@@ -331,6 +331,7 @@
     justify-content: center;
     gap: 8px;
     transition: all 0.2s ease;
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
 }
 
@@ -498,6 +499,7 @@
     visibility: visible !important;
     opacity: 1 !important;
 }
+
 /* Force Arabic Text visibility in Story Modal specifically */
 body.lang-sv .story-modal-container .ar-fixed,
 .ar-fixed {
@@ -506,9 +508,9 @@ body.lang-sv .story-modal-container .ar-fixed,
     visibility: visible !important;
     margin-top: 10px;
     padding-top: 10px;
-    border-top: 1px solid rgba(59, 130, 246, 0.2);
+    border-top: 1px solid rgba(177, 201, 239, 0.2);
     font-size: 1.2rem;
-    color: #475569;
+    color: #56e6f0;
     font-family: 'Tajawal', sans-serif;
     font-weight: 600;
 }
