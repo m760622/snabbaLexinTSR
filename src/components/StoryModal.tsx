@@ -56,8 +56,9 @@ const TypewriterSentence: React.FC<{
     isPlaying: boolean,
     playAudio: Function,
     swedishWords: Word[],
-    currentLang: Language
-}> = ({ sentence, idx, isPlaying, playAudio, swedishWords, currentLang }) => {
+    currentLang: Language,
+    forceShowTranslation: boolean
+}> = ({ sentence, idx, isPlaying, playAudio, swedishWords, currentLang, forceShowTranslation }) => {
     const typeWrittenText = useTypewriter(sentence.swedish_sentence, 20);
 
     const arabicText = sentence.arabic_translation && sentence.arabic_translation.trim().length > 0
@@ -66,7 +67,7 @@ const TypewriterSentence: React.FC<{
 
     // Visibility Logic
     const showSv = currentLang === 'sv' || currentLang === 'both';
-    const showAr = currentLang === 'ar' || currentLang === 'both';
+    const showAr = currentLang === 'ar' || currentLang === 'both' || forceShowTranslation;
 
     // Helper for highlights
     const renderWithHighlights = (text: string) => {
@@ -255,6 +256,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
                             playAudio={playAudio}
                             swedishWords={swedishWords}
                             currentLang={currentLang}
+                            forceShowTranslation={showAllTranslations}
                         />
                     ))}
                 </div>
