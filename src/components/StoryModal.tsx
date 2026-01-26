@@ -122,7 +122,7 @@ const TypewriterSentence: React.FC<{
 
             {/* Arabic Section */}
             {showAr && sentence.arabic_translation && (
-                <p className="story-ar-text ar-fixed" dir="rtl" lang="ar">
+                <p className="story-ar-text ar-fixed arabic-text" dir="rtl" lang="ar">
                     {sentence.arabic_translation}
                 </p>
             )}
@@ -165,7 +165,16 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
             }
 
             const timer = setTimeout(() => setIsAnimating(false), 300);
-            return () => clearTimeout(timer);
+
+            // Force Dual Language Mode (Dictatorship Mode)
+            document.body.classList.add('force-lang-both');
+
+            return () => {
+                clearTimeout(timer);
+                document.body.classList.remove('force-lang-both');
+            };
+        } else {
+            document.body.classList.remove('force-lang-both');
         }
     }, [isVisible]);
 

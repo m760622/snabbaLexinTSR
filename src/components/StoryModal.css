@@ -514,3 +514,12 @@ body.lang-sv .story-modal-container .ar-fixed,
     font-family: 'Tajawal', sans-serif;
     font-weight: 600;
 }
+
+
+/* Force Arabic Visibility when dictatorial mode is on */
+.force-lang-both .arabic-text,
+.force-lang-both .story-ar-text {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
