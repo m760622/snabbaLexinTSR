@@ -15,7 +15,12 @@ import { ToastManager } from '../../toast-manager'; // Assuming we can use this 
 
 
 
-export const SettingsMenu: React.FC = () => {
+interface SettingsMenuProps {
+    displayMode?: 'page' | 'modal';
+    onClose?: () => void;
+}
+
+export const SettingsMenu: React.FC<SettingsMenuProps> = ({ displayMode = 'page', onClose }) => {
     const { settings, resetSettings } = useSettings();
     const [completion, setCompletion] = useState(0);
 
@@ -42,13 +47,28 @@ export const SettingsMenu: React.FC = () => {
         <div className="settings-container">
             {/* Header */}
             <header className="settings-header">
-                <a href="index.html" className="settings-back-btn" aria-label="Tillbaka / رجوع">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                </a>
+                {displayMode === 'modal' ? (
+                    <button
+                        type="button"
+                        className="settings-back-btn"
+                        onClick={onClose}
+                        aria-label="Stäng / إغلاق"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                ) : (
+                    <a href="index.html" className="settings-back-btn" aria-label="Tillbaka / رجوع">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </a>
+                )}
                 <div className="settings-header-title">
                     <h1>
                         <span className="sv-text">Inställningar</span>

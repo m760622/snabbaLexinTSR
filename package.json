@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "شغل": "vite --port 5196 --host --open"
+    "شغل": "vite --port 5196 --host --open",
+    "حدث": "git add . && git commit -m \"react: update settings navigation and modal\" && git push"
   },
   "repository": {
     "type": "git",

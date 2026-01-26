@@ -11,6 +11,7 @@ import { LanguageManager, t } from './i18n';
 import './i18n-apply';
 import { TypeColorSystem } from './type-color-system';
 import { debounce } from './performance-utils';
+import { openReactSettingsModal } from './settings-modal-launcher';
 
 /**
  * Main SnabbaLexin Application
@@ -495,8 +496,14 @@ export class App {
 
 
     private initQuickActions() {
-        // Redundant quick action listeners removed. 
-        // Handled by initMainUI and specific feature modules for better separation.
+        // Settings Button (React Modal)
+        const settingsBtn = document.getElementById('settingsBtn');
+        if (settingsBtn) {
+            settingsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openReactSettingsModal();
+            });
+        }
     }
 
     private handleSearch(e: Event) {
