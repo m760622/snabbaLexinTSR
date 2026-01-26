@@ -12369,7 +12369,8 @@ body.lang-ar .subtitle-sv {
 /* Force show dictionary content on details page even in single-language mode */
 .details-page-container .word-swe-hero,
 .details-page-container .ex-swe-detail,
-.details-page-container .def-text {
+.details-page-container .def-text,
+.story-container .story-content-sv {
   display: block !important;
 }
 
