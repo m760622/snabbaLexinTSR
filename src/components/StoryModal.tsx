@@ -257,43 +257,14 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
         }
     }, [isVisible]);
 
-    // Audio Event Listeners for Karaoke & State
-    useEffect(() => {
-        const handleBoundary = (e: CustomEvent) => {
-            // Check if event has charIndex
-            if (typeof e.detail?.charIndex === 'number') {
-                setHighlightIndex(e.detail.charIndex);
-            }
-        };
-
-        const handleEnd = () => {
-            setCurrentlyPlaying(null);
-            setHighlightIndex(null);
-        };
-
-        const handleError = () => {
-            setCurrentlyPlaying(null);
-            setHighlightIndex(null);
-        };
-
-        // Use window listeners as TTSManager dispatches to window
-        window.addEventListener('tts-boundary', handleBoundary as EventListener);
-        window.addEventListener('tts-end', handleEnd);
-        window.addEventListener('tts-stop', handleEnd);
-        window.addEventListener('tts-error', handleError as EventListener);
-
-        return () => {
-            window.removeEventListener('tts-boundary', handleBoundary as EventListener);
-            window.removeEventListener('tts-end', handleEnd);
-            window.removeEventListener('tts-stop', handleEnd);
-            window.removeEventListener('tts-error', handleError as EventListener);
-        };
-    }, []);
+    // Fix for Garbage Collection bug: Store utterance in ref
+    const utteranceRef = React.useRef<SpeechSynthesisUtterance | null>(null);
 
     const stopAudio = () => {
-        TTSManager.stop();
+        speechSynthesis.cancel();
         setCurrentlyPlaying(null);
         setHighlightIndex(null);
+        utteranceRef.current = null;
     };
 
     const playAudio = (text: string, id: number | 'all') => {
@@ -302,18 +273,49 @@ const StoryModal: React.FC<StoryModalProps> = ({ story, swedishWords, onClose, i
             if (currentlyPlaying === id) return;
         }
 
-        // Optimistic state update
-        setCurrentlyPlaying(id);
-        setHighlightIndex(null);
+        try {
+            const utterance = new SpeechSynthesisUtterance(text);
 
-        // Use robust TTSManager
-        TTSManager.speakSwedish(text, {
-            speed: 0.8, // Slightly slower for stories
-            onError: (err) => {
-                console.error("TTS Error:", err);
+            // Assign to ref to prevent Garbage Collection
+            utteranceRef.current = utterance;
+
+            const voices = speechSynthesis.getVoices();
+            // Try to find a premium or good Swedish voice
+            const swedishVoice = voices.find(v => v.lang === 'sv-SE' && (v.name.includes('Neural') || v.name.includes('Samantha'))) ||
+                voices.find(v => v.lang.startsWith('sv'));
+
+            if (swedishVoice) utterance.voice = swedishVoice;
+            utterance.lang = 'sv-SE';
+            utterance.rate = 0.85; // Optimal reading speed
+
+            utterance.onstart = () => {
+                setCurrentlyPlaying(id);
+            };
+
+            utterance.onboundary = (event) => {
+                if (event.name === 'word') {
+                    setHighlightIndex(event.charIndex);
+                }
+            };
+
+            utterance.onend = () => {
                 setCurrentlyPlaying(null);
-            }
-        });
+                setHighlightIndex(null);
+                utteranceRef.current = null;
+            };
+
+            utterance.onerror = (e) => {
+                console.error("Audio Error:", e);
+                setCurrentlyPlaying(null);
+                setHighlightIndex(null);
+                utteranceRef.current = null;
+            };
+
+            speechSynthesis.speak(utterance);
+        } catch (error) {
+            console.error('Error playing audio:', error);
+            setCurrentlyPlaying(null);
+        }
     };
 
     const handlePlayFullStory = () => {
