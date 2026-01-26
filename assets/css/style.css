@@ -283,9 +283,7 @@ img.emoji,
   background: linear-gradient(135deg, #f59e0b, #d97706) !important;
 }
 
-.grad-indigo {
-  background: linear-gradient(135deg, #2563eb, #1e40af) !important;
-}
+
 
 .challenge-progress-fill {
   width: 0%;
