@@ -514,6 +514,42 @@
     }
 }
 
+
+/* Active Reading Highlight */
+.story-sentence-pair-container {
+    padding: 16px;
+    margin: 4px 0;
+    border-radius: 16px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+}
+
+.story-sentence-pair-container:hover {
+    background: rgba(255, 255, 255, 0.05);
+    /* Subtle hover hint */
+}
+
+.story-sentence-pair-container.playing {
+    background: rgba(255, 215, 0, 0.15);
+    /* Radiant Gold Background */
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    transform: scale(1.02);
+    /* Gentle Pop */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Make text darker/sharper when playing for readability */
+.story-sentence-pair-container.playing .story-content-sv {
+    color: #0f172a;
+    /* Black/Slate-900 */
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.story-sentence-pair-container.playing .play-icon {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));
+}
+
 /* NUCLEAR OPTION: Force text visibility overriding any global language filters */
 .story-modal-container [lang='ar'],
 .story-modal-container [dir='rtl'],
