@@ -137,9 +137,21 @@ export const useSettings = () => {
             document.body.classList.toggle('reduce-motion', !value);
         }
         if (key === 'mobileView') {
-            document.body.classList.toggle('mobile-view-mode', value);
+            const isMobile = value as boolean;
+            document.body.classList.toggle('mobile-view-mode', isMobile);
+            document.body.classList.toggle('iphone-view', isMobile);
             // Also toggle mobile-view for legacy support if needed
-            document.body.classList.toggle('mobile-view', value);
+            document.body.classList.toggle('mobile-view', isMobile);
+
+            // To simulate mobile, we must remove 'desktop-explicit' which allows full width
+            if (isMobile) {
+                document.body.classList.remove('desktop-explicit');
+            } else {
+                // Restore desktop-explicit if screen is wide
+                if (window.innerWidth > 768) {
+                    document.body.classList.add('desktop-explicit');
+                }
+            }
 
             // Trigger resize event to force layout updates
             setTimeout(() => {
