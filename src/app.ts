@@ -68,6 +68,12 @@ export class App {
             this.updateDailyChallenge(); // Initial update
             this.updateDailyProgressBar(); // Update daily progress bar
             this.updateTrainingBadge(); // Initial badge update
+            this.updateFavoritesBadge(); // Initial favorites badge update
+
+            // Subscribe to favorites changes
+            FavoritesManager.onChange(() => {
+                this.updateFavoritesBadge();
+            });
         }
 
         // Initial search from URL parameter 's'
@@ -801,6 +807,28 @@ export class App {
             }
         } catch (e) {
             console.error('[App] Failed to update training badge:', e);
+        }
+    }
+
+    public updateFavoritesBadge() {
+        try {
+            const count = FavoritesManager.count();
+            const badge = document.getElementById('favoritesBadge');
+
+            if (badge) {
+                if (count > 0) {
+                    badge.textContent = count > 99 ? '99+' : count.toString();
+                    badge.classList.remove('hidden');
+                    // Add pop animation reset
+                    badge.style.animation = 'none';
+                    badge.offsetHeight; /* trigger reflow */
+                    badge.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        } catch (e) {
+            console.error('[App] Failed to update favorites badge:', e);
         }
     }
 
