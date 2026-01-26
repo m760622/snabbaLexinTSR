@@ -74,6 +74,10 @@ export class App {
             // Subscribe to favorites changes
             FavoritesManager.onChange(() => {
                 this.updateFavoritesBadge();
+                // If currently viewing favorites, refresh the list to remove unliked items
+                if (this.activeFilterMode === 'favorites') {
+                    this.performSearch(this.currentQuery);
+                }
             });
         }
 
