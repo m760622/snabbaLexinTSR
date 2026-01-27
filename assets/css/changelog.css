@@ -208,6 +208,25 @@ main {
     flex-shrink: 0;
 }
 
+/* Language Text Separation */
+.sv-text,
+.ar-text {
+    display: block;
+    line-height: 1.5;
+}
+
+.sv-text {
+    margin-bottom: 2px;
+}
+
+.ar-text {
+    color: var(--text-muted);
+    font-size: 0.95em;
+    direction: rtl;
+    text-align: right;
+}
+
+/* Feature Badges Colors */
 .feature {
     color: var(--success);
 }
@@ -218,6 +237,25 @@ main {
 
 .fix {
     color: var(--warning);
+}
+
+/* Ensure list content stretches to full width */
+.change-list li {
+    padding: 0.75rem 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.change-list li:last-child {
+    border-bottom: none;
+}
+
+.change-list li>span:last-child {
+    flex: 1;
+    min-width: 0;
+    /* Prevent flex overflow */
 }
 
 /* Mobile Toggle Button - 3D Keycap Style */
