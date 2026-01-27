@@ -173,8 +173,8 @@ export class SearchManager {
         // Render chips
         popup.innerHTML = `
             <div class="history-popup-header">
-                <span class="text-xs font-bold text-secondary uppercase tracking-wider">Tidigare / سابقاً</span>
-                <button class="text-xs text-primary hover:underline" onclick="window.app.clearHistory()">Rensa / مسح</button>
+                <span class="history-title">Tidigare / سابقاً</span>
+                <button class="clear-history-btn" onclick="window.app.clearHistory()">Rensa / مسح</button>
             </div>
             <div class="history-chips-grid">
                 ${history.map(term => `
