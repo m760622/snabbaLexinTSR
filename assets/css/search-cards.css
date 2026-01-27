@@ -643,6 +643,11 @@
 }
 
 /* Spotlight Effect on Search Container when focused */
+body.search-focused {
+    overflow: hidden;
+    /* Lock scroll for immersion */
+}
+
 body.search-focused .sticky-header {
     z-index: 1000 !important;
     position: relative;

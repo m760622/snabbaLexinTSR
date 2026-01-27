@@ -226,17 +226,52 @@ main {
     text-align: right;
 }
 
+/* Icons */
+.icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
 /* Feature Badges Colors */
-.feature {
+.feature,
+.feature-icon {
     color: var(--success);
 }
 
-.improvement {
+.improvement,
+.design-icon,
+.tech-icon,
+.polish-icon {
     color: var(--info);
 }
 
-.fix {
+.fix,
+.fix-icon,
+.security-icon {
     color: var(--warning);
+}
+
+.react-icon,
+.rocket-icon,
+.mobile-icon,
+.search-icon {
+    color: #6366f1;
+    /* Indigo-500 equivalent */
+}
+
+.holiday-icon,
+.party-icon {
+    color: #ec4899;
+    /* Pink-500 */
+}
+
+.news-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--primary);
+    margin-right: 0.5rem;
 }
 
 /* Ensure list content stretches to full width */
