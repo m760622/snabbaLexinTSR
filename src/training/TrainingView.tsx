@@ -478,7 +478,7 @@ const TrainingView: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="training-counter mastered-counter">
+                            <div className="training-counter mastered-counter glass-darker">
                                 <span>📊</span>
                                 <span className="counter-label mastered-val">
                                     {stats.wordsReviewed > 0
@@ -530,7 +530,7 @@ const TrainingView: React.FC = () => {
                         </div>
 
                         {/* SM-2 Rating Buttons */}
-                        <div className="training-controls sm2-controls">
+                        <div className="training-controls sm2-controls w-full grid grid-cols-4 gap-2">
                             {QUALITY_BUTTONS.map((btn) => (
                                 <button
                                     key={btn.quality}
@@ -538,7 +538,7 @@ const TrainingView: React.FC = () => {
                                         e.stopPropagation();
                                         handleRating(btn.quality);
                                     }}
-                                    className={`training-btn sm2-btn quality-${btn.quality}`}
+                                    className={`training-btn sm2-btn quality-${btn.quality} w-full shadow-lg shadow-blue-900/20 active:scale-95`}
                                     style={{ '--btn-color': btn.color } as React.CSSProperties}
                                 >
                                     <span className="btn-icon">{btn.icon}</span>

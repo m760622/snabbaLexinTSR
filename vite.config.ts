@@ -65,3 +65,4 @@ export default defineConfig({
     setupFiles: './tests/setup.ts'
   }
 } as VitestConfigExport);
+// Trigger restart

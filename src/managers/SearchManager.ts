@@ -40,7 +40,9 @@ export class SearchManager {
         this.emptyState = document.getElementById('emptyState');
         this.clearSearchBtn = document.getElementById('clearSearch');
 
-        // Create backdrop if it doesn't exist
+        // Backdrop REMOVED per user request
+        this.backdrop = null;
+        /* 
         this.backdrop = document.getElementById('searchBackdrop');
         if (!this.backdrop) {
             this.backdrop = document.createElement('div');
@@ -48,6 +50,7 @@ export class SearchManager {
             this.backdrop.className = 'search-backdrop hidden';
             document.body.appendChild(this.backdrop);
         }
+        */
     }
 
     private bindEvents() {
@@ -122,8 +125,9 @@ export class SearchManager {
     // --- Immersive Mode ---
 
     private enableFocusMode() {
-        document.body.classList.add('search-focused');
-        if (this.backdrop) this.backdrop.classList.remove('hidden');
+        // Dimming REMOVED per user request
+        // document.body.classList.add('search-focused');
+        // if (this.backdrop) this.backdrop.classList.remove('hidden');
 
         // Show suggestions immediately if valid
         if (this.searchInput?.value.trim()) {
@@ -134,8 +138,9 @@ export class SearchManager {
     }
 
     private disableFocusMode() {
-        document.body.classList.remove('search-focused');
-        if (this.backdrop) this.backdrop.classList.add('hidden');
+        // Dimming REMOVED per user request
+        // document.body.classList.remove('search-focused');
+        // if (this.backdrop) this.backdrop.classList.add('hidden');
 
         // Hide any popup
         this.removeDropdown();
