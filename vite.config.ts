@@ -1,7 +1,15 @@
-/// <reference types="vitest" />
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite'
+import type { UserConfig } from 'vite'
+import UnoCSS from 'unocss/vite'
+
+interface VitestConfigExport extends UserConfig {
+  test: any
+}
 
 export default defineConfig({
+  plugins: [
+    UnoCSS(),
+  ],
   root: '.',
   build: {
     outDir: 'dist',
@@ -56,4 +64,4 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './tests/setup.ts'
   }
-});
+} as VitestConfigExport);

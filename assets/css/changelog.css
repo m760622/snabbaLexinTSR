@@ -61,6 +61,16 @@ body.iphone-view::before {
     pointer-events: none;
 }
 
+body.iphone-view header {
+    padding-top: 3.5rem;
+    height: auto;
+    align-items: flex-start;
+}
+
+body.iphone-view header h1 {
+    margin-top: -0.25rem;
+}
+
 
 
 
