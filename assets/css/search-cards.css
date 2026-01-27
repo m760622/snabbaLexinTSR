@@ -615,3 +615,229 @@
 .card.compact-card[data-type="adverb"] {
     --glow-color: #0ea5e9;
 }
+
+/* =========================================
+   IMMERSIVE SEARCH MODE (Focus Mode)
+   ========================================= */
+
+/* Backdrop to dim the entire background */
+.search-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 900;
+    /* Below search bar (999), above everything else */
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    pointer-events: all;
+}
+
+.search-backdrop.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Spotlight Effect on Search Container when focused */
+body.search-focused .sticky-header {
+    z-index: 1000 !important;
+    position: relative;
+    /* Ensure it breaks out if needed, though sticky usually works */
+}
+
+body.search-focused .search-container {
+    z-index: 1000;
+    /* Bring above backdrop */
+    position: relative;
+    /* Ensure z-index works */
+}
+
+body.search-focused .search-wrapper {
+    background-color: var(--surface);
+    /* Ensure no transparency */
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3), 0 8px 30px rgba(0, 0, 0, 0.5);
+    transform: scale(1.02);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* History Popup (Floating Suggestions) */
+.search-history-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    /* Above search bar */
+    padding: 12px;
+    max-height: 300px;
+    overflow-y: auto;
+    animation: slideDownFade 0.2s ease-out;
+}
+
+@keyframes slideDownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.history-popup-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 4px 8px 4px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+}
+
+.history-chips-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.history-chip-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--surface-secondary);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.history-chip-item:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.history-icon {
+    font-size: 1rem;
+    opacity: 0.7;
+}
+
+
+/* =========================================
+   RICH AUTOCOMPLETE DROPDOWN
+   ========================================= */
+
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    /* Same layer as history popup */
+    overflow: hidden;
+    animation: slideDownFade 0.2s ease-out;
+}
+
+.search-dropdown .dropdown-header {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--surface-secondary);
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.search-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.05));
+    transition: background 0.1s ease;
+}
+
+.search-item:last-child {
+    border-bottom: none;
+}
+
+.search-item:hover,
+.search-item.selected {
+    background: var(--surface-secondary);
+}
+
+.item-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+    /* Enable truncation */
+}
+
+.item-word-sv {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Matched substring highlight */
+.highlight-char {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: rgba(59, 130, 246, 0.4);
+}
+
+/* Mini Type Badges for Dropdown */
+.badge-mini {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    border: 1px solid currentColor;
+}
+
+/* Reuse existing color classes or define mini versions if needed */
+/* We can use .grammar-badge logic but applied to .badge-mini */
+
+.item-word-ar {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-left: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    direction: rtl;
+}
+
+/* Ensure navbar items don't overlap immersive mode */
+body.search-focused .top-nav {
+    z-index: 100;
+}

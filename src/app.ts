@@ -12,6 +12,7 @@ import './i18n-apply';
 import { TypeColorSystem } from './type-color-system';
 import { debounce } from './performance-utils';
 import { openReactSettingsModal, initSettingsLauncher } from './settings-modal-launcher';
+import { SearchManager } from './managers/SearchManager';
 
 /**
  * Main SnabbaLexin Application
@@ -36,12 +37,14 @@ export class App {
     private currentQuery: string = '';
     // Performance: Flag to track if type counts need update
     private typeCountsNeedUpdate = true;
+    private searchManager: SearchManager;
 
     constructor() {
         // Initialize debounced search (150ms delay for responsive feel)
         this.debouncedSearch = debounce((query: string) => {
             this.performSearchInternal(query);
         }, 150);
+        this.searchManager = new SearchManager();
         this.init();
     }
 
@@ -294,6 +297,11 @@ export class App {
             const cat = TypeColorSystem.getCategory(row[1], row[2], row[6], row[13] || '', row[3] || '');
             this.typeCategoryCache.set(cacheKey, cat);
         });
+
+        // Initialize SearchManager with data
+        this.searchManager.initData(data);
+        this.searchManager.setTrainingIds(this.trainingIds);
+
         console.timeEnd('[Perf] Building search index');
 
         // Initialize Word of the Day
@@ -553,135 +561,13 @@ export class App {
 
         this.renderedCount = 0; // Reset pagination
 
-        // Optimization: Single Pass Bucket Sort (O(N))
-        // Instead of filter() -> sort(), we act like a conveyor belt putting items into buckets immediately.
-        // This avoids iterating multiple times and eliminates the expensive sort operation.
-        const exactMatches: number[] = [];
-        const startMatches: number[] = [];
-        const partialMatches: number[] = [];
-        const topicMatches: number[] = [];
+        // Sync filters to manager (if they changed externally, although manager reads DOM too)
+        this.searchManager.activeFilterMode = this.activeFilterMode;
+        this.searchManager.activeTypeFilter = this.activeTypeFilter;
+        this.searchManager.activeSortMethod = this.activeSortMethod;
 
-        // Check if we have active filters that require the slow path
-        const categorySelect = document.getElementById('categorySelect') as HTMLSelectElement | null;
-        const hasTopicFilter = this.activeFilterMode === 'all' && categorySelect && categorySelect.value !== 'all';
-        const hasTypeFilter = this.activeTypeFilter !== 'all';
-        const topicFilter = hasTopicFilter && categorySelect ? categorySelect.value : '';
-
-        // If no query and filtering by favorites
-        if (!normalizedQuery && this.activeFilterMode === 'favorites') {
-            const favIndices = data.map((_: any, i: number) => i).filter((i: number) => FavoritesManager.has(data[i][0].toString()));
-            this.currentResults = favIndices.map((i: number) => data[i]);
-            this.finalizeSearch(landingPage, searchResults, emptyState, normalizedQuery);
-            return;
-        }
-
-        // If just browsing all (no query, no filters)
-        if (!normalizedQuery && !hasTopicFilter && !hasTypeFilter && this.activeFilterMode === 'all') {
-            // Show landing page
-            if (landingPage) landingPage.style.display = 'block';
-            if (searchResults) searchResults.style.display = 'none';
-            if (emptyState) emptyState.style.display = 'block';
-            this.renderSearchHistory();
-            return;
-        }
-
-        const maxResults = 100; // Cap purely for performance ensuring we don't hold 10k items in memory if not needed (though pagination handles rendering)
-        // Actually, let's keep all valid matches but stop searching if we have "enough" exact matches? No, user might want specific one later.
-        // Let's stick to full scan but it's fast.
-
-        for (let i = 0; i < this.searchIndex.length; i++) {
-            const swe = this.searchIndex[i];
-            const arb = this.searchIndexArabic[i]; // Normalized Arabic
-
-            // 1. FILTERING
-            // Apply Type Filter early
-            if (hasTypeFilter) {
-                // Use cache
-                const cat = this.typeCategoryCache.get(`${i}`);
-                if (cat !== this.activeTypeFilter) continue;
-            }
-
-            // Apply Topic Filter
-            if (hasTopicFilter) {
-                const tags = (data[i][11] || '').toLowerCase(); // Column 11 is tags/domain
-                if (!tags.includes(topicFilter)) continue;
-            }
-
-            // Apply Favorites Filter (User Request)
-            if (this.activeFilterMode === 'favorites') {
-                if (!FavoritesManager.has(data[i][0].toString())) continue;
-            }
-
-            // Match Flags
-            let isExact = false;
-            let isStart = false;
-            let isPartial = false;
-
-            // Apply Special Query Matching based on Mode
-            if (this.activeFilterMode === 'start') {
-                if (!swe.startsWith(normalizedQuery) && !arb.startsWith(normalizedQueryArabic)) continue;
-                isStart = true;
-            } else if (this.activeFilterMode === 'end') {
-                if (!swe.endsWith(normalizedQuery) && !arb.endsWith(normalizedQueryArabic)) continue;
-                isPartial = true;
-            } else if (this.activeFilterMode === 'exact') {
-                if (swe !== normalizedQuery && arb !== normalizedQueryArabic) continue;
-                isExact = true;
-            } else if (this.activeFilterMode === 'synonym') {
-                // Check definitions (col 5) or synonyms (col 4 if any)
-                const def = (data[i][5] || '').toLowerCase();
-                if (!def.includes(normalizedQuery)) continue;
-                isPartial = true;
-            } else if (this.activeFilterMode === 'learning') {
-                // Check if in training
-                if (!this.trainingIds.has(data[i][0].toString())) continue;
-                // Proceed to query matching
-            } else if (this.activeFilterMode === 'known') {
-                // Implementation for 'known' / mastered words if available
-                // For now, let's assume it checks a mastered set if we had one.
-                // Or maybe invert training?
-                // Let's rely on standard search if no specific known logic exists yet.
-            }
-
-            // Standard Query Matching (if not handled by special modes above)
-            if (this.activeFilterMode === 'all' || this.activeFilterMode === 'favorites' || this.activeFilterMode === 'learning' || this.activeFilterMode === 'known' || this.activeFilterMode === 'review') {
-                if (normalizedQuery) {
-                    if (swe === normalizedQuery || arb === normalizedQueryArabic) {
-                        isExact = true;
-                    } else if (swe.startsWith(normalizedQuery) || arb.startsWith(normalizedQueryArabic)) {
-                        isStart = true;
-                    } else if (swe.includes(normalizedQuery) || arb.includes(normalizedQueryArabic)) {
-                        isPartial = true;
-                    } else {
-                        continue; // No match
-                    }
-                } else {
-                    // No query, but passed filters -> treat as partial
-                    isPartial = true;
-                }
-            }
-
-            // 2. BUCKETING
-            if (isExact) exactMatches.push(i);
-            else if (isStart) startMatches.push(i);
-            else if (isPartial) partialMatches.push(i);
-        }
-
-        // 3. MERGE
-        // Priority: Exact > StartsWith > Partial
-        let filteredIndices = [...exactMatches, ...startMatches, ...partialMatches];
-
-        // Apply Sorting override if specific sort is selected (rare)
-        if (this.activeSortMethod !== 'relevance') {
-            if (this.activeSortMethod === 'az') {
-                filteredIndices.sort((a, b) => this.searchIndex[a].localeCompare(this.searchIndex[b], 'sv'));
-            } else if (this.activeSortMethod === 'za') {
-                filteredIndices.sort((a, b) => this.searchIndex[b].localeCompare(this.searchIndex[a], 'sv'));
-            }
-        }
-
-
-        const filtered = filteredIndices.map(idx => data[idx]);
+        // Delegate search logic to Manager
+        const filtered = this.searchManager.getSearchResults(normalizedQuery, data);
         this.currentResults = filtered;
 
         const showLanding = !normalizedQuery && this.activeFilterMode === 'all';
