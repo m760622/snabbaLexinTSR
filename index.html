@@ -439,44 +439,36 @@
             </div>
         </div>
 
-        <!-- شريط التقدم اليومي -->
-        <div class="daily-progress-bar" id="dailyProgressBar">
-            <div class="progress-info">
-                <span class="progress-label">📖 <span class="sv-text">Dagens mål</span> / <span class="ar-text">هدف
-                        اليوم</span></span>
-                <span class="progress-count"><span id="dailyProgressCount">0</span> / 10</span>
-            </div>
-            <div class="progress-track">
-                <div class="progress-fill" id="dailyProgressFill"></div>
-            </div>
-        </div>
-
         <!-- بطاقة التحدي اليومي -->
-        <div class="daily-challenge-card premium-border-animated" id="dailyChallengeCard">
-            <div class="challenge-header">
-                <div class="challenge-left">
-                    <div class="challenge-icon-wrapper">
-                        <span class="challenge-icon">🎯</span>
-                    </div>
-                    <span class="challenge-title"><span class="sv-text">Daglig Utmaning</span><span
+        <!-- بطاقة التحدي اليومي -->
+        <div class="daily-challenge-card neon-cyber" id="dailyChallengeCard">
+            <!-- Left Side: Title & Progress -->
+            <!-- Left Side: Title & Progress -->
+            <div class="challenge-main-content">
+                <div class="challenge-header">
+                    <span class="challenge-title"><span class="sv-text">DAGLIG UTMANING</span><span
                             class="ar-text">التحدي اليومي</span></span>
                 </div>
-                <!-- Points Badge next to flame area -->
-                <div class="challenge-points">
-                    <span class="points-value">+50</span>
-                    <span class="points-label">XP</span>
+
+                <p class="challenge-text hidden" id="challengeText"><span class="sv-text">Lär dig 5 nya ord
+                        idag!</span><span class="ar-text">تعلم 5 كلمات جديدة اليوم!</span></p>
+
+                <div class="challenge-progress-container">
+                    <div class="challenge-progress-track">
+                        <div class="challenge-progress-fill glow-effect" id="challengeProgressBar"></div>
+                        <span class="challenge-count-display" id="challengeProgressText">0/5</span>
+                    </div>
                 </div>
             </div>
-            <p class="challenge-text hidden" id="challengeText"><span class="sv-text">Lär dig 5 nya ord
-                    idag!</span><span class="ar-text">تعلم 5 كلمات جديدة اليوم!</span></p>
-            <div class="challenge-progress-container premium-bar">
-                <div class="challenge-progress-row">
-                    <div class="challenge-progress-track">
-                        <div class="challenge-progress-fill glow-effect" id="challengeProgressBar">
-                        </div>
+
+            <!-- Right Side: Hexagon Badge -->
+            <div class="challenge-badge-container">
+                <div class="hex-badge">
+                    <div class="hex-content">
+                        <span class="hex-icon">⬆</span>
+                        <span class="hex-value">+50</span>
+                        <span class="hex-label">XP</span>
                     </div>
-                    <button type="button" class="challenge-progress-count" id="challengeProgressText"
-                        title="تقدمك / Din framsteg">0/5</button>
                 </div>
             </div>
         </div>
@@ -596,9 +588,7 @@
             </div>
 
             <!-- Empty State / History -->
-            <div id="emptyState" class="placeholder-message">
-                <span class="sv-text">Börja skriva för att söka</span><span class="ar-text">ابدأ الكتابة للبحث</span>
-            </div>
+
         </main>
     </div><!-- End of #landingPageContent -->
 
