@@ -680,7 +680,7 @@ body.search-focused .search-wrapper {
     top: 100%;
     left: 0;
     right: 0;
-    margin-top: 14px;
+    margin-top: 4px;
     /* Dark Transparent Background */
     background: rgba(2, 6, 23, 0.95);
     backdrop-filter: blur(12px);

@@ -1,6 +1,6 @@
 {
   "name": "snabbalexin-web-1",
-  "version": "3.2.3",
+  "version": "3.2.4",
   "type": "module",
   "description": "",
   "main": "quran.js",
@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "شغل": "vite --port 5196 --host --open",
+    "شغل": "vite --port 8080 --host --open",
     "حدث": "node scripts/update-repo.cjs"
   },
   "repository": {

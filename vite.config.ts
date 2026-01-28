@@ -56,7 +56,7 @@ export default defineConfig({
     }
   },
   server: {
-    port: 5195,
+    port: 8080,
     host: true
   },
   test: {

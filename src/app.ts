@@ -625,28 +625,21 @@ export class App {
     }
 
     private renderSearchHistory() {
-        // Find the search container to place the history directly under it
-        const searchContainer = document.querySelector('.search-container');
-        if (!searchContainer) return;
-
-        // Ensure History Section exists
-        let historySection = document.getElementById('searchHistorySection');
-        if (!historySection) {
-            historySection = document.createElement('div');
-            historySection.id = 'searchHistorySection';
-            historySection.className = 'search-history-section fade-in-up';
-            // Insert directly after search container
-            searchContainer.parentNode?.insertBefore(historySection, searchContainer.nextSibling);
-        }
+        // Use the existing container in landing page
+        const historyContainer = document.getElementById('searchHistoryContainer');
+        if (!historyContainer) return;
 
         const history = SearchHistoryManager.get();
         if (history.length === 0) {
-            historySection.style.display = 'none';
+            historyContainer.classList.add('hidden');
             return;
         }
 
-        historySection.style.display = 'block';
-        historySection.innerHTML = `
+        historyContainer.classList.remove('hidden');
+        // Add classes for styling (Neon Theme)
+        historyContainer.className = 'search-history-section fade-in-up';
+
+        historyContainer.innerHTML = `
             <div class="section-header">
                 <h3><span class="icon">🕒</span> <span class="sv-text">Senaste sökningar</span><span class="ar-text">عمليات البحث الأخيرة</span></h3>
                 <button class="clear-history-btn" onclick="window.app.clearHistory()">
