@@ -166,7 +166,8 @@ export class SearchManager {
 
         const history = SearchHistoryManager.get();
         if (history.length === 0) {
-            popup.innerHTML = `<div class="p-4 text-center text-sm text-secondary">Börja söka... / ابدأ البحث</div>`;
+            // No history = don't show popup at all
+            popup.remove();
             return;
         }
 
@@ -291,6 +292,7 @@ export class SearchManager {
                 const searchInput = document.getElementById('searchInput') as HTMLInputElement;
                 if (searchInput) {
                     searchInput.value = word;
+                    SearchHistoryManager.add(word); // Save to history on click
                     this.handleInput(word); // Trigger full search
                     this.disableFocusMode();
                 }

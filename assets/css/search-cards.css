@@ -728,16 +728,16 @@ body.search-focused .search-wrapper {
     text-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
 }
 
-/* Clear Button (Ghost Style) */
+/* Clear Button (Outlined Style) */
 .clear-history-btn {
-    font-family: 'Outfit', monospace;
-    font-size: 0.7rem;
+    font-family: 'Outfit', 'Inter', sans-serif;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.6);
-    background: transparent;
-    border: 1px solid transparent;
-    padding: 4px 8px;
-    border-radius: 4px;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+    padding: 8px 16px;
+    border-radius: 8px;
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -745,10 +745,10 @@ body.search-focused .search-wrapper {
 }
 
 .clear-history-btn:hover {
-    color: #ff4d4d;
-    text-shadow: 0 0 8px rgba(255, 77, 77, 0.6);
-    background: rgba(255, 0, 0, 0.1);
-    border-color: rgba(255, 0, 0, 0.2);
+    color: #fff;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.5);
+    transform: translateY(-1px);
 }
 
 /* History Items Grid (Chips) */

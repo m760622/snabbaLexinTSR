@@ -625,22 +625,18 @@ export class App {
     }
 
     private renderSearchHistory() {
-        const landingPage = document.getElementById('landingPageContent');
-        if (!landingPage) return;
+        // Find the search container to place the history directly under it
+        const searchContainer = document.querySelector('.search-container');
+        if (!searchContainer) return;
 
         // Ensure History Section exists
         let historySection = document.getElementById('searchHistorySection');
         if (!historySection) {
             historySection = document.createElement('div');
             historySection.id = 'searchHistorySection';
-            historySection.className = 'landing-section fade-in-up';
-            // Insert after Hero
-            const hero = landingPage.querySelector('.hero-section');
-            if (hero && hero.nextSibling) {
-                landingPage.insertBefore(historySection, hero.nextSibling);
-            } else {
-                landingPage.appendChild(historySection);
-            }
+            historySection.className = 'search-history-section fade-in-up';
+            // Insert directly after search container
+            searchContainer.parentNode?.insertBefore(historySection, searchContainer.nextSibling);
         }
 
         const history = SearchHistoryManager.get();
