@@ -202,6 +202,38 @@
 
     <div class="sticky-header">
 
+        <!-- شريط الاختصارات السريعة - فوق البحث -->
+        <div class="quick-actions-bar">
+            <button type="button" class="quick-action-btn" id="quickHomeBtn" data-tooltip="Hem / الرئيسية"
+                aria-label="Hem / الرئيسية">
+                <span class="quick-icon">🏠</span>
+            </button>
+            <a href="games/games.html" class="quick-action-btn" data-tooltip="Spel / ألعاب" aria-label="Spel / ألعاب">
+                <span class="quick-icon">🎮</span>
+            </a>
+            <a href="learn/learn.html" class="quick-action-btn" data-tooltip="Lär / تعلم" aria-label="Lär / تعلم">
+                <span class="quick-icon">📚</span>
+            </a>
+            <a href="ramadan/index.html" class="quick-action-btn" data-tooltip="Ramadan / رمضان"
+                aria-label="Ramadan / رمضان">
+                <span class="quick-icon">🌙</span>
+            </a>
+            <button type="button" class="quick-action-btn" id="quickFavBtn" data-tooltip="Favoriter / مفضلة"
+                aria-label="Favoriter / مفضلة">
+                <span class="quick-icon">⭐</span>
+                <span id="favoritesBadge" class="badge hidden">0</span>
+            </button>
+            <a href="training.html" class="quick-action-btn" data-tooltip="Träning / تدريب"
+                aria-label="Träning / تدريب">
+                <span class="quick-icon">💪</span>
+                <span id="trainingBadge" class="badge hidden">0</span>
+            </a>
+            <button type="button" class="quick-action-btn" id="quickQuizBtn" data-tooltip="Quiz / اختبار"
+                aria-label="Quiz / اختبار">
+                <span class="quick-icon">⚡</span>
+            </button>
+        </div>
+
         <div class="search-container">
             <div class="search-row">
                 <div class="search-wrapper">
@@ -315,45 +347,6 @@
     </div>
 
     </header>
-
-    <!-- شريط الاختصارات السريعة - يظهر دائماً -->
-    <div class="quick-actions-bar">
-        <button type="button" class="quick-action-btn" id="quickHomeBtn" data-tooltip="Hem / الرئيسية"
-            aria-label="Hem / الرئيسية">
-            <span class="quick-icon">🏠</span>
-        </button>
-        <a href="word-dna.html" class="quick-action-btn story-trigger-pulse" id="quickWodBtn"
-            data-tooltip="Ordets DNA / قصة الكلمة" aria-label="Ordets DNA / قصة الكلمة">
-            <span class="quick-icon">📅</span>
-        </a>
-        <a href="games/games.html" class="quick-action-btn" data-tooltip="Spel / ألعاب" aria-label="Spel / ألعاب">
-            <span class="quick-icon">🎮</span>
-
-        </a>
-        <a href="learn/learn.html" class="quick-action-btn" data-tooltip="Lär / تعلم" aria-label="Lär / تعلم">
-            <span class="quick-icon">📚</span>
-
-        </a>
-        <a href="ramadan/index.html" class="quick-action-btn" data-tooltip="Ramadan / رمضان"
-            aria-label="Ramadan / رمضان">
-            <span class="quick-icon">🌙</span>
-
-        </a>
-        <button type="button" class="quick-action-btn" id="quickFavBtn" data-tooltip="Favoriter / مفضلة"
-            aria-label="Favoriter / مفضلة">
-            <span class="quick-icon">⭐</span>
-            <span id="favoritesBadge" class="badge hidden">0</span>
-        </button>
-        <a href="training.html" class="quick-action-btn" data-tooltip="Träning / تدريب" aria-label="Träning / تدريب">
-            <span class="quick-icon">💪</span>
-            <span id="trainingBadge" class="badge hidden">0</span>
-        </a>
-        <button type="button" class="quick-action-btn" id="quickQuizBtn" data-tooltip="Quiz / اختبار"
-            aria-label="Quiz / اختبار">
-            <span class="quick-icon">⚡</span>
-        </button>
-
-    </div>
 
     <!-- Landing Page Content - Everything that shows when NOT searching -->
     <!-- Quiz Container (Inline) - Enhanced Professional Version -->
