@@ -259,3 +259,6 @@ When user's prompt is NOT in English:
 | Playwright | `.agent/skills/webapp-testing/scripts/playwright_runner.py` |
 
 ---
+
+
+> 📁 **Project-specific rules are in:** `.agent/rules/SNABBALEXIN.md`
