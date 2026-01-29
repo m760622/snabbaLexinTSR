@@ -29,6 +29,12 @@
      color: var(--text-color);
      min-height: 100vh;
      overflow-y: auto !important;
+     scrollbar-width: none;
+     -ms-overflow-style: none;
+ }
+
+ body::-webkit-scrollbar {
+     display: none;
  }
 
  html.iphone-mode {
@@ -275,21 +281,27 @@
  }
 
  .filter-chip {
-     padding: 0.4rem 0.9rem;
-     border-radius: 20px;
-     background: var(--card-bg);
-     border: 1px solid rgba(59, 130, 246, 0.2);
+     padding: 0.6rem 1.25rem;
+     border-radius: 50px;
+     background: rgba(30, 41, 59, 0.4);
+     border: 1px solid rgba(255, 255, 255, 0.1);
      color: var(--text-muted);
-     font-size: 0.85rem;
+     font-size: 0.9rem;
+     font-weight: 500;
      white-space: nowrap;
      cursor: pointer;
-     transition: all 0.2s;
+     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
-     /* Enforce Centering */
+     /* Pill Flex Layout */
      display: inline-flex;
      align-items: center;
      justify-content: center;
-     text-align: center;
+     gap: 0.5rem;
+
+     /* Override any legacy fixed sizes */
+     min-width: auto;
+     width: auto;
+     height: auto;
  }
 
  .filter-chip span {
@@ -441,21 +453,25 @@
 
  .lesson-card {
      background: var(--card-bg);
-     border-radius: 14px;
-     padding: 1rem;
+     border-radius: 12px;
+     /* Slightly tighter radius */
+     padding: 0.75rem;
+     /* Reduced padding */
      cursor: pointer;
      transition: all 0.3s;
      border: 1px solid rgba(59, 130, 246, 0.1);
      position: relative;
      display: flex;
-     gap: 1rem;
+     gap: 0.75rem;
+     /* Reduced gap */
      align-items: center;
  }
 
  .lesson-card:hover {
      transform: translateY(-2px);
      border-color: var(--primary);
-     box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+     box-shadow: 0 5px 15px -5px rgba(59, 130, 246, 0.3);
+     /* Softer shadow */
  }
 
  .lesson-card.completed {
@@ -469,31 +485,41 @@
  }
 
  .lesson-icon {
-     font-size: 2.25rem;
+     font-size: 1.75rem;
+     /* Smaller icon */
      flex-shrink: 0;
  }
 
  .lesson-info {
      flex: 1;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
  }
 
  .lesson-title {
-     font-size: 1rem;
+     font-size: 0.95rem;
      font-weight: 600;
-     margin-bottom: 0.2rem;
+     margin-bottom: 0;
+     line-height: 1.2;
  }
 
  .lesson-subtitle {
-     font-size: 0.85rem;
+     font-size: 0.8rem;
      color: var(--primary);
      font-family: 'Tajawal', sans-serif;
+     opacity: 0.9;
  }
 
+ /* Hide description for compact view to save huge vertical space */
  .lesson-desc {
-     font-size: 0.8rem;
-     color: var(--text-muted);
-     margin-top: 0.35rem;
-     line-height: 1.4;
+     display: none;
+ }
+
+ /* Grid adjustment for compact cards */
+ .lessons-grid {
+     gap: 0.5rem !important;
+     /* Tighter grid */
  }
 
  .lesson-badge {
@@ -586,17 +612,7 @@
  }
 
  /* Lesson Modal */
- .lesson-modal {
-     display: none;
-     position: fixed;
-     top: 0;
-     left: 0;
-     right: 0;
-     bottom: 0;
-     background: var(--bg-color);
-     z-index: 200;
-     overflow-y: auto;
- }
+ /* Lesson Modal definition consolidated below at line 2733 */
 
  .lesson-modal.active {
      display: block;
@@ -605,8 +621,10 @@
  .modal-header {
      position: fixed;
      top: 0;
-     left: 0;
-     right: 0;
+     left: 50%;
+     transform: translateX(-50%);
+     width: 414px;
+     max-width: 414px;
      display: flex;
      align-items: center;
      gap: 0.75rem;
@@ -904,8 +922,11 @@
  .quiz-results-overlay {
      position: fixed;
      top: 0;
-     left: 0;
-     right: 0;
+     left: 50%;
+     transform: translateX(-50%);
+     width: 414px;
+     /* Fixed width */
+     max-width: 414px;
      bottom: 0;
      background: rgba(15, 23, 42, 0.85);
      -webkit-backdrop-filter: blur(8px);
@@ -1157,8 +1178,11 @@
      display: none;
      position: fixed;
      top: 0;
-     left: 0;
-     right: 0;
+     left: 50%;
+     transform: translateX(-50%);
+     width: 414px;
+     /* Fixed width */
+     max-width: 414px;
      bottom: 0;
      background: rgba(0, 0, 0, 0.9);
      z-index: 500;
@@ -1659,7 +1683,7 @@
      transform: scale(0.95);
  }
 
- /* =========================================
+ /* ========================================
    PHASE 7: LEARNING PATH & VISUAL OVERHAUL
    ========================================= */
 
@@ -2012,80 +2036,7 @@
      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
  }
 
- /* Quick Access Row - Separate Line Below Header */
- .quick-access-row {
-     display: flex;
-     justify-content: center;
-     gap: 0.4rem;
-     padding: 0.5rem 0.5rem;
-     background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
-     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-     flex-wrap: nowrap;
- }
-
- .quick-btn {
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     gap: 0.15rem;
-     padding: 0.4rem 0.5rem;
-     border: 1px solid rgba(255, 255, 255, 0.1);
-     border-radius: 10px;
-     background: rgba(255, 255, 255, 0.75);
-     color: #e2e8f0;
-     cursor: pointer;
-     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-     min-width: 55px;
-     flex: 1;
-     max-width: 80px;
- }
-
- .quick-btn:hover {
-     background: rgba(96, 165, 250, 0.15);
-     border-color: rgba(96, 165, 250, 0.3);
-     transform: translateY(-2px);
-     box-shadow: 0 4px 12px rgba(96, 165, 250, 0.2);
- }
-
- .quick-icon {
-     font-size: 1.2rem;
-     display: flex;
-     align-items: center;
-     justify-content: center;
- }
-
- /* Twemoji emoji images */
- .quick-icon .emoji,
- .quick-icon img.emoji,
- .quick-btn .emoji {
-     width: 1rem;
-     height: 1rem;
-     vertical-align: middle;
- }
-
- /* Lesson card emojis - smaller size */
- .lesson-level .emoji,
- .lesson-card .emoji {
-     width: 0.9rem;
-     height: 0.9rem;
-     vertical-align: middle;
- }
-
- /* Challenge icon emoji */
- .challenge-icon .emoji {
-     width: 1.3rem;
-     height: 1.3rem;
- }
-
- .quick-label {
-     font-size: 0.55rem;
-     opacity: 0.85;
-     text-align: center;
-     white-space: nowrap;
-     overflow: hidden;
-     text-overflow: ellipsis;
-     max-width: 100%;
- }
+ /* Quick Access Row - Legacy Styles Removed */
 
  /* Mobile adjustments for Quick Access Row */
  @media (max-width: 414px) {
@@ -2787,8 +2738,11 @@
      display: none;
      position: fixed;
      top: 0;
-     left: 0;
-     right: 0;
+     left: 50%;
+     transform: translateX(-50%);
+     width: 414px;
+     /* Fixed width */
+     max-width: 414px;
      bottom: 0;
      background: rgba(0, 0, 0, 0.9);
      z-index: 2000;
@@ -3279,7 +3233,7 @@
 
  /* --- Premium Flashcards (Blixtkort 2.0) --- */
  .flashcard-wrapper {
-     width: 100%;
+     width: 414px;
      max-width: 414px;
      height: 350px;
      margin: 2rem auto;
@@ -3437,7 +3391,7 @@
      justify-content: center;
      gap: 1.5rem;
      margin-top: 2rem;
-     width: 100%;
+     width: 414px;
      max-width: 414px;
      margin-left: auto;
      margin-right: auto;
@@ -3564,4 +3518,419 @@
      display: block !important;
      visibility: visible !important;
      opacity: 1 !important;
+ }
+
+ /* =========================================
+   MODERN HEADER (LÄR DIG SVENSKA) - LEARN PAGE
+   ========================================= */
+ header.modern-header-learn {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding: 1.5rem 1.25rem 1rem;
+     background: transparent;
+     /* Let particles show */
+     border: none;
+     box-shadow: none;
+     pointer-events: none;
+     /* Let clicks pass */
+
+     /* Default Constraints (Desktop/Tablet) */
+     width: 414px;
+     max-width: 414px;
+     /* Match main content */
+     margin: 0 auto;
+     /* Center horizontally */
+ }
+
+ header.modern-header-learn>* {
+     pointer-events: auto;
+ }
+
+ .brand-header-modern {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+ }
+
+ .modern-title-gradient {
+     font-family: 'Outfit', system-ui, sans-serif;
+     font-size: 1.25rem;
+     line-height: 1.1;
+     font-weight: 800;
+     text-align: center;
+     text-transform: uppercase;
+     background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+     background-clip: text;
+     color: #3b82f6;
+     letter-spacing: 0.08em;
+     filter: drop-shadow(0 2px 10px rgba(59, 130, 246, 0.4));
+     margin: 0;
+ }
+
+ /* Reusing .nav-btn-circle from style.css if available, else defining here */
+ .nav-btn-circle {
+     width: 44px;
+     height: 44px;
+     border-radius: 50%;
+     background: rgba(15, 23, 42, 0.6);
+     border: 1px solid rgba(255, 255, 255, 0.08);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     color: #94a3b8;
+     cursor: pointer;
+     backdrop-filter: blur(8px);
+     transition: all 0.2s;
+     -webkit-tap-highlight-color: transparent;
+ }
+
+ .nav-btn-circle:hover {
+     background: rgba(30, 41, 59, 0.9);
+     color: white;
+     transform: translateY(-2px);
+     border-color: rgba(255, 255, 255, 0.2);
+ }
+
+ /* =========================================
+   MODERN QUICK ACCESS (SEMANTIC SQUIRCLES)
+   ========================================= */
+ .quick-access-row {
+     display: flex;
+     justify-content: center;
+     gap: 0.4rem;
+     padding: 0.75rem;
+     margin: 2.5rem auto 1.5rem;
+     width: fit-content;
+     /* Floating Frame */
+
+     overflow-x: auto;
+     scrollbar-width: none;
+     -webkit-overflow-scrolling: touch;
+
+     /* Glowing Frame */
+     border: 1px solid rgba(6, 182, 212, 0.3);
+     border-radius: 24px;
+     box-shadow: 0 0 15px rgba(6, 182, 212, 0.15), inset 0 0 20px rgba(6, 182, 212, 0.05);
+     background: rgba(15, 23, 42, 0.4);
+ }
+
+ .quick-access-row::-webkit-scrollbar {
+     display: none;
+ }
+
+ .squircle-btn {
+     flex: 0 0 auto;
+     width: 56px;
+     /* Reduced from 68px */
+     height: 56px;
+     /* Reduced from 68px */
+     background: linear-gradient(145deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+     border: 1px solid rgba(59, 130, 246, 0.5);
+     /* Blue border base */
+     box-shadow: 0 0 10px rgba(59, 130, 246, 0.2), inset 0 0 5px rgba(59, 130, 246, 0.1);
+     /* Glow */
+     border-radius: 16px;
+     /* Slightly reduced radius */
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+     position: relative;
+     overflow: hidden;
+     color: white;
+ }
+
+ .squircle-btn:hover {
+     transform: translateY(-2px) scale(1.05);
+     background: linear-gradient(145deg, rgba(59, 130, 246, 0.2) 0%, rgba(30, 41, 59, 0.9) 100%);
+     border-color: rgba(96, 165, 250, 0.4);
+     box-shadow: 0 8px 20px -4px rgba(59, 130, 246, 0.4);
+ }
+
+ .squircle-btn:active {
+     transform: scale(0.95);
+ }
+
+ .squircle-icon {
+     font-size: 1.5rem;
+     /* Reduced from 1.8rem */
+     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+     z-index: 2;
+ }
+
+ /* =========================================
+   FLOATING DOCK (BOTTOM NAV)
+   ========================================= */
+ .floating-dock {
+     position: fixed;
+     bottom: 1.5rem;
+     left: 50%;
+     transform: translateX(-50%);
+     background: rgba(15, 23, 42, 0.85);
+     backdrop-filter: blur(16px);
+     -webkit-backdrop-filter: blur(16px);
+     border: 1px solid rgba(148, 163, 184, 0.1);
+     border-radius: 50px;
+     padding: 0.5rem;
+     display: flex;
+     gap: 0.5rem;
+     z-index: 100;
+     box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5),
+         inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+     width: calc(100% - 2rem);
+     max-width: 380px;
+     justify-content: space-between;
+ }
+
+ .floating-dock .mode-btn {
+     flex: 1;
+     background: transparent;
+     border: none;
+     color: #94a3b8;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     padding: 0.5rem;
+     border-radius: 50px;
+     cursor: pointer;
+     transition: all 0.3s ease;
+     position: relative;
+ }
+
+ .floating-dock .mode-btn:hover {
+     color: white;
+     background: rgba(255, 255, 255, 0.05);
+ }
+
+ .floating-dock .mode-btn.active,
+ .floating-dock .mode-btn[data-active="true"] {
+     color: #60a5fa;
+     background: rgba(59, 130, 246, 0.15);
+ }
+
+ .floating-dock .mode-icon {
+     font-size: 1.25rem;
+     margin-bottom: 2px;
+     filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+ }
+
+ .floating-dock .mode-btn:hover .mode-icon,
+ .floating-dock .mode-btn.active .mode-icon {
+     transform: scale(1.1) translateY(-2px);
+ }
+
+ .floating-dock .dock-label {
+     font-size: 10px;
+     font-weight: 600;
+     opacity: 0.8;
+ }
+
+ /* Hide the old indicator span if purely using btn styles */
+ .floating-dock .mode-indicator {
+     display: none;
+ }
+
+ /* =========================================
+   PHASE 8 FIXES: ULTRA COMPACT STRIP LAYOUT
+   ========================================= */
+ .lesson-card {
+     padding: 0.4rem 0.6rem !important;
+     /* Very tight padding */
+     min-height: unset !important;
+     height: 64px !important;
+     /* Fixed strip height */
+     gap: 0.6rem !important;
+     display: flex !important;
+     align-items: center !important;
+     border-radius: 12px !important;
+     margin-bottom: 0 !important;
+ }
+
+ .lesson-icon {
+     font-size: 1.4rem !important;
+     width: 2rem !important;
+     height: 2rem !important;
+     display: flex !important;
+     align-items: center !important;
+     justify-content: center !important;
+ }
+
+ .lesson-info {
+     flex: 1 !important;
+     display: flex !important;
+     flex-direction: column !important;
+     justify-content: center !important;
+     gap: 0 !important;
+ }
+
+ .lesson-title {
+     font-size: 0.9rem !important;
+     margin-bottom: 0 !important;
+     line-height: 1.1 !important;
+     white-space: nowrap !important;
+     overflow: hidden !important;
+     text-overflow: ellipsis !important;
+ }
+
+ .lesson-subtitle {
+     font-size: 0.75rem !important;
+     margin-bottom: 0 !important;
+     line-height: 1 !important;
+     opacity: 0.8 !important;
+ }
+
+ /* Hide ALL extra descriptions */
+ .lesson-desc,
+ .lesson-desc-arb,
+ .lesson-card p {
+     display: none !important;
+ }
+
+ .lessons-grid {
+     gap: 0.4rem !important;
+     grid-template-columns: 1fr !important;
+     /* Force single column list */
+     padding: 0 0.5rem !important;
+ }
+
+ /* Ensure Quick Access is tight */
+ .quick-access-row {
+     padding-bottom: 0.5rem !important;
+ }
+
+ /* =========================================
+   PHASE 8 FIXES: VISUAL IPHONE FRAME
+   ========================================= */
+ body.iphone-view {
+     max-width: 375px !important;
+     height: 85vh !important;
+     max-height: 812px !important;
+     margin: 2rem auto !important;
+     border: 14px solid #1e293b !important;
+     /* Bezel */
+     border-radius: 40px !important;
+     box-shadow:
+         0 0 0 2px #334155,
+         0 20px 50px -10px rgba(0, 0, 0, 0.5) !important;
+     overflow-y: auto !important;
+     overflow-x: hidden !important;
+     position: relative !important;
+     background-color: var(--bg-dark) !important;
+     scrollbar-width: none !important;
+ }
+
+ body.iphone-view::-webkit-scrollbar {
+     display: none !important;
+     width: 0 !important;
+     height: 0 !important;
+     background: transparent !important;
+ }
+
+ /* The Notch */
+ body.iphone-view::before {
+     content: '';
+     position: fixed;
+     top: 2rem;
+     /* Body margin spacing */
+     left: 50%;
+     transform: translateX(-50%);
+     width: 120px;
+     height: 30px;
+     background: #1e293b;
+     border-bottom-left-radius: 16px;
+     border-bottom-right-radius: 16px;
+     z-index: 9999;
+     pointer-events: none;
+ }
+
+ /* Push header down to avoid notch */
+ /* Push header down to avoid notch and fix constraint */
+ body.iphone-view .modern-header-learn {
+     padding-top: 2.5rem !important;
+     /* Adjust for notch */
+     position: fixed !important;
+     top: 0 !important;
+     left: 50% !important;
+     transform: translateX(-50%) !important;
+     width: 414px !important;
+     max-width: 375px !important;
+     /* MATCH BODY WIDTH */
+     z-index: 1000 !important;
+     background: linear-gradient(to bottom, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0)) !important;
+     backdrop-filter: blur(5px);
+     -webkit-backdrop-filter: blur(5px);
+ }
+
+ /* Keep dock visible inside frame */
+ body.iphone-view .floating-dock {
+     position: fixed !important;
+     bottom: 2rem !important;
+     width: 340px !important;
+     /* Fit within 375px */
+     max-width: 90% !important;
+ }
+
+ /* =========================================
+   PHASE 9: IPHONE VIEW FIXED
+   ========================================= */
+ body.iphone-view {
+     max-width: 375px !important;
+     height: 90vh !important;
+     max-height: 812px !important;
+     margin: 2rem auto !important;
+     padding-top: 0 !important;
+     /* Remove double padding */
+     border: 14px solid #1e293b !important;
+     border-radius: 40px !important;
+     box-shadow:
+         0 0 0 2px #334155,
+         0 20px 50px -10px rgba(0, 0, 0, 0.5) !important;
+     overflow-y: auto !important;
+     overflow-x: hidden !important;
+     position: relative !important;
+     background-color: var(--bg-dark) !important;
+     scrollbar-width: none !important;
+ }
+
+ body.iphone-view::-webkit-scrollbar {
+     display: none;
+ }
+
+ /* Simulate Notch */
+ body.iphone-view::before {
+     content: '';
+     position: fixed;
+     top: 2rem;
+     left: 50%;
+     transform: translateX(-50%);
+     width: 120px;
+     height: 30px;
+     background: #1e293b;
+     border-bottom-left-radius: 16px;
+     border-bottom-right-radius: 16px;
+     z-index: 10000;
+     pointer-events: none;
+ }
+
+ /* Adjust Header inside Phone - Reduced Padding */
+ body.iphone-view .modern-header-learn {
+     padding-top: 1.5rem !important;
+     /* Reduced from 3rem */
+ }
+
+ /* Floating Dock Fix */
+ body.iphone-view .floating-dock {
+     position: fixed !important;
+     bottom: 2rem !important;
+     width: 340px !important;
+     left: 50% !important;
+     transform: translateX(-50%) !important;
+     max-width: 90% !important;
+     border-radius: 30px !important;
  }

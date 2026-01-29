@@ -44,3 +44,17 @@
 **Solution:**
 
 - **Versioning:** Always append `?v=xyz` (e.g., `?v=fix4`) to CSS links in HTML when deploying critical style fixes.
+
+## 🚨 PWA & Mobile View Pitfalls (Added 2026-01-28)
+
+### 1. The "Ghost CSS" Trap (Service Worker Cache)
+*   **Problem:** PWA Service Workers aggressively cache CSS/JS. "Refreshing" Chrome often loads the *old* file even after you edit it.
+*   **Solution:** ALWAYS append a version query string (e.g., `style.css?v=2.1`) when pushing critical UI fixes. Do NOT trust `Cmd+R` alone for PWAs.
+
+### 2. Flexbox Alignment Blindness
+*   **Problem:** `display: flex` defaults to `flex-start` (left). This makes centered mobile UIs look unbalanced if the container is wider than the content.
+*   **Solution:** For any centered mobile UI, explicitly set `justify-content: center` on the flex container.
+
+### 3. The "Unconstrained Header" Mistake
+*   **Problem:** Setting `max-width: 414px` on the *content* but leaving the *header* as `width: 100%` creates a disjointed look on desktop.
+*   **Solution:** Apply the `max-width` constraint to the **Parent Container** (or both header & main) to ensure the entire vertical slice looks like a phone.

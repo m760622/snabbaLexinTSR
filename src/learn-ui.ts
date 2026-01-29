@@ -251,13 +251,18 @@ async function refreshTrainingIds() {
 function switchMode(mode: string) {
     viewManager.switchTo(mode as LearnView);
 
-    // Update Mode Bar UI
-    document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+    // Update Mode Bar UI (UnoCSS Data Attribute)
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.removeAttribute('data-active');
+        btn.classList.remove('active'); // Legacy cleanup
+    });
+
     const btnId = `btn-${mode}`;
     const activeBtn = document.getElementById(btnId);
 
     if (activeBtn) {
-        activeBtn.classList.add('active');
+        activeBtn.setAttribute('data-active', 'true');
+        // Optional: animate the pill indicator if we want to keep it
         updateModeIndicator(activeBtn);
     }
 }
@@ -1348,6 +1353,7 @@ function setupFilters(): void {
 
 // Setup search
 function setupSearch(): void {
+    console.log('[LearnUI] Setting up search & filters...'); // DEBUG
     const searchInput = document.getElementById('lessonSearchInput') as HTMLInputElement;
     if (searchInput) {
         // Debounce search to avoid lag while typing
@@ -1363,9 +1369,16 @@ function setupSearch(): void {
     const filterBtn = document.getElementById('filterToggleBtn');
     const filterContainer = document.querySelector('.filter-scroll-container');
 
+    console.log('[LearnUI] Filter Elements:', { filterBtn, filterContainer }); // DEBUG
+
     if (filterBtn && filterContainer) {
-        filterBtn.addEventListener('click', () => {
+        filterBtn.onclick = (e) => { // Force onclick to override listeners
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('[LearnUI] Filter clicked!');
+
             const isExpanded = filterContainer.classList.contains('expanded');
+            console.log('[LearnUI] Toggling filter. Current state:', isExpanded);
 
             if (isExpanded) {
                 filterContainer.classList.remove('expanded');
@@ -1374,7 +1387,9 @@ function setupSearch(): void {
                 filterContainer.classList.add('expanded');
                 filterBtn.classList.add('active');
             }
-        });
+        };
+    } else {
+        console.error('[LearnUI] Filter button or container NOT found!');
     }
 }
 
@@ -2504,3 +2519,27 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// =========================================
+// INITIALIZATION
+// =========================================
+function init() {
+    console.log('[LearnUI] Initializing...');
+    loadState();
+    initViewManager();
+    initWordLookup();
+    refreshTrainingIds();
+    setupSearch(); // Attaches filter listener
+
+    // Initial Render
+    if (window.location.hash.includes('quiz')) {
+        switchMode('quiz');
+    } else {
+        renderLessons();
+    }
+}
+
+// Auto-run if in browser
+if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', init);
+}
