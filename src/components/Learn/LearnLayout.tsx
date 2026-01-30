@@ -33,9 +33,11 @@ export const LearnLayout: React.FC = () => {
 
     return (
         <div className="learn-layout w-full min-h-screen bg-[var(--bg-color)] text-[var(--text-color)] padding-bottom-dock">
-            <LearnHeader onBack={activeMode !== 'browse' ? navigateBack : undefined} />
+            <LearnHeader
+                onBack={activeMode !== 'browse' ? navigateBack : undefined}
+            />
 
-            <main className="pt-24 pb-32 px-4 max-w-md mx-auto">
+            <main className="pt-0 pb-32 px-4 max-w-md mx-auto">
                 {/* Quick Access (Only show in browse mode) */}
                 {activeMode === 'browse' && (
                     <QuickAccessRow onQuickAction={(action) => {
@@ -73,7 +75,6 @@ export const LearnLayout: React.FC = () => {
                 {activeMode === 'lesson' && selectedLessonId && (
                     <LessonDetailView
                         lessonId={selectedLessonId}
-                        onBack={navigateBack}
                         onStartQuiz={() => setMode('quiz')}
                     />
                 )}

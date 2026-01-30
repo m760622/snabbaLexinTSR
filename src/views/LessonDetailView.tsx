@@ -7,11 +7,10 @@ import '../../assets/css/lesson-detail-terminal.css';
 
 interface LessonDetailViewProps {
     lessonId: string;
-    onBack: () => void;
     onStartQuiz: (lessonId: string) => void;
 }
 
-export const LessonDetailView: React.FC<LessonDetailViewProps> = ({ lessonId, onBack, onStartQuiz }) => {
+export const LessonDetailView: React.FC<LessonDetailViewProps> = ({ lessonId, onStartQuiz }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     // Find Lesson
@@ -47,7 +46,6 @@ export const LessonDetailView: React.FC<LessonDetailViewProps> = ({ lessonId, on
         return (
             <div className="terminal-view view-section active p-10 text-center min-h-screen">
                 <h2 className="terminal-title">Error: 404_DATA_NOT_FOUND</h2>
-                <button onClick={onBack} className="terminal-btn mt-4">REBOOT_TO_BROWSE</button>
             </div>
         );
     }
@@ -65,16 +63,6 @@ export const LessonDetailView: React.FC<LessonDetailViewProps> = ({ lessonId, on
             {/* Header / Nav */}
             <div className="terminal-header flex flex-col gap-2">
                 <div className="flex items-center gap-3">
-                    <button
-                        onClick={onBack}
-                        className="p-2 border border-accent/30 text-accent hover:bg-accent/10 transition-all"
-                        aria-label="Tillbaka"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="19" y1="12" x2="5" y2="12"></line>
-                            <polyline points="12 19 5 12 12 5"></polyline>
-                        </svg>
-                    </button>
                     <h1 className="terminal-title text-xl font-bold flex-1 truncate">{lesson.title}</h1>
                 </div>
 
