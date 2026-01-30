@@ -227,7 +227,8 @@
  }
 
  main {
-     padding: 0 1rem 1rem;
+     padding: 0 1rem;
+     padding-bottom: calc(90px + env(safe-area-inset-bottom));
      max-width: 414px;
      margin: 0 auto;
  }
@@ -451,43 +452,207 @@
      gap: 0.75rem;
  }
 
+ /* =========================================
+    CYBERPUNK ENERGY CARDS
+    ========================================= */
+
  .lesson-card {
-     background: var(--card-bg);
-     border-radius: 12px;
-     /* Slightly tighter radius */
-     padding: 0.75rem;
-     /* Reduced padding */
-     cursor: pointer;
-     transition: all 0.3s;
-     border: 1px solid rgba(59, 130, 246, 0.1);
      position: relative;
+     background: linear-gradient(135deg,
+             rgba(15, 23, 42, 0.95) 0%,
+             rgba(30, 41, 59, 0.9) 100%);
+     border: 1px solid rgba(0, 243, 255, 0.3);
+     border-radius: 12px;
+     padding: 0.75rem;
+     padding-left: 1rem;
+     /* Extra space for energy bar */
+     cursor: pointer;
+     overflow: hidden;
+     box-shadow:
+         0 0 20px rgba(0, 243, 255, 0.15),
+         0 4px 12px rgba(0, 0, 0, 0.3),
+         inset 0 1px 0 rgba(0, 243, 255, 0.1);
+     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
      display: flex;
-     gap: 0.75rem;
-     /* Reduced gap */
-     align-items: center;
+     flex-direction: column;
+     gap: 0.5rem;
+     align-items: flex-start !important;
+     /* Force children to left */
+     text-align: left !important;
+     /* Force text to left */
  }
 
+ /* Energy Bar (Left Edge) */
+ .lesson-card::before {
+     content: '';
+     position: absolute;
+     left: 0;
+     top: 0;
+     width: 3px;
+     height: 100%;
+     background: linear-gradient(180deg,
+             rgba(0, 243, 255, 0.9) 0%,
+             rgba(14, 165, 233, 0.5) 50%,
+             rgba(0, 243, 255, 0) 100%);
+     animation: energyPulse 2s ease-in-out infinite;
+     z-index: 1;
+ }
+
+ /* Scan Lines Effect */
+ .lesson-card::after {
+     content: '';
+     position: absolute;
+     top: 0;
+     left: 0;
+     right: 0;
+     height: 100%;
+     background: repeating-linear-gradient(0deg,
+             rgba(0, 243, 255, 0.03) 0px,
+             transparent 1px,
+             transparent 2px);
+     pointer-events: none;
+     z-index: 2;
+     animation: scanMove 8s linear infinite;
+ }
+
+ /* Hover State with Glitch Effect */
  .lesson-card:hover {
-     transform: translateY(-2px);
-     border-color: var(--primary);
-     box-shadow: 0 5px 15px -5px rgba(59, 130, 246, 0.3);
-     /* Softer shadow */
+     transform: translateY(-4px) scale(1.01);
+     border-color: rgba(0, 243, 255, 0.6);
+     box-shadow:
+         0 0 30px rgba(0, 243, 255, 0.3),
+         0 8px 24px rgba(0, 0, 0, 0.4),
+         inset 0 1px 0 rgba(0, 243, 255, 0.2);
  }
 
+ /* Completed State */
  .lesson-card.completed {
-     border-color: var(--success);
-     background: rgba(34, 197, 94, 0.05);
+     border-color: rgba(16, 185, 129, 0.5);
+     background: linear-gradient(135deg,
+             rgba(15, 23, 42, 0.95) 0%,
+             rgba(16, 185, 129, 0.1) 100%);
  }
 
+ .lesson-card.completed::before {
+     background: linear-gradient(180deg,
+             rgba(16, 185, 129, 0.9) 0%,
+             rgba(16, 185, 129, 0.5) 50%,
+             rgba(16, 185, 129, 0) 100%);
+ }
+
+ /* Locked State */
  .lesson-card.locked {
      opacity: 0.5;
      pointer-events: none;
  }
 
+ /* Level-Based Energy Colors */
+ .lesson-card[data-level="beginner"]::before {
+     background: linear-gradient(180deg,
+             rgba(16, 185, 129, 0.9) 0%,
+             rgba(16, 185, 129, 0.5) 50%,
+             rgba(16, 185, 129, 0) 100%);
+ }
+
+ .lesson-card[data-level="intermediate"]::before {
+     background: linear-gradient(180deg,
+             rgba(251, 191, 36, 0.9) 0%,
+             rgba(251, 191, 36, 0.5) 50%,
+             rgba(251, 191, 36, 0) 100%);
+ }
+
+ .lesson-card[data-level="advanced"]::before {
+     background: linear-gradient(180deg,
+             rgba(239, 68, 68, 0.9) 0%,
+             rgba(239, 68, 68, 0.5) 50%,
+             rgba(239, 68, 68, 0) 100%);
+ }
+
+ /* Animations */
+ @keyframes energyPulse {
+
+     0%,
+     100% {
+         opacity: 0.6;
+         filter: blur(0px);
+     }
+
+     50% {
+         opacity: 1;
+         filter: blur(2px);
+         box-shadow: 0 0 10px currentColor;
+     }
+ }
+
+ @keyframes scanMove {
+     0% {
+         transform: translateY(-100%);
+     }
+
+     100% {
+         transform: translateY(100%);
+     }
+ }
+
+ @keyframes glitchHover {
+
+     0%,
+     100% {
+         filter: none;
+     }
+
+     25% {
+         filter: hue-rotate(90deg);
+         transform: translateY(-4px) translateX(2px);
+     }
+
+     75% {
+         filter: hue-rotate(-90deg);
+         transform: translateY(-4px) translateX(-2px);
+     }
+ }
+
+ /* Legacy Elements (kept for compatibility) */
  .lesson-icon {
      font-size: 1.75rem;
-     /* Smaller icon */
      flex-shrink: 0;
+     filter: drop-shadow(0 0 4px rgba(0, 243, 255, 0.6));
+     animation: iconGlow 3s ease-in-out infinite;
+ }
+
+ .lesson-meta-row {
+     display: flex;
+     gap: 1rem;
+     margin-top: 0.5rem;
+     position: relative;
+     z-index: 3;
+     justify-content: flex-start;
+     /* Force meta content to left */
+ }
+
+ .meta-item {
+     display: flex;
+     align-items: center;
+     gap: 0.25rem;
+     font-size: 0.8rem;
+     color: rgba(255, 255, 255, 0.7);
+ }
+
+ .meta-item .icon {
+     filter: drop-shadow(0 0 4px rgba(0, 243, 255, 0.6));
+     animation: iconGlow 3s ease-in-out infinite;
+ }
+
+ @keyframes iconGlow {
+
+     0%,
+     100% {
+         filter: drop-shadow(0 0 4px rgba(0, 243, 255, 0.4));
+     }
+
+     50% {
+         filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.8));
+     }
  }
 
  .lesson-info {
@@ -495,6 +660,10 @@
      display: flex;
      flex-direction: column;
      justify-content: center;
+     position: relative;
+     z-index: 3;
+     align-items: flex-start;
+     /* Ensure info group is left-aligned */
  }
 
  .lesson-title {
@@ -511,15 +680,12 @@
      opacity: 0.9;
  }
 
- /* Hide description for compact view to save huge vertical space */
  .lesson-desc {
      display: none;
  }
 
- /* Grid adjustment for compact cards */
  .lessons-grid {
-     gap: 0.5rem !important;
-     /* Tighter grid */
+     gap: 0.75rem !important;
  }
 
  .lesson-badge {
@@ -535,6 +701,7 @@
      align-items: center;
      justify-content: center;
      font-size: 0.8rem;
+     z-index: 4;
  }
 
  .lesson-progress {
@@ -554,7 +721,6 @@
      transition: width 0.3s;
  }
 
- /* Star Ratings */
  .lesson-stars {
      display: flex;
      gap: 0.1rem;
@@ -576,6 +742,21 @@
      border-left: 3px solid var(--success);
      background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, var(--card-bg) 100%);
  }
+
+ /* Accessibility: Reduced Motion */
+ @media (prefers-reduced-motion: reduce) {
+
+     .lesson-card::before,
+     .lesson-card::after,
+     .lesson-icon {
+         animation: none !important;
+     }
+
+     .lesson-card:hover {
+         animation: none !important;
+     }
+ }
+
 
  /* Badge Variants */
  .lesson-badge.warning-badge {
@@ -3738,27 +3919,31 @@
  }
 
  /* =========================================
+   UTILITY: PADDING FOR DOCK
+   ========================================= */
+ .padding-bottom-dock {
+     padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+ }
+
+ /* =========================================
    FLOATING DOCK (BOTTOM NAV)
    ========================================= */
  .floating-dock {
      position: fixed;
-     bottom: 1.5rem;
-     left: 50%;
-     transform: translateX(-50%);
-     background: rgba(15, 23, 42, 0.85);
+     bottom: 0;
+     left: 0;
+     right: 0;
+     background: rgba(15, 23, 42, 0.95);
      backdrop-filter: blur(16px);
      -webkit-backdrop-filter: blur(16px);
-     border: 1px solid rgba(148, 163, 184, 0.1);
-     border-radius: 50px;
-     padding: 0.5rem;
+     border-top: 1px solid rgba(148, 163, 184, 0.1);
+     padding: 0.75rem 1rem;
+     padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
      display: flex;
      gap: 0.5rem;
      z-index: 100;
-     box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5),
-         inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-     width: calc(100% - 2rem);
-     max-width: 380px;
-     justify-content: space-between;
+     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+     justify-content: space-around;
  }
 
  .floating-dock .mode-btn {
@@ -3811,73 +3996,7 @@
      display: none;
  }
 
- /* =========================================
-   PHASE 8 FIXES: ULTRA COMPACT STRIP LAYOUT
-   ========================================= */
- .lesson-card {
-     padding: 0.4rem 0.6rem !important;
-     /* Very tight padding */
-     min-height: unset !important;
-     height: 64px !important;
-     /* Fixed strip height */
-     gap: 0.6rem !important;
-     display: flex !important;
-     align-items: center !important;
-     border-radius: 12px !important;
-     margin-bottom: 0 !important;
- }
-
- .lesson-icon {
-     font-size: 1.4rem !important;
-     width: 2rem !important;
-     height: 2rem !important;
-     display: flex !important;
-     align-items: center !important;
-     justify-content: center !important;
- }
-
- .lesson-info {
-     flex: 1 !important;
-     display: flex !important;
-     flex-direction: column !important;
-     justify-content: center !important;
-     gap: 0 !important;
- }
-
- .lesson-title {
-     font-size: 0.9rem !important;
-     margin-bottom: 0 !important;
-     line-height: 1.1 !important;
-     white-space: nowrap !important;
-     overflow: hidden !important;
-     text-overflow: ellipsis !important;
- }
-
- .lesson-subtitle {
-     font-size: 0.75rem !important;
-     margin-bottom: 0 !important;
-     line-height: 1 !important;
-     opacity: 0.8 !important;
- }
-
- /* Hide ALL extra descriptions */
- .lesson-desc,
- .lesson-desc-arb,
- .lesson-card p {
-     display: none !important;
- }
-
- .lessons-grid {
-     gap: 0.4rem !important;
-     grid-template-columns: 1fr !important;
-     /* Force single column list */
-     padding: 0 0.5rem !important;
- }
-
- /* Ensure Quick Access is tight */
- .quick-access-row {
-     padding-bottom: 0.5rem !important;
- }
+ /* Removed ULTRA COMPACT STRIP LAYOUT to allow Cyberpunk Energy Cards to display fully */
 
  /* =========================================
    PHASE 8 FIXES: VISUAL IPHONE FRAME
@@ -3945,7 +4064,7 @@
  /* Keep dock visible inside frame */
  body.iphone-view .floating-dock {
      position: fixed !important;
-     bottom: 2rem !important;
+     bottom: 0 !important;
      width: 340px !important;
      /* Fit within 375px */
      max-width: 90% !important;
@@ -4002,7 +4121,7 @@
  /* Floating Dock Fix */
  body.iphone-view .floating-dock {
      position: fixed !important;
-     bottom: 2rem !important;
+     bottom: 0 !important;
      width: 340px !important;
      left: 50% !important;
      transform: translateX(-50%) !important;
