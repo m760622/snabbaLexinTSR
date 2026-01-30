@@ -6692,27 +6692,29 @@ h1 {
 }
 
 /* Forced Override for Quiz Layout - NUCLEAR OPTION */
-html body .container .quiz-options,
+html body .quiz-options,
 html body .game-options,
 #quizOptions {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  gap: 12px !important;
+  gap: 1.5rem !important;
+  /* Standardized gap */
   width: 100% !important;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem !important;
 }
 
 html body .quiz-option,
 html body .option-btn,
 button.quiz-option {
-  width: 80% !important;
-  max-width: 400px !important;
+  width: 85% !important;
+  max-width: 450px !important;
   min-width: 250px !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
   margin: 0 auto !important;
+  /* Keep centered, but gap handles vertical spacing */
   background: var(--surface);
   border: 2px solid var(--border);
   padding: 16px 20px;
@@ -8094,9 +8096,9 @@ body.flashcard-active .revealed {
 .quiz-options {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1.5rem;
   /* Increased gap for WOD style */
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 /* Quiz Option Buttons - Clean Card UI */
@@ -11384,7 +11386,7 @@ footer,
 .quiz-options {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1.5rem;
   margin-top: 1.5rem;
   position: relative;
   z-index: 1;
@@ -12147,7 +12149,7 @@ body.dark-mode .onboarding-container {
   }
 
   .quiz-options {
-    gap: 0.5rem;
+    gap: 1.25rem;
   }
 
   .quiz-option {
@@ -12873,10 +12875,12 @@ body.lang-ar .sv-text {
     transform: scale(1);
   }
 }
+
 /* Global Scrollbar Hide Fix */
 html {
   scrollbar-width: none;
 }
+
 html::-webkit-scrollbar {
   display: none;
 }

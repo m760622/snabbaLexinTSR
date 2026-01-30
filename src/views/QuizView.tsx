@@ -257,7 +257,7 @@ export const QuizView: React.FC<QuizViewProps> = ({ onBack, lessonId = null }) =
             </div>
 
             {/* Options Grid */}
-            <div className="grid grid-cols-1" style={{ gap: '40px' }}>
+            <div className="quiz-options">
                 {currentQ.options.map((opt, idx) => {
                     let stateClass = '';
                     if (isAnswered) {
