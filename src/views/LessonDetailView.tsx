@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { lessonsData, Lesson, LessonSection, ExampleItem, ContentItem } from '../learn/lessonsData';
 import { TTSManager } from '../tts';
 import { normalizeArabic } from '../utils';
+import '../../assets/css/lesson-detail-terminal.css';
 
 interface LessonDetailViewProps {
     lessonId: string;
@@ -18,6 +19,19 @@ export const LessonDetailView: React.FC<LessonDetailViewProps> = ({ lessonId, on
         return lessonsData.find(l => l.id === lessonId);
     }, [lessonId]);
 
+    // Calculate metadata
+    const stats = useMemo(() => {
+        if (!lesson) return null;
+        let totalExamples = 0;
+        lesson.sections.forEach(s => totalExamples += s.examples.length);
+        return {
+            sectionCount: lesson.sections.length,
+            exampleCount: totalExamples,
+            timestamp: new Date().toLocaleTimeString(),
+            status: "ANALYSIS_COMPLETE"
+        };
+    }, [lesson]);
+
     // TTS Hook
     const playAudio = (text: string) => {
         TTSManager.speak(text);
@@ -31,79 +45,112 @@ export const LessonDetailView: React.FC<LessonDetailViewProps> = ({ lessonId, on
 
     if (!lesson) {
         return (
-            <div className="view-section active p-10 text-center">
-                <h2>Lektionen hittades inte</h2>
-                <button onClick={onBack} className="primary-btn mt-4">Tillbaka</button>
+            <div className="terminal-view view-section active p-10 text-center min-h-screen">
+                <h2 className="terminal-title">Error: 404_DATA_NOT_FOUND</h2>
+                <button onClick={onBack} className="terminal-btn mt-4">REBOOT_TO_BROWSE</button>
             </div>
         );
     }
 
     if (isLoading) {
-        return <div className="view-section active p-10 text-center">Laddar lektion...</div>;
+        return (
+            <div className="terminal-view view-section active p-10 text-center min-h-screen">
+                <div className="terminal-title animate-pulse">SYSTEM_LOADING...</div>
+            </div>
+        );
     }
 
     return (
-        <div id="lessonView" className="view-section active fade-in w-full pb-32">
+        <div id="lessonView" className="terminal-view view-section active fade-in w-full pb-32 min-h-screen p-4">
             {/* Header / Nav */}
-            <div className="lesson-nav mb-6 flex items-center gap-3">
-                <button
-                    onClick={onBack}
-                    className="back-btn p-2 rounded-full hover:bg-white/5 active:scale-95 transition-all"
-                    aria-label="Tillbaka"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                </button>
-                <h1 className="text-xl font-bold flex-1">{lesson.title}</h1>
+            <div className="terminal-header flex flex-col gap-2">
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={onBack}
+                        className="p-2 border border-accent/30 text-accent hover:bg-accent/10 transition-all"
+                        aria-label="Tillbaka"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+                    <h1 className="terminal-title text-xl font-bold flex-1 truncate">{lesson.title}</h1>
+                </div>
+
+                {/* System Info Row */}
+                <div className="flex flex-wrap gap-2 mt-2">
+                    <span className="terminal-meta-chip">DATA_BLOCKS: {stats?.sectionCount}</span>
+                    <span className="terminal-meta-chip">REF_EXAMPLES: {stats?.exampleCount}</span>
+                    <span className="terminal-meta-chip hidden sm:inline-block">LOAD_TIME: {stats?.timestamp}</span>
+                    <span className={`terminal-meta-chip text-xs ${lesson.level === 'beginner' ? 'text-green-400' : lesson.level === 'intermediate' ? 'text-amber-400' : 'text-red-400'}`}>
+                        LEVEL: {lesson.level.toUpperCase()}
+                    </span>
+                </div>
             </div>
 
-            <div className="lesson-content-container space-y-8">
+            <div className="lesson-content-container space-y-8 max-w-2xl mx-auto">
                 {lesson.sections.map((section, idx) => (
-                    <section key={idx} className="lesson-section bg-surface glass-card p-6 rounded-2xl border border-white/5 shadow-lg">
-                        <h2 className="text-xl font-semibold mb-4 text-accent border-b border-white/10 pb-2">
+                    <section key={idx} className="terminal-section group">
+                        <h2 className="terminal-section-title">
                             {section.title}
                         </h2>
 
                         {/* Content Blocks */}
-                        {section.content.map((block, bIdx) => (
-                            <div key={bIdx} className="content-block mb-4 text-gray-200 leading-relaxed">
-                                {/* Using dangerouslySetInnerHTML because data contains <strong>, <em> etc */}
-                                <div dangerouslySetInnerHTML={{ __html: block.html }} />
-                            </div>
-                        ))}
+                        <div className="terminal-content mb-6 space-y-4">
+                            {section.content.map((block, bIdx) => (
+                                <div key={bIdx} className="content-block">
+                                    <div dangerouslySetInnerHTML={{ __html: block.html }} />
+                                </div>
+                            ))}
+                        </div>
 
                         {/* Examples */}
                         {section.examples.length > 0 && (
-                            <div className="examples-container mt-6 space-y-3">
-                                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">Exempel / أمثلة</h3>
-                                {section.examples.map((ex, exIdx) => (
-                                    <div key={exIdx} className="example-item bg-black/20 p-4 rounded-xl border border-white/5 hover:border-accent/30 transition-colors group cursor-pointer" onClick={() => playAudio(ex.swe)}>
-                                        <div className="flex justify-between items-start gap-3">
-                                            <div className="flex-1">
-                                                <p className="swe-text font-medium text-lg text-white mb-1">{ex.swe}</p>
-                                                <p className="arb-text text-gray-400 text-lg" dir="rtl" lang="ar">{ex.arb}</p>
+                            <div className="examples-container mt-6">
+                                <div className="text-[10px] text-accent/50 mb-3 border-b border-accent/20 pb-1 font-mono uppercase tracking-[3px]">
+                                    Extracted_References / أمثلة
+                                </div>
+                                <div className="grid gap-3">
+                                    {section.examples.map((ex, exIdx) => (
+                                        <div
+                                            key={exIdx}
+                                            className="terminal-example group/ex cursor-pointer"
+                                            onClick={() => playAudio(ex.swe)}
+                                        >
+                                            <div className="flex justify-between items-start gap-4">
+                                                <div className="flex-1">
+                                                    <p className="swe-text text-base mb-1 tracking-wide">
+                                                        <span className="text-accent/40 mr-2 opacity-50">[{exIdx + 1}]</span>
+                                                        {ex.swe}
+                                                    </p>
+                                                    <p className="arb-text text-base" dir="rtl" lang="ar">{ex.arb}</p>
+                                                </div>
+                                                <div className="flex flex-col items-center justify-center h-full opacity-30 group-hover/ex:opacity-100 transition-opacity">
+                                                    <span className="text-accent text-xl">🔊</span>
+                                                </div>
                                             </div>
-                                            <button className="audio-btn opacity-50 group-hover:opacity-100 p-2 text-accent" aria-label="Lyssna">
-                                                🔊
-                                            </button>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         )}
+
+                        {/* Section ID tag */}
+                        <div className="absolute top-2 right-2 text-[8px] text-accent/20 font-mono">
+                            SEC_ID: {idx.toString().padStart(3, '0')}
+                        </div>
                     </section>
                 ))}
             </div>
 
             {/* Sticky Footer Action */}
-            <div className="lesson-footer fixed bottom-0 left-0 right-0 p-4 bg-surface/95 backdrop-blur-lg border-t border-white/10 flex justify-center z-50">
+            <div className="fixed bottom-0 left-0 right-0 p-6 bg-slate-950/80 backdrop-blur-md border-t border-accent/20 flex justify-center z-50">
                 <button
                     onClick={() => onStartQuiz(lesson.id)}
-                    className="primary-btn w-full max-w-md shadow-lg shadow-accent/20"
+                    className="terminal-btn min-w-[280px] text-sm"
                 >
-                    Starta Quiz / اختبار
+                    INITIALIZE_QUIZ_PROCEDURE
                 </button>
             </div>
         </div>

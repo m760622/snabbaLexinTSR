@@ -1117,8 +1117,9 @@ function createLessonCardHTML(lesson: Lesson): string {
     // If translation is missing (returns key) or empty, use fallback
     const sectionLabel = (rawLabel === 'learn.sections' || !rawLabel) ? 'avsnitt' : rawLabel;
 
-    const sectionsText = `${lesson.sections.length} ${sectionLabel}`;
-    const timeText = `${Math.max(3, lesson.sections.length * 2)} min`;
+    const totalExamples = lesson.sections.reduce((acc, s) => acc + s.examples.length, 0);
+    const sectionsText = `${lesson.sections.length} Avsnitt / أقسام`;
+    const examplesText = `${totalExamples} Exempel / أمثلة`;
 
     // Arabic title or description if available
     const subTitle = lesson.id === 'wordOrder' ? 'ترتيب الكلمات - قاعدة V2' :
@@ -1136,7 +1137,6 @@ function createLessonCardHTML(lesson: Lesson): string {
             <div class="lesson-card-header">
                 <div class="lesson-text-group">
                     <h2 class="lesson-title search-result-title">${lesson.title}</h2>
-                    <span class="lesson-level-badge ${lesson.level}">${levelEmoji[lesson.level] || '📚'} ${lesson.level}</span>
                 </div>
                 ${isCompleted ? '<span class="check-icon">✓</span>' : ''}
             </div>
@@ -1145,7 +1145,7 @@ function createLessonCardHTML(lesson: Lesson): string {
             
             <div class="lesson-meta-row">
                 <span class="meta-item"><span class="icon">📄</span> ${sectionsText}</span>
-                <span class="meta-item"><span class="icon">⚡</span> ${timeText}</span>
+                <span class="meta-item"><span class="icon">📝</span> ${examplesText}</span>
             </div>
 
             ${starsHtml}

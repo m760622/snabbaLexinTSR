@@ -60,8 +60,9 @@ export const LessonCard: React.FC<LessonCardProps> = ({ lesson, isCompleted, onC
         setMousePos({ x: 0, y: 0 });
     };
 
-    const sectionsText = `${lesson.sections.length} avsnitt`;
-    const timeText = `${Math.max(3, lesson.sections.length * 2)} min`;
+    const totalExamples = lesson.sections.reduce((acc, s) => acc + s.examples.length, 0);
+    const sectionsText = `${lesson.sections.length} Avsnitt / أقسام`;
+    const examplesText = `${totalExamples} Exempel / أمثلة`;
 
     return (
         <div
@@ -81,9 +82,6 @@ export const LessonCard: React.FC<LessonCardProps> = ({ lesson, isCompleted, onC
             <div className="lesson-card-header">
                 <div className="lesson-text-group">
                     <h2 className="lesson-title search-result-title">{lesson.title}</h2>
-                    <span className={`lesson-level-badge ${lesson.level}`}>
-                        {levelEmoji[lesson.level] || '📚'} {lesson.level}
-                    </span>
                 </div>
                 {isCompleted && <span className="check-icon">✓</span>}
             </div>
@@ -92,7 +90,7 @@ export const LessonCard: React.FC<LessonCardProps> = ({ lesson, isCompleted, onC
 
             <div className="lesson-meta-row">
                 <span className="meta-item"><span className="icon">📄</span> {sectionsText}</span>
-                <span className="meta-item"><span className="icon">⚡</span> {timeText}</span>
+                <span className="meta-item"><span className="icon">📝</span> {examplesText}</span>
             </div>
 
             {isCompleted && (

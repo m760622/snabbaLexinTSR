@@ -282,12 +282,13 @@
  }
 
  .filter-chip {
-     padding: 0.6rem 1.25rem;
-     border-radius: 50px;
+     padding: 0.5rem 0.4rem;
+     border-radius: 8px;
+     /* Slightly less rounded for better text use */
      background: rgba(30, 41, 59, 0.4);
      border: 1px solid rgba(255, 255, 255, 0.1);
      color: var(--text-muted);
-     font-size: 0.9rem;
+     font-size: 0.75rem;
      font-weight: 500;
      white-space: nowrap;
      cursor: pointer;
@@ -477,9 +478,16 @@
      flex-direction: column;
      gap: 0.5rem;
      align-items: flex-start !important;
-     /* Force children to left */
      text-align: left !important;
-     /* Force text to left */
+ }
+
+ .lesson-subtitle-arb {
+     width: 100%;
+     text-align: right !important;
+     direction: rtl !important;
+     font-family: 'Tajawal', sans-serif;
+     font-size: 0.85rem;
+     color: var(--text-secondary);
  }
 
  /* Energy Bar (Left Edge) */
@@ -622,12 +630,13 @@
 
  .lesson-meta-row {
      display: flex;
-     gap: 1rem;
+     flex-wrap: wrap;
+     /* Allow wrapping for multiple bilingual items */
+     gap: 0.75rem;
      margin-top: 0.5rem;
      position: relative;
      z-index: 3;
      justify-content: flex-start;
-     /* Force meta content to left */
  }
 
  .meta-item {
@@ -678,6 +687,9 @@
      color: var(--primary);
      font-family: 'Tajawal', sans-serif;
      opacity: 0.9;
+     width: 100%;
+     text-align: right !important;
+     direction: rtl !important;
  }
 
  .lesson-desc {
@@ -2805,13 +2817,12 @@
  /* Filter Chips Enhanced */
  .filter-scroll-container {
      display: flex;
-     gap: 0.8rem;
-     /* Increased gap */
-     padding: 0.5rem 1rem 1rem;
-     /* Added top padding */
-     overflow-x: auto;
-     min-height: 60px;
-     /* Ensure visibility */
+     gap: 0.4rem;
+     padding: 0.5rem 0 0.75rem;
+     overflow-x: hidden;
+     /* Keep in one row on screen */
+     justify-content: space-between;
+     min-height: auto;
      scrollbar-width: none;
      /* Hide scrollbar as per previous fix */
      -ms-overflow-style: none;

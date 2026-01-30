@@ -1,0 +1,12 @@
+
+> snabbalexin-web-1@3.2.4 dev
+> vite
+
+Port 8080 is in use, trying another one...
+
+  VITE v5.4.21  ready in 306 ms
+
+  ➜  Local:   http://localhost:8081/
+  ➜  Network: http://192.168.1.139:8081/
+  ➜  UnoCSS Inspector: http://localhost:8081/__unocss/
+  ➜  press h + enter to show help

@@ -84,7 +84,6 @@ export const BrowseView: React.FC<BrowseViewProps> = ({
                         </svg>
                     </button>
                 </div>
-
                 <div className={`filter-bar-wrapper ${isFilterOpen ? 'expanded' : 'collapsed'}`} style={{
                     height: isFilterOpen ? 'auto' : '0',
                     overflow: 'hidden',
