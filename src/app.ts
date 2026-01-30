@@ -170,37 +170,7 @@ export class App {
             }
         });
 
-        const clearSearch = document.getElementById('clearSearch');
-
-        const toggleClearBtn = () => {
-            if (clearSearch) {
-                if (searchInput.value.length > 0) {
-                    clearSearch.classList.remove('hidden');
-                    clearSearch.style.display = 'flex'; // Ensure flex layout if needed
-                } else {
-                    clearSearch.classList.add('hidden');
-                    clearSearch.style.display = ''; // Reset inline style
-                }
-            }
-        };
-
-        searchInput.addEventListener('input', () => {
-            toggleClearBtn();
-        });
-
-        // Initialize button state with a slight delay to catch browser autofill/restoration
-        setTimeout(() => {
-            toggleClearBtn();
-        }, 100);
-
-        if (clearSearch) {
-            clearSearch.addEventListener('click', () => {
-                searchInput.value = '';
-                clearSearch.classList.add('hidden');
-                clearSearch.style.display = '';
-                this.performSearch('');
-            });
-        }
+        // Clear button is now handled by SearchManager
     }
 
     private setupFilters() {
@@ -648,7 +618,7 @@ export class App {
             </div>
             <div class="history-chips">
                 ${history.map(term => `
-                    <button class="history-chip" onclick="window.app.performSearch('${term}')">
+                    <button class="history-chip" onclick="document.getElementById('searchInput').value = '${term}'; window.app.performSearch('${term}')">
                         ${term}
                     </button>
                 `).join('')}

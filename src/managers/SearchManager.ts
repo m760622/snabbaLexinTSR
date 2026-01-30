@@ -76,11 +76,33 @@ export class SearchManager {
                 if (this.searchInput) {
                     this.searchInput.value = '';
                     this.searchInput.focus();
+
+                    // Clear sessionStorage to prevent restoration on refresh
+                    sessionStorage.removeItem('snabbaLexin_lastSearch');
+
+                    // Clear URL parameter
+                    if (window.history.replaceState) {
+                        window.history.replaceState({ path: window.location.pathname }, '', window.location.pathname);
+                    }
+
                     this.handleInput('');
                     this.updateDropdown('');
                 }
             });
         }
+
+        // Initialize clear button state on page load
+        setTimeout(() => {
+            if (this.searchInput && this.clearSearchBtn) {
+                if (this.searchInput.value.length > 0) {
+                    this.clearSearchBtn.classList.remove('hidden');
+                    this.clearSearchBtn.style.display = 'flex';
+                } else {
+                    this.clearSearchBtn.classList.add('hidden');
+                    this.clearSearchBtn.style.display = '';
+                }
+            }
+        }, 100);
     }
 
     // --- Public API ---
