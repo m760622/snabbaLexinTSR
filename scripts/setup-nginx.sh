@@ -6,8 +6,10 @@ if ! command -v nginx &> /dev/null; then
     exit 1
 fi
 
-echo "🔄 Stopping any running Nginx..."
+echo "🔄 Stopping any running Nginx and freeing Port 80..."
 sudo nginx -s stop 2>/dev/null
+# Force kill any process using port 80 (e.g., previous npm run preview)
+sudo lsof -t -i:80 | xargs sudo kill -9 2>/dev/null
 
 echo "🚀 Starting Nginx Proxy on Port 80..."
 # Start Nginx with local config using absolute path

@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "شغل": "vite --port 8080 --host --open",
+    "شغل": "./scripts/setup-nginx.sh && vite --port 8080 --host",
+    "شغلل": "./scripts/start-all.sh",
     "حدث": "node scripts/update-repo.cjs"
   },
   "repository": {

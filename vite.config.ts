@@ -57,7 +57,12 @@ export default defineConfig({
   },
   server: {
     port: 8080,
-    host: true
+    host: true,
+    allowedHosts: [
+      '.trycloudflare.com',
+      'localhost',
+      '192.168.1.139'
+    ]
   },
   test: {
     globals: true,
