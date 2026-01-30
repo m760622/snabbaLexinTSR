@@ -1380,42 +1380,7 @@ body {
   position: relative;
 }
 
-/* Ambient Background */
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  filter: blur(100px);
-  z-index: -1;
-  opacity: 0.4;
-  animation: float-orb 20s infinite alternate;
-}
-
-body::before {
-  background: var(--primary);
-  top: -100px;
-  left: -100px;
-}
-
-body::after {
-  background: var(--accent);
-  bottom: -100px;
-  right: -100px;
-  animation-delay: -10s;
-}
-
-@keyframes float-orb {
-  0% {
-    transform: translate(0, 0) rotate(0deg);
-  }
-
-  100% {
-    transform: translate(100px, 50px) rotate(20deg);
-  }
-}
+/* Legacy Ambient Background Removed */
 
 [data-theme="dark"] body::before {
   opacity: 0.2;
@@ -2791,6 +2756,7 @@ header {
 
 .search-container {
   width: 100%;
+  max-width: 414px;
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -3637,35 +3603,34 @@ header {
 
 .settings-menu {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 15px);
+  /* Increased gap for glow */
   left: 0;
   width: min(340px, 92vw);
   max-height: 80vh;
   overflow-y: auto;
   overflow-x: hidden;
 
-  /* Premium Glassmorphism - Optimized */
-  background: rgba(255, 255, 255, 0.95);
-  /* More opaque, less blur work needed */
-  -webkit-backdrop-filter: blur(12px);
-  /* Reduced from 25px */
-  backdrop-filter: blur(12px);
+  /* Cyber Glassmorphism - Match Learn Screen */
+  background: rgba(15, 23, 42, 0.95) !important;
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
 
   border-radius: 20px;
-  padding: 0.75rem;
+  padding: 1rem;
 
-  /* Simplified Shadow */
+  /* Neon Glow Border */
+  border: 1px solid rgba(0, 243, 255, 0.3) !important;
   box-shadow:
-    0 15px 35px -5px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(0, 243, 255, 0.15),
+    inset 0 0 0 1px rgba(0, 243, 255, 0.1);
 
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  z-index: 1000;
-
-  /* Border for separation */
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  gap: 0.5rem;
+  z-index: 3000;
+  /* Above everything */
 
   /* Transformation origin for animation */
   transform-origin: top left;
@@ -3693,24 +3658,24 @@ header {
 }
 
 [data-theme="dark"] .settings-menu {
-  background: rgba(20, 20, 27, 0.95);
-  /* More solid */
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(2, 6, 23, 0.98) !important;
+  border-color: rgba(0, 243, 255, 0.4) !important;
   box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.7),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  /* Simplified */
+    0 25px 60px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(0, 243, 255, 0.2);
 }
 
 /* Section Headers */
 .settings-section-header {
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-secondary);
-  margin-top: 0.75rem;
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.12em;
+  color: #00f3ff;
+  text-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
   padding: 0 0.75rem;
   opacity: 0.8;
   display: flex;
@@ -3993,8 +3958,10 @@ header {
 .top-nav {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
+  max-width: 414px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9604,6 +9571,110 @@ html:not([data-theme="dark"]) #nextQuestion:hover {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+}
+
+/* =========================================
+   UNIFIED CYBER BACKGROUND
+   ========================================= */
+.learn-bg-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -2;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  overflow: hidden;
+}
+
+.learn-bg-layer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(34, 197, 94, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.05) 0%, transparent 60%);
+  animation: bgPulse 20s ease-in-out infinite;
+}
+
+@keyframes bgPulse {
+
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(-2%, -2%) rotate(1deg);
+  }
+
+  50% {
+    transform: translate(2%, -1%) rotate(-1deg);
+  }
+
+  75% {
+    transform: translate(-1%, 2%) rotate(0.5deg);
+  }
+}
+
+.particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.learn-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: floatParticle 15s ease-in-out infinite;
+}
+
+.learn-particle.blue {
+  background: #60a5fa;
+  box-shadow: 0 0 10px #60a5fa;
+}
+
+.learn-particle.green {
+  background: #34d399;
+  box-shadow: 0 0 10px #34d399;
+}
+
+.learn-particle.gold {
+  background: #fbbf24;
+  box-shadow: 0 0 10px #fbbf24;
+}
+
+@keyframes floatParticle {
+
+  0%,
+  100% {
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: translateY(50vh) scale(1);
+    opacity: 0.6;
+  }
+
+  90% {
+    opacity: 0.4;
+  }
 }
 
 /* ========================================

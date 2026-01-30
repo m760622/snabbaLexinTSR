@@ -10,13 +10,18 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 10px 14px;
-    background: var(--surface);
-    border: 1px solid var(--border);
+
+    /* Cyber Glassmorphism - Match Learn Screen */
+    background: rgba(15, 23, 42, 0.7) !important;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(0, 243, 255, 0.2) !important;
     /* Dynamic Left Border Override */
-    border-left: 5px solid var(--glow-color, #ccc) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-left: 5px solid var(--glow-color, #00f3ff) !important;
     border-radius: 12px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
     position: relative;
     overflow: hidden !important;
@@ -53,35 +58,33 @@
 
 /* Force single line for Swedish text */
 .word-swe {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text-main);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.4;
     text-align: left;
-    /* Ensure it starts from left */
 }
 
 /* Allow Arabic text to take remaining space but valid truncation */
 .word-arb {
-    font-size: 1rem;
-    color: var(--text-secondary);
+    font-size: 1.1rem;
+    color: #cbd5e1;
     margin: 0;
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     white-space: normal;
-    /* Allow wrapping */
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: right;
-    /* Ensure it aligns right */
     max-height: none !important;
-    /* Override any global max-height */
+    font-family: 'Amiri', serif;
 }
 
 .card-actions {

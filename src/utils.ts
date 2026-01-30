@@ -300,6 +300,42 @@ export const ThemeManager = {
     }
 };
 
+// --- Background Manager ---
+
+export const BackgroundManager = {
+    init() {
+        const container = document.getElementById('particlesContainer');
+        if (container) {
+            this.createParticles(container);
+        }
+    },
+
+    createParticles(container: HTMLElement) {
+        const colors = ['blue', 'green', 'gold'];
+        const particleCount = 20;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = `learn-particle ${colors[i % 3]}`;
+
+            // Random position
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+
+            // Random scale and animation delay
+            const scale = 0.5 + Math.random();
+            const delay = Math.random() * 15;
+            const duration = 10 + Math.random() * 10;
+
+            particle.style.transform = `scale(${scale})`;
+            particle.style.animationDelay = `-${delay}s`;
+            particle.style.animationDuration = `${duration}s`;
+
+            container.appendChild(particle);
+        }
+    }
+};
+
 // --- Mobile View Manager ---
 
 export const MobileViewManager = {
@@ -424,6 +460,7 @@ export const CategoryHelper = {
 // Global exports for legacy scripts
 if (typeof window !== 'undefined') {
     (window as any).VoiceSearchManager = VoiceSearchManager;
+    (window as any).BackgroundManager = BackgroundManager;
     (window as any).showToast = showToast;
     (window as any).TextSizeManager = TextSizeManager;
     (window as any).ThemeManager = ThemeManager;

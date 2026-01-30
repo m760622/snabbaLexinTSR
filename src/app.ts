@@ -2,7 +2,7 @@ import { Loader } from './loader';
 import './utils';
 import './quiz';
 import './confetti';
-import { ThemeManager, showToast, TextSizeManager, VoiceSearchManager, normalizeArabic, levenshteinDistance } from './utils';
+import { ThemeManager, showToast, TextSizeManager, VoiceSearchManager, BackgroundManager, normalizeArabic, levenshteinDistance } from './utils';
 import { FavoritesManager } from './favorites';
 import { SearchHistoryManager } from './search-history';
 import { QuizStats } from './quiz-stats';
@@ -62,6 +62,7 @@ export class App {
         this.setupInfiniteScroll();
         this.setupGlobalHandlers();
         this.setupFilters();
+        BackgroundManager.init();
 
         const isTestMode = new URLSearchParams(window.location.search).has('test_mode');
         if (isTestMode) {
