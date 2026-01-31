@@ -232,7 +232,7 @@ export const QuizView: React.FC<QuizViewProps> = ({ onBack, lessonId = null }) =
     const progress = ((currentIndex) / questions.length) * 100;
 
     return (
-        <div className="quiz-view w-full h-full px-4 pt-15">
+        <div className="quiz-view w-full h-full px-4" style={{ paddingTop: '60px' }}>
             {/* Header Stats */}
             <div className="flex justify-between items-center mb-6 bg-surface p-3 rounded-xl border border-white/5 shadow-lg">
                 <div className="flex flex-col w-full">

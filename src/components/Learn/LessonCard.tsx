@@ -103,7 +103,8 @@ export const LessonCard: React.FC<LessonCardProps> = ({ lesson, isCompleted, onC
 
             <div className="lesson-progress-bar">
                 <div
-                    className={`lesson-progress-fill ${isCompleted ? 'w-full' : 'w-0'}`}
+                    className="lesson-progress-fill"
+                    style={{ width: isCompleted ? '100%' : '0%' }}
                 />
             </div>
         </div>

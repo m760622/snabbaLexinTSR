@@ -28,7 +28,7 @@ export const LearnHeader: React.FC<LearnHeaderProps> = ({ onBack, onProfile, hid
 
     return (
         <header className="modern-header-learn">
-            <div className="nav-left-group flex items-center gap-2">
+            <div className="nav-left-group" style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                 {!hideBack && (
                     <button
                         type="button"

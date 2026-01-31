@@ -139,12 +139,113 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({ onBack }) => {
 
     const currentWord = words[currentIndex];
 
-    // ... (Keep existing handlers, update onBack)
     const playAudio = () => {
         if (!currentWord) return;
         TTSManager.speak(currentWord.swe);
+
+        // Track usage for "Speech Champion" badge
+        const currentUsage = parseInt(localStorage.getItem('ttsUsage') || '0', 10);
+        localStorage.setItem('ttsUsage', (currentUsage + 1).toString());
     };
 
+    // Touch handlers for swipe
+    const touchStartY = useRef(0);
+    const touchEndY = useRef(0);
+    const isDragging = useRef(false);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartX.current = e.touches[0].clientX;
+        touchStartY.current = e.touches[0].clientY;
+        isDragging.current = false;
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        touchEndX.current = e.touches[0].clientX;
+        touchEndY.current = e.touches[0].clientY;
+
+        const diffX = touchEndX.current - touchStartX.current;
+        const diffY = touchEndY.current - touchStartY.current;
+
+        // Mark as dragging if moved significantly
+        if (Math.abs(diffX) > 5 || Math.abs(diffY) > 5) {
+            isDragging.current = true;
+        }
+
+        // Determine dominant axis
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+            // Horizontal swipe (Rating)
+            if (Math.abs(diffX) > 10 && cardRef.current) {
+                // Prevent scrolling when swiping horizontally
+                if (e.cancelable) e.preventDefault();
+
+                // Add resistance/rotation
+                const rotation = diffX * 0.05; // 5% rotation
+                const baseRotate = isFlipped ? 180 : 0;
+                cardRef.current.style.transform = `translateX(${diffX}px) rotateY(${baseRotate}deg) rotateZ(${rotation}deg)`;
+            }
+        } else {
+            // Vertical swipe (Audio)
+            if (diffY < -10 && cardRef.current) {
+                const baseRotate = isFlipped ? 180 : 0;
+                // Slight lift effect
+                cardRef.current.style.transform = `translateY(${diffY * 0.3}px) rotateY(${baseRotate}deg)`;
+            }
+        }
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        const diffX = touchEndX.current - touchStartX.current;
+        const diffY = touchEndY.current - touchStartY.current;
+        const threshold = 60;
+        const verticalThreshold = 40;
+
+        if (isDragging.current && e.cancelable) {
+            e.preventDefault();
+        }
+
+        if (cardRef.current) {
+            cardRef.current.style.transform = '';
+        }
+
+        // Detect Gestures only if dragging occurred
+        if (isDragging.current) {
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                // Horizontal Swipe
+                if (diffX > threshold) {
+                    handleRating(Quality.Easy); // Right = Easy
+                } else if (diffX < -threshold) {
+                    handleRating(Quality.Again); // Left = Again
+                }
+            } else {
+                // Vertical Swipe
+                if (diffY < -verticalThreshold) {
+                    playAudio();
+                    if ('vibrate' in navigator) navigator.vibrate(20);
+                }
+            }
+        }
+
+        // Reset refs
+        touchStartX.current = 0;
+        touchEndX.current = 0;
+        touchStartY.current = 0;
+        touchEndY.current = 0;
+        setTimeout(() => { isDragging.current = false; }, 200);
+    };
+
+    // Save session on unmount
+    useEffect(() => {
+        return () => {
+            if (stats.wordsReviewed > 0) {
+                DictionaryDB.saveTrainingSession({
+                    date: new Date().toISOString().split('T')[0],
+                    wordsReviewed: stats.wordsReviewed,
+                    correctCount: stats.correctCount,
+                    timeSpentMs: Date.now() - stats.startTime
+                });
+            }
+        };
+    }, [stats]);
     const handleFlip = () => {
         setIsFlipped(!isFlipped);
         playAudio();
@@ -161,7 +262,14 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({ onBack }) => {
         if (quality === Quality.Easy) {
             await DictionaryDB.updateTrainingStatus(currentWord.id, false);
 
-            // Logic for badge would go here (omitted for brevity)
+            // Update profile stats (localStorage) for "Mastered Words" badge/counter
+            const assessments = JSON.parse(localStorage.getItem('wordAssessments') || '{}');
+            assessments[currentWord.id] = {
+                id: currentWord.id,
+                level: 5, // 4+ counts as mastered in UserProfile
+                timestamp: Date.now()
+            };
+            localStorage.setItem('wordAssessments', JSON.stringify(assessments));
 
             const newMasteredList = [...masteredWordsInSession, currentWord];
             setMasteredWordsInSession(newMasteredList);
@@ -241,17 +349,38 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({ onBack }) => {
 
             {!isSessionComplete ? (
                 <div className={`training-container lang-both transition-opacity duration-700 ${showGlass ? 'opacity-100' : 'opacity-0'}`}>
-                    <header className="training-header flex justify-between items-center mb-6">
+                    <header className="training-header">
                         <button
-                            className="training-back-btn p-2"
+                            className="training-back-btn"
                             onClick={onBack}
-                            aria-label="Tillbaka"
-                            title="Tillbaka"
+                            aria-label="Tillbaka / رجوع"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
                         </button>
-                        <div className="training-progress text-sm">
-                            {currentIndex + 1} / {words.length}
+
+                        <div className="training-progress-container">
+                            <div className="progress-stats">
+                                <span>{masteredWordsInSession.length} / {totalSessionWords}</span>
+                                <span dir="rtl">المتبقي: {totalSessionWords - masteredWordsInSession.length}</span>
+                            </div>
+                            <div className="progress-track">
+                                <div
+                                    className="progress-fill"
+                                    style={{ width: `${Math.min(100, (masteredWordsInSession.length / totalSessionWords) * 100)}%` }}
+                                ></div>
+                            </div>
+                        </div>
+
+                        <div className="training-counter mastered-counter glass-darker">
+                            <span>📊</span>
+                            <span className="counter-label mastered-val">
+                                {stats.wordsReviewed > 0
+                                    ? `${Math.round((stats.correctCount / stats.wordsReviewed) * 100)}%`
+                                    : '0%'}
+                            </span>
                         </div>
                     </header>
 
@@ -259,8 +388,11 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({ onBack }) => {
                     <div
                         className={`training-card relative w-full h-80 perspective-1000 cursor-pointer ${isFlipped ? 'flipped' : ''}`}
                         onClick={handleFlip}
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
                     >
-                        <div className={`card-inner w-full h-full relative transition-transform duration-500 preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+                        <div className={`card-inner w-full h-full relative transition-transform duration-500 preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`} ref={cardRef}>
                             {/* Front */}
                             <div className="card-face card-front absolute inset-0 backface-hidden bg-surface glass-card flex flex-col items-center justify-center rounded-2xl border border-white/10">
                                 <h2 className="text-3xl font-bold">{currentWord.swe}</h2>
@@ -284,7 +416,7 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({ onBack }) => {
                             <button
                                 key={btn.quality}
                                 onClick={(e) => { e.stopPropagation(); handleRating(btn.quality); }}
-                                className="p-3 rounded-xl font-bold text-sm bg-surface glass-effect active:scale-95 transition-transform"
+                                className={`p-3 rounded-xl font-bold text-sm bg-surface glass-effect active:scale-95 transition-transform quality-btn quality-${btn.quality}`}
                                 style={{ borderBottomColor: btn.color }}
                             >
                                 {btn.label.split(' / ')[0]}
@@ -294,11 +426,38 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({ onBack }) => {
 
                 </div>
             ) : (
-                <div className="text-center p-10">
-                    <h2 className="text-2xl font-bold mb-4">Träning Klar! 🎉</h2>
-                    <p className="mb-6">Du har repeterat alla ord.</p>
-                    <button onClick={onBack} className="primary-btn">Tillbaka</button>
-                    {hasTrainingWords && <button onClick={handleRestart} className="btn-secondary ml-2">Igen</button>}
+                <div className="training-container">
+                    <div className="training-state complete">
+                        <div className="state-emoji">🎉</div>
+                        <h2 className="text-white">Träning Klar!</h2>
+                        <p>Grymt jobbat! Du har repeterat alla ord som behövdes idag.</p>
+
+                        <div className="stats-grid">
+                            <div className="stat-item">
+                                <span className="stat-value">{stats.wordsReviewed}</span>
+                                <span className="stat-label">Ord repeterade</span>
+                            </div>
+                            <div className="stat-item">
+                                <span className="stat-value">{Math.round((stats.correctCount / Math.max(1, stats.wordsReviewed)) * 100)}%</span>
+                                <span className="stat-label">Precision</span>
+                            </div>
+                            <div className="stat-item">
+                                <span className="stat-value">{Math.max(1, Math.round((Date.now() - stats.startTime) / 60000))}m</span>
+                                <span className="stat-label">Tid</span>
+                            </div>
+                        </div>
+
+                        <div className="complete-actions">
+                            {hasTrainingWords && (
+                                <button onClick={handleRestart} className="btn-secondary h-[50px] px-6">
+                                    🔄 Träna Igen
+                                </button>
+                            )}
+                            <button onClick={onBack} className="primary-btn h-[50px] px-8">
+                                Tillbaka Hem
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
 
