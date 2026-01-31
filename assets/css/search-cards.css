@@ -79,6 +79,10 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    display: -moz-box;
+    -moz-line-clamp: 2;
+    -moz-box-orient: vertical;
+    line-clamp: 2;
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -631,8 +635,8 @@
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
     z-index: 900;
     /* Below search bar (999), above everything else */
     opacity: 1;
@@ -686,8 +690,8 @@ body.search-focused .search-wrapper {
     margin-top: 4px;
     /* Dark Transparent Background */
     background: rgba(2, 6, 23, 0.95);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     /* Neon Glow Border */
     border: 1px solid rgba(0, 243, 255, 0.3);
     border-radius: 16px;

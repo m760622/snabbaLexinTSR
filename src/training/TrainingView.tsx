@@ -417,10 +417,8 @@ const TrainingView: React.FC = () => {
                                     r="52"
                                     cx="60"
                                     cy="60"
-                                    style={{
-                                        strokeDasharray: '326.72', // 2 * PI * 52
-                                        strokeDashoffset: (326.72 - (generationProgress / 100) * 326.72).toString()
-                                    }}
+                                    strokeDasharray="326.72"
+                                    strokeDashoffset={(326.72 - (generationProgress / 100) * 326.72).toString()}
                                 />
                             </svg>
 
@@ -620,7 +618,7 @@ const MissionAccomplished: React.FC<{ stats: SessionStats; hasMore: boolean; onR
 
                 <div className="complete-actions">
                     {hasMore && (
-                        <button onClick={onRestart} className="training-btn" style={{ width: 'auto', flex: 'none', height: '50px', padding: '0 1.5rem' }}>
+                        <button onClick={onRestart} className="training-btn w-auto flex-none h-[50px] px-[1.5rem]">
                             🔄 Träna Igen
                         </button>
                     )}

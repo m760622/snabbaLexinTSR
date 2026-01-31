@@ -61,7 +61,7 @@ export const Recommendations: React.FC = () => {
                             <span className="sv-text">{rec.textSv}</span>
                             <span className="ar-text">{rec.textAr}</span>
                         </div>
-                        <span className="rec-item-action" onClick={rec.action} style={{ cursor: 'pointer' }}>
+                        <span className="rec-item-action cursor-pointer" onClick={rec.action}>
                             <span className="sv-text">{rec.actionSv}</span>
                             <span className="ar-text">{rec.actionAr}</span>
                         </span>

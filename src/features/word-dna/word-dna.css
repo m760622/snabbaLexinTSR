@@ -5,6 +5,47 @@
     /* Replaced rose with cyan to prevent purple mixing */
 }
 
+/* Word DNA Page Styles */
+.word-dna-header {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.2);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.word-dna-header .back-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.word-dna-title {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+    font-size: 1.2rem;
+    font-family: 'Tajawal', sans-serif;
+}
+
+.header-spacer {
+    width: 44px;
+}
+
+.word-dna-main {
+    min-height: calc(100vh - 60px);
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+}
+
 .wod-overlay {
     position: fixed;
     top: 0;

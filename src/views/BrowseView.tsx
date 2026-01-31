@@ -84,12 +84,7 @@ export const BrowseView: React.FC<BrowseViewProps> = ({
                         </svg>
                     </button>
                 </div>
-                <div className={`filter-bar-wrapper ${isFilterOpen ? 'expanded' : 'collapsed'}`} style={{
-                    height: isFilterOpen ? 'auto' : '0',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s ease',
-                    opacity: isFilterOpen ? 1 : 0
-                }}>
+                <div className={`filter-bar-wrapper ${isFilterOpen ? 'expanded' : 'collapsed'}`}>
                     <FilterBar activeFilter={activeFilter} onFilterChange={onFilterChange} />
                 </div>
             </div>

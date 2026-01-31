@@ -25,7 +25,7 @@ export const AboutSection: React.FC = () => {
             </div>
 
             {/* Changelog */}
-            <a href="changelog.html" className="settings-item clickable" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <a href="changelog.html" className="settings-item clickable no-underline text-inherit">
                 <div className="item-left">
                     <span className="item-icon">📋</span>
                     <div className="item-info">
@@ -41,7 +41,7 @@ export const AboutSection: React.FC = () => {
             </a>
 
             {/* Device Info */}
-            <a href="device.html" className="settings-item clickable" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <a href="device.html" className="settings-item clickable no-underline text-inherit">
                 <div className="item-left">
                     <span className="item-icon">🖥️</span>
                     <div className="item-info">

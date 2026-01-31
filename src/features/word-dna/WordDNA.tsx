@@ -143,7 +143,7 @@ export const WordDNA: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
             <div className="story-bg-overlay"></div>
 
 
-            <header className="story-header" style={{ opacity: showRewards ? 0 : 1 }}>
+            <header className={`story-header ${showRewards ? 'opacity-0' : 'opacity-100'}`}>
                 <div className="story-progress-container">
                     {tabs.map((tab, idx) => {
                         const tabIdx = tabs.findIndex(t => t.id === activeTab);
@@ -194,7 +194,7 @@ export const WordDNA: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
                         <div className="example-text" dangerouslySetInnerHTML={{
                             __html: (word.sweEx || `Jag lär mig ${word.swe} idag.`).replace(word.swe, `<strong>${word.swe}</strong>`)
                         }}></div>
-                        <div className="word-translation" dir="rtl" style={{ marginTop: '20px', opacity: 0.8 }}>
+                        <div className="word-translation mt-5 opacity-80" dir="rtl">
                             {word.arbEx || 'مثال توضيحي للكلمة.'}
                         </div>
                         {recordFeedback && (
@@ -206,12 +206,12 @@ export const WordDNA: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
                 {activeTab === 'history' && <EtymologyDNA history={word.history} />}
 
                 {activeTab === 'quiz' && (
-                    <div className="fade-in" style={{ width: '100%', maxWidth: '400px' }}>
-                        <h2 style={{ fontSize: '1.8rem', marginBottom: '10px' }}>Vad betyder det?</h2>
-                        <div style={{ color: 'var(--story-cyan)', marginBottom: '30px', fontWeight: 600 }}>{word.swe}</div>
+                    <div className="fade-in w-full max-w-[400px]">
+                        <h2 className="text-[1.8rem] mb-2.5">Vad betyder det?</h2>
+                        <div className="text-[var(--story-cyan)] mb-7.5 font-semibold">{word.swe}</div>
                         <QuizOptions correctAnswer={word.arb} onAnswer={handleQuizOption} state={quizState} />
                         {quizError && (
-                            <div className="record-feedback-pop" style={{ background: 'var(--story-rose)', marginTop: '20px' }}>
+                            <div className="record-feedback-pop bg-[var(--story-rose)] mt-5">
                                 {quizError}
                             </div>
                         )}
@@ -227,37 +227,41 @@ export const WordDNA: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
                         <div className="record-container">
                             <div className="record-btn-wrapper">
                                 <AudioVisualizer isActive={isRecording} />
-                                <button className={`record-btn ${isRecording ? 'recording' : ''}`} onClick={toggleRecording}>
+                                <button
+                                    className={`record-btn ${isRecording ? 'recording' : ''}`}
+                                    onClick={toggleRecording}
+                                    title={isRecording ? 'Stop Recording' : 'Start Recording'}
+                                >
                                     <svg className="record-icon" fill="currentColor" viewBox="0 0 24 24">
                                         {isRecording ? <rect x="6" y="6" width="12" height="12" rx="2" /> :
                                             <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zM17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />}
                                     </svg>
                                 </button>
                             </div>
-                            <span style={{ fontSize: '0.9rem', opacity: 0.8 }}>
+                            <span className="text-[0.9rem] opacity-80">
                                 {isRecording ? 'Listening...' : 'Try Pronouncing'}
                             </span>
                         </div>
                     ) : (
-                        <div style={{ height: '110px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <div className="h-[110px] flex items-center justify-center">
                             {activeTab === 'word' ? (
                                 <button className="social-btn" onClick={() => TTSManager.speak(word.swe)}>
-                                    <div className="big-audio-btn"><span style={{ fontSize: '1.5rem' }}>🔊</span></div>
+                                    <div className="big-audio-btn"><span className="text-[1.5rem]">🔊</span></div>
                                     <span>Lyssna</span>
                                 </button>
-                            ) : <div style={{ opacity: 0.5, fontStyle: 'italic' }}>Swipe or choose answer</div>}
+                            ) : <div className="opacity-50 italic">Swipe or choose answer</div>}
                         </div>
                     )}
 
                     <div className="social-actions">
                         <button className="social-btn" onClick={() => window.location.href = 'profile.html'}>
-                            <span style={{ fontSize: '1.4rem' }}>👤</span><span>Profile</span>
+                            <span className="text-[1.4rem]">👤</span><span>Profile</span>
                         </button>
                         <button className={`social-btn ${isLiked ? 'liked' : ''}`} onClick={() => {
                             setIsLiked(!isLiked);
                             if (!isLiked && window.navigator.vibrate) window.navigator.vibrate(30);
                         }}>
-                            <span style={{ fontSize: '1.4rem', color: isLiked ? 'var(--story-rose)' : 'inherit' }}>
+                            <span className={`text-[1.4rem] ${isLiked ? 'text-[var(--story-rose)]' : ''}`}>
                                 {isLiked ? '❤️' : '🤍'}
                             </span>
                             <span>Like</span>
@@ -269,10 +273,10 @@ export const WordDNA: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
                                 alert('Sharing not supported on this browser');
                             }
                         }}>
-                            <span style={{ fontSize: '1.4rem' }}>📤</span><span>Share</span>
+                            <span className="text-[1.4rem]">📤</span><span>Share</span>
                         </button>
                         <button className="social-btn" onClick={() => alert('Comments coming soon! • التعليقات قادمة قريباً')}>
-                            <span style={{ fontSize: '1.4rem' }}>💬</span><span>Comment</span>
+                            <span className="text-[1.4rem]">💬</span><span>Comment</span>
                         </button>
                     </div>
                 </div>

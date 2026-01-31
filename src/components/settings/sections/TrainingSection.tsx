@@ -62,6 +62,7 @@ export const TrainingSection: React.FC = () => {
                         type="checkbox"
                         checked={settings.autoTraining}
                         onChange={(e) => updateSettings('autoTraining', e.target.checked)}
+                        aria-label="Auto-lägg till misstag / إضافة الأخطاء تلقائياً"
                     />
                     <span className="toggle-slider"></span>
                 </label>
@@ -87,6 +88,7 @@ export const TrainingSection: React.FC = () => {
                         type="checkbox"
                         checked={settings.showContextInCards}
                         onChange={(e) => updateSettings('showContextInCards', e.target.checked)}
+                        aria-label="Visa kontext på kort / سياق الجمل على البطاقات"
                     />
                     <span className="toggle-slider"></span>
                 </label>
@@ -107,7 +109,7 @@ export const TrainingSection: React.FC = () => {
             </div>
 
             {/* Clear Button */}
-            <div className="settings-item clickable danger" onClick={clearTrainingList} style={{ cursor: 'pointer' }}>
+            <div className="settings-item clickable danger cursor-pointer" onClick={clearTrainingList}>
                 <div className="item-left">
                     <span className="item-icon">🗑️</span>
                     <div className="item-info">

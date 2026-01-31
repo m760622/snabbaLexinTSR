@@ -959,6 +959,11 @@
      text-align: center;
  }
 
+ /* Quiz view top padding for fixed header */
+ .pt-15 {
+     padding-top: 60px;
+ }
+
  .quiz-header {
      margin-bottom: 1.5rem;
  }
@@ -1174,6 +1179,7 @@
      font-weight: 800;
      background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
      -webkit-background-clip: text;
+     background-clip: text;
      -webkit-text-fill-color: transparent;
      margin: 0.5rem 0;
      line-height: 1;
@@ -2822,7 +2828,7 @@
      overflow-x: hidden;
      /* Keep in one row on screen */
      justify-content: space-between;
-     min-height: auto;
+     /* min-height: auto; not supported by Firefox, using default */
      scrollbar-width: none;
      /* Hide scrollbar as per previous fix */
      -ms-overflow-style: none;
@@ -3064,8 +3070,8 @@
      gap: 1rem;
      overflow-x: auto;
      padding-bottom: 0.5rem;
-     scrollbar-width: thin;
-     scrollbar-color: rgba(96, 165, 250, 0.3) transparent;
+     /* scrollbar-width: thin; not supported by Chrome/Safari */
+     /* scrollbar-color: rgba(96, 165, 250, 0.3) transparent; not supported by Chrome/Safari */
  }
 
  .badges-grid::-webkit-scrollbar {
@@ -3540,8 +3546,8 @@
 
      /* Radiant Glass Style */
      background: rgba(15, 23, 42, 0.6) !important;
-     backdrop-filter: blur(16px);
      -webkit-backdrop-filter: blur(16px);
+     backdrop-filter: blur(16px);
      border: 1px solid rgba(0, 243, 255, 0.3) !important;
 
      /* Radiant Glow */
@@ -3700,8 +3706,8 @@
  .fc-btn-dont-know {
      background: rgba(255, 255, 255, 0.1);
      color: #cbd5e1;
-     backdrop-filter: blur(10px);
      -webkit-backdrop-filter: blur(10px);
+     backdrop-filter: blur(10px);
      border: 1px solid rgba(255, 255, 255, 0.1);
  }
 
@@ -3849,6 +3855,7 @@
      justify-content: center;
      color: #94a3b8;
      cursor: pointer;
+     -webkit-backdrop-filter: blur(8px);
      backdrop-filter: blur(8px);
      transition: all 0.2s;
      -webkit-tap-highlight-color: transparent;
@@ -3947,8 +3954,8 @@
      width: 100%;
      max-width: 414px;
      background: rgba(15, 23, 42, 0.95);
-     backdrop-filter: blur(16px);
      -webkit-backdrop-filter: blur(16px);
+     backdrop-filter: blur(16px);
      border-top: 1px solid rgba(148, 163, 184, 0.1);
      padding: 0.75rem 1rem;
      padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
@@ -4070,8 +4077,8 @@
      /* MATCH BODY WIDTH */
      z-index: 1000 !important;
      background: linear-gradient(to bottom, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0)) !important;
-     backdrop-filter: blur(5px);
      -webkit-backdrop-filter: blur(5px);
+     backdrop-filter: blur(5px);
  }
 
  /* Keep dock visible inside frame */

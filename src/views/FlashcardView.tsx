@@ -231,7 +231,7 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({ onBack }) => {
         <div id="flashcardView" className="view-section active fade-in w-full h-full">
             {/* Story Loading Overlay */}
             {isGeneratingStory && (
-                <div className="story-loading-overlay lang-both" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="story-loading-overlay lang-both fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
                     <div className="text-center text-white">
                         <h2 className="text-xl mb-2">AI Skriver Story...</h2>
                         <div className="mt-4 text-3xl font-bold text-accent">{generationProgress}%</div>
@@ -242,7 +242,12 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({ onBack }) => {
             {!isSessionComplete ? (
                 <div className={`training-container lang-both transition-opacity duration-700 ${showGlass ? 'opacity-100' : 'opacity-0'}`}>
                     <header className="training-header flex justify-between items-center mb-6">
-                        <button className="training-back-btn p-2" onClick={onBack}>
+                        <button
+                            className="training-back-btn p-2"
+                            onClick={onBack}
+                            aria-label="Tillbaka"
+                            title="Tillbaka"
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                         </button>
                         <div className="training-progress text-sm">
@@ -254,16 +259,15 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({ onBack }) => {
                     <div
                         className={`training-card relative w-full h-80 perspective-1000 cursor-pointer ${isFlipped ? 'flipped' : ''}`}
                         onClick={handleFlip}
-                        style={{ perspective: '1000px' }}
                     >
-                        <div className={`card-inner w-full h-full relative transition-transform duration-500 preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`} style={{ transformStyle: 'preserve-3d', transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
+                        <div className={`card-inner w-full h-full relative transition-transform duration-500 preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
                             {/* Front */}
                             <div className="card-face card-front absolute inset-0 backface-hidden bg-surface glass-card flex flex-col items-center justify-center rounded-2xl border border-white/10">
                                 <h2 className="text-3xl font-bold">{currentWord.swe}</h2>
                                 {currentWord.type && <span className="text-sm text-gray-400 mt-2">{currentWord.type}</span>}
                             </div>
                             {/* Back */}
-                            <div className="card-face card-back absolute inset-0 backface-hidden bg-surface glass-card flex flex-col items-center justify-center rounded-2xl border border-white/10 rotate-y-180" style={{ transform: 'rotateY(180deg)' }}>
+                            <div className="card-face card-back absolute inset-0 backface-hidden bg-surface glass-card flex flex-col items-center justify-center rounded-2xl border border-white/10 rotate-y-180">
                                 <h2 className="text-3xl font-bold text-accent" dir="rtl" lang="ar">{currentWord.arb}</h2>
                                 <div className="mt-4 text-center px-4">
                                     {currentWord.sweEx && <p className="text-sm italic">"{currentWord.sweEx}"</p>}
@@ -281,7 +285,7 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({ onBack }) => {
                                 key={btn.quality}
                                 onClick={(e) => { e.stopPropagation(); handleRating(btn.quality); }}
                                 className="p-3 rounded-xl font-bold text-sm bg-surface glass-effect active:scale-95 transition-transform"
-                                style={{ borderBottom: `3px solid ${btn.color}` }}
+                                style={{ borderBottomColor: btn.color }}
                             >
                                 {btn.label.split(' / ')[0]}
                             </button>

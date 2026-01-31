@@ -82,7 +82,7 @@ export const DataSection: React.FC = () => {
             iconGradient="gradient-cyan"
         >
             {/* Export */}
-            <div className="settings-item clickable" onClick={handleExport} style={{ cursor: 'pointer' }}>
+            <div className="settings-item clickable cursor-pointer" onClick={handleExport}>
                 <div className="item-left">
                     <span className="item-icon">📤</span>
                     <div className="item-info">
@@ -98,7 +98,7 @@ export const DataSection: React.FC = () => {
             </div>
 
             {/* Import */}
-            <div className="settings-item clickable" onClick={() => fileInputRef.current?.click()} style={{ cursor: 'pointer' }}>
+            <div className="settings-item clickable cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                 <div className="item-left">
                     <span className="item-icon">📥</span>
                     <div className="item-info">
@@ -117,12 +117,13 @@ export const DataSection: React.FC = () => {
                 ref={fileInputRef}
                 accept=".json"
                 className="hidden"
-                style={{ display: 'none' }}
                 onChange={handleImport}
+                aria-label="Importera data / استيراد البيانات"
+                title="Importera data"
             />
 
             {/* Clear Favorites */}
-            <div className="settings-item clickable danger" onClick={handleClearFavorites} style={{ cursor: 'pointer' }}>
+            <div className="settings-item clickable danger cursor-pointer" onClick={handleClearFavorites}>
                 <div className="item-left">
                     <span className="item-icon">🗑️</span>
                     <div className="item-info">
@@ -138,7 +139,7 @@ export const DataSection: React.FC = () => {
             </div>
 
             {/* Clear All Data */}
-            <div className="settings-item clickable danger" onClick={handleClearAll} style={{ cursor: 'pointer' }}>
+            <div className="settings-item clickable danger cursor-pointer" onClick={handleClearAll}>
                 <div className="item-left">
                     <span className="item-icon">⚠️</span>
                     <div className="item-info">
