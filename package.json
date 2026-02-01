@@ -1,6 +1,6 @@
 {
   "name": "snabbalexin-web-1",
-  "version": "3.2.8",
+  "version": "3.2.9",
   "type": "module",
   "description": "",
   "main": "quran.js",
@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "شغل": "./scripts/setup-nginx.sh && vite --port 8080 --host",
     "شغلل": "./scripts/start-all.sh",
-    "حدث": "node scripts/update-repo.cjs"
+    "ارفع": "node scripts/update-repo.cjs",
+    "رحلل": "node scripts/analyze-repo.cjs"
   },
   "repository": {
     "type": "git",

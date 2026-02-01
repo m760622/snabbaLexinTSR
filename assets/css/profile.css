@@ -58,20 +58,6 @@ body.iphone-view {
     position: relative;
 }
 
-body.iphone-view::before {
-    content: "";
-    position: absolute;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 35px;
-    background-color: #000;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    z-index: 1000;
-    pointer-events: none;
-}
 
 /* Header */
 header {

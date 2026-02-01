@@ -82,21 +82,6 @@
      }
  }
 
- body.iphone-view::before {
-     /* Notch / Dynamic Island Simulation */
-     content: "";
-     position: absolute;
-     top: 12px;
-     left: 50%;
-     transform: translateX(-50%);
-     width: 120px;
-     height: 35px;
-     background-color: #000;
-     border-bottom-left-radius: 20px;
-     border-bottom-right-radius: 20px;
-     z-index: 1000;
-     pointer-events: none;
- }
 
  /* Header */
  header {
@@ -3839,7 +3824,6 @@
      background-clip: text;
      color: #3b82f6;
      letter-spacing: 0.08em;
-     filter: drop-shadow(0 2px 10px rgba(59, 130, 246, 0.4));
      margin: 0;
  }
 
@@ -4046,22 +4030,6 @@
      background: transparent !important;
  }
 
- /* The Notch */
- body.iphone-view::before {
-     content: '';
-     position: fixed;
-     top: 2rem;
-     /* Body margin spacing */
-     left: 50%;
-     transform: translateX(-50%);
-     width: 120px;
-     height: 30px;
-     background: #1e293b;
-     border-bottom-left-radius: 16px;
-     border-bottom-right-radius: 16px;
-     z-index: 9999;
-     pointer-events: none;
- }
 
  /* Push header down to avoid notch */
  /* Push header down to avoid notch and fix constraint */
@@ -4076,9 +4044,7 @@
      max-width: 375px !important;
      /* MATCH BODY WIDTH */
      z-index: 1000 !important;
-     background: linear-gradient(to bottom, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0)) !important;
-     -webkit-backdrop-filter: blur(5px);
-     backdrop-filter: blur(5px);
+     background: transparent !important;
  }
 
  /* Keep dock visible inside frame */
@@ -4116,21 +4082,6 @@
      display: none;
  }
 
- /* Simulate Notch */
- body.iphone-view::before {
-     content: '';
-     position: fixed;
-     top: 2rem;
-     left: 50%;
-     transform: translateX(-50%);
-     width: 120px;
-     height: 30px;
-     background: #1e293b;
-     border-bottom-left-radius: 16px;
-     border-bottom-right-radius: 16px;
-     z-index: 10000;
-     pointer-events: none;
- }
 
  /* Adjust Header inside Phone - Reduced Padding */
  body.iphone-view .modern-header-learn {
