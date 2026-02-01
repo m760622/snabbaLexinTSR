@@ -168,4 +168,70 @@ export class AIService {
     static validateApiKey(apiKey: string): boolean {
         return apiKey.length > 0 && apiKey.startsWith('sk-');
     }
+
+    /**
+     * Search for a word definition using AI
+     * @param query The word to search for
+     */
+    static async searchWord(query: string): Promise<{
+        title: string;
+        content: string;
+        translation: string;
+        example: string;
+        type: string;
+    } | null> {
+        try {
+            const apiKey = import.meta.env.VITE_DEEPSEEK_API_KEY || StorageSync.getDeepSeekApiKey();
+            if (!apiKey) return null;
+
+            const prompt = `You are a Swedish-Arabic dictionary assistant. 
+            User is searching for: "${query}".
+            
+            Provide the definition/translation in strict JSON format:
+            {
+                "word": "The Swedish word (corrected if needed)",
+                "type": "Part of speech (e.g., Substantiv, Verb) in Swedish",
+                "translation": "Arabic translation",
+                "example": "A short Swedish example sentence using the word"
+            }
+            
+            If the word is invalid or offensive, return null.`;
+
+            const response = await fetch('https://api.deepseek.com/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'deepseek-chat',
+                    messages: [
+                        { role: 'system', content: 'You are a helpful Swedish-Arabic dictionary.' },
+                        { role: 'user', content: prompt }
+                    ],
+                    response_format: { type: 'json_object' }
+                })
+            });
+
+            if (!response.ok) return null;
+
+            const data = await response.json() as DeepSeekResponse;
+            const content = data.choices[0].message.content;
+            const json = JSON.parse(content);
+
+            if (!json || !json.word) return null;
+
+            return {
+                title: `${json.word} (${json.type || 'Ord'})`,
+                content: json.word,
+                translation: json.translation,
+                example: json.example,
+                type: json.type
+            };
+
+        } catch (error) {
+            console.error('[AIService] Search failed:', error);
+            return null;
+        }
+    }
 }

@@ -254,8 +254,10 @@ export const ThemeManager = {
             document.documentElement.setAttribute('data-theme', savedTheme);
             if (savedTheme === 'dark') {
                 document.body.classList.add('dark-mode');
+                document.documentElement.classList.add('dark');
             } else {
                 document.body.classList.remove('dark-mode');
+                document.documentElement.classList.remove('dark');
             }
         }
         const colorTheme = localStorage.getItem('colorTheme') || 'default';
@@ -271,8 +273,13 @@ export const ThemeManager = {
         const isDark = this.isNightTime();
         const theme = isDark ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', theme);
-        if (isDark) document.body.classList.add('dark-mode');
-        else document.body.classList.remove('dark-mode');
+        if (isDark) {
+            document.body.classList.add('dark-mode');
+            document.documentElement.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.documentElement.classList.remove('dark');
+        }
         if (showMessage) showToast(isDark ? 'Automatiskt mörkt läge 🌙' : 'Automatiskt ljust läge ☀️');
         return theme;
     },
@@ -284,9 +291,11 @@ export const ThemeManager = {
         localStorage.setItem('theme', newTheme);
         if (newTheme === 'dark') {
             document.body.classList.add('dark-mode');
+            document.documentElement.classList.add('dark');
             showToast('Mörkt läge aktiverat / الوضع الليلي 🌙');
         } else {
             document.body.classList.remove('dark-mode');
+            document.documentElement.classList.remove('dark');
             showToast('Ljust läge aktiverat / الوضع النهاري ☀️');
         }
         return newTheme;
